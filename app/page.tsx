@@ -15,6 +15,7 @@ interface Company {
   id: number
   name: string
   website: string
+  summary: string
   description: string
   logoUrl: string
   foundingYear: number
@@ -27,6 +28,7 @@ const companies: Company[] = [
     id: 1,
     name: "Forto",
     website: "forto.com",
+    summary: "Digital logistics platform covering the entire supply chain process from booking to tracking.",
     description: "Forto's logistics platform covers the entire supply chain process, from offer to booking, document administration, tracking and tracing. By delivering a highly transparent, frictionless, and sustainable digital supply chain, Forto supports its customers with greater visibility, insight, and control. Leading manufacturers and e-commerce brands are among the 2,500 customers using Forto's digitally-focused offerings as part of their supply chain delivery.",
     logoUrl: "https://ui-avatars.com/api/?name=Forto&size=300&background=1a1f3a&color=fff&bold=true&font-size=0.4",
     foundingYear: 2016,
@@ -50,6 +52,7 @@ const companies: Company[] = [
     id: 2,
     name: "TechVenture",
     website: "techventure.io",
+    summary: "AI-powered platform helping businesses automate processes and scale operations efficiently.",
     description: "TechVenture is revolutionizing the way businesses approach digital transformation. With cutting-edge AI and machine learning solutions, we help companies automate processes, gain insights from data, and scale their operations efficiently. Our platform serves over 1,000 enterprises worldwide.",
     logoUrl: "https://ui-avatars.com/api/?name=TechVenture&size=300&background=2c3e50&color=fff&bold=true&font-size=0.4",
     foundingYear: 2018,
@@ -67,6 +70,7 @@ const companies: Company[] = [
     id: 3,
     name: "FinanceFlow",
     website: "financeflow.com",
+    summary: "Cloud-based financial management platform for SMBs with accounting and invoicing tools.",
     description: "FinanceFlow provides next-generation financial management tools for small and medium-sized businesses. Our cloud-based platform simplifies accounting, invoicing, and financial reporting, helping businesses make better financial decisions with real-time insights and automation.",
     logoUrl: "https://ui-avatars.com/api/?name=FinanceFlow&size=300&background=27ae60&color=fff&bold=true&font-size=0.4",
     foundingYear: 2017,
@@ -90,6 +94,7 @@ const companies: Company[] = [
     id: 4,
     name: "HealthTech Solutions",
     website: "healthtech.io",
+    summary: "Telemedicine platform connecting patients with healthcare providers and managing medical records.",
     description: "HealthTech Solutions is transforming healthcare delivery through innovative technology. Our telemedicine platform connects patients with healthcare providers, streamlines medical records management, and improves patient outcomes through data-driven insights and personalized care.",
     logoUrl: "https://ui-avatars.com/api/?name=HealthTech&size=300&background=e74c3c&color=fff&bold=true&font-size=0.4",
     foundingYear: 2019,
@@ -113,6 +118,7 @@ const companies: Company[] = [
     id: 5,
     name: "EduLearn",
     website: "edulearn.com",
+    summary: "Interactive online learning platform offering courses in technology, business, and creative skills.",
     description: "EduLearn is democratizing education through our interactive online learning platform. We offer courses in technology, business, and creative skills, with personalized learning paths and real-world projects. Over 500,000 students have advanced their careers through our platform.",
     logoUrl: "https://ui-avatars.com/api/?name=EduLearn&size=300&background=9b59b6&color=fff&bold=true&font-size=0.4",
     foundingYear: 2020,
@@ -184,7 +190,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-12 text-center">
           <p className="text-[#d0006f] font-bold text-sm tracking-wider uppercase mb-3">WANNA LEARN MORE?</p>
@@ -192,12 +198,12 @@ export default function Home() {
         </div>
 
         {/* Filter Section */}
-        <div className="mb-12 bg-white p-8 rounded-lg shadow-md">
-          <h2 className="text-2xl font-black text-[#00002c] mb-6 uppercase tracking-tight">Filters</h2>
+        <div className="mb-12 bg-[#00002c] p-8 rounded-lg border-2 border-[#00002c]">
+          <h2 className="text-2xl font-black text-white mb-6 uppercase tracking-tight">Filters</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Batch Filter */}
             <div>
-              <label htmlFor="batch-filter" className="block text-sm font-bold text-[#00002c] mb-3 uppercase tracking-wide">
+              <label htmlFor="batch-filter" className="block text-sm font-bold text-white mb-3 uppercase tracking-wide">
                 Batch
               </label>
               <Select value={selectedBatch} onValueChange={setSelectedBatch}>
@@ -217,7 +223,7 @@ export default function Home() {
 
             {/* Category Filter */}
             <div>
-              <label htmlFor="category-filter" className="block text-sm font-bold text-[#00002c] mb-3 uppercase tracking-wide">
+              <label htmlFor="category-filter" className="block text-sm font-bold text-white mb-3 uppercase tracking-wide">
                 Category
               </label>
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
@@ -237,7 +243,7 @@ export default function Home() {
 
             {/* Founding Year Filter */}
             <div>
-              <label htmlFor="year-filter" className="block text-sm font-bold text-[#00002c] mb-3 uppercase tracking-wide">
+              <label htmlFor="year-filter" className="block text-sm font-bold text-white mb-3 uppercase tracking-wide">
                 Founded
               </label>
               <Select value={selectedYear} onValueChange={setSelectedYear}>
@@ -263,69 +269,54 @@ export default function Home() {
                   setSelectedCategory("all")
                   setSelectedYear("all")
                 }}
-                className="w-full px-6 py-3 text-sm font-bold text-white bg-[#d0006f] hover:bg-[#a0005a] rounded-lg transition-colors uppercase tracking-wide shadow-md hover:shadow-lg"
+                className="w-full px-6 py-3 text-sm font-bold text-white bg-[#d0006f] hover:bg-[#a0005a] rounded-lg transition-colors uppercase tracking-wide border-2 border-[#d0006f] hover:border-[#a0005a]"
               >
                 Clear Filters
               </button>
             </div>
           </div>
-          <p className="mt-6 text-sm font-semibold text-gray-600">
-            Showing {filteredCompanies.length} {filteredCompanies.length === 1 ? 'company' : 'companies'}
-          </p>
         </div>
 
         {/* Company List */}
-        <div className="space-y-4">
+        <div className="space-y-6">
           {filteredCompanies.map((company) => {
             const isExpanded = expandedCards.has(company.id)
             return (
-              <Card key={company.id} className="overflow-hidden hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-[#d0006f]">
+              <Card key={company.id} className="overflow-hidden transition-all duration-300 border-2 border-[#00002c] hover:border-[#d0006f]">
                 <div className="md:flex">
-                  {/* Logo Section - Only show when expanded */}
-                  {isExpanded && (
-                    <div className="md:flex-shrink-0 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-8 md:w-64">
-                      <img
-                        src={company.logoUrl}
-                        alt={`${company.name} logo`}
-                        className="w-full object-contain"
-                      />
-                    </div>
-                  )}
+                  {/* Logo Section - Always visible */}
+                  <div className="md:flex-shrink-0 flex items-center justify-center p-8 md:w-64">
+                    <img
+                      src={company.logoUrl}
+                      alt={`${company.name} logo`}
+                      className="w-full object-contain"
+                    />
+                  </div>
 
                   {/* Content Section */}
                   <div className="flex-1">
-                    <CardHeader 
-                      className="pb-3 pt-4 cursor-pointer"
-                      onClick={() => toggleCard(company.id)}
-                    >
+                    <CardHeader className="pb-3 pt-5">
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
-                          <CardTitle className="text-2xl font-black text-[#00002c] tracking-tight uppercase mb-1">{company.name}</CardTitle>
+                          <CardTitle className="text-3xl font-black text-[#00002c] tracking-tight uppercase mb-1">{company.name}</CardTitle>
                           <a 
                             href={`https://${company.website}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-[#d0006f] hover:text-[#a0005a] hover:underline font-semibold text-sm"
-                            onClick={(e) => e.stopPropagation()}
+                            className="text-[#d0006f] hover:text-[#a0005a] hover:underline font-semibold text-base"
                           >
                             {company.website}
                           </a>
                         </div>
-                        <button
-                          className="text-[#d0006f] font-bold text-2xl hover:text-[#a0005a] transition-transform duration-300"
-                          style={{ transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
-                        >
-                          ↓
-                        </button>
                       </div>
                       <div className="flex flex-wrap items-center gap-2 mt-3">
-                        <span className="text-xs font-bold text-gray-700 uppercase tracking-wide">Founded {company.foundingYear}</span>
+                        <span className="text-sm font-bold text-gray-700 uppercase tracking-wide">Founded {company.foundingYear}</span>
                         <span className="text-gray-400 font-bold">•</span>
-                        <div className="flex flex-wrap gap-1.5">
+                        <div className="flex flex-wrap gap-2">
                           {company.category.map((cat, idx) => (
                             <span
                               key={idx}
-                              className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-[#00002c] text-white uppercase tracking-wide"
+                              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#00002c] text-white uppercase tracking-wide"
                             >
                               {cat}
                             </span>
@@ -334,38 +325,45 @@ export default function Home() {
                       </div>
                     </CardHeader>
 
-                    {isExpanded && (
-                      <CardContent className="pt-2 pb-4">
-                        <CardDescription className="text-base leading-relaxed mb-6 text-gray-700">
-                          {company.description}
+                    <CardContent className="pt-2 pb-5">
+                      {/* Description with expand/collapse */}
+                      <div className="mb-6">
+                        <CardDescription className="text-base leading-relaxed text-gray-700">
+                          {isExpanded ? company.description : company.summary}
                         </CardDescription>
+                        <button 
+                          className="text-[#d0006f] hover:text-[#a0005a] font-bold text-sm mt-2 uppercase tracking-wide"
+                          onClick={() => toggleCard(company.id)}
+                        >
+                          {isExpanded ? '↑ Show Less' : '↓ Read More'}
+                        </button>
+                      </div>
 
-                        {/* Founders Section */}
-                        {company.founders.length > 0 && (
-                          <div>
-                            <h3 className="text-sm font-black text-[#00002c] mb-3 uppercase tracking-wider">
-                              CDTM {company.founders.length > 1 ? 'founders' : 'founder'}
-                            </h3>
-                            <div className="flex flex-wrap gap-4">
-                              {company.founders.map((founder, index) => (
-                                <div key={index} className="flex items-center gap-3">
-                                  <img
-                                    src={founder.imageUrl}
-                                    alt={founder.name}
-                                    className="w-12 h-12 rounded-full object-cover border-2 border-gray-200"
-                                  />
-                                  <div>
-                                    <p className="font-bold text-gray-900 text-sm">{founder.name}</p>
-                                    <p className="text-xs font-bold text-[#d0006f] uppercase tracking-wide">{founder.role}</p>
-                                    <p className="text-xs text-gray-600 font-medium">{founder.batch}</p>
-                                  </div>
+                      {/* Founders Section - Always visible */}
+                      {company.founders.length > 0 && (
+                        <div>
+                          <h3 className="text-sm font-black text-[#00002c] mb-4 uppercase tracking-wider">
+                            CDTM {company.founders.length > 1 ? 'founders' : 'founder'}
+                          </h3>
+                          <div className="flex flex-wrap gap-5">
+                            {company.founders.map((founder, index) => (
+                              <div key={index} className="flex items-center gap-3">
+                                <img
+                                  src={founder.imageUrl}
+                                  alt={founder.name}
+                                  className="w-14 h-14 rounded-full object-cover border-2 border-gray-200"
+                                />
+                                <div>
+                                  <p className="font-bold text-gray-900 text-base">{founder.name}</p>
+                                  <p className="text-sm font-bold text-[#d0006f] uppercase tracking-wide">{founder.role}</p>
+                                  <p className="text-sm text-gray-600 font-medium">{founder.batch}</p>
                                 </div>
-                              ))}
-                            </div>
+                              </div>
+                            ))}
                           </div>
-                        )}
-                      </CardContent>
-                    )}
+                        </div>
+                      )}
+                    </CardContent>
                   </div>
                 </div>
               </Card>
