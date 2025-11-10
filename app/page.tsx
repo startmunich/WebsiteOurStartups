@@ -21,6 +21,9 @@ interface Company {
   foundingYear: number
   category: string[]
   founders: Founder[]
+  totalRaised?: string
+  employees?: number
+  isSpotlight?: boolean
 }
 
 const companies: Company[] = [
@@ -33,6 +36,9 @@ const companies: Company[] = [
     logoUrl: "https://ui-avatars.com/api/?name=Forto&size=300&background=1a1f3a&color=fff&bold=true&font-size=0.4",
     foundingYear: 2016,
     category: ["SaaS", "Logistics", "Supply Chain"],
+    totalRaised: "€240M",
+    employees: 850,
+    isSpotlight: true,
     founders: [
       {
         name: "Erik Muttersbach",
@@ -57,6 +63,9 @@ const companies: Company[] = [
     logoUrl: "https://ui-avatars.com/api/?name=TechVenture&size=300&background=2c3e50&color=fff&bold=true&font-size=0.4",
     foundingYear: 2018,
     category: ["AI", "SaaS", "Manufacturing"],
+    totalRaised: "€85M",
+    employees: 320,
+    isSpotlight: true,
     founders: [
       {
         name: "Sarah Johnson",
@@ -75,6 +84,9 @@ const companies: Company[] = [
     logoUrl: "https://ui-avatars.com/api/?name=FinanceFlow&size=300&background=27ae60&color=fff&bold=true&font-size=0.4",
     foundingYear: 2017,
     category: ["SaaS", "FinTech", "Accounting"],
+    totalRaised: "€52M",
+    employees: 180,
+    isSpotlight: true,
     founders: [
       {
         name: "David Chen",
@@ -99,6 +111,8 @@ const companies: Company[] = [
     logoUrl: "https://ui-avatars.com/api/?name=HealthTech&size=300&background=e74c3c&color=fff&bold=true&font-size=0.4",
     foundingYear: 2019,
     category: ["HealthTech", "SaaS", "Telemedicine"],
+    totalRaised: "€38M",
+    employees: 145,
     founders: [
       {
         name: "Dr. Amanda Rodriguez",
@@ -123,6 +137,8 @@ const companies: Company[] = [
     logoUrl: "https://ui-avatars.com/api/?name=EduLearn&size=300&background=9b59b6&color=fff&bold=true&font-size=0.4",
     foundingYear: 2020,
     category: ["EdTech", "AI", "SaaS"],
+    totalRaised: "€28M",
+    employees: 95,
     founders: [
       {
         name: "Robert Martinez",
@@ -189,16 +205,77 @@ export default function Home() {
     })
   }
 
+  // Calculate total statistics
+  const totalStartups = companies.length
+  const totalRaised = companies.reduce((sum, company) => {
+    const amount = parseInt(company.totalRaised?.replace(/[€M]/g, '') || '0')
+    return sum + amount
+  }, 0)
+  const totalEmployees = companies.reduce((sum, company) => sum + (company.employees || 0), 0)
+
+  // Get spotlight startups
+  const spotlightStartups = companies.filter(company => company.isSpotlight)
+
   return (
     <main className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-12 text-center">
           <p className="text-[#d0006f] font-bold text-sm tracking-wider uppercase mb-3">WANNA LEARN MORE?</p>
-          <h1 className="text-5xl md:text-7xl font-black text-[#00002c] tracking-tight uppercase mb-2">Startup Directory</h1>
+          <h1 className="text-5xl md:text-7xl font-black text-[#00002c] tracking-tight uppercase mb-2">Our Startups</h1>
+        </div>
+
+        {/* Statistics Section */}
+        <div className="mb-12 bg-white border-2 border-[#00002c] p-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div>
+              <p className="text-5xl font-black text-[#00002c] mb-2">{totalStartups}</p>
+              <p className="text-sm font-bold text-gray-600 uppercase tracking-wide">Startups</p>
+            </div>
+            <div>
+              <p className="text-5xl font-black text-[#d0006f] mb-2">€{totalRaised}M</p>
+              <p className="text-sm font-bold text-gray-600 uppercase tracking-wide">Total Raised</p>
+            </div>
+            <div>
+              <p className="text-5xl font-black text-[#00002c] mb-2">{totalEmployees}+</p>
+              <p className="text-sm font-bold text-gray-600 uppercase tracking-wide">Employees</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Spotlight Section */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-black text-[#00002c] mb-6 uppercase tracking-tight">Spotlight Startups</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {spotlightStartups.map((company) => (
+              <div key={company.id} className="bg-white border-2 border-[#d0006f] p-6 hover:border-[#00002c] transition-all duration-300">
+                <div className="flex justify-center mb-4">
+                  <img
+                    src={company.logoUrl}
+                    alt={`${company.name} logo`}
+                    className="w-32 h-32 object-contain"
+                  />
+                </div>
+                <h3 className="text-xl font-black text-[#00002c] uppercase tracking-tight mb-2 text-center">{company.name}</h3>
+                <p className="text-sm text-gray-700 mb-4 text-center">{company.summary}</p>
+                <div className="flex justify-between text-xs font-bold uppercase tracking-wide text-gray-600 mb-2">
+                  <span>Raised: <span className="text-[#d0006f]">{company.totalRaised}</span></span>
+                  <span>Team: <span className="text-[#d0006f]">{company.employees}</span></span>
+                </div>
+                <a 
+                  href={`https://${company.website}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-center text-[#d0006f] hover:text-[#a0005a] font-bold text-sm mt-4 uppercase tracking-wide hover:underline"
+                >
+                  Visit Website →
+                </a>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Filter Section */}
-        <div className="mb-12 bg-[#00002c] p-8 rounded-lg border-2 border-[#00002c]">
+        <div className="mb-12 bg-[#00002c] p-8 border-2 border-[#00002c]">
           <h2 className="text-2xl font-black text-white mb-6 uppercase tracking-tight">Filters</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Batch Filter */}
@@ -269,7 +346,7 @@ export default function Home() {
                   setSelectedCategory("all")
                   setSelectedYear("all")
                 }}
-                className="w-full px-6 py-3 text-sm font-bold text-white bg-[#d0006f] hover:bg-[#a0005a] rounded-lg transition-colors uppercase tracking-wide border-2 border-[#d0006f] hover:border-[#a0005a]"
+                className="w-full px-6 py-3 text-sm font-bold text-white bg-[#d0006f] hover:bg-[#a0005a] transition-colors uppercase tracking-wide border-2 border-[#d0006f] hover:border-[#a0005a]"
               >
                 Clear Filters
               </button>
@@ -316,7 +393,7 @@ export default function Home() {
                           {company.category.map((cat, idx) => (
                             <span
                               key={idx}
-                              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#00002c] text-white uppercase tracking-wide"
+                              className="inline-flex items-center px-2.5 py-0.5 text-xs font-bold bg-[#00002c] text-white uppercase tracking-wide"
                             >
                               {cat}
                             </span>
@@ -351,7 +428,7 @@ export default function Home() {
                                 <img
                                   src={founder.imageUrl}
                                   alt={founder.name}
-                                  className="w-14 h-14 rounded-full object-cover border-2 border-gray-200"
+                                  className="w-14 h-14 object-cover border-2 border-gray-200"
                                 />
                                 <div>
                                   <p className="font-bold text-gray-900 text-base">{founder.name}</p>
