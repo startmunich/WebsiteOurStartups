@@ -164,11 +164,11 @@ export default function StartupsPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {spotlightStartups.map((company) => (
                 <div key={company.id} className="bg-white border-2 border-[#d0006f] p-6 hover:border-[#00002c] transition-all duration-300">
-                  <div className="flex justify-center mb-4">
+                  <div className="flex justify-center items-center mb-4 h-32 w-full">
                     <img
                       src={company.logoUrl}
                       alt={`${company.name} logo`}
-                      className="w-32 h-32 object-contain"
+                      className="max-w-32 max-h-32 w-auto h-auto object-contain"
                     />
                   </div>
                   <h3 className="text-xl font-black text-[#00002c] uppercase tracking-tight mb-2 text-center">{company.name}</h3>
@@ -283,12 +283,12 @@ export default function StartupsPage() {
                         href={`https://${company.website}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block w-full"
+                        className="flex items-center justify-center w-full h-48"
                       >
                         <img
                           src={company.logoUrl}
                           alt={`${company.name} logo`}
-                          className="w-full object-contain hover:opacity-80 transition-opacity cursor-pointer"
+                          className="max-w-full max-h-full w-auto h-auto object-contain hover:opacity-80 transition-opacity cursor-pointer"
                         />
                       </a>
                     </div>

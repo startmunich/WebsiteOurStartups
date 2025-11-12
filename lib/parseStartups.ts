@@ -30,7 +30,7 @@ interface Company {
 // Helper function to get founder image path
 function getFounderImagePath(founderName: string): string {
   const normalizedName = founderName.trim();
-  const founderPicsDir = path.join(process.cwd(), 'public', 'data', 'FounderPics');
+  const founderPicsDir = path.join(process.cwd(), 'public', 'FounderPics');
   
   try {
     const files = fs.readdirSync(founderPicsDir);
@@ -42,7 +42,7 @@ function getFounderImagePath(founderName: string): string {
     
     if (matchingFile) {
       // Return local path relative to public folder
-      return `/data/FounderPics/${matchingFile}`;
+      return `/FounderPics/${matchingFile}`;
     }
   } catch (error) {
     console.error('Error reading founder pics directory:', error);
@@ -54,7 +54,7 @@ function getFounderImagePath(founderName: string): string {
 
 // Parse CSV data
 export function parseStartupsCSV(): Company[] {
-  const csvPath = path.join(process.cwd(), 'public', 'data', 'StartupsList.csv');
+  const csvPath = path.join(process.cwd(), 'public', 'StartupsList.csv');
   
   try {
     const csvContent = fs.readFileSync(csvPath, 'utf-8');
