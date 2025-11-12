@@ -176,28 +176,25 @@ export default function StartupsPage() {
             <h2 className="text-3xl font-black text-[#00002c] mb-6 uppercase tracking-tight">Spotlight Startups</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {spotlightStartups.map((company) => (
-                <div key={company.id} className="bg-white border-2 border-[#d0006f] p-6 hover:border-[#00002c] transition-all duration-300">
-                  <div className="flex justify-center items-center mb-4 h-32 w-full">
-                    <img
-                      src={company.logoUrl}
-                      alt={`${company.name} logo`}
-                      className="max-w-32 max-h-32 w-auto h-auto object-contain"
-                    />
-                  </div>
-                  <h3 className="text-xl font-black text-[#00002c] uppercase tracking-tight mb-2 text-center">{company.name}</h3>
-                  <p className="text-sm text-gray-700 mb-4 text-center">{company.summary}</p>
-                  <div className="flex justify-between text-xs font-bold uppercase tracking-wide text-gray-600 mb-2">
-                    <span>Raised: <span className="text-[#d0006f]">{company.totalRaised || "N/A"}</span></span>
-                    <span>Founded: <span className="text-[#d0006f]">{company.foundingYear}</span></span>
-                  </div>
+                <div key={company.id} className="overflow-hidden transition-all duration-300 border-2 border-[#00002c] hover:border-[#d0006f]">
                   <a 
                     href={`https://${company.website}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block text-center text-[#d0006f] hover:text-[#a0005a] font-bold text-sm mt-4 uppercase tracking-wide hover:underline"
+                    className="block"
                   >
-                    Visit Website →
+                    <div className="flex justify-center items-center bg-white p-8 h-48">
+                      <img
+                        src={company.logoUrl}
+                        alt={`${company.name} logo`}
+                        className="max-w-full max-h-full w-auto h-auto object-contain hover:opacity-80 transition-opacity cursor-pointer"
+                      />
+                    </div>
                   </a>
+                  <div className="bg-[#d0006f] p-6">
+                    <h3 className="text-xl font-black text-white uppercase tracking-tight mb-2">{company.name}</h3>
+                    <p className="text-sm text-white/90">{company.summary}</p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -347,6 +344,18 @@ export default function StartupsPage() {
                         <div className="mb-6">
                           <CardDescription className="text-base leading-relaxed text-gray-700">
                             {isExpanded ? company.description : getPreviewText(company.description)}
+
+                            {isExpanded && company.milestones && (
+                              <div className="mb-6 mt-4">
+                                <p className="text-base text-gray-700 mb-2">Milestones:</p>
+                                <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+                                  {company.milestones.split('-').filter(m => m.trim()).map((milestone, idx) => (
+                                    <li key={idx}>{milestone.trim()}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+
                           </CardDescription>
                           {getPreviewText(company.description) !== company.description && (
                             <button 
@@ -358,15 +367,8 @@ export default function StartupsPage() {
                           )}
                         </div>
 
-                        {/* Milestones - Only show when expanded */}
-                        {isExpanded && company.milestones && (
-                          <div className="mb-6">
-                            <h3 className="text-sm font-black text-[#00002c] mb-2 uppercase tracking-wider">
-                              Milestones
-                            </h3>
-                            <p className="text-sm text-gray-700">{company.milestones}</p>
-                          </div>
-                        )}
+                        {/* Milestones - Only shown when expanded and if available */}
+
 
                         {/* Founders Section */}
                         {company.founders.length > 0 && (

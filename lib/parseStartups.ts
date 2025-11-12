@@ -52,6 +52,13 @@ function getFounderImagePath(founderName: string): string {
   return `https://ui-avatars.com/api/?name=${encodeURIComponent(founderName)}&size=80&background=4f46e5&color=fff`;
 }
 
+// Define spotlight startups by name
+const SPOTLIGHT_STARTUPS = [
+  'Productlane',
+  'OneTutor',
+  'Manex AI'
+];
+
 // Parse CSV data
 export function parseStartupsCSV(): Company[] {
   const csvPath = path.join(process.cwd(), 'public', 'StartupsList.csv');
@@ -119,8 +126,8 @@ export function parseStartupsCSV(): Company[] {
         });
       }
       
-      // Determine if spotlight (first 3 with investment or detailed info)
-      const isSpotlight = i <= 3 && (hasInvestment || longDescription.length > 100);
+      // Determine if spotlight (based on predefined list)
+      const isSpotlight = SPOTLIGHT_STARTUPS.includes(startupName);
       
       companies.push({
         id: i,
