@@ -42,6 +42,19 @@ async function fetchCompanies(): Promise<Company[]> {
   }
 }
 
+// Helper function to get preview text (first 30 words)
+function getPreviewText(text: string): string {
+  if (!text) return '';
+  
+  const words = text.split(/\s+/);
+  const maxWords = 30;
+  
+  if (words.length <= maxWords) {
+    return text;
+  }
+  
+  return words.slice(0, maxWords).join(' ') + '...';
+}
 
 export default function StartupsPage() {
   const [companies, setCompanies] = useState<Company[]>([])
@@ -56,7 +69,7 @@ export default function StartupsPage() {
     const loadCompanies = async () => {
       setLoading(true)
       const data = await fetchCompanies()
-      setCompanies(data.length > 0 ? data : fallbackCompanies)
+      setCompanies(data)
       setLoading(false)
     }
     loadCompanies()
@@ -333,9 +346,9 @@ export default function StartupsPage() {
                         {/* Description with expand/collapse */}
                         <div className="mb-6">
                           <CardDescription className="text-base leading-relaxed text-gray-700">
-                            {isExpanded ? company.description : company.summary}
+                            {isExpanded ? company.description : getPreviewText(company.description)}
                           </CardDescription>
-                          {company.description !== company.summary && (
+                          {getPreviewText(company.description) !== company.description && (
                             <button 
                               className="text-[#d0006f] hover:text-[#a0005a] font-bold text-sm mt-2 uppercase tracking-wide"
                               onClick={() => toggleCard(company.id)}
