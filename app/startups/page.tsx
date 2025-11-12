@@ -28,6 +28,7 @@ interface Company {
   companyLinkedin?: string
   investmentRound?: string
   milestones?: string
+  supportingPrograms?: string
 }
 
 // Fetch companies from API
@@ -368,46 +369,72 @@ export default function StartupsPage() {
                         </div>
 
                         {/* Milestones - Only shown when expanded and if available */}
+                        {isExpanded && company.milestones && (
+                          <div className="mb-6">
+                            <p className="text-base text-gray-700 mb-2">Milestones:</p>
+                            <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+                              {company.milestones.split('-').filter(m => m.trim()).map((milestone, idx) => (
+                                <li key={idx}>{milestone.trim()}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
 
-
-                        {/* Founders Section */}
-                        {company.founders.length > 0 && (
-                          <div>
-                            <h3 className="text-sm font-black text-[#00002c] mb-4 uppercase tracking-wider">
-                              {company.founders.length > 1 ? 'Founders' : 'Founder'}
-                            </h3>
-                            <div className="flex flex-wrap gap-5">
-                              {company.founders.map((founder, index) => (
-                                <div key={index} className="flex items-center gap-3">
-                                  {founder.linkedinUrl ? (
-                                    <a 
-                                      href={founder.linkedinUrl}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="block"
-                                    >
+                        {/* Founders and Programmes Section */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          {/* Founders Section */}
+                          {company.founders.length > 0 && (
+                            <div>
+                              <h3 className="text-sm font-black text-[#00002c] mb-4 uppercase tracking-wider">
+                                {company.founders.length > 1 ? 'Founders' : 'Founder'}
+                              </h3>
+                              <div className="flex flex-wrap gap-5">
+                                {company.founders.map((founder, index) => (
+                                  <div key={index} className="flex items-center gap-3">
+                                    {founder.linkedinUrl ? (
+                                      <a 
+                                        href={founder.linkedinUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="block"
+                                      >
+                                        <img
+                                          src={founder.imageUrl}
+                                          alt={founder.name}
+                                          className="w-14 h-14 object-cover border-2 border-gray-200 hover:opacity-80 transition-opacity cursor-pointer"
+                                        />
+                                      </a>
+                                    ) : (
                                       <img
                                         src={founder.imageUrl}
                                         alt={founder.name}
-                                        className="w-14 h-14 object-cover border-2 border-gray-200 hover:opacity-80 transition-opacity cursor-pointer"
+                                        className="w-14 h-14 object-cover border-2 border-gray-200"
                                       />
-                                    </a>
-                                  ) : (
-                                    <img
-                                      src={founder.imageUrl}
-                                      alt={founder.name}
-                                      className="w-14 h-14 object-cover border-2 border-gray-200"
-                                    />
-                                  )}
-                                  <div>
-                                    <p className="font-bold text-gray-900 text-base">{founder.name}</p>
-                                    <p className="text-sm font-bold text-[#d0006f] uppercase tracking-wide">{founder.role}</p>
+                                    )}
+                                    <div>
+                                      <p className="font-bold text-gray-900 text-base">{founder.name}</p>
+                                      <p className="text-sm font-bold text-[#d0006f] uppercase tracking-wide">{founder.role}</p>
+                                    </div>
                                   </div>
-                                </div>
-                              ))}
+                                ))}
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          )}
+
+                          {/* Programmes Section */}
+                          {company.supportingPrograms && (
+                            <div>
+                              <h3 className="text-sm font-black text-[#00002c] mb-4 uppercase tracking-wider">
+                                Programmes
+                              </h3>
+                              <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+                                {company.supportingPrograms.split(',').filter(p => p.trim()).map((program, idx) => (
+                                  <li key={idx}>{program.trim()}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
                       </CardContent>
                     </div>
                   </div>

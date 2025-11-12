@@ -25,6 +25,7 @@ interface Company {
   companyLinkedin?: string
   investmentRound?: string
   milestones?: string
+  supportingPrograms?: string
 }
 
 // Helper function to get founder image path
@@ -144,7 +145,8 @@ export function parseStartupsCSV(): Company[] {
         isSpotlight: isSpotlight,
         companyLinkedin: companyLinkedin || undefined,
         investmentRound: investmentRound || undefined,
-        milestones: milestones || undefined
+        milestones: milestones || undefined,
+        supportingPrograms: supportingPrograms || undefined
       });
     }
     
