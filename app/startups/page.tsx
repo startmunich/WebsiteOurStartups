@@ -64,6 +64,8 @@ export default function StartupsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [selectedYear, setSelectedYear] = useState<string>("all")
   const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set())
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
 
   // Load companies on mount
   useEffect(() => {
@@ -112,6 +114,17 @@ export default function StartupsPage() {
 
     return matchesBatch && matchesCategory && matchesYear
   })
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredCompanies.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const paginatedCompanies = filteredCompanies.slice(startIndex, endIndex)
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [selectedBatch, selectedCategory, selectedYear])
 
   const toggleCard = (id: number) => {
     setExpandedCards(prev => {
@@ -283,7 +296,7 @@ export default function StartupsPage() {
 
           {/* Company List */}
           <div className="space-y-6">
-            {filteredCompanies.map((company) => {
+            {paginatedCompanies.map((company) => {
               const isExpanded = expandedCards.has(company.id)
               return (
                 <Card key={company.id} className="overflow-hidden transition-all duration-300 border-2 border-[#00002c] hover:border-[#d0006f]">
@@ -447,7 +460,44 @@ export default function StartupsPage() {
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">No companies found matching the selected filters.</p>
             </div>
-        )}
+          )}
+
+          {/* Pagination Controls */}
+          {filteredCompanies.length > 0 && totalPages > 1 && (
+            <div className="flex justify-center items-center gap-4 mt-12">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-6 py-3 text-sm font-bold text-white bg-[#00002c] hover:bg-[#d0006f] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors uppercase tracking-wide border-2 border-[#00002c] hover:border-[#d0006f] disabled:border-gray-300"
+              >
+                ← Previous
+              </button>
+              
+              <div className="flex items-center gap-2">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-4 py-2 text-sm font-bold uppercase tracking-wide border-2 transition-colors ${
+                      currentPage === page
+                        ? 'bg-[#d0006f] text-white border-[#d0006f]'
+                        : 'bg-white text-[#00002c] border-[#00002c] hover:bg-[#00002c] hover:text-white'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-6 py-3 text-sm font-bold text-white bg-[#00002c] hover:bg-[#d0006f] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors uppercase tracking-wide border-2 border-[#00002c] hover:border-[#d0006f] disabled:border-gray-300"
+              >
+                Next →
+              </button>
+            </div>
+          )}
       </div>
     </main>
   )
