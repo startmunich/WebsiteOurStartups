@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import Script from "next/script"
 
 interface Founder {
   name: string
@@ -160,7 +161,26 @@ export default function StartupsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+    <>
+      <Script id="iframe-height-sender" strategy="afterInteractive">
+        {`
+          function sendHeight() {
+            const h = Math.max(
+              document.documentElement.scrollHeight,
+              document.body.scrollHeight
+            );
+            parent.postMessage({ type: "EMBED_HEIGHT", height: h }, "*");
+          }
+
+          // initial + on changes
+          window.addEventListener("load", sendHeight);
+          const ro = new ResizeObserver(sendHeight);
+          ro.observe(document.documentElement);
+          document.addEventListener("DOMContentLoaded", sendHeight);
+        `}
+      </Script>
+      
+      <main className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12 text-center">
             <p className="text-[#d0006f] font-bold text-sm tracking-wider uppercase mb-3">WANNA LEARN MORE?</p>
@@ -488,5 +508,6 @@ export default function StartupsPage() {
           )}
       </div>
     </main>
+    </>
   )
 }
