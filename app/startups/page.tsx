@@ -381,18 +381,6 @@ export default function StartupsPage() {
                           )}
                         </div>
 
-                        {/* Milestones - Only shown when expanded and if available */}
-                        {isExpanded && company.milestones && (
-                          <div className="mb-6">
-                            <p className="text-base text-gray-700 mb-2">Milestones:</p>
-                            <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
-                              {company.milestones.split('-').filter(m => m.trim()).map((milestone, idx) => (
-                                <li key={idx}>{milestone.trim()}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-
                         {/* Founders and Programmes Section */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           {/* Founders Section */}
