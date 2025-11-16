@@ -68,6 +68,7 @@ export default function StartupsPage() {
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 12 // Reduced to approximate 3000px height (about 5-6 cards)
+  const modalRef = useRef<HTMLDivElement>(null)
   
   // Animation states for numbers
   const [animatedStartups, setAnimatedStartups] = useState(0)
@@ -133,6 +134,19 @@ export default function StartupsPage() {
   useEffect(() => {
     setCurrentPage(1)
   }, [selectedBatch, selectedCategory, selectedYear])
+
+  // Scroll modal into view when opened
+  useEffect(() => {
+    if (selectedCompany && modalRef.current) {
+      // Small delay to ensure modal is rendered
+      setTimeout(() => {
+        modalRef.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center'
+        })
+      }, 50)
+    }
+  }, [selectedCompany])
 
   // Calculate total statistics
   const totalStartups = companies.length
@@ -724,6 +738,7 @@ export default function StartupsPage() {
       {/* Startup Details Modal */}
       {selectedCompany && (
         <div 
+          ref={modalRef}
           className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto animate-fadeIn"
           onClick={() => setSelectedCompany(null)}
         >
