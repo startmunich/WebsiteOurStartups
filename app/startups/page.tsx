@@ -154,11 +154,11 @@ export default function StartupsPage() {
   }, 0)
   const totalEmployees = companies.reduce((sum, company) => sum + (company.employees || 0), 0)
 
-  // Get spotlight startups
-  const spotlightStartups = companies.filter(company => company.isSpotlight).slice(0, 3)
+  // Get spotlight startups (show all featured startups)
+  const spotlightStartups = companies.filter(company => company.isSpotlight)
   
-  // Get Y Combinator startups
-  const yCombinatorStartups = companies.filter(company => company.isYCombinator).slice(0, 3)
+  // Get Y Combinator startups (show all YC alumni)
+  const yCombinatorStartups = companies.filter(company => company.isYCombinator)
 
   // Animate numbers on component mount
   useEffect(() => {
