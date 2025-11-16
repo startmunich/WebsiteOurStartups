@@ -237,7 +237,7 @@ export default function StartupsPage() {
       
       <main className="min-h-screen bg-[#00002c]">
         {/* Hero Section with Full-Width Image */}
-        <div className="relative w-full h-[70vh] overflow-hidden">
+        <div className="relative w-full h-auto overflow-hidden">
           {/* Background Image */}
           <div className="absolute inset-0">
             <img
