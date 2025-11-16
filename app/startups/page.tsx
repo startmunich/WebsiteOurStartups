@@ -246,11 +246,11 @@ export default function StartupsPage() {
                   <div className="w-2 h-2 bg-[#d0006f] rounded-full animate-pulse"></div>
                   <p className="text-[#d0006f] font-semibold text-xs tracking-widest uppercase">OUR STARTUPS</p>
                 </div>
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight mb-6 leading-tight">
-                  START Munich
+                <h1 className="text-5xl md:text-6xl lg:text-8xl font-black text-white mb-6">
+                  START MUNICH
                   <br />
-                  <span className="bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent">
-                    Startups
+                  <span className="outline-text">
+                    STARTUPS
                   </span>
                 </h1>
                 <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
@@ -353,7 +353,7 @@ export default function StartupsPage() {
           {spotlightStartups.length > 0 && (
             <div className="mb-16">
               <div className="mb-10">
-                <h2 className="text-3xl md:text-4xl font-bold text-white">
+                <h2 className="text-3xl md:text-4xl font-black text-white">
                   Featured Startups
                 </h2>
               </div>
@@ -439,7 +439,7 @@ export default function StartupsPage() {
                     
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
                       Join the{" "}
-                      <span className="bg-gradient-to-r from-[#d0006f] via-pink-400 to-[#d0006f] bg-clip-text text-transparent animate-pulse">
+                      <span className="no-stroke bg-gradient-to-r from-[#d0006f] via-pink-400 to-[#d0006f] bg-clip-text text-transparent animate-pulse">
                         Next Big Thing
                       </span>
                     </h2>

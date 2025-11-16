@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Avenir Next - All weights and styles from TTC */
+@font-face {
+  font-family: 'Avenirnextltpro';
+  src: url('/fonts/Avenir Next.ttc') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Avenirnextltpro';
+  src: url('/fonts/Avenir Next.ttc') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -57,9 +74,31 @@
     @apply bg-background text-foreground;
     font-family: Avenirnextltpro, sans-serif;
   }
+  h1 {
+    -webkit-text-stroke: 7px white;
+    paint-order: stroke fill;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+  h2 {
+    -webkit-text-stroke: 3px white;
+    paint-order: stroke fill;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
 }
 
 @layer utilities {
+  .outline-text {
+    color: transparent;
+    -webkit-text-stroke: 3px white;
+  }
+
+  .no-stroke {
+    -webkit-text-stroke: 0;
+    text-transform: none;
+  }
+
   @keyframes scroll {
     0% {
       transform: translateX(0);
