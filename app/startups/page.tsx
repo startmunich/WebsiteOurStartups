@@ -225,7 +225,7 @@ export default function StartupsPage() {
       
       <main className="min-h-screen bg-[#00002c]">
         {/* Hero Section with Full-Width Image */}
-        <div className="relative w-full h-auto overflow-hidden">
+        <div className="relative w-full overflow-hidden">
           {/* Background Image */}
           <div className="absolute inset-0">
             <img
@@ -238,8 +238,8 @@ export default function StartupsPage() {
           </div>
 
           {/* Content Overlay */}
-          <div className="relative min-h-[70vh] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="min-h-[70vh] flex items-center justify-between gap-12">
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div className="flex items-center justify-between gap-12">
               {/* Left Side - Heading */}
               <div className="flex-1 max-w-2xl">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#d0006f]/20 border border-[#d0006f]/40 rounded-full mb-6 backdrop-blur-sm">
