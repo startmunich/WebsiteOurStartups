@@ -135,43 +135,20 @@ export default function StartupsPage() {
     setCurrentPage(1)
   }, [selectedBatch, selectedCategory, selectedYear])
 
-  // Track initial scroll position for returning after modal closes
-  const [initialScrollPosition, setInitialScrollPosition] = useState(0)
-
-  // Handle modal opening and closing with smooth scrolling
+  // Handle modal opening and closing - prevent background scrolling only
   useEffect(() => {
     if (selectedCompany) {
-      // Store current scroll position
-      const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop
-      setInitialScrollPosition(currentScrollTop)
-      
-      // Scroll to top smoothly for modal
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      })
-      
-      // Prevent background scrolling after scroll animation
-      setTimeout(() => {
-        document.body.style.overflow = 'hidden'
-      }, 500) // Wait for smooth scroll to complete
+      // Prevent background scrolling when modal is open
+      document.body.style.overflow = 'hidden'
     } else {
-      // Re-enable scrolling and return to original position
+      // Re-enable scrolling when modal is closed
       document.body.style.overflow = 'unset'
-      
-      // Small delay to ensure modal is unmounted before scrolling
-      setTimeout(() => {
-        window.scrollTo({
-          top: initialScrollPosition,
-          behavior: 'smooth'
-        })
-      }, 100)
     }
     
     return () => {
       document.body.style.overflow = 'unset'
     }
-  }, [selectedCompany, initialScrollPosition])
+  }, [selectedCompany])
 
   // Calculate total statistics
   const totalStartups = companies.length
@@ -764,14 +741,13 @@ export default function StartupsPage() {
       {selectedCompany && (
         <div 
           ref={modalRef}
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto animate-fadeIn"
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn"
           onClick={() => setSelectedCompany(null)}
         >
-          <div className="min-h-full flex items-center justify-center p-4">
-            <div 
-              className="bg-[#00002c] border border-white/20 rounded-2xl max-w-4xl w-full my-8 relative animate-scaleIn"
-              onClick={(e) => e.stopPropagation()}
-            >
+          <div 
+            className="bg-[#00002c] border border-white/20 rounded-2xl max-w-4xl w-full max-h-[90vh] relative animate-scaleIn overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Close Button */}
             <button
               onClick={() => setSelectedCompany(null)}
@@ -959,7 +935,6 @@ export default function StartupsPage() {
                 )}
               </div>
             </div>
-          </div>
           </div>
         </div>
       )}
