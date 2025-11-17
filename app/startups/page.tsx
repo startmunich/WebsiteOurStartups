@@ -135,16 +135,23 @@ export default function StartupsPage() {
     setCurrentPage(1)
   }, [selectedBatch, selectedCategory, selectedYear])
 
-  // Scroll modal into view when opened
+  // Track scroll position for modal positioning in iframe
+  const [modalScrollPosition, setModalScrollPosition] = useState(0)
+
+  // Capture scroll position when opening modal
   useEffect(() => {
-    if (selectedCompany && modalRef.current) {
-      // Small delay to ensure modal is rendered
-      setTimeout(() => {
-        modalRef.current?.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'center'
-        })
-      }, 50)
+    if (selectedCompany) {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+      setModalScrollPosition(scrollTop)
+      // Prevent background scrolling
+      document.body.style.overflow = 'hidden'
+    } else {
+      // Re-enable scrolling when modal closes
+      document.body.style.overflow = 'unset'
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset'
     }
   }, [selectedCompany])
 
@@ -739,11 +746,14 @@ export default function StartupsPage() {
       {selectedCompany && (
         <div 
           ref={modalRef}
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto animate-fadeIn"
+          className="absolute left-0 right-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn"
           onClick={() => setSelectedCompany(null)}
-          style={{ position: 'fixed' }}
+          style={{ 
+            top: `${modalScrollPosition}px`,
+            minHeight: '100vh'
+          }}
         >
-          <div className="min-h-full flex items-start justify-center p-4 pt-8">
+          <div className="min-h-screen flex items-center justify-center p-4">
             <div 
               className="bg-[#00002c] border border-white/20 rounded-2xl max-w-4xl w-full my-8 relative animate-scaleIn"
               onClick={(e) => e.stopPropagation()}
