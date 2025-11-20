@@ -257,7 +257,7 @@ export default function StartupsPage() {
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 lg:gap-12">
               {/* Left Side */}
-              <div className="flex-1 max-w-2xl text-center lg:text-left">
+              <div className="flex-1 max-w-2xl text-left">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#d0006f]/20 border border-[#d0006f]/40 rounded-full mb-6 backdrop-blur-sm">
                   <div className="w-2 h-2 bg-[#d0006f] rounded-full animate-pulse"></div>
                   <p className="text-[#d0006f] font-semibold text-xs tracking-widest uppercase">
@@ -324,22 +324,22 @@ export default function StartupsPage() {
         </div>
 
         {/* Mobile Stats (static, below hero) */}
-        <div className="lg:hidden bg-[#00002c]/80 backdrop-blur-md border-t border-white/10 mt-4">
+        <div className="lg:hidden backdrop-blur-md mt-10">
           <div className="max-w-7xl mx-auto px-4 py-6">
             <div className="grid grid-cols-3 gap-4 text-center">
-              <div>
+              <div className="pt-0">
                 <p className="text-2xl font-black text-white">
                   {Math.floor(animatedStartups)}+
                 </p>
                 <p className="text-xs font-bold text-gray-300 uppercase">Companies</p>
               </div>
-              <div>
+              <div className="pt-8">
                 <p className="text-2xl font-black text-white">
                   €{animatedFunding.toFixed(1)}M
                 </p>
                 <p className="text-xs font-bold text-gray-300 uppercase">Funding</p>
               </div>
-              <div>
+              <div className="pt-16">
                 <p className="text-2xl font-black text-white">
                   {Math.floor(animatedEmployees)}+
                 </p>
@@ -351,7 +351,7 @@ export default function StartupsPage() {
 
 
         {/* Content Below Hero */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-20">
 
           {/* Growth Champions Section */}
           {spotlightStartups.length > 0 && (
