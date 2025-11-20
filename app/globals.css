@@ -67,28 +67,17 @@
     @apply bg-background text-foreground;
     font-family: Avenirnextltpro, sans-serif;
   }
-  h1 {
-    paint-order: stroke fill;
-    text-transform: uppercase;
-  }
-  h2 {
-    paint-order: stroke fill;
-    text-transform: uppercase;
-  }
 }
 
 
 
 
 @layer utilities {
-  .outline-text {
-    color: transparent;
-    -webkit-text-stroke: 3px white;
-  }
 
-  .no-stroke {
-    -webkit-text-stroke: 0;
-    text-transform: none;
+  .outline-text {
+    -webkit-text-stroke: 2px white;
+    -webkit-text-fill-color: transparent;
+    paint-order: stroke fill;
   }
 
   @keyframes scroll {
