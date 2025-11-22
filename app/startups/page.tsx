@@ -38,8 +38,20 @@ interface Company {
 // Fetch companies from API
 async function fetchCompanies(): Promise<Company[]> {
   try {
-    const response = await fetch('/api/startups');
-    if (!response.ok) throw new Error('Failed to fetch startups');
+    // Use absolute URL in production, relative in development
+    const baseUrl = typeof window !== 'undefined' 
+      ? window.location.origin 
+      : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    
+    const response = await fetch(`${baseUrl}/api/startups`, {
+      cache: 'no-store', // Ensure fresh data
+    });
+    
+    if (!response.ok) {
+      console.error(`API error: ${response.status} ${response.statusText}`);
+      throw new Error('Failed to fetch startups');
+    }
+    
     return await response.json();
   } catch (error) {
     console.error('Error fetching startups:', error);
