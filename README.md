@@ -21,6 +21,7 @@ NOCODB_API_TOKEN=your_nocodb_api_token_here
 NOCODB_TABLE_ID=your_nocodb_table_id_here
 NOCODB_BASE_URL=https://ndb.startmunich.de
 NOCODB_STARTUPS_TABLE_ID=your_nocodb_table_id_here
+NOCODB_MEMBERS_TABLE_ID=your_nocodb_members_table_id_here
 ```
 
 ### Where to Set Environment Variables

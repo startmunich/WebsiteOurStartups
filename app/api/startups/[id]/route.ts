@@ -91,6 +91,14 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+  const id = params.id;
+  console.log('========== FETCHING SINGLE STARTUP ==========');
+  console.log('Startup ID:', id);
+  console.log('🔍 Environment Variables:');
+  console.log('NOCODB_API_TOKEN:', NOCODB_API_TOKEN ? `${NOCODB_API_TOKEN.substring(0, 10)}... (${NOCODB_API_TOKEN.length} chars)` : 'NOT SET');
+  console.log('NOCODB_BASE_URL:', NOCODB_BASE_URL);
+  console.log('NOCODB_TABLE_ID (startups):', NOCODB_TABLE_ID);
+  
   if (!NOCODB_API_TOKEN || !NOCODB_TABLE_ID) {
     return NextResponse.json(
       { error: 'NocoDB not configured' },

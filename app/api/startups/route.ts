@@ -91,6 +91,17 @@ function transformNocoDBRecord(record: any): Company {
 }
 
 export async function GET() {
+  console.log('========== FETCHING ALL STARTUPS ==========');
+  console.log('🔍 Environment Variables:');
+  console.log('NOCODB_API_TOKEN:', NOCODB_API_TOKEN ? `${NOCODB_API_TOKEN.substring(0, 10)}... (${NOCODB_API_TOKEN.length} chars)` : 'NOT SET');
+  console.log('NOCODB_BASE_URL:', NOCODB_BASE_URL);
+  console.log('NOCODB_TABLE_ID (startups):', NOCODB_TABLE_ID);
+  console.log('NOCODB_MEMBERS_TABLE_ID:', process.env.NOCODB_MEMBERS_TABLE_ID);
+  console.log('NEXT_PUBLIC_BASE_URL:', process.env.NEXT_PUBLIC_BASE_URL);
+  console.log('NODE_ENV:', process.env.NODE_ENV);
+  console.log('VERCEL:', process.env.VERCEL);
+  console.log('VERCEL_ENV:', process.env.VERCEL_ENV);
+  
   // Check if NocoDB is configured
   if (!NOCODB_API_TOKEN || !NOCODB_TABLE_ID) {
     console.error('NocoDB not configured - missing API token or table ID');

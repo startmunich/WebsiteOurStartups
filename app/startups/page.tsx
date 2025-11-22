@@ -192,7 +192,7 @@ export default function StartupsPage() {
       let employeesCurrent = 0
       
       const fundingTarget = totalRaised / 1000000
-      const employeesTarget = totalEmployees || 300
+      const employeesTarget = totalEmployees || 333
       
       const duration = 1500 // 1.5 seconds
       const steps = 60

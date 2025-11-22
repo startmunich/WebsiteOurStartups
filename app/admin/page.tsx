@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 
 interface Company {
@@ -29,7 +29,7 @@ interface Company {
   supportingPrograms?: string
 }
 
-export default function AdminPage() {
+function AdminPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const editId = searchParams?.get('edit')
@@ -1147,5 +1147,19 @@ export default function AdminPage() {
         )}
       </div>
     </main>
+  )
+}
+
+export default function AdminPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-[#00002c] py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-xl text-white">Loading...</p>
+        </div>
+      </main>
+    }>
+      <AdminPageContent />
+    </Suspense>
   )
 }

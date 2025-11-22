@@ -47,6 +47,14 @@ function transformNocoDBRecord(record: any): Member {
 }
 
 export async function GET() {
+  console.log('========== FETCHING ALL MEMBERS ==========');
+  console.log('🔍 Environment Variables:');
+  console.log('NOCODB_API_TOKEN:', NOCODB_API_TOKEN ? `${NOCODB_API_TOKEN.substring(0, 10)}... (${NOCODB_API_TOKEN.length} chars)` : 'NOT SET');
+  console.log('NOCODB_BASE_URL:', NOCODB_BASE_URL);
+  console.log('NOCODB_MEMBERS_TABLE_ID:', NOCODB_MEMBERS_TABLE_ID);
+  console.log('NOCODB_STARTUPS_TABLE_ID:', process.env.NOCODB_STARTUPS_TABLE_ID);
+  console.log('NODE_ENV:', process.env.NODE_ENV);
+  
   // If members table is not configured, return empty array
   if (!NOCODB_API_TOKEN || !NOCODB_MEMBERS_TABLE_ID) {
     console.log('Members table not configured in NocoDB');
