@@ -67,6 +67,7 @@ export default function AdminPage() {
     employees: "",
     featuredStartup: "no",
     yCombinatorAlumni: "no",
+    mtz: "no",
     companyLinkedin: "",
     lastInvestmentRound: "",
     firstMilestones: "",
@@ -139,6 +140,7 @@ export default function AdminPage() {
         employees: data.employees?.toString() || "",
         featuredStartup: data.isSpotlight ? "yes" : "no",
         yCombinatorAlumni: data.isYCombinator ? "yes" : "no",
+        mtz: "no",
         companyLinkedin: data.companyLinkedin || "",
         lastInvestmentRound: data.investmentRound || "",
         firstMilestones: data.milestones || "",
@@ -180,6 +182,7 @@ export default function AdminPage() {
       employees: "",
       featuredStartup: "no",
       yCombinatorAlumni: "no",
+      mtz: "no",
       companyLinkedin: "",
       lastInvestmentRound: "",
       firstMilestones: "",
@@ -199,45 +202,7 @@ export default function AdminPage() {
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const checkIfImageIsWhite = (imageData: string): Promise<boolean> => {
-    return new Promise((resolve) => {
-      const img = new Image()
-      img.onload = () => {
-        const canvas = document.createElement('canvas')
-        const ctx = canvas.getContext('2d')
-        if (!ctx) {
-          resolve(false)
-          return
-        }
 
-        canvas.width = img.width
-        canvas.height = img.height
-        ctx.drawImage(img, 0, 0)
-
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-        const data = imageData.data
-        
-        let whitePixels = 0
-        let totalPixels = data.length / 4
-
-        for (let i = 0; i < data.length; i += 4) {
-          const r = data[i]
-          const g = data[i + 1]
-          const b = data[i + 2]
-          const a = data[i + 3]
-          
-          if (r > 240 && g > 240 && b > 240 && a > 200) {
-            whitePixels++
-          }
-        }
-
-        const whitePercentage = (whitePixels / totalPixels) * 100
-        resolve(whitePercentage > 80)
-      }
-      img.onerror = () => resolve(false)
-      img.src = imageData
-    })
-  }
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: 'memberPicture' | 'companyLogo') => {
     const file = e.target.files?.[0]
@@ -267,12 +232,7 @@ export default function AdminPage() {
         const imageData = reader.result as string
         setCompanyLogoPreview(imageData)
         
-        const isWhite = await checkIfImageIsWhite(imageData)
-        if (isWhite) {
-          setLogoWarning('⚠️ Warning: This logo appears to be predominantly white and may not be visible on the white background. Please use a logo with a colored background or darker elements.')
-        } else {
-          setLogoWarning(null)
-        }
+
       }
       reader.readAsDataURL(file)
     }
@@ -294,6 +254,16 @@ export default function AdminPage() {
     setSuccess(false)
 
     try {
+      // Check for duplicate startup name when adding
+      if (mode === 'add') {
+        const existingStartup = companies.find(
+          company => company.name.toLowerCase().trim() === formData.startupName.toLowerCase().trim()
+        )
+        if (existingStartup) {
+          throw new Error(`A startup with the name "${formData.startupName}" already exists. Please use a different name.`)
+        }
+      }
+
       const submitData = { ...formData }
       
       if (memberPictureFile) {
@@ -374,7 +344,7 @@ export default function AdminPage() {
         <div className="max-w-7xl mx-auto">
           <div className="mb-8 flex justify-between items-center">
             <div>
-              <h1 className="text-4xl font-bold text-white mb-2">Manage Startups</h1>
+              <h1 className="text-5xl font-bold text-white mb-2">Manage Startups</h1>
               <p className="text-gray-400">Add new startups or edit existing ones</p>
             </div>
             <button
@@ -452,10 +422,10 @@ export default function AdminPage() {
       <div className="max-w-4xl mx-auto">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-bold text-white mb-2">
+            <h1 className="text-3xl font-bold text-white mb-2">
               {mode === 'add' ? 'Add New Startup' : 'Edit Startup'}
             </h1>
-            <p className="text-gray-400">
+            <p className="text-sm text-gray-400">
               {mode === 'add' ? 'Submit a new startup to the database' : 'Update startup information'}
             </p>
           </div>
@@ -470,23 +440,6 @@ export default function AdminPage() {
           </button>
         </div>
 
-        {/* Success Message */}
-        {success && (
-          <div className="mb-6 p-4 bg-green-500/20 border border-green-500/40 rounded-lg">
-            <p className="text-green-400 font-medium">
-              ✓ Startup {mode === 'add' ? 'added' : 'updated'} successfully!
-              {mode === 'edit' && ' Redirecting...'}
-            </p>
-          </div>
-        )}
-
-        {/* Error Message */}
-        {error && (
-          <div className="mb-6 p-4 bg-red-500/20 border border-red-500/40 rounded-lg">
-            <p className="text-red-400 font-medium">✗ {error}</p>
-          </div>
-        )}
-
         {loading && (
           <div className="text-center py-12">
             <p className="text-xl text-white">Loading...</p>
@@ -497,7 +450,7 @@ export default function AdminPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Company Information */}
             <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-              <h2 className="text-2xl font-bold text-white mb-6">Company Information</h2>
+              <h2 className="text-xl font-bold text-white mb-4">Company Information</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="md:col-span-2">
@@ -552,7 +505,6 @@ export default function AdminPage() {
                   
                   {(companyLogoPreview || (mode === 'edit' && formData.companyLogo)) && (
                     <div className="mt-3 p-4 bg-white rounded-lg">
-                      <p className="text-xs text-gray-600 mb-2 text-center">Logo Preview (on white background)</p>
                       <img 
                         src={companyLogoPreview || formData.companyLogo} 
                         alt="Logo preview" 
@@ -580,11 +532,12 @@ export default function AdminPage() {
 
                 <div className="md:col-span-2">
                   <label htmlFor="descriptionLong" className="block text-sm font-medium text-gray-300 mb-2">
-                    Long Description
+                    Long Description *
                   </label>
                   <textarea
                     id="descriptionLong"
                     name="descriptionLong"
+                    required
                     rows={4}
                     value={formData.descriptionLong}
                     onChange={handleChange}
@@ -644,7 +597,7 @@ export default function AdminPage() {
 
             {/* Founder Information */}
             <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-              <h2 className="text-2xl font-bold text-white mb-6">Founder Information</h2>
+              <h2 className="text-xl font-bold text-white mb-4">Founder Information</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -735,7 +688,7 @@ export default function AdminPage() {
 
             {/* Funding & Metrics */}
             <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-              <h2 className="text-2xl font-bold text-white mb-6">Funding & Metrics</h2>
+              <h2 className="text-xl font-bold text-white mb-4">Funding & Metrics</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -818,7 +771,7 @@ export default function AdminPage() {
 
             {/* Special Flags */}
             <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-              <h2 className="text-2xl font-bold text-white mb-6">Special Flags</h2>
+              <h2 className="text-xl font-bold text-white mb-4">Special Flags</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -852,13 +805,29 @@ export default function AdminPage() {
                     <option value="yes">Yes</option>
                   </select>
                 </div>
+
+                <div>
+                  <label htmlFor="mtz" className="block text-sm font-medium text-gray-300 mb-2">
+                    MTZ
+                  </label>
+                  <select
+                    id="mtz"
+                    name="mtz"
+                    value={formData.mtz}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#d0006f]"
+                  >
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                  </select>
+                </div>
               </div>
             </div>
 
             {/* Startup Card Preview */}
             {(companyLogoPreview || formData.startupName || formData.companyLogo) && (
               <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                <h2 className="text-2xl font-bold text-white mb-4">Preview</h2>
+                <h2 className="text-xl font-bold text-white mb-3">Preview</h2>
                 <p className="text-sm text-gray-400 mb-4">How your startup card will look</p>
                 
                 <div className="max-w-sm mx-auto">
@@ -932,6 +901,23 @@ export default function AdminPage() {
               </div>
             )}
 
+        {/* Success Message */}
+        {success && (
+          <div className="mb-6 p-4 bg-green-500/20 border border-green-500/40 rounded-lg">
+            <p className="text-green-400 font-medium">
+              ✓ Startup {mode === 'add' ? 'added' : 'updated'} successfully!
+              {mode === 'edit' && ' Redirecting...'}
+            </p>
+          </div>
+        )}
+
+        {/* Error Message */}
+        {error && (
+          <div className="mb-6 p-4 bg-red-500/20 border border-red-500/40 rounded-lg">
+            <p className="text-red-400 font-medium">✗ {error}</p>
+          </div>
+        )}
+
             {/* Action Buttons */}
             <div className="flex gap-4">
               <button
@@ -960,7 +946,9 @@ export default function AdminPage() {
               >
                 Cancel
               </button>
+              
             </div>
+            
           </form>
         )}
       </div>
