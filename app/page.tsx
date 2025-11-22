@@ -17,13 +17,8 @@ export default function Home() {
             </Link>
           </li>
           <li>
-            <Link href="/admin/add-startup" className="text-blue-600 hover:underline text-lg">
-              Add Startup (Admin)
-            </Link>
-          </li>
-          <li>
-            <Link href="/admin/edit-startups" className="text-blue-600 hover:underline text-lg">
-              Edit Startups (Admin)
+            <Link href="/admin" className="text-blue-600 hover:underline text-lg">
+              Admin - Manage Startups
             </Link>
           </li>
         </ul>
