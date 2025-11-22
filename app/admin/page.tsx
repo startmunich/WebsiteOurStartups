@@ -170,6 +170,9 @@ export default function AdminPage() {
     setView('form')
     setSelectedStartupId(id)
     setLoading(true)
+    setSaving(false)
+    setError(null)
+    setSuccess(false)
     
     try {
       const response = await fetch(`/api/startups/${id}`)
@@ -472,7 +475,6 @@ export default function AdminPage() {
                     <h3 className="text-lg font-semibold text-white mb-2">{company.name}</h3>
                     <p className="text-sm text-gray-400 line-clamp-2 mb-3">{company.summary}</p>
                     <div className="flex items-center justify-between text-xs text-gray-500">
-                      <span>Founded {company.foundingYear}</span>
                       <span className="text-[#d0006f] group-hover:text-[#d0006f]/80 font-medium">
                         Edit →
                       </span>

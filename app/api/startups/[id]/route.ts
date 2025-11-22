@@ -215,19 +215,58 @@ export async function PUT(
     // Get current date in ISO format
     const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
 
+    // First, get the current record to preserve existing attachments
+    const getResponse = await fetch(
+      `${NOCODB_BASE_URL}/api/v2/tables/${NOCODB_TABLE_ID}/records/${params.id}`,
+      {
+        headers: {
+          'xc-token': NOCODB_API_TOKEN,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!getResponse.ok) {
+      const errorText = await getResponse.text();
+      console.error(`NocoDB GET error: ${getResponse.status}`, errorText);
+      throw new Error(`Failed to find startup: ${getResponse.status}`);
+    }
+
+    const currentRecord = await getResponse.json();
+    const ncId = currentRecord.Id || currentRecord.id || params.id;
+
+    // Handle attachments: if new upload exists, use it; if it's a URL (from edit form showing existing), preserve current
+    let finalCompanyLogo = currentRecord['Company Logo'];
+    if (companyLogoUrl && typeof companyLogoUrl === 'object') {
+      // New upload - wrap in array format that NocoDB expects
+      finalCompanyLogo = [companyLogoUrl];
+    } else if (formData.companyLogo && formData.companyLogo.startsWith('https://ndb.startmunich.de/')) {
+      // Existing file - preserve current
+      finalCompanyLogo = currentRecord['Company Logo'];
+    }
+
+    let finalMemberPicture = currentRecord['Member Picture'];
+    if (memberPictureUrl && typeof memberPictureUrl === 'object') {
+      // New upload - wrap in array format that NocoDB expects
+      finalMemberPicture = [memberPictureUrl];
+    } else if (formData.memberPicture && formData.memberPicture.startsWith('https://ndb.startmunich.de/')) {
+      // Existing file - preserve current
+      finalMemberPicture = currentRecord['Member Picture'];
+    }
+
     // Map form data to NocoDB field names
     const nocoDBRecord = {
       "Startup Name": formData.startupName,
       "Company Website": formData.companyWebsite,
       "Short Description": formData.shortDescription,
       "Description Long": formData.descriptionLong,
-      "Company Logo": companyLogoUrl || null,
+      "Company Logo": finalCompanyLogo,
       "Founding Year": parseInt(formData.foundingYear) || new Date().getFullYear(),
       "Chategory": formData.chategory,
       "STARTMunich Member": formData.startMunichMember,
       "Company Role": formData.companyRole,
       "Batch": formData.batch,
-      "Member Picture": memberPictureUrl || null,
+      "Member Picture": finalMemberPicture,
       "Member Linkedin": formData.memberLinkedin,
       "Investment Size €": formData.investmentSize,
       "Employees": formData.employees ? parseInt(formData.employees) : null,
@@ -240,15 +279,19 @@ export async function PUT(
       "Last Updated": currentDate,
     };
 
+    // Now update using the correct endpoint format for NocoDB v2
     const response = await fetch(
-      `${NOCODB_BASE_URL}/api/v2/tables/${NOCODB_TABLE_ID}/records/${params.id}`,
+      `${NOCODB_BASE_URL}/api/v2/tables/${NOCODB_TABLE_ID}/records`,
       {
         method: 'PATCH',
         headers: {
           'xc-token': NOCODB_API_TOKEN,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(nocoDBRecord),
+        body: JSON.stringify({
+          Id: ncId,
+          ...nocoDBRecord,
+        }),
       }
     );
 
@@ -287,14 +330,18 @@ export async function DELETE(
   }
 
   try {
+    // NocoDB v2 API uses DELETE with the record ID in the body or as a query parameter
     const response = await fetch(
-      `${NOCODB_BASE_URL}/api/v2/tables/${NOCODB_TABLE_ID}/records/${params.id}`,
+      `${NOCODB_BASE_URL}/api/v2/tables/${NOCODB_TABLE_ID}/records`,
       {
         method: 'DELETE',
         headers: {
           'xc-token': NOCODB_API_TOKEN,
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          Id: params.id
+        }),
       }
     );
 
