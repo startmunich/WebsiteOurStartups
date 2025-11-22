@@ -49,6 +49,11 @@ export default function AdminPage() {
   const [memberPicturePreview, setMemberPicturePreview] = useState<string | null>(null)
   const [companyLogoPreview, setCompanyLogoPreview] = useState<string | null>(null)
   const [logoWarning, setLogoWarning] = useState<string | null>(null)
+  const [batchWarning, setBatchWarning] = useState<string | null>(null)
+  const [existingCategories, setExistingCategories] = useState<string[]>([])
+  const [existingSupportingPrograms, setExistingSupportingPrograms] = useState<string[]>([])
+  const [existingCompanyRoles, setExistingCompanyRoles] = useState<string[]>([])
+  const [existingInvestmentRounds, setExistingInvestmentRounds] = useState<string[]>([])
 
   const [formData, setFormData] = useState({
     startupName: "",
@@ -95,6 +100,51 @@ export default function AdminPage() {
       if (!response.ok) throw new Error('Failed to fetch startups')
       const data = await response.json()
       setCompanies(data)
+      
+      // Extract unique categories
+      const categoriesSet = new Set<string>()
+      data.forEach((company: Company) => {
+        company.category?.forEach(cat => {
+          if (cat && cat.trim()) {
+            categoriesSet.add(cat.trim())
+          }
+        })
+      })
+      setExistingCategories(Array.from(categoriesSet).sort())
+      
+      // Extract unique supporting programs
+      const programsSet = new Set<string>()
+      data.forEach((company: Company) => {
+        if (company.supportingPrograms) {
+          company.supportingPrograms.split(',').forEach(prog => {
+            const trimmed = prog.trim()
+            if (trimmed) {
+              programsSet.add(trimmed)
+            }
+          })
+        }
+      })
+      setExistingSupportingPrograms(Array.from(programsSet).sort())
+      
+      // Extract unique company roles
+      const rolesSet = new Set<string>()
+      data.forEach((company: Company) => {
+        company.founders?.forEach(founder => {
+          if (founder.role && founder.role.trim()) {
+            rolesSet.add(founder.role.trim())
+          }
+        })
+      })
+      setExistingCompanyRoles(Array.from(rolesSet).sort())
+      
+      // Extract unique investment rounds
+      const roundsSet = new Set<string>()
+      data.forEach((company: Company) => {
+        if (company.investmentRound && company.investmentRound.trim()) {
+          roundsSet.add(company.investmentRound.trim())
+        }
+      })
+      setExistingInvestmentRounds(Array.from(roundsSet).sort())
     } catch (error) {
       console.error('Error fetching startups:', error)
       setError('Failed to load startups')
@@ -199,6 +249,21 @@ export default function AdminPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
+    
+    // Validate batch format
+    if (name === 'batch') {
+      if (value.trim() === '') {
+        setBatchWarning(null)
+      } else {
+        const batchPattern = /^(WS|SS)\d{2}$/
+        if (!batchPattern.test(value.trim())) {
+          setBatchWarning('Batch must follow format: WS23 or SS24')
+        } else {
+          setBatchWarning(null)
+        }
+      }
+    }
+    
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
@@ -573,9 +638,38 @@ export default function AdminPage() {
                     name="chategory"
                     value={formData.chategory}
                     onChange={handleChange}
+                    list="categories-list"
                     className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#d0006f]"
                     placeholder="e.g., SaaS, FinTech, AI"
                   />
+                  <datalist id="categories-list">
+                    {existingCategories.map((cat, idx) => (
+                      <option key={idx} value={cat} />
+                    ))}
+                  </datalist>
+                  {existingCategories.length > 0 && (
+                    <details className="mt-2">
+                      <summary className="text-xs text-gray-400 cursor-pointer hover:text-gray-300">Show already existing categories ({existingCategories.length})</summary>
+                      <div className="mt-2 p-2 bg-white/5 rounded border border-white/10 max-h-32 overflow-y-auto">
+                        <div className="flex flex-wrap gap-1">
+                          {existingCategories.map((cat, idx) => (
+                            <button
+                              key={idx}
+                              type="button"
+                              onClick={() => {
+                                const current = formData.chategory
+                                const newValue = current ? `${current}, ${cat}` : cat
+                                setFormData(prev => ({ ...prev, chategory: newValue }))
+                              }}
+                              className="text-xs px-2 py-1 bg-white/10 hover:bg-white/20 text-gray-300 rounded transition-colors"
+                            >
+                              {cat}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </details>
+                  )}
                 </div>
 
                 <div>
@@ -626,14 +720,41 @@ export default function AdminPage() {
                     name="companyRole"
                     value={formData.companyRole}
                     onChange={handleChange}
+                    list="roles-list"
                     className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#d0006f]"
                     placeholder="e.g., CEO, CTO, Founder"
                   />
+                  <datalist id="roles-list">
+                    {existingCompanyRoles.map((role, idx) => (
+                      <option key={idx} value={role} />
+                    ))}
+                  </datalist>
+                  {existingCompanyRoles.length > 0 && (
+                    <details className="mt-2">
+                      <summary className="text-xs text-gray-400 cursor-pointer hover:text-gray-300">Show existing roles ({existingCompanyRoles.length})</summary>
+                      <div className="mt-2 p-2 bg-white/5 rounded border border-white/10 max-h-32 overflow-y-auto">
+                        <div className="flex flex-wrap gap-1">
+                          {existingCompanyRoles.map((role, idx) => (
+                            <button
+                              key={idx}
+                              type="button"
+                              onClick={() => {
+                                setFormData(prev => ({ ...prev, companyRole: role }))
+                              }}
+                              className="text-xs px-2 py-1 bg-white/10 hover:bg-white/20 text-gray-300 rounded transition-colors"
+                            >
+                              {role}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </details>
+                  )}
                 </div>
 
                 <div>
                   <label htmlFor="batch" className="block text-sm font-medium text-gray-300 mb-2">
-                    Batch (comma-separated)
+                    Batch (Semester as prefix)
                   </label>
                   <input
                     type="text"
@@ -642,8 +763,11 @@ export default function AdminPage() {
                     value={formData.batch}
                     onChange={handleChange}
                     className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#d0006f]"
-                    placeholder="e.g., W23, S24"
+                    placeholder="e.g., WS23 or SS24"
                   />
+                  {batchWarning && (
+                    <p className="text-yellow-400 text-xs mt-2">⚠️ {batchWarning}</p>
+                  )}
                 </div>
 
                 <div>
@@ -716,9 +840,36 @@ export default function AdminPage() {
                     name="lastInvestmentRound"
                     value={formData.lastInvestmentRound}
                     onChange={handleChange}
+                    list="rounds-list"
                     className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#d0006f]"
                     placeholder="e.g., Seed, Series A"
                   />
+                  <datalist id="rounds-list">
+                    {existingInvestmentRounds.map((round, idx) => (
+                      <option key={idx} value={round} />
+                    ))}
+                  </datalist>
+                  {existingInvestmentRounds.length > 0 && (
+                    <details className="mt-2">
+                      <summary className="text-xs text-gray-400 cursor-pointer hover:text-gray-300">Show existing rounds ({existingInvestmentRounds.length})</summary>
+                      <div className="mt-2 p-2 bg-white/5 rounded border border-white/10 max-h-32 overflow-y-auto">
+                        <div className="flex flex-wrap gap-1">
+                          {existingInvestmentRounds.map((round, idx) => (
+                            <button
+                              key={idx}
+                              type="button"
+                              onClick={() => {
+                                setFormData(prev => ({ ...prev, lastInvestmentRound: round }))
+                              }}
+                              className="text-xs px-2 py-1 bg-white/10 hover:bg-white/20 text-gray-300 rounded transition-colors"
+                            >
+                              {round}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </details>
+                  )}
                 </div>
 
                 <div>
@@ -747,9 +898,38 @@ export default function AdminPage() {
                     name="supportingPrograms"
                     value={formData.supportingPrograms}
                     onChange={handleChange}
+                    list="programs-list"
                     className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#d0006f]"
-                    placeholder="e.g., EXIST, FLÜGGE"
+                    placeholder="e.g., EXIST, Xplore, YC"
                   />
+                  <datalist id="programs-list">
+                    {existingSupportingPrograms.map((prog, idx) => (
+                      <option key={idx} value={prog} />
+                    ))}
+                  </datalist>
+                  {existingSupportingPrograms.length > 0 && (
+                    <details className="mt-2">
+                      <summary className="text-xs text-gray-400 cursor-pointer hover:text-gray-300">Show existing programs ({existingSupportingPrograms.length})</summary>
+                      <div className="mt-2 p-2 bg-white/5 rounded border border-white/10 max-h-32 overflow-y-auto">
+                        <div className="flex flex-wrap gap-1">
+                          {existingSupportingPrograms.map((prog, idx) => (
+                            <button
+                              key={idx}
+                              type="button"
+                              onClick={() => {
+                                const current = formData.supportingPrograms
+                                const newValue = current ? `${current}, ${prog}` : prog
+                                setFormData(prev => ({ ...prev, supportingPrograms: newValue }))
+                              }}
+                              className="text-xs px-2 py-1 bg-white/10 hover:bg-white/20 text-gray-300 rounded transition-colors"
+                            >
+                              {prog}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </details>
+                  )}
                 </div>
 
                 <div className="md:col-span-2">
