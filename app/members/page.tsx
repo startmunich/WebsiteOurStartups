@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import Link from "next/link"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Script from "next/script"
 
@@ -82,7 +81,7 @@ export default function MembersPage() {
       name: batchName,
       semester: batchName.split(' ')[0] || 'Batch',
       year: batchName.split(' ')[1] || '',
-      groupImageUrl: '/hero-image.jpg', // Using hero image for batch group photos
+      groupImageUrl: '/memberbackground.jpg', // Using hero image for batch group photos
       memberCount: batchMembers.length
     }
   })
@@ -311,105 +310,7 @@ export default function MembersPage() {
         {/* Content Below Hero */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
 
-          {/* Batches Section - Timeline Style */}
-          {batchGroups.length > 0 && (
-            <div className="mb-20">
-              <div className="mb-12 text-center">
-                <h2 className="text-4xl md:text-5xl font-black text-white mb-3">
-                  Our Journey Through
-                  <span className="block no-stroke bg-gradient-to-r from-[#d0006f] via-pink-400 to-purple-400 bg-clip-text text-transparent">
-                    Time & Innovation
-                  </span>
-                </h2>
-                <p className="text-gray-400 text-lg">Each semester brings fresh perspectives and groundbreaking ideas</p>
-              </div>
-
-              {/* Timeline Layout */}
-              <div className="relative">
-                {/* Vertical Line - Desktop Only */}
-                <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-[#d0006f] via-purple-500 to-transparent"></div>
-                
-                <div className="space-y-12">
-                  {batchGroups.map((batch, index) => (
-                    <div
-                      key={index}
-                      className={`relative flex items-center gap-8 ${
-                        index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'
-                      }`}
-                    >
-                      {/* Timeline Dot - Desktop Only */}
-                      <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 w-6 h-6 rounded-full bg-[#d0006f] border-4 border-[#00002c] z-10 shadow-lg shadow-[#d0006f]/50"></div>
-                      
-                      {/* Content Container */}
-                      <div className={`flex-1 ${index % 2 === 0 ? 'lg:text-right' : 'lg:text-left'}`}>
-                        <div
-                          onClick={() => setSelectedBatch(batch.name)}
-                          className="group relative cursor-pointer"
-                        >
-                          {/* Decorative Background Element */}
-                          <div className={`absolute -inset-4 bg-gradient-to-br from-[#d0006f]/10 to-purple-500/10 rounded-3xl blur-2xl group-hover:blur-3xl transition-all duration-500 ${
-                            index % 2 === 0 ? 'lg:-right-12' : 'lg:-left-12'
-                          }`}></div>
-                          
-                          <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden transition-all duration-500 group-hover:scale-[1.02] group-hover:border-[#d0006f]/50 group-hover:shadow-2xl group-hover:shadow-[#d0006f]/20">
-                            <div className="flex flex-col md:flex-row items-center gap-0">
-                              {/* Image Side */}
-                              <div className={`relative w-full md:w-1/2 h-64 md:h-72 overflow-hidden ${
-                                index % 2 === 0 ? 'md:order-last' : ''
-                              }`}>
-                                <img
-                                  src={batch.groupImageUrl}
-                                  alt={`${batch.name} Group Photo`}
-                                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-br from-[#d0006f]/40 via-purple-500/30 to-transparent mix-blend-multiply"></div>
-                                
-                                {/* Floating Badge */}
-                                <div className="absolute top-4 right-4 px-4 py-2 bg-white/95 backdrop-blur-sm rounded-full shadow-lg">
-                                  <span className="text-[#d0006f] font-black text-lg">{batch.memberCount}</span>
-                                  <span className="text-gray-600 text-xs ml-1 font-semibold">Members</span>
-                                </div>
-                              </div>
-                              
-                              {/* Text Side */}
-                              <div className="w-full md:w-1/2 p-8">
-                                <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#d0006f]/20 border border-[#d0006f]/40 rounded-full mb-4">
-                                  <svg className="w-4 h-4 text-[#d0006f]" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-                                  </svg>
-                                  <span className="text-[#d0006f] font-bold text-xs tracking-widest uppercase">{batch.semester} {batch.year}</span>
-                                </div>
-                                
-                                <h3 className="text-4xl font-black text-white mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#d0006f] group-hover:bg-clip-text transition-all duration-300">
-                                  {batch.name}
-                                </h3>
-                                
-                                <p className="text-gray-400 text-sm leading-relaxed mb-6">
-                                  A cohort of innovative minds pushing boundaries and creating the future of technology and entrepreneurship.
-                                </p>
-                                
-                                <button className="inline-flex items-center gap-2 text-[#d0006f] font-semibold group-hover:gap-3 transition-all">
-                                  <span>View Members</span>
-                                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                  </svg>
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {/* Spacer for desktop alignment */}
-                      <div className="hidden lg:block flex-1"></div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Join Our Community CTA */}
+          {/* Join Our Community CTA
           <div className="mb-16 relative">
             <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#d0006f]/20 via-[#00002c] to-[#d0006f]/10 border border-[#d0006f]/30 p-1">
               <div className="absolute inset-0 bg-gradient-to-r from-[#d0006f]/20 via-transparent to-[#d0006f]/20 animate-pulse"></div>
@@ -454,7 +355,7 @@ export default function MembersPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Filter Section - Pill Style */}
           <div className="mb-12">
@@ -554,13 +455,18 @@ export default function MembersPage() {
               const isLarge = index % 7 === 0
               const isMedium = index % 5 === 0 && !isLarge
               
+              const CardWrapper = member.linkedinUrl ? 'a' : 'div'
+              const cardProps = member.linkedinUrl ? {
+                href: member.linkedinUrl,
+                target: "_blank",
+                rel: "noopener noreferrer"
+              } : {}
+              
               return (
-                <Link
+                <CardWrapper
                   key={member.id}
-                  href={`/member-details/${member.id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`group relative overflow-hidden rounded-2xl transition-all duration-500 cursor-pointer ${
+                  {...cardProps}
+                  className={`group relative overflow-hidden rounded-2xl transition-all duration-500 ${member.linkedinUrl ? 'cursor-pointer' : 'cursor-default'} ${
                     isLarge 
                       ? 'col-span-2 row-span-2 md:col-span-2 md:row-span-2' 
                       : isMedium
@@ -582,20 +488,14 @@ export default function MembersPage() {
                     {/* Gradient Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/60 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
                     
-                    {/* LinkedIn Button */}
+                    {/* LinkedIn Icon Badge */}
                     {member.linkedinUrl && (
                       <div className="absolute top-3 right-3 z-20">
-                        <a
-                          href={member.linkedinUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-center w-10 h-10 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full transition-all hover:scale-110 shadow-lg"
-                          onClick={(e) => e.stopPropagation()}
-                        >
+                        <div className="flex items-center justify-center w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full shadow-lg group-hover:bg-white group-hover:scale-110 transition-all">
                           <svg className="w-5 h-5 text-[#0077b5]" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                           </svg>
-                        </a>
+                        </div>
                       </div>
                     )}
                     
@@ -627,7 +527,7 @@ export default function MembersPage() {
                     {/* Hover Effect - Corner Accent */}
                     <div className="absolute top-0 left-0 w-20 h-20 bg-gradient-to-br from-[#d0006f] to-transparent opacity-0 group-hover:opacity-30 transition-opacity duration-500 blur-2xl"></div>
                   </div>
-                </Link>
+                </CardWrapper>
               )
             })}
           </div>

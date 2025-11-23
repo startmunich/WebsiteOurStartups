@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { mockMembers } from '@/lib/mockMembers'
 
 export const dynamic = 'force-dynamic';
 
@@ -57,10 +58,10 @@ export async function GET() {
   console.log('NOCODB_STARTUPS_TABLE_ID:', process.env.NOCODB_STARTUPS_TABLE_ID);
   console.log('NODE_ENV:', process.env.NODE_ENV);
   
-  // If members table is not configured, return empty array
+  // If members table is not configured, return mock data
   if (!NOCODB_API_TOKEN || !NOCODB_MEMBERS_TABLE_ID) {
-    console.log('Members table not configured in NocoDB');
-    return NextResponse.json([]);
+    console.log('Members table not configured in NocoDB, using mock data');
+    return NextResponse.json(mockMembers);
   }
 
   try {
