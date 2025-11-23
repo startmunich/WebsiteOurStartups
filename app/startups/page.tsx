@@ -242,20 +242,20 @@ export default function StartupsPage() {
       
       <main className="min-h-screen bg-[#00002c]">
         {/* Hero Section with Full-Width Image */}
-        <div className="relative w-full overflow-hidden">
+        <div className="relative w-full overflow-hidden h-[50vh] lg:h-auto">
           {/* Background Image + Overlay */}
-          <div className="absolute inset-0">
+          <div className="absolute inset-0 h-full">
             <img
               src="/hero-image.jpg"
               alt="START Munich Community"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-[#00002c]/60"></div>
+            <div className="absolute inset-0 h-full bg-[#00002c]/60"></div>
           </div>
 
           {/* Content Overlay */}
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 lg:gap-12">
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 h-full flex items-center">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 w-full">
               {/* Left Side */}
               <div className="flex-1 max-w-2xl text-left">
                 {/* <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#d0006f]/20 border border-[#d0006f]/40 rounded-full mb-6 backdrop-blur-sm">
