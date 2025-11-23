@@ -19,6 +19,7 @@ interface Member {
   bio?: string
   expertise?: string[]
   achievements?: string
+  gender?: string
 }
 
 // Transform NocoDB record to Member format
@@ -47,6 +48,7 @@ function transformNocoDBRecord(record: any): Member {
     bio: record.Bio || undefined,
     expertise: expertise,
     achievements: record.Achievements || undefined,
+    gender: record.Gender || undefined,
   };
 }
 

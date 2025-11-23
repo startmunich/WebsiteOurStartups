@@ -13,6 +13,7 @@ export interface Member {
   bio?: string
   expertise?: string[]
   achievements?: string
+  gender?: string
 }
 
 // Base member templates (8 unique members)
@@ -26,7 +27,8 @@ const baseMemberTemplates = [
     imageUrl: "/example.png",
     bio: "Passionate about using AI to solve real-world problems. Previously at Google and Meta.",
     expertise: ["Machine Learning", "Product Strategy", "Leadership"],
-    achievements: "Raised $5M seed round, 50K+ users in first year"
+    achievements: "Raised $5M seed round, 50K+ users in first year",
+    gender: "female"
   },
   {
     name: "Marcus Weber",
@@ -37,7 +39,8 @@ const baseMemberTemplates = [
     imageUrl: "/example.png",
     bio: "Building scalable cloud infrastructure. Former principal engineer at AWS.",
     expertise: ["Cloud Architecture", "DevOps", "Distributed Systems"],
-    achievements: "Built systems serving 10M+ daily active users"
+    achievements: "Built systems serving 10M+ daily active users",
+    gender: "male"
   },
   {
     name: "Priya Patel",
@@ -48,7 +51,8 @@ const baseMemberTemplates = [
     imageUrl: "/example.png",
     bio: "Revolutionizing healthcare delivery with technology. MD turned entrepreneur.",
     expertise: ["Healthcare", "Digital Health", "Product Development"],
-    achievements: "Y Combinator W24, Partnership with 20+ hospitals"
+    achievements: "Y Combinator W24, Partnership with 20+ hospitals",
+    gender: "female"
   },
   {
     name: "David Müller",
@@ -59,7 +63,8 @@ const baseMemberTemplates = [
     imageUrl: "/example.png",
     bio: "Creating beautiful and functional design tools for the next generation of creators.",
     expertise: ["Product Design", "UX/UI", "Creative Tools"],
-    achievements: "15K designers using platform, Featured in ProductHunt top 5"
+    achievements: "15K designers using platform, Featured in ProductHunt top 5",
+    gender: "male"
   },
   {
     name: "Lisa Anderson",
@@ -70,7 +75,8 @@ const baseMemberTemplates = [
     imageUrl: "/example.png",
     bio: "Making quality education accessible to everyone. Former teacher and education consultant.",
     expertise: ["EdTech", "Growth Marketing", "Business Development"],
-    achievements: "100K+ students, 15 countries, €2M ARR"
+    achievements: "100K+ students, 15 countries, €2M ARR",
+    gender: "female"
   },
   {
     name: "Alex Thompson",
@@ -81,7 +87,8 @@ const baseMemberTemplates = [
     imageUrl: "/example.png",
     bio: "Building modern financial infrastructure for SMEs. Ex-Goldman Sachs and Stripe.",
     expertise: ["FinTech", "Backend Engineering", "Security"],
-    achievements: "€10M Series A, Processing €50M monthly"
+    achievements: "€10M Series A, Processing €50M monthly",
+    gender: "male"
   },
   {
     name: "Nina Kowalski",
@@ -92,7 +99,8 @@ const baseMemberTemplates = [
     imageUrl: "/example.png",
     bio: "Fighting climate change through innovative sustainability solutions. Environmental scientist and entrepreneur.",
     expertise: ["Sustainability", "Climate Tech", "Impact Investing"],
-    achievements: "B Corp certified, Reduced 50K tons CO2, €3M raised"
+    achievements: "B Corp certified, Reduced 50K tons CO2, €3M raised",
+    gender: "female"
   },
   {
     name: "James Park",
@@ -103,7 +111,8 @@ const baseMemberTemplates = [
     imageUrl: "/example.png",
     bio: "Reimagining the food industry with sustainable alternatives. Former Michelin-starred chef.",
     expertise: ["Food Science", "Supply Chain", "Operations"],
-    achievements: "Partnership with 100+ restaurants, €1.5M seed"
+    achievements: "Partnership with 100+ restaurants, €1.5M seed",
+    gender: "male"
   }
 ]
 

@@ -18,6 +18,7 @@ interface Member {
   bio?: string
   expertise?: string[]
   achievements?: string
+  gender?: string
 }
 
 interface Batch {
@@ -43,16 +44,13 @@ async function fetchMembers(): Promise<Member[]> {
 export default function MembersPage() {
   const [members, setMembers] = useState<Member[]>([])
   const [loading, setLoading] = useState(true)
-  const [selectedBatch, setSelectedBatch] = useState<string>("all")
-  const [selectedStudy, setSelectedStudy] = useState<string>("all")
   const [expandedBatch, setExpandedBatch] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 12
-  
+
   // Animation states for numbers
   const [animatedMembers, setAnimatedMembers] = useState(0)
-  const [animatedBatches, setAnimatedBatches] = useState(0)
-  const [animatedCompanies, setAnimatedCompanies] = useState(0)
+  const [animatedAlumni, setAnimatedAlumni] = useState(0)
   const hasAnimatedRef = useRef(false)
   const membersGridRef = useRef<HTMLDivElement>(null)
 
@@ -77,6 +75,30 @@ export default function MembersPage() {
     new Set(members.map(member => member.study).filter((study): study is string => !!study))
   ).sort()
 
+  // Calculate analytics
+  const totalMembers = members.length
+  const maleMembers = members.filter(m => m.gender?.toLowerCase() === 'male').length
+  const femaleMembers = members.filter(m => m.gender?.toLowerCase() === 'female').length
+  const malePercentage = totalMembers > 0 ? Math.round((maleMembers / totalMembers) * 100) : 0
+  const femalePercentage = totalMembers > 0 ? Math.round((femaleMembers / totalMembers) * 100) : 0
+
+  // Study topics distribution
+  const studyDistribution = members.reduce((acc, member) => {
+    if (member.study) {
+      acc[member.study] = (acc[member.study] || 0) + 1
+    }
+    return acc
+  }, {} as Record<string, number>)
+
+  const topStudies = Object.entries(studyDistribution)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 5)
+    .map(([study, count]) => ({
+      study,
+      count,
+      percentage: Math.round((count / totalMembers) * 100)
+    }))
+
   // Group members by batch for batch cards
   const batchGroups = allBatches.map(batchName => {
     const batchMembers = members.filter(m => m.batch === batchName)
@@ -99,70 +121,47 @@ export default function MembersPage() {
     return 0
   })
 
-  // Filter members based on selected filters
-  const filteredMembers = members.filter(member => {
-    const matchesBatch = selectedBatch === "all" || member.batch === selectedBatch
-    const matchesStudy = selectedStudy === "all" || member.study === selectedStudy
-    return matchesBatch && matchesStudy
-  })
+  // No filtering needed anymore, show all members in batches
 
-  // Pagination calculations
-  const totalPages = Math.ceil(filteredMembers.length / itemsPerPage)
-  const startIndex = (currentPage - 1) * itemsPerPage
-  const endIndex = startIndex + itemsPerPage
-  const paginatedMembers = filteredMembers.slice(startIndex, endIndex)
-
-  // Reset to page 1 when filters change
+  // Animate numbers on component mount (members + alumni)
   useEffect(() => {
-    setCurrentPage(1)
-  }, [selectedBatch, selectedStudy])
-
-  // Calculate total statistics
-  const totalMembers = members.length
-  const totalBatches = allBatches.length
-  const totalCompanies = new Set(members.filter(m => m.company).map(m => m.company)).size
-
-  // Animate numbers on component mount
-  useEffect(() => {
-    if (!loading && !hasAnimatedRef.current && totalMembers > 0) {
+    if (!loading && !hasAnimatedRef.current) {
       hasAnimatedRef.current = true
-      
+
+      // Mock alumni count (as requested)
+      const alumniCount = 800
+
       let membersCurrent = 0
-      let batchesCurrent = 0
-      let companiesCurrent = 0
-      
+      let alumniCurrent = 0
+
       const duration = 1500
       const steps = 60
       const interval = duration / steps
-      
-      const membersIncrement = totalMembers / steps
-      const batchesIncrement = totalBatches / steps
-      const companiesIncrement = totalCompanies / steps
-      
+
+      const membersIncrement = (totalMembers || 0) / steps
+      const alumniIncrement = alumniCount / steps
+
       let step = 0
-      
+
       const timer = setInterval(() => {
         step++
-        
+
         membersCurrent += membersIncrement
-        batchesCurrent += batchesIncrement
-        companiesCurrent += companiesIncrement
-        
+        alumniCurrent += alumniIncrement
+
         if (step >= steps) {
           setAnimatedMembers(totalMembers)
-          setAnimatedBatches(totalBatches)
-          setAnimatedCompanies(totalCompanies)
+          setAnimatedAlumni(alumniCount)
           clearInterval(timer)
         } else {
           setAnimatedMembers(membersCurrent)
-          setAnimatedBatches(batchesCurrent)
-          setAnimatedCompanies(companiesCurrent)
+          setAnimatedAlumni(alumniCurrent)
         }
       }, interval)
 
       return () => clearInterval(timer)
     }
-  }, [loading, totalMembers, totalBatches, totalCompanies])
+  }, [loading, totalMembers])
 
   if (loading) {
     return (
@@ -192,7 +191,7 @@ export default function MembersPage() {
           document.addEventListener("DOMContentLoaded", sendHeight);
         `}
       </Script>
-      
+
       <main className="min-h-screen bg-[#00002c]">
         {/* Hero Section with Full-Width Image */}
         <div className="relative w-full overflow-hidden">
@@ -212,10 +211,10 @@ export default function MembersPage() {
             <div className="flex items-center justify-between gap-12">
               {/* Left Side - Heading */}
               <div className="flex-1 max-w-2xl">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#d0006f]/20 border border-[#d0006f]/40 rounded-full mb-6 backdrop-blur-sm">
+                {/* <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#d0006f]/20 border border-[#d0006f]/40 rounded-full mb-6 backdrop-blur-sm">
                   <div className="w-2 h-2 bg-[#d0006f] rounded-full animate-pulse"></div>
                   <p className="text-[#d0006f] font-semibold text-xs tracking-widest uppercase">OUR COMMUNITY</p>
-                </div>
+                </div> */}
                 <h1 className="text-5xl md:text-6xl lg:text-8xl font-black text-white mb-6 h1-big">
                   <span className="no-stroke bg-gradient-to-r from-white via-pink-200 to-white bg-clip-text text-transparent">
                     THE MINDS
@@ -233,87 +232,19 @@ export default function MembersPage() {
                   Meet the ambitious student entrepreneurs building the future of technology and innovation
                 </p>
               </div>
-
-              {/* Right Side - Statistics */}
-              <div className="hidden lg:flex flex-col gap-6 min-w-[280px] mt-11 mb-11 ml-auto mr-20">
-                {/* Stat 1 - Total Members */}
-                <div className="group relative backdrop-blur-lg bg-gradient-to-br from-white/10 to-white/5 p-8 rounded-2xl border border-white/20 hover:border-[#d0006f]/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[#d0006f]/20 w-full">
-                  <div className="absolute top-3 right-3 w-12 h-12 bg-[#d0006f]/20 rounded-full blur-xl group-hover:bg-[#d0006f]/30 transition-all"></div>
-                  <div className="relative text-center">
-                    <div className="flex items-baseline justify-center gap-2 mb-3">
-                      <span className="text-6xl font-black bg-gradient-to-br from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-[#d0006f] transition-all duration-300">
-                        {Math.floor(animatedMembers)}
-                      </span>
-                      <span className="text-3xl font-bold text-[#d0006f] animate-pulse">+</span>
-                    </div>
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="w-8 h-0.5 bg-gradient-to-r from-[#d0006f] to-transparent"></div>
-                      <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Members</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Stat 2 - Total Batches */}
-                <div className="group relative backdrop-blur-lg bg-gradient-to-br from-white/10 to-white/5 p-8 rounded-2xl border border-white/20 hover:border-[#d0006f]/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[#d0006f]/20">
-                  <div className="absolute top-3 right-3 w-12 h-12 bg-[#d0006f]/20 rounded-full blur-xl group-hover:bg-[#d0006f]/30 transition-all"></div>
-                  <div className="relative text-center">
-                    <div className="flex items-baseline justify-center gap-2 mb-3">
-                      <span className="text-6xl font-black bg-gradient-to-br from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-[#d0006f] transition-all duration-300">
-                        {Math.floor(animatedBatches)}
-                      </span>
-                      <span className="text-3xl font-bold text-[#d0006f] animate-pulse">+</span>
-                    </div>
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="w-8 h-0.5 bg-gradient-to-r from-[#d0006f] to-transparent"></div>
-                      <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Batches</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Stat 3 - Companies Founded */}
-                <div className="group relative backdrop-blur-lg bg-gradient-to-br from-white/10 to-white/5 p-8 rounded-2xl border border-white/20 hover:border-[#d0006f]/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[#d0006f]/20">
-                  <div className="absolute top-3 right-3 w-12 h-12 bg-[#d0006f]/20 rounded-full blur-xl group-hover:bg-[#d0006f]/30 transition-all"></div>
-                  <div className="relative text-center">
-                    <div className="flex items-baseline justify-center gap-2 mb-3">
-                      <span className="text-6xl font-black bg-gradient-to-br from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-[#d0006f] transition-all duration-300">
-                        {Math.floor(animatedCompanies)}
-                      </span>
-                      <span className="text-3xl font-bold text-[#d0006f] animate-pulse">+</span>
-                    </div>
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="w-8 h-0.5 bg-gradient-to-r from-[#d0006f] to-transparent"></div>
-                      <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Companies</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
 
           {/* Mobile Statistics - Below Image */}
           <div className="lg:hidden absolute bottom-0 left-0 right-0 backdrop-blur-md bg-[#00002c]/80 border-t border-white/10">
             <div className="max-w-7xl mx-auto px-4 py-10">
-              <div className="grid grid-cols-3 gap-8 text-center">
+              <div className="grid grid-cols-1 gap-4 text-center">
                 <div>
                   <div className="flex items-baseline justify-center gap-1 mb-1">
                     <span className="text-3xl font-black text-white">{Math.floor(animatedMembers)}</span>
                     <span className="text-lg font-bold text-[#d0006f]">+</span>
                   </div>
-                  <p className="text-xs font-bold text-gray-300 uppercase">Members</p>
-                </div>
-                <div>
-                  <div className="flex items-baseline justify-center gap-1 mb-1">
-                    <span className="text-3xl font-black text-white">{Math.floor(animatedBatches)}</span>
-                    <span className="text-lg font-bold text-[#d0006f]">+</span>
-                  </div>
-                  <p className="text-xs font-bold text-gray-300 uppercase">Batches</p>
-                </div>
-                <div>
-                  <div className="flex items-baseline justify-center gap-1 mb-1">
-                    <span className="text-3xl font-black text-white">{Math.floor(animatedCompanies)}</span>
-                    <span className="text-lg font-bold text-[#d0006f]">+</span>
-                  </div>
-                  <p className="text-xs font-bold text-gray-300 uppercase">Companies</p>
+                  <p className="text-xs font-bold text-gray-300 uppercase">Active Members</p>
                 </div>
               </div>
             </div>
@@ -370,88 +301,100 @@ export default function MembersPage() {
             </div>
           </div> */}
 
-          {/* Filter Section - Pill Style */}
-          <div className="mb-12">
-            <div className="flex flex-wrap items-center gap-3">
-              {/* Batch Filter Pills */}
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-sm font-semibold text-gray-400 uppercase tracking-wide">Batch:</span>
-                <button
-                  onClick={() => setSelectedBatch("all")}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    selectedBatch === "all"
-                      ? 'bg-gradient-to-r from-[#d0006f] to-purple-600 text-white shadow-lg shadow-[#d0006f]/30'
-                      : 'bg-white/5 text-gray-300 hover:bg-white/10 border border-white/20'
-                  }`}
-                >
-                  All
-                </button>
-                {allBatches.map((batch) => (
-                  <button
-                    key={batch}
-                    onClick={() => setSelectedBatch(batch)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                      selectedBatch === batch
-                        ? 'bg-gradient-to-r from-[#d0006f] to-purple-600 text-white shadow-lg shadow-[#d0006f]/30'
-                        : 'bg-white/5 text-gray-300 hover:bg-white/10 border border-white/20'
-                    }`}
-                  >
-                    {batch}
-                  </button>
-                ))}
+          {/* Analytics Section */}
+          <div className="mb-16">
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-8">
+              Community <span className="no-stroke bg-gradient-to-r from-[#d0006f] to-purple-400 bg-clip-text text-transparent">Analytics</span>
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Active Members */}
+              <div className="group relative backdrop-blur-lg bg-gradient-to-br from-white/10 to-white/5 p-6 rounded-2xl border border-white/20 hover:border-[#d0006f]/50 transition-all duration-300">
+                
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="w-12 h-12 bg-[#d0006f]/20 rounded-xl flex items-center justify-center">
+                    <svg className="w-6 h-6 text-[#d0006f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-3xl font-black text-white">{totalMembers}</p>
+                    <p className="text-sm text-gray-400 font-medium">Active Members</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-[#ffd1e6]/20 rounded-xl flex items-center justify-center">
+                    <svg className="w-6 h-6 text-[#d0006f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M12 12a5 5 0 100-10 5 5 0 000 10z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-3xl font-black text-white">{Math.floor(animatedAlumni)}</p>
+                    <p className="text-sm text-gray-400 font-medium">Alumni</p>
+                  </div>
+                </div>
               </div>
 
-              {/* Divider */}
-              <div className="h-8 w-px bg-white/20"></div>
-
-              {/* Study Filter Pills */}
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-sm font-semibold text-gray-400 uppercase tracking-wide">Study:</span>
-                <button
-                  onClick={() => setSelectedStudy("all")}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    selectedStudy === "all"
-                      ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-600/30'
-                      : 'bg-white/5 text-gray-300 hover:bg-white/10 border border-white/20'
-                  }`}
-                >
-                  All
-                </button>
-                {allStudies.slice(0, 4).map((study) => (
-                  <button
-                    key={study}
-                    onClick={() => setSelectedStudy(study)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                      selectedStudy === study
-                        ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-600/30'
-                        : 'bg-white/5 text-gray-300 hover:bg-white/10 border border-white/20'
-                    }`}
-                  >
-                    {study}
-                  </button>
-                ))}
+              {/* Gender Distribution */}
+              <div className="group relative backdrop-blur-lg bg-gradient-to-br from-white/10 to-white/5 p-6 rounded-2xl border border-white/20 hover:border-[#d0006f]/50 transition-all duration-300">
+                <div className="mb-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                      <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                      </svg>
+                    </div>
+                    <p className="text-sm text-gray-400 font-medium">Gender Distribution</p>
+                  </div>
+                  <div className="space-y-3">
+                    <div>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-xs text-gray-400">Male</span>
+                        <span className="text-sm font-bold text-white">{malePercentage}%</span>
+                      </div>
+                      <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-blue-500 to-blue-400 transition-all duration-1000"
+                          style={{ width: `${malePercentage}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-xs text-gray-400">Female</span>
+                        <span className="text-sm font-bold text-white">{femalePercentage}%</span>
+                      </div>
+                      <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-pink-500 to-pink-400 transition-all duration-1000"
+                          style={{ width: `${femalePercentage}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              {/* Clear Filters */}
-              {(selectedBatch !== "all" || selectedStudy !== "all") && (
-                <button
-                  onClick={() => {
-                    setSelectedBatch("all")
-                    setSelectedStudy("all")
-                  }}
-                  className="ml-auto px-4 py-2 rounded-full text-sm font-medium text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/20 transition-all flex items-center gap-2"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                  Clear
-                </button>
-              )}
-            </div>
-            
-            {/* Results Count */}
-            <div className="mt-4 text-sm text-gray-400">
-              Showing <span className="text-white font-semibold">{filteredMembers.length}</span> member{filteredMembers.length !== 1 ? 's' : ''}
+              {/* Study Topics Distribution */}
+              <div className="group relative backdrop-blur-lg bg-gradient-to-br from-white/10 to-white/5 p-6 rounded-2xl border border-white/20 hover:border-[#d0006f]/50 transition-all duration-300">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                    <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                  </div>
+                  <p className="text-sm text-gray-400 font-medium">Top Study Fields</p>
+                </div>
+                <div className="space-y-2">
+                  {topStudies.map(({ study, count, percentage }, index) => (
+                    <div key={study} className="flex items-center justify-between">
+                      <span className="text-xs text-gray-300 truncate flex-1">{study}</span>
+                      <span className="text-xs font-bold text-[#d0006f] ml-2">{percentage}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -460,7 +403,7 @@ export default function MembersPage() {
             <h2 className="text-3xl md:text-4xl font-black text-white mb-8">
               Our <span className="no-stroke bg-gradient-to-r from-[#d0006f] to-purple-400 bg-clip-text text-transparent">Batches</span>
             </h2>
-            
+
             {/* Show expanded batch full width if selected */}
             {expandedBatch ? (
               <div>
@@ -480,19 +423,19 @@ export default function MembersPage() {
                           alt={batch.name}
                           className="w-full h-full object-cover"
                         />
-                        
+
                         {/* Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/40 to-transparent"></div>
-                        
+
                         {/* Hover Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-br from-[#d0006f]/30 via-purple-400/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        
+
                       </div>
-                      
+
                       {/* Corner Accent */}
                       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#d0006f] to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-3xl"></div>
                     </button>
-                    
+
                     {/* Members Grid */}
                     <div className="animate-in fade-in slide-in-from-top-4 duration-500">
                       <div className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-5 gap-4">
@@ -511,17 +454,17 @@ export default function MembersPage() {
                                 className="w-full h-full object-cover"
                               />
                               <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/40 to-transparent"></div>
-                              
+
                               {member.linkedinUrl && (
                                 <div className="absolute top-2 right-2">
                                   <div className="w-8 h-8 bg-white/90 rounded-full flex items-center justify-center">
                                     <svg className="w-4 h-4 text-[#0077b5]" fill="currentColor" viewBox="0 0 24 24">
-                                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                                     </svg>
                                   </div>
                                 </div>
                               )}
-                              
+
                               <div className="absolute bottom-0 left-0 right-0 p-3">
                                 <h4 className="font-bold text-white text-sm">{member.name}</h4>
                                 <p className="text-pink-300 text-xs font-semibold">{member.study || member.role}</p>
@@ -553,14 +496,14 @@ export default function MembersPage() {
                           alt={batch.name}
                           className="w-full h-full object-cover"
                         />
-                        
+
                         {/* Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/10 to-transparent"></div>
-                        
+
                         {/* Hover Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-br from-[#d0006f]/30 via-purple-400/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                       </div>
-                      
+
                       {/* Corner Accent */}
                       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#d0006f] to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-3xl"></div>
                     </button>
@@ -579,7 +522,7 @@ export default function MembersPage() {
             <p className="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
               Discover more about our programs and how we support student entrepreneurs
             </p>
-            <a 
+            <a
               href="https://www.startmunich.de"
               target="_blank"
               rel="noopener noreferrer"
