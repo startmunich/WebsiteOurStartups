@@ -5,6 +5,8 @@ import Link from "next/link"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Script from "next/script"
 
+export const dynamic = 'force-dynamic'
+
 interface Member {
   id: number
   name: string
