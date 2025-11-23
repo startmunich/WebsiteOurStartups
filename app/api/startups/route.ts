@@ -32,6 +32,7 @@ interface Company {
   investmentRound?: string
   milestones?: string
   supportingPrograms?: string
+  lastUpdated?: string
 }
 
 // Transform NocoDB record to Company format
@@ -90,6 +91,7 @@ function transformNocoDBRecord(record: any): Company {
     investmentRound: record['Last investment round'] || undefined,
     milestones: record['First milestones'] || undefined,
     supportingPrograms: record['Supporting Programs'] || undefined,
+    lastUpdated: record['Last Updated'] || undefined,
   };
 }
 

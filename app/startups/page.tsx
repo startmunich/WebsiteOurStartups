@@ -35,6 +35,7 @@ interface Company {
   investmentRound?: string
   milestones?: string
   supportingPrograms?: string
+  lastUpdated?: string
 }
 
 // Fetch companies from API

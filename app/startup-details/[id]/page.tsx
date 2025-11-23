@@ -30,6 +30,7 @@ interface Company {
   investmentRound?: string
   milestones?: string
   supportingPrograms?: string
+  lastUpdated?: string
 }
 
 // Fetch companies from API
@@ -122,33 +123,40 @@ export default function StartupDetailsPage({ params }: { params: { id: string } 
 
                 {/* Quick Info */}
                 <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-gray-400 mb-4">
-                  <span>Founded {company.foundingYear}</span>
-                  {company.totalRaised && company.totalRaised !== "€0" && (
+
+                  {company.lastUpdated && (
                     <>
-                      <span>•</span>
-                      <span>{company.totalRaised} raised</span>
-                    </>
-                  )}
-                  {company.investmentRound && (
-                    <>
-                      <span>•</span>
-                      <span>{company.investmentRound}</span>
+                      <span>Infromation Updated {new Date(company.lastUpdated).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
                     </>
                   )}
                 </div>
-
-                {/* Website Link */}
-                <a
-                  href={`https://${company.website}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-[#d0006f] hover:text-pink-400 font-medium transition-colors"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                  Visit Website
-                </a>
+              {/* Links */}
+                <div className="flex flex-wrap gap-3">
+                  <a
+                    href={`https://${company.website}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-[#d0006f] hover:text-pink-400 font-medium transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                    Visit Website
+                  </a>
+                  {company.companyLinkedin && (
+                    <a
+                      href={company.companyLinkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-[#d0006f] hover:text-pink-400 font-medium transition-colors"
+                    >
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                      </svg>
+                      Visit LinkedIn
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -158,9 +166,50 @@ export default function StartupDetailsPage({ params }: { params: { id: string } 
               <p className="text-gray-300 leading-relaxed">{company.description}</p>
             </div>
 
+                        {/* Supporting Programs */}
+            {company.supportingPrograms && (
+              <div className="mb-6">
+                <h2 className="text-lg font-semibold text-white mb-4">Programs</h2>
+                <div className="flex flex-wrap gap-2">
+                  {company.supportingPrograms.split(',').filter(p => p.trim()).map((program, idx) => (
+                    <span
+                      key={idx}
+                      className="px-3 py-1.5 text-sm bg-white/5 text-gray-300 rounded-lg"
+                    >
+                      {program.trim()}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* Company Info */}
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold text-white mb-3">Company Info</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Founded</p>
+                  <p className="text-base font-semibold text-white">{company.foundingYear}</p>
+                </div>
+                {company.totalRaised && company.totalRaised !== "€0" && (
+                  <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+                    <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Funding</p>
+                    <p className="text-base font-semibold text-white">{company.totalRaised}</p>
+                  </div>
+                )}
+                {company.investmentRound && (
+                  <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+                    <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Stage</p>
+                    <p className="text-base font-semibold text-white">{company.investmentRound}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+
             {/* Founders */}
             {company.founders.length > 0 && (
-              <div className="mb-6 pb-6 border-b border-white/10">
+              <div className="mb-1 pb-1">
                 <h2 className="text-lg font-semibold text-white mb-4">
                   {company.founders.length > 1 ? 'Founders' : 'Founder'}
                 </h2>
@@ -188,13 +237,15 @@ export default function StartupDetailsPage({ params }: { params: { id: string } 
                         />
                       )}
                       <div className="flex-1 min-w-0">
-                        <p className="text-base font-semibold text-white mb-1">{founder.name}</p>
+                        <p className="text-base font-semibold text-white mb-1">
+                          {founder.name}
+                          {founder.batch && (
+                            <span className="ml-2 font-normal text-gray-500">
+                              (Batch: {founder.batch})
+                            </span>
+                          )}
+                        </p>
                         <p className="text-sm text-gray-400 mb-1">{founder.role}</p>
-                        {founder.batch && founder.batch.length > 0 && (
-                          <p className="text-xs text-gray-500">
-                            Batch: {founder.batch.join(', ')}
-                          </p>
-                        )}
                       </div>
                       {founder.linkedinUrl && (
                         <a
@@ -214,25 +265,9 @@ export default function StartupDetailsPage({ params }: { params: { id: string } 
               </div>
             )}
 
-            {/* Supporting Programs */}
-            {company.supportingPrograms && (
-              <div className="mb-6">
-                <h2 className="text-lg font-semibold text-white mb-4">Programs</h2>
-                <div className="flex flex-wrap gap-2">
-                  {company.supportingPrograms.split(',').filter(p => p.trim()).map((program, idx) => (
-                    <span
-                      key={idx}
-                      className="px-3 py-1.5 text-sm bg-white/5 text-gray-300  border-white/10 rounded-lg"
-                    >
-                      {program.trim()}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
 
             {/* Footer Links */}
-            <div className="flex flex-wrap gap-4 pt-6 border-t border-white/10">
+            {/* <div className="flex flex-wrap gap-4 pt-6 border-t border-white/10">
               <a
                 href={`https://${company.website}`}
                 target="_blank"
@@ -257,7 +292,7 @@ export default function StartupDetailsPage({ params }: { params: { id: string } 
                   LinkedIn
                 </a>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
