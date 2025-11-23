@@ -2,41 +2,13 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
+import type { Company } from "@/lib/types"
 
 export const dynamic = 'force-dynamic'
 import Image from "next/image"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Script from "next/script"
-
-interface Founder {
-  name: string
-  role: string
-  batch: string
-  imageUrl: string
-  linkedinUrl?: string
-}
-
-interface Company {
-  id: number
-  name: string
-  website: string
-  summary: string
-  description: string
-  logoUrl: string
-  foundingYear: number | string
-  category: string[]
-  founders: Founder[]
-  totalRaised?: string
-  employees?: number
-  isSpotlight?: boolean
-  isYCombinator?: boolean
-  companyLinkedin?: string
-  investmentRound?: string
-  milestones?: string
-  supportingPrograms?: string
-  lastUpdated?: string
-}
 
 // Fetch companies from API
 async function fetchCompanies(): Promise<Company[]> {

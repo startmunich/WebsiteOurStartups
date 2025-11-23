@@ -1,39 +1,11 @@
 import { NextResponse } from 'next/server';
+import type { Company, Founder } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
 const NOCODB_API_TOKEN = process.env.NOCODB_API_TOKEN;
 const NOCODB_BASE_URL = process.env.NOCODB_BASE_URL || 'https://ndb.startmunich.de';
 const NOCODB_TABLE_ID = process.env.NOCODB_STARTUPS_TABLE_ID;
-
-interface Founder {
-  name: string
-  role: string
-  batch: string
-  imageUrl: string
-  linkedinUrl?: string
-}
-
-interface Company {
-  id: number
-  name: string
-  website: string
-  summary: string
-  description: string
-  logoUrl: string
-  foundingYear: number | string
-  category: string[]
-  founders: Founder[]
-  totalRaised?: string
-  employees?: number
-  isSpotlight?: boolean
-  isYCombinator?: boolean
-  companyLinkedin?: string
-  investmentRound?: string
-  milestones?: string
-  supportingPrograms?: string
-  lastUpdated?: string
-}
 
 // Transform NocoDB record to Company format
 function transformNocoDBRecord(record: any): Company {

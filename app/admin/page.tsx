@@ -2,34 +2,9 @@
 
 import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import type { Company } from "@/lib/types"
 
 export const dynamic = 'force-dynamic'
-
-interface Company {
-  id: number
-  name: string
-  website: string
-  summary: string
-  logoUrl: string
-  foundingYear: number | string
-  category: string[]
-  description: string
-  founders: Array<{
-    name: string
-    role: string
-    batch: string
-    imageUrl: string
-    linkedinUrl?: string
-  }>
-  totalRaised?: string
-  employees?: number
-  isSpotlight?: boolean
-  isYCombinator?: boolean
-  companyLinkedin?: string
-  investmentRound?: string
-  milestones?: string
-  supportingPrograms?: string
-}
 
 function AdminPageContent() {
   const router = useRouter()
