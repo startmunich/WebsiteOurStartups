@@ -264,7 +264,7 @@ export default function StartupsPage() {
                     OUR STARTUPS
                   </p>
                 </div> */}
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black text-white mb-4 sm:mb-6">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black text-white mb-4 sm:mb-6 animate-[flyInFromTop_0.6s_ease-out]">
                   START MUNICH
                   <br />
                   <span className="outline-text">STARTUPS</span>

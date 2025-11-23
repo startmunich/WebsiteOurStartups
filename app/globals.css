@@ -146,6 +146,17 @@
     }
   }
 
+  @keyframes flyInFromTop {
+    from {
+      opacity: 0;
+      transform: translateY(-100px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .animate-fadeIn {
     animation: fadeIn 0.3s ease-out;
   }
