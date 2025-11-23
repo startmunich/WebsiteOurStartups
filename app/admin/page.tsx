@@ -168,9 +168,9 @@ function AdminPageContent() {
   }
 
   const handleEditStartup = async (id: string) => {
+    setSelectedStartupId(id)
     setMode('edit')
     setView('form')
-    setSelectedStartupId(id)
     setLoading(true)
     setSaving(false)
     setError(null)
@@ -192,7 +192,7 @@ function AdminPageContent() {
         chategory: data.category?.join(", ") || "",
         startMunichMember: data.founders?.[0]?.name || "",
         companyRole: data.founders?.[0]?.role || "Founder",
-        batch: data.founders?.[0]?.batch?.join(", ") || "",
+        batch: data.founders?.[0]?.batch || "",
         memberPicture: data.founders?.[0]?.imageUrl || "",
         memberLinkedin: data.founders?.[0]?.linkedinUrl || "",
         investmentSize: data.totalRaised || "",
@@ -1121,7 +1121,10 @@ function AdminPageContent() {
                 disabled={saving}
                 className="flex-1 px-6 py-3 bg-[#d0006f] hover:bg-[#d0006f]/90 disabled:bg-[#d0006f]/50 text-white font-semibold rounded-lg transition-all disabled:cursor-not-allowed"
               >
-                {saving ? (mode === 'add' ? 'Adding...' : 'Saving...') : (mode === 'add' ? 'Add Startup' : 'Save Changes')}
+                {saving 
+                  ? (selectedStartupId ? 'Updating...' : 'Adding...') 
+                  : (selectedStartupId ? 'Save Changes' : 'Add Startup')
+                }
               </button>
               
               {mode === 'edit' && (
