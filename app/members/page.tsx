@@ -45,6 +45,7 @@ export default function MembersPage() {
   const [loading, setLoading] = useState(true)
   const [selectedBatch, setSelectedBatch] = useState<string>("all")
   const [selectedStudy, setSelectedStudy] = useState<string>("all")
+  const [expandedBatch, setExpandedBatch] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 12
   
@@ -88,31 +89,15 @@ export default function MembersPage() {
     }
   })
 
-  // Group batches by year and organize as WS/SS pairs
-  const batchPairs: Array<{ winter?: typeof batchGroups[0], summer?: typeof batchGroups[0] }> = []
-  const batchesByYear: { [year: string]: { winter?: typeof batchGroups[0], summer?: typeof batchGroups[0] } } = {}
-  
-  batchGroups.forEach(batch => {
-    const year = batch.year
-    const semester = batch.semester.toLowerCase()
-    
-    if (!batchesByYear[year]) {
-      batchesByYear[year] = {}
-    }
-    
-    if (semester.includes('winter') || semester.startsWith('w')) {
-      batchesByYear[year].winter = batch
-    } else if (semester.includes('summer') || semester.startsWith('s')) {
-      batchesByYear[year].summer = batch
-    }
+  // Sort batches by year (newest first), then by semester
+  const sortedBatches = batchGroups.sort((a, b) => {
+    const yearDiff = parseInt(b.year) - parseInt(a.year)
+    if (yearDiff !== 0) return yearDiff
+    // If same year, Winter comes before Summer
+    if (a.semester.toLowerCase().includes('winter') || a.semester.toLowerCase().startsWith('w')) return -1
+    if (b.semester.toLowerCase().includes('winter') || b.semester.toLowerCase().startsWith('w')) return 1
+    return 0
   })
-  
-  // Convert to array sorted by year (newest first)
-  Object.keys(batchesByYear)
-    .sort((a, b) => parseInt(b) - parseInt(a))
-    .forEach(year => {
-      batchPairs.push(batchesByYear[year])
-    })
 
   // Filter members based on selected filters
   const filteredMembers = members.filter(member => {
@@ -476,271 +461,85 @@ export default function MembersPage() {
               Our <span className="no-stroke bg-gradient-to-r from-[#d0006f] to-purple-400 bg-clip-text text-transparent">Batches</span>
             </h2>
             
-            <div className="space-y-6">
-              {batchPairs.map((pair, pairIndex) => (
-                <div key={pairIndex} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Winter Semester */}
-                  {pair.winter && (
-                    <button
-                      onClick={() => {
-                        setSelectedBatch(pair.winter!.name)
-                        setSelectedStudy("all")
-                        setTimeout(() => {
-                          membersGridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                        }, 100)
-                      }}
-                      className="group relative overflow-hidden rounded-2xl transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-blue-500/30"
-                    >
-                      {/* Background Image */}
-                      <div className="relative h-64 md:h-80">
-                        <img
-                          src="/batch.jpeg"
-                          alt={pair.winter.name}
-                          className="w-full h-full object-cover"
-                        />
-                        
-                        {/* Gradient Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/70 to-transparent"></div>
-                        
-                        {/* Hover Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 via-blue-400/20 to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {sortedBatches.map((batch) => (
+                <div key={batch.name} className="space-y-3">
+                  <h3 className="text-xl md:text-2xl font-black text-white">
+                    {batch.name}
+                  </h3>
+                  <button
+                    onClick={() => {
+                      if (expandedBatch === batch.name) {
+                        setExpandedBatch(null)
+                      } else {
+                        setExpandedBatch(batch.name)
+                      }
+                    }}
+                    className="w-full group relative overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#d0006f]/30 border-2 border-white/20"
+                  >
+                    {/* Background Image */}
+                    <div className="relative">
+                      <img
+                        src="/batch.jpeg"
+                        alt={batch.name}
+                        className="w-full h-full object-cover"
+                      />
                       
-                      {/* Content Overlay */}
-                      <div className="absolute inset-0 flex flex-col justify-end p-6">
-                        <div className="space-y-2">
-                          {/* Badge */}
-                          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full mb-2">
-                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                            </svg>
-                            <span className="text-white font-semibold text-xs uppercase tracking-wider">
-                              {pair.winter.memberCount} Members
-                            </span>
-                          </div>
-                          
-                          {/* Batch Name */}
-                          <h3 className="text-3xl md:text-4xl font-black text-white group-hover:text-blue-400 transition-colors leading-tight">
-                            {pair.winter.name}
-                          </h3>
-                          
-                          {/* Semester Info */}
-                          <div className="flex items-center gap-2">
-                            <div className="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/30 text-blue-200 border border-blue-400/50">
-                              ❄️ Winter Semester
-                            </div>
-                          </div>
-                          
-                          {/* Call to Action */}
-                          <p className="text-gray-300 text-sm mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            Click to view all members from this batch →
-                          </p>
-                        </div>
-                      </div>
+                      {/* Gradient Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/70 to-transparent"></div>
                       
-                      {/* Corner Accent */}
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500 to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-3xl"></div>
-                    </button>
-                  )}
+                      {/* Hover Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#d0006f]/30 via-purple-400/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    </div>
+                    
+                    {/* Corner Accent */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#d0006f] to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-3xl"></div>
+                  </button>
                   
-                  {/* Summer Semester */}
-                  {pair.summer && (
-                    <button
-                      onClick={() => {
-                        setSelectedBatch(pair.summer!.name)
-                        setSelectedStudy("all")
-                        setTimeout(() => {
-                          membersGridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                        }, 100)
-                      }}
-                      className="group relative overflow-hidden rounded-2xl transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-orange-500/30"
-                    >
-                      {/* Background Image */}
-                      <div className="relative h-64 md:h-80">
-                        <img
-                          src="/batch.jpeg"
-                          alt={pair.summer.name}
-                          className="w-full h-full object-cover"
-                        />
-                        
-                        {/* Gradient Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/70 to-transparent"></div>
-                        
-                        {/* Hover Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-orange-500/30 via-yellow-400/20 to-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      </div>
-                      
-                      {/* Content Overlay */}
-                      <div className="absolute inset-0 flex flex-col justify-end p-6">
-                        <div className="space-y-2">
-                          {/* Badge */}
-                          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full mb-2">
-                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                            </svg>
-                            <span className="text-white font-semibold text-xs uppercase tracking-wider">
-                              {pair.summer.memberCount} Members
-                            </span>
-                          </div>
-                          
-                          {/* Batch Name */}
-                          <h3 className="text-3xl md:text-4xl font-black text-white group-hover:text-orange-400 transition-colors leading-tight">
-                            {pair.summer.name}
-                          </h3>
-                          
-                          {/* Semester Info */}
-                          <div className="flex items-center gap-2">
-                            <div className="px-3 py-1 rounded-full text-xs font-bold bg-orange-500/30 text-orange-200 border border-orange-400/50">
-                              ☀️ Summer Semester
+                  {/* Expanded Members */}
+                  {expandedBatch === batch.name && (
+                    <div className="animate-in fade-in slide-in-from-top-4 duration-500 col-span-full">
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 mt-4">
+                        {members.filter(m => m.batch === batch.name).map((member) => (
+                          <a
+                            key={member.id}
+                            href={member.linkedinUrl || '#'}
+                            target={member.linkedinUrl ? "_blank" : undefined}
+                            rel={member.linkedinUrl ? "noopener noreferrer" : undefined}
+                            className={`group relative overflow-hidden transition-all duration-300 hover:scale-105 border border-white/20 ${member.linkedinUrl ? 'cursor-pointer' : 'cursor-default'}`}
+                          >
+                            <div className="relative h-56 bg-gradient-to-br from-[#d0006f]/10 to-purple-500/10">
+                              <img
+                                src={member.imageUrl}
+                                alt={member.name}
+                                className="w-full h-full object-cover"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/40 to-transparent"></div>
+                              
+                              {member.linkedinUrl && (
+                                <div className="absolute top-2 right-2">
+                                  <div className="w-8 h-8 bg-white/90 rounded-full flex items-center justify-center">
+                                    <svg className="w-4 h-4 text-[#0077b5]" fill="currentColor" viewBox="0 0 24 24">
+                                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                    </svg>
+                                  </div>
+                                </div>
+                              )}
+                              
+                              <div className="absolute bottom-0 left-0 right-0 p-3">
+                                <h4 className="font-bold text-white text-sm">{member.name}</h4>
+                                <p className="text-pink-300 text-xs font-semibold">{member.study || member.role}</p>
+                              </div>
                             </div>
-                          </div>
-                          
-                          {/* Call to Action */}
-                          <p className="text-gray-300 text-sm mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            Click to view all members from this batch →
-                          </p>
-                        </div>
+                          </a>
+                        ))}
                       </div>
-                      
-                      {/* Corner Accent */}
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-500 to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-3xl"></div>
-                    </button>
+                    </div>
                   )}
                 </div>
               ))}
             </div>
-          </div>
-
-          {/* Members Grid - Bento Box Style */}
-          <div ref={membersGridRef} className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 scroll-mt-8">
-            {paginatedMembers.map((member, index) => {
-              // Create varied card sizes for bento box effect
-              const isLarge = index % 7 === 0
-              const isMedium = index % 5 === 0 && !isLarge
-              
-              const CardWrapper = member.linkedinUrl ? 'a' : 'div'
-              const cardProps = member.linkedinUrl ? {
-                href: member.linkedinUrl,
-                target: "_blank",
-                rel: "noopener noreferrer"
-              } : {}
-              
-              return (
-                <CardWrapper
-                  key={member.id}
-                  {...cardProps}
-                  className={`group relative overflow-hidden rounded-2xl transition-all duration-500 ${member.linkedinUrl ? 'cursor-pointer' : 'cursor-default'} ${
-                    isLarge 
-                      ? 'col-span-2 row-span-2 md:col-span-2 md:row-span-2' 
-                      : isMedium
-                      ? 'col-span-2 md:col-span-2'
-                      : 'col-span-1'
-                  }`}
-                >
-                  {/* Background with gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#d0006f]/30 via-purple-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
-                  
-                  {/* Profile Image */}
-                  <div className={`relative ${isLarge ? 'h-full min-h-96' : isMedium ? 'h-72' : 'h-64'} bg-gradient-to-br from-[#d0006f]/10 to-purple-500/10 overflow-hidden`}>
-                    <img
-                      src={member.imageUrl}
-                      alt={member.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    
-                    {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/60 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-                    
-                    {/* LinkedIn Icon Badge */}
-                    {member.linkedinUrl && (
-                      <div className="absolute top-3 right-3 z-20">
-                        <div className="flex items-center justify-center w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full shadow-lg group-hover:bg-white group-hover:scale-110 transition-all">
-                          <svg className="w-5 h-5 text-[#0077b5]" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                          </svg>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {/* Member Info Overlay */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4 z-20 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                      <div className="space-y-1">
-                        <h3 className={`font-black text-white leading-tight ${isLarge ? 'text-2xl' : 'text-lg'} group-hover:text-[#d0006f] transition-colors`}>
-                          {member.name}
-                        </h3>
-                        <p className={`text-[#d0006f] font-semibold ${isLarge ? 'text-sm' : 'text-xs'}`}>
-                          {member.study || member.role}
-                        </p>
-                        {member.company && isLarge && (
-                          <p className="text-gray-300 text-sm flex items-center gap-1 mt-2">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                            </svg>
-                            {member.company}
-                          </p>
-                        )}
-                        <div className="flex items-center gap-2 mt-2">
-                          <span className="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-xs text-white font-medium">
-                            {member.batch}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Hover Effect - Corner Accent */}
-                    <div className="absolute top-0 left-0 w-20 h-20 bg-gradient-to-br from-[#d0006f] to-transparent opacity-0 group-hover:opacity-30 transition-opacity duration-500 blur-2xl"></div>
-                  </div>
-                </CardWrapper>
-              )
-            })}
-          </div>
-
-          {filteredMembers.length === 0 && (
-            <div className="text-center py-20">
-              <div className="inline-block p-12 bg-white/5 border border-white/20 rounded-lg">
-                <p className="text-xl font-semibold text-white mb-2">No Members Found</p>
-                <p className="text-gray-400 text-sm">Try adjusting your filters to see more members</p>
-              </div>
-            </div>
-          )}
-
-          {/* Pagination Controls */}
-          {filteredMembers.length > 0 && totalPages > 1 && (
-            <div className="flex justify-center items-center gap-4 mt-12">
-              <button
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className="px-6 py-2 text-sm font-medium text-white bg-white/10 hover:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all rounded border border-white/20"
-              >
-                ← Previous
-              </button>
-              
-              <div className="flex items-center gap-2">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`w-10 h-10 text-sm font-medium rounded transition-all ${
-                      currentPage === page
-                        ? 'bg-white text-[#00002c]'
-                        : 'bg-white/10 text-white hover:bg-white/20 border border-white/20'
-                    }`}
-                  >
-                    {page}
-                  </button>
-                ))}
-              </div>
-
-              <button
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
-                className="px-6 py-2 text-sm font-medium text-white bg-white/10 hover:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all rounded border border-white/20"
-              >
-                Next →
-              </button>
-            </div>
-          )}
-        </div>
+          </div>        </div>
 
         {/* Footer CTA Section */}
         <div className="border-t border-white/10 mt-20 py-16">
