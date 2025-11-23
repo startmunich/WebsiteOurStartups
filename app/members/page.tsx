@@ -11,6 +11,7 @@ interface Member {
   name: string
   batch: string
   role: string
+  study?: string
   company?: string
   linkedinUrl?: string
   imageUrl: string
@@ -43,7 +44,7 @@ export default function MembersPage() {
   const [members, setMembers] = useState<Member[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedBatch, setSelectedBatch] = useState<string>("all")
-  const [selectedRole, setSelectedRole] = useState<string>("all")
+  const [selectedStudy, setSelectedStudy] = useState<string>("all")
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 12
   
@@ -52,6 +53,7 @@ export default function MembersPage() {
   const [animatedBatches, setAnimatedBatches] = useState(0)
   const [animatedCompanies, setAnimatedCompanies] = useState(0)
   const hasAnimatedRef = useRef(false)
+  const membersGridRef = useRef<HTMLDivElement>(null)
 
   // Load members on mount
   useEffect(() => {
@@ -69,10 +71,10 @@ export default function MembersPage() {
     new Set(members.map(member => member.batch))
   ).filter(batch => batch).sort().reverse()
 
-  // Extract unique roles
-  const allRoles = Array.from(
-    new Set(members.map(member => member.role))
-  ).filter(role => role).sort()
+  // Extract unique study subjects
+  const allStudies = Array.from(
+    new Set(members.map(member => member.study).filter((study): study is string => !!study))
+  ).sort()
 
   // Group members by batch for batch cards
   const batchGroups = allBatches.map(batchName => {
@@ -81,16 +83,42 @@ export default function MembersPage() {
       name: batchName,
       semester: batchName.split(' ')[0] || 'Batch',
       year: batchName.split(' ')[1] || '',
-      groupImageUrl: '/memberbackground.jpg', // Using hero image for batch group photos
+      groupImageUrl: '/batch.jpeg',
       memberCount: batchMembers.length
     }
   })
 
+  // Group batches by year and organize as WS/SS pairs
+  const batchPairs: Array<{ winter?: typeof batchGroups[0], summer?: typeof batchGroups[0] }> = []
+  const batchesByYear: { [year: string]: { winter?: typeof batchGroups[0], summer?: typeof batchGroups[0] } } = {}
+  
+  batchGroups.forEach(batch => {
+    const year = batch.year
+    const semester = batch.semester.toLowerCase()
+    
+    if (!batchesByYear[year]) {
+      batchesByYear[year] = {}
+    }
+    
+    if (semester.includes('winter') || semester.startsWith('w')) {
+      batchesByYear[year].winter = batch
+    } else if (semester.includes('summer') || semester.startsWith('s')) {
+      batchesByYear[year].summer = batch
+    }
+  })
+  
+  // Convert to array sorted by year (newest first)
+  Object.keys(batchesByYear)
+    .sort((a, b) => parseInt(b) - parseInt(a))
+    .forEach(year => {
+      batchPairs.push(batchesByYear[year])
+    })
+
   // Filter members based on selected filters
   const filteredMembers = members.filter(member => {
     const matchesBatch = selectedBatch === "all" || member.batch === selectedBatch
-    const matchesRole = selectedRole === "all" || member.role === selectedRole
-    return matchesBatch && matchesRole
+    const matchesStudy = selectedStudy === "all" || member.study === selectedStudy
+    return matchesBatch && matchesStudy
   })
 
   // Pagination calculations
@@ -102,7 +130,7 @@ export default function MembersPage() {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1)
-  }, [selectedBatch, selectedRole])
+  }, [selectedBatch, selectedStudy])
 
   // Calculate total statistics
   const totalMembers = members.length
@@ -186,7 +214,7 @@ export default function MembersPage() {
           {/* Background Image */}
           <div className="absolute inset-0">
             <img
-              src="/hero-image.jpg"
+              src="/member-background.png"
               alt="START Munich Community"
               className="w-full h-full object-cover"
             />
@@ -391,40 +419,40 @@ export default function MembersPage() {
               {/* Divider */}
               <div className="h-8 w-px bg-white/20"></div>
 
-              {/* Role Filter Pills */}
+              {/* Study Filter Pills */}
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-sm font-semibold text-gray-400 uppercase tracking-wide">Role:</span>
+                <span className="text-sm font-semibold text-gray-400 uppercase tracking-wide">Study:</span>
                 <button
-                  onClick={() => setSelectedRole("all")}
+                  onClick={() => setSelectedStudy("all")}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    selectedRole === "all"
+                    selectedStudy === "all"
                       ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-600/30'
                       : 'bg-white/5 text-gray-300 hover:bg-white/10 border border-white/20'
                   }`}
                 >
                   All
                 </button>
-                {allRoles.slice(0, 4).map((role) => (
+                {allStudies.slice(0, 4).map((study) => (
                   <button
-                    key={role}
-                    onClick={() => setSelectedRole(role)}
+                    key={study}
+                    onClick={() => setSelectedStudy(study)}
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                      selectedRole === role
+                      selectedStudy === study
                         ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-600/30'
                         : 'bg-white/5 text-gray-300 hover:bg-white/10 border border-white/20'
                     }`}
                   >
-                    {role}
+                    {study}
                   </button>
                 ))}
               </div>
 
               {/* Clear Filters */}
-              {(selectedBatch !== "all" || selectedRole !== "all") && (
+              {(selectedBatch !== "all" || selectedStudy !== "all") && (
                 <button
                   onClick={() => {
                     setSelectedBatch("all")
-                    setSelectedRole("all")
+                    setSelectedStudy("all")
                   }}
                   className="ml-auto px-4 py-2 rounded-full text-sm font-medium text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/20 transition-all flex items-center gap-2"
                 >
@@ -442,14 +470,149 @@ export default function MembersPage() {
             </div>
           </div>
 
-          {/* Members Grid - Bento Box Style */}
-          <div className="mb-12">
+          {/* Batch Images Section */}
+          <div className="mb-16">
             <h2 className="text-3xl md:text-4xl font-black text-white mb-8">
-              Meet the <span className="no-stroke bg-gradient-to-r from-[#d0006f] to-purple-400 bg-clip-text text-transparent">Innovators</span>
+              Our <span className="no-stroke bg-gradient-to-r from-[#d0006f] to-purple-400 bg-clip-text text-transparent">Batches</span>
             </h2>
+            
+            <div className="space-y-6">
+              {batchPairs.map((pair, pairIndex) => (
+                <div key={pairIndex} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Winter Semester */}
+                  {pair.winter && (
+                    <button
+                      onClick={() => {
+                        setSelectedBatch(pair.winter!.name)
+                        setSelectedStudy("all")
+                        setTimeout(() => {
+                          membersGridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                        }, 100)
+                      }}
+                      className="group relative overflow-hidden rounded-2xl transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-blue-500/30"
+                    >
+                      {/* Background Image */}
+                      <div className="relative h-64 md:h-80">
+                        <img
+                          src="/batch.jpeg"
+                          alt={pair.winter.name}
+                          className="w-full h-full object-cover"
+                        />
+                        
+                        {/* Gradient Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/70 to-transparent"></div>
+                        
+                        {/* Hover Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 via-blue-400/20 to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      </div>
+                      
+                      {/* Content Overlay */}
+                      <div className="absolute inset-0 flex flex-col justify-end p-6">
+                        <div className="space-y-2">
+                          {/* Badge */}
+                          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full mb-2">
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            <span className="text-white font-semibold text-xs uppercase tracking-wider">
+                              {pair.winter.memberCount} Members
+                            </span>
+                          </div>
+                          
+                          {/* Batch Name */}
+                          <h3 className="text-3xl md:text-4xl font-black text-white group-hover:text-blue-400 transition-colors leading-tight">
+                            {pair.winter.name}
+                          </h3>
+                          
+                          {/* Semester Info */}
+                          <div className="flex items-center gap-2">
+                            <div className="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/30 text-blue-200 border border-blue-400/50">
+                              ❄️ Winter Semester
+                            </div>
+                          </div>
+                          
+                          {/* Call to Action */}
+                          <p className="text-gray-300 text-sm mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            Click to view all members from this batch →
+                          </p>
+                        </div>
+                      </div>
+                      
+                      {/* Corner Accent */}
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500 to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-3xl"></div>
+                    </button>
+                  )}
+                  
+                  {/* Summer Semester */}
+                  {pair.summer && (
+                    <button
+                      onClick={() => {
+                        setSelectedBatch(pair.summer!.name)
+                        setSelectedStudy("all")
+                        setTimeout(() => {
+                          membersGridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                        }, 100)
+                      }}
+                      className="group relative overflow-hidden rounded-2xl transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-orange-500/30"
+                    >
+                      {/* Background Image */}
+                      <div className="relative h-64 md:h-80">
+                        <img
+                          src="/batch.jpeg"
+                          alt={pair.summer.name}
+                          className="w-full h-full object-cover"
+                        />
+                        
+                        {/* Gradient Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/70 to-transparent"></div>
+                        
+                        {/* Hover Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-orange-500/30 via-yellow-400/20 to-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      </div>
+                      
+                      {/* Content Overlay */}
+                      <div className="absolute inset-0 flex flex-col justify-end p-6">
+                        <div className="space-y-2">
+                          {/* Badge */}
+                          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full mb-2">
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            <span className="text-white font-semibold text-xs uppercase tracking-wider">
+                              {pair.summer.memberCount} Members
+                            </span>
+                          </div>
+                          
+                          {/* Batch Name */}
+                          <h3 className="text-3xl md:text-4xl font-black text-white group-hover:text-orange-400 transition-colors leading-tight">
+                            {pair.summer.name}
+                          </h3>
+                          
+                          {/* Semester Info */}
+                          <div className="flex items-center gap-2">
+                            <div className="px-3 py-1 rounded-full text-xs font-bold bg-orange-500/30 text-orange-200 border border-orange-400/50">
+                              ☀️ Summer Semester
+                            </div>
+                          </div>
+                          
+                          {/* Call to Action */}
+                          <p className="text-gray-300 text-sm mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            Click to view all members from this batch →
+                          </p>
+                        </div>
+                      </div>
+                      
+                      {/* Corner Accent */}
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-500 to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-3xl"></div>
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          {/* Members Grid - Bento Box Style */}
+          <div ref={membersGridRef} className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 scroll-mt-8">
             {paginatedMembers.map((member, index) => {
               // Create varied card sizes for bento box effect
               const isLarge = index % 7 === 0
@@ -506,7 +669,7 @@ export default function MembersPage() {
                           {member.name}
                         </h3>
                         <p className={`text-[#d0006f] font-semibold ${isLarge ? 'text-sm' : 'text-xs'}`}>
-                          {member.role}
+                          {member.study || member.role}
                         </p>
                         {member.company && isLarge && (
                           <p className="text-gray-300 text-sm flex items-center gap-1 mt-2">

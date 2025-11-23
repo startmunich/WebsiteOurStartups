@@ -12,6 +12,7 @@ interface Member {
   name: string
   batch: string
   role: string
+  study?: string
   company?: string
   linkedinUrl?: string
   imageUrl: string
