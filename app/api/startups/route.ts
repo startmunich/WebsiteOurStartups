@@ -64,6 +64,7 @@ function transformNocoDBRecord(record: any): Company {
     milestones: record['First milestones'] || undefined,
     supportingPrograms: record['Supporting Programs'] || undefined,
     lastUpdated: record['Last Updated'] || undefined,
+    isMTZ: record['MTZ']?.toLowerCase() === 'yes' || false
   };
 }
 

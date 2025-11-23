@@ -379,9 +379,14 @@ export default function StartupsPage() {
                     </div>
                     <div className="p-6">
                       <div className="flex items-start justify-between mb-2">
-                        <h3 className="text-xl font-semibold text-white">{company.name}</h3>
-                        <span className="text-yellow-400 text-xs font-bold px-2 py-1 bg-yellow-500/20 rounded">★</span>
-                      </div>
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-xl font-semibold text-white">{company.name}</h3>
+                            {company.isMTZ === true ? (
+                              <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-[#d0006f] text-white rounded">MTZ</span>
+                            ) : null}
+                          </div>
+                          <span className="text-yellow-400 text-xs font-bold px-2 py-1 bg-yellow-500/20 rounded">★</span>
+                        </div>
                       <p className="text-sm text-gray-400 leading-relaxed">{company.summary}</p>
                     </div>
                   </Link>
@@ -416,9 +421,14 @@ export default function StartupsPage() {
                     </div>
                     <div className="p-6">
                       <div className="flex items-start justify-between mb-2">
-                        <h3 className="text-xl font-semibold text-white">{company.name}</h3>
-                        <span className="text-orange-400 text-xs font-bold px-2 py-1 bg-orange-500/20 rounded">YC</span>
-                      </div>
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-xl font-semibold text-white">{company.name}</h3>
+                            {company.isMTZ === true ? (
+                              <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-[#d0006f] text-white rounded">MTZ</span>
+                            ) : null}
+                          </div>
+                          <span className="text-orange-400 text-xs font-bold px-2 py-1 bg-orange-500/20 rounded">YC</span>
+                        </div>
                       <p className="text-sm text-gray-400 leading-relaxed">{company.summary}</p>
                     </div>
                   </Link>
@@ -616,10 +626,15 @@ export default function StartupsPage() {
 
                   {/* Content Section */}
                   <div className="p-6">
-                    <div className="mb-4">
-                      <h3 className="text-2xl font-semibold text-white mb-2 leading-tight">
-                        {company.name}
-                      </h3>
+                      <div className="mb-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <h3 className="text-2xl font-semibold text-white leading-tight">
+                          {company.name}
+                        </h3>
+                        {company.isMTZ === true ? (
+                          <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-[#d0006f] text-white rounded">MTZ</span>
+                        ) : null}
+                      </div>
                       <div className="flex flex-wrap gap-2 mb-3">
                         {company.category.slice(0, 2).map((cat, idx) => (
                           <span

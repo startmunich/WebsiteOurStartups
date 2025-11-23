@@ -174,7 +174,7 @@ function AdminPageContent() {
         employees: data.employees?.toString() || "",
         featuredStartup: data.isSpotlight ? "yes" : "no",
         yCombinatorAlumni: data.isYCombinator ? "yes" : "no",
-        mtz: "no",
+        mtz: data.isMTZ ? "yes" : "no",
         companyLinkedin: data.companyLinkedin || "",
         lastInvestmentRound: data.investmentRound || "",
         firstMilestones: data.milestones || "",

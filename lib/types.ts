@@ -27,4 +27,5 @@ export interface Company {
   milestones?: string
   supportingPrograms?: string
   lastUpdated?: string
+  isMTZ?: boolean
 }
