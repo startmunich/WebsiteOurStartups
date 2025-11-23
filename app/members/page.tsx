@@ -461,54 +461,50 @@ export default function MembersPage() {
               Our <span className="no-stroke bg-gradient-to-r from-[#d0006f] to-purple-400 bg-clip-text text-transparent">Batches</span>
             </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {sortedBatches.map((batch) => (
-                <div key={batch.name} className="space-y-3">
-                  <h3 className="text-xl md:text-2xl font-black text-white">
-                    {batch.name}
-                  </h3>
-                  <button
-                    onClick={() => {
-                      if (expandedBatch === batch.name) {
-                        setExpandedBatch(null)
-                      } else {
-                        setExpandedBatch(batch.name)
-                      }
-                    }}
-                    className="w-full group relative overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#d0006f]/30 border-2 border-white/20"
-                  >
-                    {/* Background Image */}
-                    <div className="relative">
-                      <img
-                        src="/batch.jpeg"
-                        alt={batch.name}
-                        className="w-full h-full object-cover"
-                      />
+            {/* Show expanded batch full width if selected */}
+            {expandedBatch ? (
+              <div>
+                {sortedBatches.filter(b => b.name === expandedBatch).map((batch) => (
+                  <div key={batch.name} className="space-y-0">
+                    <h3 className="text-2xl md:text-3xl font-black text-white text-left">
+                      {batch.name}
+                    </h3>
+                    <button
+                      onClick={() => setExpandedBatch(null)}
+                      className="w-full block group relative overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-[#d0006f]/30"
+                    >
+                      {/* Background Image - Large (80% viewport height) */}
+                      <div className="relative w-full h-[70vh] md:h-[70vh]">
+                        <img
+                          src="/batch.jpeg"
+                          alt={batch.name}
+                          className="w-full h-full object-cover"
+                        />
+                        
+                        {/* Gradient Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/40 to-transparent"></div>
+                        
+                        {/* Hover Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#d0006f]/30 via-purple-400/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        
+                      </div>
                       
-                      {/* Gradient Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/70 to-transparent"></div>
-                      
-                      {/* Hover Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#d0006f]/30 via-purple-400/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    </div>
+                      {/* Corner Accent */}
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#d0006f] to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-3xl"></div>
+                    </button>
                     
-                    {/* Corner Accent */}
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#d0006f] to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-3xl"></div>
-                  </button>
-                  
-                  {/* Expanded Members */}
-                  {expandedBatch === batch.name && (
-                    <div className="animate-in fade-in slide-in-from-top-4 duration-500 col-span-full">
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 mt-4">
+                    {/* Members Grid */}
+                    <div className="animate-in fade-in slide-in-from-top-4 duration-500">
+                      <div className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-5 gap-4">
                         {members.filter(m => m.batch === batch.name).map((member) => (
                           <a
                             key={member.id}
                             href={member.linkedinUrl || '#'}
                             target={member.linkedinUrl ? "_blank" : undefined}
                             rel={member.linkedinUrl ? "noopener noreferrer" : undefined}
-                            className={`group relative overflow-hidden transition-all duration-300 hover:scale-105 border border-white/20 ${member.linkedinUrl ? 'cursor-pointer' : 'cursor-default'}`}
+                            className={`group relative overflow-hidden transition-all duration-300 hover:scale-105 ${member.linkedinUrl ? 'cursor-pointer' : 'cursor-default'} z-10`}
                           >
-                            <div className="relative h-56 bg-gradient-to-br from-[#d0006f]/10 to-purple-500/10">
+                            <div>
                               <img
                                 src={member.imageUrl}
                                 alt={member.name}
@@ -535,10 +531,43 @@ export default function MembersPage() {
                         ))}
                       </div>
                     </div>
-                  )}
-                </div>
-              ))}
-            </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              /* Show grid of batch thumbnails */
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {sortedBatches.map((batch) => (
+                  <div key={batch.name} className="space-y-3">
+                    <h3 className="text-xl md:text-2xl font-black text-white">
+                      {batch.name}
+                    </h3>
+                    <button
+                      onClick={() => setExpandedBatch(batch.name)}
+                      className="w-full group relative overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#d0006f]/30 border-2 border-white/20"
+                    >
+                      {/* Background Image */}
+                      <div className="relative">
+                        <img
+                          src="/batch.jpeg"
+                          alt={batch.name}
+                          className="w-full h-full object-cover"
+                        />
+                        
+                        {/* Gradient Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/10 to-transparent"></div>
+                        
+                        {/* Hover Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#d0006f]/30 via-purple-400/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      </div>
+                      
+                      {/* Corner Accent */}
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#d0006f] to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-3xl"></div>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>        </div>
 
         {/* Footer CTA Section */}
