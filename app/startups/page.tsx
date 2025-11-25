@@ -287,7 +287,7 @@ export default function StartupsPage() {
                       <span className="text-6xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-300 group-hover:to-[#d0006f] transition">
                         {Math.floor(animatedStartups)}
                       </span>
-                      <span className="text-3xl font-bold text-[#d0006f] animate-pulse">+</span>
+                      <span className="text-3xl font-bold text-[#d0006f]">+</span>
                     </div>
                     <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Companies</p>
                   </div>
@@ -316,7 +316,7 @@ export default function StartupsPage() {
                       <span className="text-6xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-300 group-hover:to-[#d0006f] transition">
                         {Math.floor(animatedEmployees)}
                       </span>
-                      <span className="text-3xl font-bold text-[#d0006f] animate-pulse">+</span>
+                      <span className="text-3xl font-bold text-[#d0006f]">+</span>
                     </div>
                     <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Employees</p>
                   </div>
@@ -484,8 +484,7 @@ export default function StartupsPage() {
 
           {/* Join Our Startups - Innovative CTA Section */}
           <div className="mb-16 relative">
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#d0006f]/20 via-[#00002c] to-[#d0006f]/10 border border-[#d0006f]/30 p-1">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#d0006f]/20 via-transparent to-[#d0006f]/20 animate-pulse"></div>
+            <div className="relative overflow-hidden rounded-2xl  border-2 border-[#d0006f]">
 
               <div className="relative bg-[#00002c] rounded-xl p-8 md:p-12">
                 {/* Floating animated orbs */}
@@ -496,13 +495,12 @@ export default function StartupsPage() {
                   {/* Left Side - Content */}
                   <div className="flex-1 text-center md:text-left">
                     <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#d0006f]/20 border border-[#d0006f]/40 rounded-full mb-4">
-                      <div className="w-2 h-2 bg-[#d0006f] rounded-full animate-pulse"></div>
                       <span className="text-[#d0006f] font-bold text-xs tracking-widest uppercase">We're Hiring</span>
                     </div>
 
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
                       Join the{" "}
-                      <span className="no-stroke bg-gradient-to-r from-[#d0006f] via-pink-400 to-[#d0006f] bg-clip-text text-transparent animate-pulse">
+                      <span className="text-[#d0006f]">
                         Next Big Thing
                       </span>
                     </h2>
