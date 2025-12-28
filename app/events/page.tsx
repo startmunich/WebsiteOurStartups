@@ -15,6 +15,7 @@ interface RecurringEvent {
   icon: string
   color: string
   image: string
+  category: string
 }
 
 const recurringEvents: RecurringEvent[] = [
@@ -26,7 +27,8 @@ const recurringEvents: RecurringEvent[] = [
     frequency: "Once per year",
     icon: "presentation",
     color: "#d0006f",
-    image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop",
+    category: "Pitch Event"
   },
   {
     id: "rtsh",
@@ -36,7 +38,8 @@ const recurringEvents: RecurringEvent[] = [
     frequency: "Once per year",
     icon: "code",
     color: "#ff6b9d",
-    image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=2070&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=2070&auto=format&fit=crop",
+    category: "Hackathon"
   },
   {
     id: "info-event",
@@ -46,7 +49,8 @@ const recurringEvents: RecurringEvent[] = [
     frequency: "Once per semester",
     icon: "info",
     color: "#4a90e2",
-    image: "https://images.unsplash.com/photo-1591115765373-5207764f72e7?q=80&w=2070&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1591115765373-5207764f72e7?q=80&w=2070&auto=format&fit=crop",
+    category: "Info Event"
   },
   {
     id: "fail-tales",
@@ -56,7 +60,8 @@ const recurringEvents: RecurringEvent[] = [
     frequency: "Once per semester",
     icon: "stories",
     color: "#e91e63",
-    image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=2070&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=2070&auto=format&fit=crop",
+    category: "Founder Event"
   },
   {
     id: "pitch-network",
@@ -66,7 +71,8 @@ const recurringEvents: RecurringEvent[] = [
     frequency: "Once per semester",
     icon: "presentation",
     color: "#ff1744",
-    image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2070&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2070&auto=format&fit=crop",
+    category: "Pitch Event"
   }
 ]
 
@@ -186,137 +192,200 @@ export default function EventsPage() {
             </div>
 
             {/* Timeline Visualization */}
-            <div className="mb-12 relative bg-white/5 rounded-2xl p-6 md:p-8 border border-white/10">
-              <h3 className="text-xl font-bold text-white mb-6 text-center">Event Timeline</h3>
+            <div className="mb-12 relative bg-white/5 rounded-2xl p-6 md:p-10 border border-white/10">
+              <h3 className="text-2xl font-bold text-white mb-8 text-center">Event Timeline</h3>
               
               {/* Months */}
-              <div className="hidden md:grid grid-cols-12 gap-2 mb-4 text-center">
+              <div className="hidden md:grid grid-cols-12 gap-2 mb-6 text-center">
                 {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((month, i) => (
-                  <div key={month} className="text-xs text-gray-400 font-semibold">
+                  <div key={month} className="text-sm text-gray-300 font-bold">
                     {month}
                   </div>
                 ))}
               </div>
 
-              {/* Timeline Line */}
-              <div className="relative h-2 bg-white/10 rounded-full mb-8 hidden md:block">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#d0006f] via-pink-500 to-[#d0006f] opacity-30 rounded-full"></div>
+              {/* Timeline Line - Desktop */}
+              <div className="relative h-3 bg-white/10 rounded-full mb-20 mt-16 hidden md:block">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#d0006f] via-pink-500 to-[#d0006f] opacity-40 rounded-full"></div>
                 
                 {/* Month Dividers */}
-                {[...Array(12)].map((_, i) => (
+                {[...Array(11)].map((_, i) => (
                   <div 
                     key={i}
-                    className="absolute top-1/2 -translate-y-1/2 w-px h-4 bg-white/20"
-                    style={{ left: `calc(${(i + 1) * 8.33}% - 0.5px)` }}
+                    className="absolute top-1/2 -translate-y-1/2 w-0.5 h-6 bg-white/30"
+                    style={{ left: `${(i + 1) * 8.33}%` }}
                   ></div>
                 ))}
                 
                 {/* Event Markers */}
                 {/* PITCH & NETWORK - January */}
-                <div className="absolute top-1/2 -translate-y-1/2" style={{ left: 'calc(8.33% - 6px)' }}>
-                  <div className="w-3 h-3 bg-[#d0006f] rounded-full"></div>
-                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                    <p className="text-xs text-white font-bold">PITCH</p>
+                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2" style={{ left: '4.2%' }}>
+                  <div className="relative">
+                    <div className="w-4 h-4 bg-[#ff1744] rounded-full"></div>
+                    <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                      <div className="bg-[#ff1744]/90 px-3 py-1.5 rounded-lg">
+                        <p className="text-xs text-white font-bold">PITCH</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Info Event & Founder Fail Tales - April (semester start) */}
-                <div className="absolute top-1/2 -translate-y-1/2" style={{ left: 'calc(33.33% - 6px)' }}>
-                  <div className="w-3 h-3 bg-[#d0006f] rounded-full"></div>
-                  <div className="absolute top-6 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                    <p className="text-xs text-white font-bold">Info Event</p>
-                  </div>
-                </div>
-                <div className="absolute top-1/2 -translate-y-1/2" style={{ left: 'calc(33.33% + 8px)' }}>
-                  <div className="w-3 h-3 bg-[#d0006f] rounded-full"></div>
-                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                    <p className="text-xs text-white font-bold">Fail Tales</p>
+                {/* Info Event - April */}
+                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2" style={{ left: '29.2%' }}>
+                  <div className="relative">
+                    <div className="w-4 h-4 bg-[#4a90e2] rounded-full"></div>
+                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                      <div className="bg-[#4a90e2]/90 px-3 py-1.5 rounded-lg">
+                        <p className="text-xs text-white font-bold">Info Event</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* RTSH - November */}
-                <div className="absolute top-1/2 -translate-y-1/2" style={{ left: 'calc(91.67% - 6px)' }}>
-                  <div className="w-4 h-4 bg-[#d0006f] rounded-full shadow-lg shadow-[#d0006f]/50"></div>
-                  <div className="absolute top-6 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                    <p className="text-xs text-white font-bold">RTSH</p>
+                {/* Fail Tales - April */}
+                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2" style={{ left: '37.5%' }}>
+                  <div className="relative">
+                    <div className="w-4 h-4 bg-[#e91e63] rounded-full"></div>
+                    <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                      <div className="bg-[#e91e63]/90 px-3 py-1.5 rounded-lg">
+                        <p className="text-xs text-white font-bold">Fail Tales</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 {/* PITCH & NETWORK - June */}
-                <div className="absolute top-1/2 -translate-y-1/2" style={{ left: 'calc(50% - 6px)' }}>
-                  <div className="w-3 h-3 bg-[#d0006f] rounded-full"></div>
-                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                    <p className="text-xs text-white font-bold">PITCH</p>
+                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2" style={{ left: '45.8%' }}>
+                  <div className="relative">
+                    <div className="w-4 h-4 bg-[#ff1744] rounded-full"></div>
+                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                      <div className="bg-[#ff1744]/90 px-3 py-1.5 rounded-lg">
+                        <p className="text-xs text-white font-bold">PITCH</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Info Event & Founder Fail Tales - October (semester start) */}
-                <div className="absolute top-1/2 -translate-y-1/2" style={{ left: 'calc(83.33% - 6px)' }}>
-                  <div className="w-3 h-3 bg-[#d0006f] rounded-full"></div>
-                  <div className="absolute top-6 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                    <p className="text-xs text-white font-bold">Info Event</p>
-                  </div>
-                </div>
-                <div className="absolute top-1/2 -translate-y-1/2" style={{ left: 'calc(83.33% + 8px)' }}>
-                  <div className="w-3 h-3 bg-[#d0006f] rounded-full"></div>
-                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                    <p className="text-xs text-white font-bold">Fail Tales</p>
+                {/* Info Event - October */}
+                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2" style={{ left: '79.2%' }}>
+                  <div className="relative">
+                    <div className="w-4 h-4 bg-[#4a90e2] rounded-full"></div>
+                    <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                      <div className="bg-[#4a90e2]/90 px-3 py-1.5 rounded-lg">
+                        <p className="text-xs text-white font-bold">Info Event</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* RTSS - October */}
-                <div className="absolute top-1/2 -translate-y-1/2" style={{ left: 'calc(83.33% + 22px)' }}>
-                  <div className="w-4 h-4 bg-[#d0006f] rounded-full shadow-lg shadow-[#d0006f]/50"></div>
-                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                    <p className="text-xs text-white font-bold">RTSS</p>
+                {/* Fail Tales - October */}
+                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2" style={{ left: '87.5%' }}>
+                  <div className="relative">
+                    <div className="w-4 h-4 bg-[#e91e63] rounded-full"></div>
+                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                      <div className="bg-[#e91e63]/90 px-3 py-1.5 rounded-lg">
+                        <p className="text-xs text-white font-bold">Fall Tales</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* RTSS - October/November */}
+                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2" style={{ left: '91.7%' }}>
+                  <div className="relative">
+                    <div className="w-6 h-6 bg-[#d0006f] rounded-full"></div>
+                    <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                      <div className="bg-[#d0006f] px-4 py-2 rounded-lg">
+                        <p className="text-sm text-white font-bold">RTSS</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* RTSH - November */}
+                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2" style={{ left: '95.8%' }}>
+                  <div className="relative">
+                    <div className="w-6 h-6 bg-[#d0006f] rounded-full"></div>
+                    <div className="absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                      <div className="bg-[#d0006f] px-4 py-2 rounded-lg">
+                        <p className="text-sm text-white font-bold">RTSH</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Mobile Timeline - Simplified */}
-              <div className="md:hidden space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 text-gray-400 text-xs font-semibold">Jan</div>
-                  <div className="flex-1 flex items-center gap-2">
-                    <div className="w-3 h-3 bg-[#d0006f] rounded-full"></div>
-                    <span className="text-xs text-white">PITCH & NETWORK</span>
+              {/* Mobile Timeline - Enhanced */}
+              <div className="md:hidden space-y-4">
+                <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-16 text-gray-300 text-sm font-bold">JAN</div>
+                  </div>
+                  <div className="ml-3 pl-4 border-l-2 border-[#ff1744] space-y-2">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-[#ff1744] rounded-full"></div>
+                      <span className="text-sm text-white font-semibold">PITCH & NETWORK</span>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 text-gray-400 text-xs font-semibold">Apr</div>
-                  <div className="flex-1 flex flex-wrap items-center gap-2">
-                    <div className="w-3 h-3 bg-[#d0006f] rounded-full"></div>
-                    <span className="text-xs text-white">Info Event</span>
-                    <span className="text-gray-500">•</span>
-                    <div className="w-3 h-3 bg-[#d0006f] rounded-full"></div>
-                    <span className="text-xs text-white">Fail Tales</span>
+
+                <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-16 text-gray-300 text-sm font-bold">APR</div>
+                  </div>
+                  <div className="ml-3 pl-4 border-l-2 border-[#4a90e2] space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-[#4a90e2] rounded-full"></div>
+                      <span className="text-sm text-white font-semibold">Info Event</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-[#e91e63] rounded-full"></div>
+                      <span className="text-sm text-white font-semibold">Fail Tales</span>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 text-gray-400 text-xs font-semibold">Jun</div>
-                  <div className="flex-1 flex items-center gap-2">
-                    <div className="w-3 h-3 bg-[#d0006f] rounded-full"></div>
-                    <span className="text-xs text-white">PITCH & NETWORK</span>
+
+                <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-16 text-gray-300 text-sm font-bold">JUN</div>
+                  </div>
+                  <div className="ml-3 pl-4 border-l-2 border-[#ff1744] space-y-2">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-[#ff1744] rounded-full"></div>
+                      <span className="text-sm text-white font-semibold">PITCH & NETWORK</span>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 text-gray-400 text-xs font-semibold">Oct</div>
-                  <div className="flex-1 flex flex-wrap items-center gap-2">
-                    <div className="w-3 h-3 bg-[#d0006f] rounded-full"></div>
-                    <span className="text-xs text-white">Info Event</span>
-                    <span className="text-gray-500">•</span>
-                    <div className="w-3 h-3 bg-[#d0006f] rounded-full"></div>
-                    <span className="text-xs text-white">Fail Tales</span>
-                    <span className="text-gray-500">•</span>
-                    <div className="w-3 h-3 bg-[#d0006f] rounded-full"></div>
-                    <span className="text-xs text-white">RTSS</span>
+
+                <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-16 text-gray-300 text-sm font-bold">OCT</div>
+                  </div>
+                  <div className="ml-3 pl-4 border-l-2 border-[#d0006f] space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-[#4a90e2] rounded-full"></div>
+                      <span className="text-sm text-white font-semibold">Info Event</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-[#e91e63] rounded-full"></div>
+                      <span className="text-sm text-white font-semibold">Fail Tales</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-5 h-5 bg-[#d0006f] rounded-full"></div>
+                      <span className="text-sm text-white font-bold">RTSS</span>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 text-gray-400 text-xs font-semibold">Nov</div>
-                  <div className="flex-1 flex items-center gap-2">
-                    <div className="w-3 h-3 bg-[#d0006f] rounded-full"></div>
-                    <span className="text-xs text-white">Road to START Hack</span>
+
+                <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-16 text-gray-300 text-sm font-bold">NOV</div>
+                  </div>
+                  <div className="ml-3 pl-4 border-l-2 border-[#d0006f] space-y-2">
+                    <div className="flex items-center gap-3">
+                      <div className="w-5 h-5 bg-[#d0006f] rounded-full"></div>
+                      <span className="text-sm text-white font-bold">Road to START Hack</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -339,12 +408,12 @@ export default function EventsPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/50 to-transparent"></div>
                     
-                    {/* Icon Overlay */}
+                    {/* Category Badge */}
                     <div className="absolute top-4 right-4">
-                      <div className="w-16 h-16 rounded-xl flex items-center justify-center backdrop-blur-sm bg-[#d0006f] border-2 border-[#d0006f]">
-                        <div className="text-white">
-                          {getIconSvg(event.icon)}
-                        </div>
+                      <div className="px-4 py-2 rounded-lg bg-[#d0006f] backdrop-blur-sm">
+                        <p className="text-xs text-white uppercase tracking-wide font-bold">
+                          {event.category}
+                        </p>
                       </div>
                     </div>
 
@@ -401,12 +470,12 @@ export default function EventsPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/50 to-transparent"></div>
                     
-                    {/* Icon Overlay */}
+                    {/* Category Badge */}
                     <div className="absolute top-4 right-4">
-                      <div className="w-12 h-12 rounded-xl flex items-center justify-center backdrop-blur-sm bg-[#d0006f] border-2 border-[#d0006f]">
-                        <div className="text-white">
-                          {getIconSvg(event.icon)}
-                        </div>
+                      <div className="px-3 py-1.5 rounded-lg bg-[#d0006f] backdrop-blur-sm">
+                        <p className="text-xs text-white uppercase tracking-wide font-bold">
+                          {event.category}
+                        </p>
                       </div>
                     </div>
 
@@ -470,12 +539,12 @@ export default function EventsPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/50 to-transparent"></div>
                   
-                  {/* Icon Overlay */}
+                  {/* Category Badge */}
                   <div className="absolute top-4 right-4">
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center backdrop-blur-sm bg-[#d0006f] border-2 border-[#d0006f]">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                      </svg>
+                    <div className="px-3 py-1.5 rounded-lg bg-[#d0006f] backdrop-blur-sm">
+                      <p className="text-xs text-white uppercase tracking-wide font-bold">
+                        Hackathon
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -506,12 +575,12 @@ export default function EventsPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/50 to-transparent"></div>
                   
-                  {/* Icon Overlay */}
+                  {/* Category Badge */}
                   <div className="absolute top-4 right-4">
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center backdrop-blur-sm bg-[#d0006f] border-2 border-[#d0006f]">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                      </svg>
+                    <div className="px-3 py-1.5 rounded-lg bg-[#d0006f] backdrop-blur-sm">
+                      <p className="text-xs text-white uppercase tracking-wide font-bold">
+                        Hackathon
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -542,12 +611,12 @@ export default function EventsPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/50 to-transparent"></div>
                   
-                  {/* Icon Overlay */}
+                  {/* Category Badge */}
                   <div className="absolute top-4 right-4">
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center backdrop-blur-sm bg-[#d0006f] border-2 border-[#d0006f]">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                      </svg>
+                    <div className="px-3 py-1.5 rounded-lg bg-[#d0006f] backdrop-blur-sm">
+                      <p className="text-xs text-white uppercase tracking-wide font-bold">
+                        Founder Event
+                      </p>
                     </div>
                   </div>
                 </div>
