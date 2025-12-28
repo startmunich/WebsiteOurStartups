@@ -194,7 +194,7 @@ export default function MembersPage() {
 
       <main className="min-h-screen bg-[#00002c]">
         {/* Hero Section with Full-Width Image */}
-        <div className="relative w-full overflow-hidden h-[50vh] lg:h-[70vh]">
+        <div className="relative w-full overflow-hidden h-[650px]">
           {/* Background Image */}
           <div className="absolute inset-0">
             <img
@@ -215,18 +215,10 @@ export default function MembersPage() {
                   <div className="w-2 h-2 bg-[#d0006f] rounded-full animate-pulse"></div>
                   <p className="text-[#d0006f] font-semibold text-xs tracking-widest uppercase">OUR COMMUNITY</p>
                 </div> */}
-                <h1 className="text-5xl md:text-6xl lg:text-8xl font-black text-white mb-6 h1-big animate-[flyInFromTop_0.6s_ease-out]">
-                  <span className="no-stroke bg-gradient-to-r from-white via-pink-200 to-white bg-clip-text text-transparent">
-                    THE MINDS
-                  </span>
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black text-white mb-4 sm:mb-6 animate-[flyInFromTop_0.6s_ease-out]">
+                  START MUNICH
                   <br />
-                  <span className="outline-text">
-                    BEHIND THE
-                  </span>
-                  <br />
-                  <span className="no-stroke bg-gradient-to-r from-[#d0006f] via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    MAGIC
-                  </span>
+                  <span className="outline-text">MEMBERS</span>
                 </h1>
                 <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
                   Meet the ambitious student entrepreneurs building the future of technology and innovation
@@ -289,12 +281,12 @@ export default function MembersPage() {
           {/* Analytics Section */}
           <div className="mb-16">
             <h2 className="text-3xl md:text-4xl font-black text-white mb-8">
-              Community <span className="no-stroke bg-gradient-to-r from-[#d0006f] to-purple-400 bg-clip-text text-transparent">Analytics</span>
+              <span className="text-[#d0006f]">Community</span> Analytics
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Active Members */}
-              <div className="group relative backdrop-blur-lg bg-gradient-to-br from-white/10 to-white/5 p-6 rounded-2xl border border-white/20 hover:border-[#d0006f]/50 transition-all duration-300">
+              <div className="group relative backdrop-blur-lg bg-gradient-to-br from-white/10 to-white/5 p-6 rounded-2xl border border-white/20 hover:border-[#d0006f] transition-all duration-300 hover:shadow-lg hover:shadow-[#d0006f]/20">
 
                 <div className="flex items-center gap-4 mb-3">
                   <div className="w-12 h-12 bg-[#d0006f]/20 rounded-xl flex items-center justify-center">
@@ -322,7 +314,7 @@ export default function MembersPage() {
               </div>
 
               {/* Gender Distribution */}
-              <div className="group relative backdrop-blur-lg bg-gradient-to-br from-white/10 to-white/5 p-6 rounded-2xl border border-white/20 hover:border-[#d0006f]/50 transition-all duration-300">
+              <div className="group relative backdrop-blur-lg bg-gradient-to-br from-white/10 to-white/5 p-6 rounded-2xl border border-white/20 hover:border-[#d0006f] transition-all duration-300 hover:shadow-lg hover:shadow-[#d0006f]/20">
                 <div className="mb-4">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
@@ -362,7 +354,7 @@ export default function MembersPage() {
               </div>
 
               {/* Study Topics Distribution */}
-              <div className="group relative backdrop-blur-lg bg-gradient-to-br from-white/10 to-white/5 p-6 rounded-2xl border border-white/20 hover:border-[#d0006f]/50 transition-all duration-300">
+              <div className="group relative backdrop-blur-lg bg-gradient-to-br from-white/10 to-white/5 p-6 rounded-2xl border border-white/20 hover:border-[#d0006f] transition-all duration-300 hover:shadow-lg hover:shadow-[#d0006f]/20">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
                     <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -386,7 +378,7 @@ export default function MembersPage() {
           {/* Batch Images Section */}
           <div className="mb-16">
             <h2 className="text-3xl md:text-4xl font-black text-white mb-8">
-              Our <span className="no-stroke bg-gradient-to-r from-[#d0006f] to-purple-400 bg-clip-text text-transparent">Batches</span>
+              Our <span className="text-[#d0006f]">Batches</span>
             </h2>
 
             {/* Show expanded batch full width if selected */}
@@ -497,27 +489,6 @@ export default function MembersPage() {
               </div>
             )}
           </div>        </div>
-
-        {/* Footer CTA Section */}
-        <div className="border-t border-white/10 mt-20 py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Want to Learn More?
-            </h2>
-            <p className="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
-              Discover more about our programs and how we support student entrepreneurs
-            </p>
-            <a
-              href="https://www.startmunich.de"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-3 text-base font-medium text-[#00002c] bg-white hover:bg-gray-100 transition-all rounded group"
-            >
-              Visit Website
-              <span className="group-hover:translate-x-1 transition-transform">→</span>
-            </a>
-          </div>
-        </div>
       </main>
     </>
   )
