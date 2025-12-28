@@ -2,11 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Avenir Next - All weights and styles from TTC */
+/* Avenir Next - All weights and styles from TTC v */ 
 @font-face {
   font-family: 'Avenirnextltpro';
   src: url('/fonts/AvenirNext-Heavy-09.ttf') format('truetype');
   font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Avenirnextltpro';
+  src: url('/fonts/AvenirNext-Medium-06.ttf') format('truetype');
+  font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
@@ -66,6 +74,7 @@
   body {
     @apply bg-background text-foreground;
     font-family: Avenirnextltpro, sans-serif;
+    font-weight: 500;
   }
 }
 
