@@ -281,12 +281,12 @@ export default function MembersPage() {
           {/* Analytics Section */}
           <div className="mb-16">
             <h2 className="text-3xl md:text-4xl font-black text-white mb-8">
-              <span className="text-[#d0006f]">Community</span> Analytics
+              Community Analytics
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Active Members */}
-              <div className="group relative backdrop-blur-lg bg-gradient-to-br from-white/10 to-white/5 p-6 rounded-2xl border border-white/20 hover:border-[#d0006f] transition-all duration-300 hover:shadow-lg hover:shadow-[#d0006f]/20">
+              <div className="group relative backdrop-blur-lg bg-gradient-to-br from-white/10 to-white/5 p-6 border border-white/20 hover:border-[#d0006f] transition-all duration-300 hover:shadow-lg hover:shadow-[#d0006f]/20">
 
                 <div className="flex items-center gap-4 mb-3">
                   <div className="w-12 h-12 bg-[#d0006f]/20 rounded-xl flex items-center justify-center">
@@ -314,7 +314,7 @@ export default function MembersPage() {
               </div>
 
               {/* Gender Distribution */}
-              <div className="group relative backdrop-blur-lg bg-gradient-to-br from-white/10 to-white/5 p-6 rounded-2xl border border-white/20 hover:border-[#d0006f] transition-all duration-300 hover:shadow-lg hover:shadow-[#d0006f]/20">
+              <div className="group relative backdrop-blur-lg bg-gradient-to-br from-white/10 to-white/5 p-6 border border-white/20 hover:border-[#d0006f] transition-all duration-300 hover:shadow-lg hover:shadow-[#d0006f]/20">
                 <div className="mb-4">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
@@ -354,7 +354,7 @@ export default function MembersPage() {
               </div>
 
               {/* Study Topics Distribution */}
-              <div className="group relative backdrop-blur-lg bg-gradient-to-br from-white/10 to-white/5 p-6 rounded-2xl border border-white/20 hover:border-[#d0006f] transition-all duration-300 hover:shadow-lg hover:shadow-[#d0006f]/20">
+              <div className="group relative backdrop-blur-lg bg-gradient-to-br from-white/10 to-white/5 p-6 border border-white/20 hover:border-[#d0006f] transition-all duration-300 hover:shadow-lg hover:shadow-[#d0006f]/20">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
                     <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -378,7 +378,7 @@ export default function MembersPage() {
           {/* Batch Images Section */}
           <div className="mb-16">
             <h2 className="text-3xl md:text-4xl font-black text-white mb-8">
-              Our <span className="text-[#d0006f]">Batches</span>
+              Our Batches
             </h2>
 
             {/* Show expanded batch full width if selected */}

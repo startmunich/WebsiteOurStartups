@@ -184,7 +184,7 @@ export default function EventsPage() {
           <div className="mb-20">
             <div className="mb-10">
               <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                Public <span className="text-[#d0006f]">Yearly</span> Events
+                Public Yearly Events
               </h2>
               <p className="text-gray-400 text-lg">
                 Mark your calendars! These are our flagship events that happen throughout the year.
@@ -520,7 +520,7 @@ export default function EventsPage() {
           <div className="mb-20">
             <div className="mb-10">
               <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                <span className="text-[#d0006f]">Special</span> Events
+                Special Events
               </h2>
               <p className="text-gray-400 text-lg">
                 Unique experiences and initiatives that make our community special
@@ -642,7 +642,7 @@ export default function EventsPage() {
           <div className="mb-20">
             <div className="mb-10">
               <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                <span className="text-[#d0006f]">Upcoming</span> Events
+                Upcoming Events
               </h2>
               <p className="text-gray-400 text-lg">
                 Stay updated with all our latest events and register to join us!

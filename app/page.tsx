@@ -17,6 +17,11 @@ export default function Home() {
             </Link>
           </li>
           <li>
+            <Link href="/events" className="text-blue-600 hover:underline text-lg">
+              Events
+            </Link>
+          </li>
+          <li>
             <Link href="/admin" className="text-blue-600 hover:underline text-lg">
               Admin - Manage Startups
             </Link>
