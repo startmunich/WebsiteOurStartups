@@ -50,7 +50,7 @@ const recurringEvents: RecurringEvent[] = [
     icon: "info",
     color: "#4a90e2",
     image: "https://images.unsplash.com/photo-1591115765373-5207764f72e7?q=80&w=2070&auto=format&fit=crop",
-    category: "Info Event"
+    category: "Talks"
   },
   {
     id: "fail-tales",
@@ -61,7 +61,7 @@ const recurringEvents: RecurringEvent[] = [
     icon: "stories",
     color: "#e91e63",
     image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=2070&auto=format&fit=crop",
-    category: "Founder Event"
+    category: "Talks"
   },
   {
     id: "pitch-network",
@@ -282,12 +282,10 @@ export default function EventsPage() {
                   src="https://luma.com/embed/calendar/cal-1MxD65bgV0Hcb0r/events"
                   width="100%"
                   height="450"
-                  frameBorder="0"
-                  style={{ border: 0, borderRadius: '12px' }}
                   allowFullScreen
                   aria-hidden="false"
                   tabIndex={0}
-                  className="bg-white rounded-xl"
+                  className=" rounded-xl"
                 ></iframe>
               </div>
             </div>
@@ -338,7 +336,7 @@ export default function EventsPage() {
                     <div className={`w-4 h-4 bg-[#ff1744] rounded-full transition-all ${hoveredEvent === 'pitch-network' ? 'ring-4 ring-[#ff1744]/50' : ''}`}></div>
                     <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
                       <div className="bg-[#ff1744]/90 px-3 py-1.5 rounded-lg">
-                        <p className="text-xs text-white font-bold">PITCH</p>
+                        <p className="text-xs text-white font-bold">Pitch & Network</p>
                       </div>
                     </div>
                   </div>
@@ -386,7 +384,7 @@ export default function EventsPage() {
                     <div className={`w-4 h-4 bg-[#ff1744] rounded-full transition-all ${hoveredEvent === 'pitch-network' ? 'ring-4 ring-[#ff1744]/50' : ''}`}></div>
                     <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
                       <div className="bg-[#ff1744]/90 px-3 py-1.5 rounded-lg">
-                        <p className="text-xs text-white font-bold">PITCH</p>
+                        <p className="text-xs text-white font-bold">Pitch & Network</p>
                       </div>
                     </div>
                   </div>
@@ -557,14 +555,30 @@ export default function EventsPage() {
                 className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-2 cursor-grab active:cursor-grabbing"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               >
-                {recurringEvents.map((event, index) => (
+                {recurringEvents.map((event, index) => {
+                  const isFlagship = event.id === 'rtss' || event.id === 'rtsh'
+                  return (
                 <div
                   key={event.id}
                   onMouseEnter={() => setHoveredEvent(event.id)}
                   onMouseLeave={() => setHoveredEvent(null)}
-                  className="flex-shrink-0 w-[90%] sm:w-[450px] group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#d0006f] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#d0006f]/20"
+                  className={`flex-shrink-0 ${isFlagship ? 'w-[95%] sm:w-[520px]' : 'w-[90%] sm:w-[450px]'} group relative ${isFlagship ? 'bg-gradient-to-br from-[#d0006f]/10 via-white/5 to-[#d0006f]/5' : 'bg-white/5'} hover:bg-white/10 border-2 ${isFlagship ? 'border-[#d0006f]/50 hover:border-[#d0006f]' : 'border-white/10 hover:border-[#d0006f]'} rounded-lg overflow-hidden transition-all duration-300 ${isFlagship ? 'hover:shadow-2xl hover:shadow-[#d0006f]/40 hover:scale-105' : 'hover:shadow-xl hover:shadow-[#d0006f]/20'}`}
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
+                  {/* Flagship Badge */}
+                  {isFlagship && (
+                    <div className="absolute top-4 left-4 z-10">
+                      <div className="px-4 py-2 rounded-full bg-gradient-to-r from-[#d0006f] to-pink-600 backdrop-blur-sm border border-white/20 shadow-lg shadow-[#d0006f]/50">
+                        <div className="flex items-center gap-2">
+                          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                          <span className="text-white font-bold text-xs tracking-widest uppercase">Flagship Event</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Event Image */}
                   <div className="relative h-80 w-full overflow-hidden">
                     <img 
@@ -573,24 +587,6 @@ export default function EventsPage() {
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/50 to-transparent"></div>
-                    
-                    {/* Category Badge */}
-                    <div className="absolute top-4 right-4">
-                      <div className="px-4 py-2 rounded-lg bg-[#d0006f] backdrop-blur-sm">
-                        <p className="text-xs text-white uppercase tracking-wide font-bold">
-                          {event.category}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Frequency Badge */}
-                    <div className="absolute top-4 left-4">
-                      <div className="px-4 py-2 rounded-full backdrop-blur-md bg-black/50 border border-white/20">
-                        <p className="text-sm text-white uppercase tracking-wide font-semibold">
-                          {event.frequency}
-                        </p>
-                      </div>
-                    </div>
                   </div>
 
                   {/* Content */}
@@ -604,7 +600,7 @@ export default function EventsPage() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                       <span className="text-base font-semibold text-[#d0006f]">
-                        {event.month}
+                        {event.month}, {event.category}
                       </span>
                     </div>
 
@@ -614,9 +610,16 @@ export default function EventsPage() {
                   </div>
 
                   {/* Hover effect accent */}
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#d0006f] to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+                  <div className={`absolute bottom-0 left-0 w-full ${isFlagship ? 'h-2' : 'h-1'} bg-gradient-to-r from-[#d0006f] to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300`}></div>
+                  
+                  {/* Flagship glow effect */}
+                  {isFlagship && (
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#d0006f]/10 via-pink-500/10 to-[#d0006f]/10 blur-xl"></div>
+                    </div>
+                  )}
                 </div>
-              ))}
+              )})}
               </div>
 
               {/* Scroll Indicator */}
