@@ -26,6 +26,11 @@ export default function Home() {
               Admin - Manage Startups
             </Link>
           </li>
+          <li>
+           <Link href="/member-network" className="text-blue-600 hover:underline text-lg">
+             Member Network
+           </Link>
+          </li>
         </ul>
       </div>
     </main>
