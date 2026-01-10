@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import Script from "next/script"
+import { EventCard, TimelineMarker, ScrollIndicator, SpecialEventCard } from "@/components/EventComponents"
 
 export const dynamic = 'force-dynamic'
 
@@ -13,9 +14,16 @@ interface RecurringEvent {
   month: string
   frequency: string
   icon: string
-  color: string
   image: string
   category: string
+}
+
+interface SpecialEvent {
+  id: string
+  name: string
+  description: string
+  category: string
+  image: string
 }
 
 const recurringEvents: RecurringEvent[] = [
@@ -26,7 +34,6 @@ const recurringEvents: RecurringEvent[] = [
     month: "October",
     frequency: "Once per year",
     icon: "presentation",
-    color: "#d0006f",
     image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop",
     category: "Pitch Event"
   },
@@ -37,7 +44,6 @@ const recurringEvents: RecurringEvent[] = [
     month: "November",
     frequency: "Once per year",
     icon: "code",
-    color: "#ff6b9d",
     image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=2070&auto=format&fit=crop",
     category: "Hackathon"
   },
@@ -48,9 +54,8 @@ const recurringEvents: RecurringEvent[] = [
     month: "October & April",
     frequency: "Once per semester",
     icon: "info",
-    color: "#4a90e2",
     image: "https://images.unsplash.com/photo-1591115765373-5207764f72e7?q=80&w=2070&auto=format&fit=crop",
-    category: "Talks"
+    category: "Talk"
   },
   {
     id: "fail-tales",
@@ -59,9 +64,8 @@ const recurringEvents: RecurringEvent[] = [
     month: "October & April",
     frequency: "Once per semester",
     icon: "stories",
-    color: "#e91e63",
     image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=2070&auto=format&fit=crop",
-    category: "Talks"
+    category: "Talk"
   },
   {
     id: "pitch-network",
@@ -70,10 +74,9 @@ const recurringEvents: RecurringEvent[] = [
     month: "January & June",
     frequency: "Once per semester",
     icon: "presentation",
-    color: "#ff1744",
     image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2070&auto=format&fit=crop",
     category: "Pitch Event"
-  },
+  }, 
   {
     id: "legal-hack",
     name: "START Legal Hack",
@@ -81,9 +84,25 @@ const recurringEvents: RecurringEvent[] = [
     month: "March",
     frequency: "Once per year",
     icon: "code",
-    color: "#9c27b0",
     image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop",
     category: "Hackathon"
+  }
+]
+
+const specialEvents: SpecialEvent[] = [
+  {
+    id: "start-lab",
+    name: "START Lab",
+    description: "An intensive program where startups work on solving real challenges with expert mentorship, resources, and a structured approach to innovation and growth.",
+    category: "Hackathon",
+    image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=2070&auto=format&fit=crop"
+  },
+  {
+    id: "isar-unfiltered",
+    name: "Isar Unfiltered",
+    description: "Raw, honest conversations with founders and entrepreneurs about the realities of building companies. No sugar-coating, just authentic stories and lessons learned.",
+    category: "Founder Event",
+    image: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?q=80&w=2070&auto=format&fit=crop"
   }
 ]
 
@@ -96,7 +115,6 @@ export default function EventsPage() {
   const [scrollProgress, setScrollProgress] = useState(0)
   const [specialEventsScrollProgress, setSpecialEventsScrollProgress] = useState(0)
   const [hoveredEvent, setHoveredEvent] = useState<string | null>(null)
-  const [, forceUpdate] = useState({})
 
   useEffect(() => {
     setLoading(false)
@@ -114,8 +132,6 @@ export default function EventsPage() {
 
     slider.addEventListener('scroll', updateScroll)
     updateScroll()
-    
-    // Force initial update after mount
     setTimeout(updateScroll, 100)
 
     return () => slider.removeEventListener('scroll', updateScroll)
@@ -133,7 +149,6 @@ export default function EventsPage() {
 
     slider.addEventListener('scroll', updateScroll)
     updateScroll()
-    
     setTimeout(updateScroll, 100)
 
     return () => slider.removeEventListener('scroll', updateScroll)
@@ -196,7 +211,6 @@ export default function EventsPage() {
     const cardWidth = card.offsetWidth
     const sliderWidth = slider.offsetWidth
     
-    // Calculate position to center the card
     const scrollPosition = cardLeft - (sliderWidth / 2) + (cardWidth / 2)
     
     slider.scrollTo({
@@ -278,7 +292,7 @@ export default function EventsPage() {
 
       <main className="min-h-screen bg-[#00002c]">
         {/* Hero Section */}
-        <div className="relative w-full overflow-hidden h-[650px]">
+        <div className="relative w-full overflow-hidden h-[600px]">
           {/* Background Image + Overlay */}
           <div className="absolute inset-0 h-full">
             <img
@@ -306,8 +320,7 @@ export default function EventsPage() {
 
         {/* Content Below Hero */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-20">
-
-
+        
           {/* Upcoming Events Calendar Section */}
           <div className="mb-20">
             <div className="mb-10">
@@ -331,8 +344,7 @@ export default function EventsPage() {
                   height="450"
                   allowFullScreen
                   aria-hidden="false"
-                  tabIndex={0}
-                  className=" rounded-xl"
+                  className="rounded-xl"
                 ></iframe>
               </div>
             </div>
@@ -357,223 +369,129 @@ export default function EventsPage() {
               {/* Months */}
               <div className="hidden md:grid grid-cols-12 gap-2 mb-6 text-center">
                 {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((month, i) => (
-                  <div key={month} className="text-sm text-gray-300 font-bold">
+                  <div key={month} className="text-sm text-gray-300 font-semibold">
                     {month}
                   </div>
                 ))}
               </div>
 
-              {/* Timeline Line - Desktop */}
+              {/* Timeline Line */}
               <div className="relative h-3 bg-white/10 rounded-full mb-20 mt-16 hidden md:block">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#d0006f] via-pink-500 to-[#d0006f] opacity-40 rounded-full"></div>
                 
                 {/* Month Dividers */}
-                {[...Array(11)].map((_, i) => (
+                {[...Array(12)].map((_, i) => (
                   <div 
                     key={i}
-                    className="absolute top-1/2 -translate-y-1/2 w-0.5 h-6 bg-white/30"
-                    style={{ left: `${(i + 1) * 8.33}%` }}
+                    className="absolute top-1/2 -translate-y-1/2 w-px h-6 bg-white/20"
+                    style={{ left: `calc(${(i + 1) * 8.33}% - 0.5px)` }}
                   ></div>
                 ))}
                 
-                {/* Event Markers */}
-                {/* PITCH & NETWORK - January */}
-                <div className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 cursor-pointer transition-all ${hoveredEvent === 'pitch-network' ? 'scale-150 z-10' : 'hover:scale-125'}`} style={{ left: '4.2%' }} onMouseEnter={() => handleTimelineMarkerHover('pitch-network')} onMouseLeave={() => setHoveredEvent(null)}>
-                  <div className="relative">
-                    <div className={`w-4 h-4 bg-[#ff1744] rounded-full transition-all ${hoveredEvent === 'pitch-network' ? 'ring-4 ring-[#ff1744]/50' : ''}`}></div>
-                    <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                      <div className="bg-[#ff1744]/90 px-3 py-1.5 rounded-lg">
-                        <p className="text-xs text-white font-bold">Pitch & Network</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Legal Hack - March */}
-                <div className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 cursor-pointer transition-all ${hoveredEvent === 'legal-hack' ? 'scale-150 z-10' : 'hover:scale-125'}`} style={{ left: '20.8%' }} onMouseEnter={() => handleTimelineMarkerHover('legal-hack')} onMouseLeave={() => setHoveredEvent(null)}>
-                  <div className="relative">
-                    <div className={`w-4 h-4 bg-[#9c27b0] rounded-full transition-all ${hoveredEvent === 'legal-hack' ? 'ring-4 ring-[#9c27b0]/50' : ''}`}></div>
-                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                      <div className="bg-[#9c27b0]/90 px-3 py-1.5 rounded-lg">
-                        <p className="text-xs text-white font-bold">Legal Hack</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Info Event - April */}
-                <div className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 cursor-pointer transition-all ${hoveredEvent === 'info-event' ? 'scale-150 z-10' : 'hover:scale-125'}`} style={{ left: '29.2%' }} onMouseEnter={() => handleTimelineMarkerHover('info-event')} onMouseLeave={() => setHoveredEvent(null)}>
-                  <div className="relative">
-                    <div className={`w-4 h-4 bg-[#4a90e2] rounded-full transition-all ${hoveredEvent === 'info-event' ? 'ring-4 ring-[#4a90e2]/50' : ''}`}></div>
-                    <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                      <div className="bg-[#4a90e2]/90 px-3 py-1.5 rounded-lg">
-                        <p className="text-xs text-white font-bold">Info Event</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Fail Tales - April */}
-                <div className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 cursor-pointer transition-all ${hoveredEvent === 'fail-tales' ? 'scale-150 z-10' : 'hover:scale-125'}`} style={{ left: '37.5%' }} onMouseEnter={() => handleTimelineMarkerHover('fail-tales')} onMouseLeave={() => setHoveredEvent(null)}>
-                  <div className="relative">
-                    <div className={`w-4 h-4 bg-[#4a90e2] rounded-full transition-all ${hoveredEvent === 'fail-tales' ? 'ring-4 ring-[#4a90e2]/50' : ''}`}></div>
-                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                      <div className="bg-[#4a90e2]/90 px-3 py-1.5 rounded-lg">
-                        <p className="text-xs text-white font-bold">Fail Tales</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* PITCH & NETWORK - June */}
-                <div className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 cursor-pointer transition-all ${hoveredEvent === 'pitch-network' ? 'scale-150 z-10' : 'hover:scale-125'}`} style={{ left: '45.8%' }} onMouseEnter={() => handleTimelineMarkerHover('pitch-network')} onMouseLeave={() => setHoveredEvent(null)}>
-                  <div className="relative">
-                    <div className={`w-4 h-4 bg-[#ff1744] rounded-full transition-all ${hoveredEvent === 'pitch-network' ? 'ring-4 ring-[#ff1744]/50' : ''}`}></div>
-                    <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                      <div className="bg-[#ff1744]/90 px-3 py-1.5 rounded-lg">
-                        <p className="text-xs text-white font-bold">Pitch & Network</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Info Event - October */}
-                <div className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 cursor-pointer transition-all ${hoveredEvent === 'info-event' ? 'scale-150 z-10' : 'hover:scale-125'}`} style={{ left: '79.2%' }} onMouseEnter={() => handleTimelineMarkerHover('info-event')} onMouseLeave={() => setHoveredEvent(null)}>
-                  <div className="relative">
-                    <div className={`w-4 h-4 bg-[#4a90e2] rounded-full transition-all ${hoveredEvent === 'info-event' ? 'ring-4 ring-[#4a90e2]/50' : ''}`}></div>
-                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                      <div className="bg-[#4a90e2]/90 px-3 py-1.5 rounded-lg">
-                        <p className="text-xs text-white font-bold">Info Event</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Fail Tales - October */}
-                <div className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 cursor-pointer transition-all ${hoveredEvent === 'fail-tales' ? 'scale-150 z-10' : 'hover:scale-125'}`} style={{ left: '87.5%' }} onMouseEnter={() => handleTimelineMarkerHover('fail-tales')} onMouseLeave={() => setHoveredEvent(null)}>
-                  <div className="relative">
-                    <div className={`w-4 h-4 bg-[#4a90e2] rounded-full transition-all ${hoveredEvent === 'fail-tales' ? 'ring-4 ring-[#4a90e2]/50' : ''}`}></div>
-                    <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                      <div className="bg-[#4a90e2]/90 px-3 py-1.5 rounded-lg">
-                        <p className="text-xs text-white font-bold">Fail Tales</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* RTSS - October/November */}
-                <div className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 cursor-pointer transition-all ${hoveredEvent === 'rtss' ? 'scale-150 z-10' : 'hover:scale-125'}`} style={{ left: '91.7%' }} onMouseEnter={() => handleTimelineMarkerHover('rtss')} onMouseLeave={() => setHoveredEvent(null)}>
-                  <div className="relative">
-                    <div className={`w-6 h-6 bg-[#ff1744] rounded-full transition-all ${hoveredEvent === 'rtss' ? 'ring-4 ring-[#ff1744]/50' : ''}`}></div>
-                    <div className="absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                      <div className="bg-[#ff1744] px-4 py-2 rounded-lg">
-                        <p className="text-sm text-white font-bold">RTSS</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* RTSH - November */}
-                <div className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 cursor-pointer transition-all ${hoveredEvent === 'rtsh' ? 'scale-150 z-10' : 'hover:scale-125'}`} style={{ left: '95.8%' }} onMouseEnter={() => handleTimelineMarkerHover('rtsh')} onMouseLeave={() => setHoveredEvent(null)}>
-                  <div className="relative">
-                    <div className={`w-6 h-6 bg-[#9c27b0] rounded-full transition-all ${hoveredEvent === 'rtsh' ? 'ring-4 ring-[#9c27b0]/50' : ''}`}></div>
-                    <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                      <div className="bg-[#9c27b0] px-4 py-2 rounded-lg">
-                        <p className="text-sm text-white font-bold">RTSH</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {/* Event Markers - Using TimelineMarker Components */}
+                <TimelineMarker
+                  eventId="pitch-network"
+                  left="calc(100% / 12 + 100% / 24)"
+                  color="#ff1744"
+                  label="Pitch & Network"
+                  position="bottom"
+                  hoveredEvent={hoveredEvent}
+                  onHover={handleTimelineMarkerHover}
+                  onLeave={() => setHoveredEvent(null)}
+                />
+                
+                <TimelineMarker
+                  eventId="legal-hack"
+                  left="25%"
+                  color="#9c27b0"
+                  label="Legal Hack"
+                  position="top"
+                  hoveredEvent={hoveredEvent}
+                  onHover={handleTimelineMarkerHover}
+                  onLeave={() => setHoveredEvent(null)}
+                />
+                
+                <TimelineMarker
+                  eventId="info-event"
+                  left="33.33%"
+                  color="#4a90e2"
+                  label="Info Event"
+                  position="bottom"
+                  hoveredEvent={hoveredEvent}
+                  onHover={handleTimelineMarkerHover}
+                  onLeave={() => setHoveredEvent(null)}
+                />
+                
+                <TimelineMarker
+                  eventId="fail-tales"
+                  left="calc(33.33% + 14px)"
+                  color="#4a90e2"
+                  label="Fail Tales"
+                  position="top"
+                  hoveredEvent={hoveredEvent}
+                  onHover={handleTimelineMarkerHover}
+                  onLeave={() => setHoveredEvent(null)}
+                />
+                
+                <TimelineMarker
+                  eventId="pitch-network"
+                  left="50%"
+                  color="#ff1744"
+                  label="Pitch & Network"
+                  position="bottom"
+                  hoveredEvent={hoveredEvent}
+                  onHover={handleTimelineMarkerHover}
+                  onLeave={() => setHoveredEvent(null)}
+                />
+                
+                <TimelineMarker
+                  eventId="info-event"
+                  left="83.33%"
+                  color="#4a90e2"
+                  label="Info Event"
+                  position="top"
+                  hoveredEvent={hoveredEvent}
+                  onHover={handleTimelineMarkerHover}
+                  onLeave={() => setHoveredEvent(null)}
+                />
+                
+                <TimelineMarker
+                  eventId="fail-tales"
+                  left="calc(83.33% + 14px)"
+                  color="#4a90e2"
+                  label="Fail Tales"
+                  position="bottom"
+                  hoveredEvent={hoveredEvent}
+                  onHover={handleTimelineMarkerHover}
+                  onLeave={() => setHoveredEvent(null)}
+                />
+                
+                <TimelineMarker
+                  eventId="rtss"
+                  left="calc(83.33% + 28px)"
+                  color="#ff1744"
+                  label="RTSS"
+                  position="top"
+                  size="lg"
+                  hoveredEvent={hoveredEvent}
+                  onHover={handleTimelineMarkerHover}
+                  onLeave={() => setHoveredEvent(null)}
+                />
+                
+                <TimelineMarker
+                  eventId="rtsh"
+                  left="91.67%"
+                  color="#9c27b0"
+                  label="RTSH"
+                  position="bottom"
+                  size="lg"
+                  hoveredEvent={hoveredEvent}
+                  onHover={handleTimelineMarkerHover}
+                  onLeave={() => setHoveredEvent(null)}
+                />
               </div>
 
-              {/* Mobile Timeline - Enhanced */}
-              <div className="md:hidden space-y-4">
-                <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-16 text-gray-300 text-sm font-bold">JAN</div>
-                  </div>
-                  <div className="ml-3 pl-4 border-l-2 border-[#ff1744] space-y-2">
-                    <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 bg-[#ff1744] rounded-full"></div>
-                      <span className="text-sm text-white font-semibold">PITCH & NETWORK</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-16 text-gray-300 text-sm font-bold">MAR</div>
-                  </div>
-                  <div className="ml-3 pl-4 border-l-2 border-[#9c27b0] space-y-2">
-                    <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 bg-[#9c27b0] rounded-full"></div>
-                      <span className="text-sm text-white font-semibold">Legal Hack</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-16 text-gray-300 text-sm font-bold">APR</div>
-                  </div>
-                  <div className="ml-3 pl-4 border-l-2 border-[#4a90e2] space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 bg-[#4a90e2] rounded-full"></div>
-                      <span className="text-sm text-white font-semibold">Info Event</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 bg-[#4a90e2] rounded-full"></div>
-                      <span className="text-sm text-white font-semibold">Fail Tales</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-16 text-gray-300 text-sm font-bold">JUN</div>
-                  </div>
-                  <div className="ml-3 pl-4 border-l-2 border-[#ff1744] space-y-2">
-                    <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 bg-[#ff1744] rounded-full"></div>
-                      <span className="text-sm text-white font-semibold">PITCH & NETWORK</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-16 text-gray-300 text-sm font-bold">OCT</div>
-                  </div>
-                  <div className="ml-3 pl-4 border-l-2 border-[#ff1744] space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 bg-[#4a90e2] rounded-full"></div>
-                      <span className="text-sm text-white font-semibold">Info Event</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 bg-[#4a90e2] rounded-full"></div>
-                      <span className="text-sm text-white font-semibold">Fail Tales</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-5 h-5 bg-[#ff1744] rounded-full"></div>
-                      <span className="text-sm text-white font-bold">RTSS</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-16 text-gray-300 text-sm font-bold">NOV</div>
-                  </div>
-                  <div className="ml-3 pl-4 border-l-2 border-[#9c27b0] space-y-2">
-                    <div className="flex items-center gap-3">
-                      <div className="w-5 h-5 bg-[#9c27b0] rounded-full"></div>
-                      <span className="text-sm text-white font-bold">RTSH</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Legend */}
+               {/* Legend */}
               <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-8 pt-6 border-t border-white/10">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-[#ff1744] rounded-full"></div>
@@ -588,11 +506,81 @@ export default function EventsPage() {
                   <span className="text-sm text-gray-300 font-medium">Talks</span>
                 </div>
               </div>
+
+              {/* Mobile Timeline - Simplified */}
+              <div className="md:hidden space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 text-gray-400 text-xs font-semibold">Jan</div>
+                  <div className="flex-1 flex items-center gap-2">
+                    <div className="w-3 h-3 bg-[#ff1744] rounded-full"></div>
+                    <span className="text-xs text-white">PITCH & NETWORK</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 text-gray-400 text-xs font-semibold">Mar</div>
+                  <div className="flex-1 flex items-center gap-2">
+                    <div className="w-3 h-3 bg-[#9c27b0] rounded-full"></div>
+                    <span className="text-xs text-white">Legal Hack</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 text-gray-400 text-xs font-semibold">Apr</div>
+                  <div className="flex-1 flex flex-wrap items-center gap-2">
+                    <div className="w-3 h-3 bg-[#4a90e2] rounded-full"></div>
+                    <span className="text-xs text-white">Info Event</span>
+                    <span className="text-gray-500">•</span>
+                    <div className="w-3 h-3 bg-[#4a90e2] rounded-full"></div>
+                    <span className="text-xs text-white">Fail Tales</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 text-gray-400 text-xs font-semibold">Jun</div>
+                  <div className="flex-1 flex items-center gap-2">
+                    <div className="w-3 h-3 bg-[#ff1744] rounded-full"></div>
+                    <span className="text-xs text-white">PITCH & NETWORK</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 text-gray-400 text-xs font-semibold">Oct</div>
+                  <div className="flex-1 flex flex-wrap items-center gap-2">
+                    <div className="w-3 h-3 bg-[#4a90e2] rounded-full"></div>
+                    <span className="text-xs text-white">Info Event</span>
+                    <span className="text-gray-500">•</span>
+                    <div className="w-3 h-3 bg-[#4a90e2] rounded-full"></div>
+                    <span className="text-xs text-white">Fail Tales</span>
+                    <span className="text-gray-500">•</span>
+                    <div className="w-3 h-3 bg-[#ff1744] rounded-full"></div>
+                    <span className="text-xs text-white">RTSS</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 text-gray-400 text-xs font-semibold">Nov</div>
+                  <div className="flex-1 flex items-center gap-2">
+                    <div className="w-3 h-3 bg-[#9c27b0] rounded-full"></div>
+                    <span className="text-xs text-white">Road to START Hack</span>
+                  </div>
+                </div>
+                
+                {/* Mobile Legend */}
+                <div className="mt-4 pt-4 border-t border-white/10 flex flex-wrap gap-4 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#ff1744]"></div>
+                    <span className="text-gray-300">Pitch Event</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#9c27b0]"></div>
+                    <span className="text-gray-300">Hackathon</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#4a90e2]"></div>
+                    <span className="text-gray-300">Talks</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Events Slider */}
             <div className="relative">
-              {/* Slider Container */}
               <div 
                 ref={sliderRef}
                 onMouseDown={handleDrag.start}
@@ -604,82 +592,20 @@ export default function EventsPage() {
               >
                 {recurringEvents.map((event, index) => {
                   const isFlagship = event.id === 'rtss' || event.id === 'rtsh'
-                  const isHovered = hoveredEvent === event.id
                   return (
-                <div
-                  key={event.id}
-                  onMouseEnter={() => setHoveredEvent(event.id)}
-                  onMouseLeave={() => setHoveredEvent(null)}
-                  className={`flex-shrink-0 ${isFlagship ? 'w-[95%] sm:w-[520px]' : 'w-[90%] sm:w-[450px]'} group relative ${isFlagship ? 'bg-gradient-to-br from-[#d0006f]/10 via-white/5 to-[#d0006f]/5' : 'bg-white/5'} ${isHovered ? 'bg-white/10' : ''} border-2 ${isFlagship ? `${isHovered ? 'border-[#d0006f]' : 'border-[#d0006f]/50'}` : `${isHovered ? 'border-[#d0006f]' : 'border-white/10'}`} rounded-lg overflow-hidden transition-all duration-300 ${isFlagship ? `${isHovered ? 'shadow-2xl shadow-[#d0006f]/20' : ''}` : `${isHovered ? 'shadow-xl shadow-[#d0006f]/20' : ''}`}`}
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  {/* Flagship Badge */}
-                  {isFlagship && (
-                    <div className="absolute top-4 left-4 z-10">
-                      <div className="px-4 py-2 rounded-full bg-gradient-to-r from-[#d0006f] to-pink-600 backdrop-blur-sm border border-white/20 shadow-lg shadow-[#d0006f]/50">
-                        <div className="flex items-center gap-2">
-                          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                          <span className="text-white font-bold text-xs tracking-widest uppercase">Flagship Event</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Event Image */}
-                  <div className="relative h-80 w-full overflow-hidden">
-                    <img 
-                      src={event.image} 
-                      alt={event.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    <EventCard
+                      key={event.id}
+                      event={event}
+                      index={index}
+                      hoveredEvent={hoveredEvent}
+                      setHoveredEvent={setHoveredEvent}
+                      isFlagship={isFlagship}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/50 to-transparent"></div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-8">
-                    <h3 className="text-2xl font-bold text-white mb-3">
-                      {event.name}
-                    </h3>
-                    
-                    <div className="flex items-center gap-2 mb-4">
-                      <svg className="w-5 h-5 text-[#d0006f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      <span className="text-base font-semibold text-[#d0006f]">
-                        {event.month}, {event.category}
-                      </span>
-                    </div>
-
-                    <p className="text-base text-gray-400 leading-relaxed">
-                      {event.description}
-                    </p>
-                  </div>
-
-                  {/* Hover effect accent */}
-                  <div className={`absolute bottom-0 left-0 w-full ${isFlagship ? 'h-2' : 'h-1'} bg-gradient-to-r from-[#d0006f] to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300`}></div>
-                  
-                  {/* Flagship glow effect */}
-                  {isFlagship && (
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#d0006f]/10 via-pink-500/10 to-[#d0006f]/10 blur-xl"></div>
-                    </div>
-                  )}
-                </div>
-              )})}
+                  )
+                })}
               </div>
 
-              {/* Scroll Indicator */}
-              <div className="relative h-2 bg-white/10 rounded-full mt-6 overflow-hidden">
-                <div 
-                  className="absolute h-full bg-gradient-to-r from-[#d0006f] to-pink-500 rounded-full transition-all duration-200"
-                  style={{
-                    width: `${sliderRef.current ? (sliderRef.current.clientWidth / sliderRef.current.scrollWidth) * 100 : 30}%`,
-                    left: `${sliderRef.current ? scrollProgress * (1 - sliderRef.current.clientWidth / sliderRef.current.scrollWidth) : 0}%`
-                  }}
-                />
-              </div>
+              <ScrollIndicator sliderRef={sliderRef} scrollProgress={scrollProgress} />
 
               {/* Gradient Fade Edges */}
               <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#00002c]/50 to-transparent pointer-events-none"></div>
@@ -691,7 +617,7 @@ export default function EventsPage() {
           <div className="mb-20">
             <div className="mb-10">
               <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                SPECIAL EVENTS
+                <span className="text-[#d0006f]">Special</span> Events
               </h2>
               <p className="text-gray-400 text-lg">
                 Unique experiences and initiatives that make our community special
@@ -699,7 +625,6 @@ export default function EventsPage() {
             </div>
 
             <div className="relative">
-              {/* Slider Container */}
               <div
                 ref={specialEventsSliderRef}
                 onMouseDown={handleSpecialEventsDrag.start}
@@ -709,8 +634,38 @@ export default function EventsPage() {
                 className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-2 cursor-grab active:cursor-grabbing"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               >
+                {specialEvents.map((event, index) => (
+                  <SpecialEventCard
+                    key={event.id}
+                    event={event}
+                    index={index}
+                  />
+                ))}
+              </div>
+
+              <ScrollIndicator sliderRef={specialEventsSliderRef} scrollProgress={specialEventsScrollProgress} />
+
+              {/* Gradient Fade Edges */}
+              <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#00002c]/50 to-transparent pointer-events-none"></div>
+              <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#00002c]/50 to-transparent pointer-events-none"></div>
+            </div>
+          </div>
+
+          {/* Remove the duplicate special events section below */}
+          {/* Special Events Section */}
+          <div className="mb-20" style={{ display: 'none' }}>
+            <div className="mb-10">
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+                <span className="text-[#d0006f]">Special</span> Events
+              </h2>
+              <p className="text-gray-400 text-lg">
+                Unique experiences and initiatives that make our community special
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* START Lab */}
-              <div className="flex-shrink-0 w-[90%] sm:w-[400px] group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#d0006f] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#d0006f]/20">
+              <div className="group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#d0006f] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#d0006f]/20">
                 {/* Event Image */}
                 <div className="relative h-64 w-full overflow-hidden">
                   <img 
@@ -719,16 +674,22 @@ export default function EventsPage() {
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/50 to-transparent"></div>
+                  
+                  {/* Category Badge */}
+                  <div className="absolute top-4 right-4">
+                    <div className="px-3 py-1.5 rounded-lg bg-[#d0006f] backdrop-blur-sm">
+                      <p className="text-xs text-white uppercase tracking-wide font-bold">
+                        Hackathon
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Content */}
                 <div className="p-6">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-xl font-bold text-white">
-                      START Lab
-                    </h3>
-                    <span className="text-xs text-[#d0006f] font-bold uppercase tracking-wide">Hackathon</span>
-                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2">
+                    START Lab
+                  </h3>
 
                   <p className="text-sm text-gray-400 leading-relaxed">
                     An intensive program where startups work on solving real challenges with expert mentorship, resources, and a structured approach to innovation and growth.
@@ -739,8 +700,44 @@ export default function EventsPage() {
                 <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#d0006f] to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
               </div>
 
+              {/* START Legal Hack */}
+              <div className="group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#d0006f] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#d0006f]/20">
+                {/* Event Image */}
+                <div className="relative h-64 w-full overflow-hidden">
+                  <img 
+                    src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop" 
+                    alt="START Legal Hack"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/50 to-transparent"></div>
+                  
+                  {/* Category Badge */}
+                  <div className="absolute top-4 right-4">
+                    <div className="px-3 py-1.5 rounded-lg bg-[#d0006f] backdrop-blur-sm">
+                      <p className="text-xs text-white uppercase tracking-wide font-bold">
+                        Hackathon
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-white mb-2">
+                    START Legal Hack
+                  </h3>
+
+                  <p className="text-sm text-gray-400 leading-relaxed">
+                    A unique hackathon focused on building legal tech solutions that address real challenges in the legal industry, combining technology with regulatory expertise.
+                  </p>
+                </div>
+
+                {/* Hover effect accent */}
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#d0006f] to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+              </div>
+
               {/* Isar Unfiltered */}
-              <div className="flex-shrink-0 w-[90%] sm:w-[400px] group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#d0006f] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#d0006f]/20">
+              <div className="group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#d0006f] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#d0006f]/20">
                 {/* Event Image */}
                 <div className="relative h-64 w-full overflow-hidden">
                   <img 
@@ -749,16 +746,22 @@ export default function EventsPage() {
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/50 to-transparent"></div>
+                  
+                  {/* Category Badge */}
+                  <div className="absolute top-4 right-4">
+                    <div className="px-3 py-1.5 rounded-lg bg-[#d0006f] backdrop-blur-sm">
+                      <p className="text-xs text-white uppercase tracking-wide font-bold">
+                        Founder Event
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Content */}
                 <div className="p-6">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-xl font-bold text-white">
-                      Isar Unfiltered
-                    </h3>
-                    <span className="text-xs text-[#d0006f] font-bold uppercase tracking-wide">Founder Event</span>
-                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2">
+                    Isar Unfiltered
+                  </h3>
 
                   <p className="text-sm text-gray-400 leading-relaxed">
                     Raw, honest conversations with founders and entrepreneurs about the realities of building companies. No sugar-coating, just authentic stories and lessons learned.
@@ -768,22 +771,6 @@ export default function EventsPage() {
                 {/* Hover effect accent */}
                 <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#d0006f] to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
               </div>
-              </div>
-
-              {/* Scroll Indicator */}
-              <div className="relative h-2 bg-white/10 rounded-full mt-6 overflow-hidden">
-                <div 
-                  className="absolute h-full bg-gradient-to-r from-[#d0006f] to-pink-500 rounded-full transition-all duration-200"
-                  style={{
-                    width: `${specialEventsSliderRef.current ? (specialEventsSliderRef.current.clientWidth / specialEventsSliderRef.current.scrollWidth) * 100 : 30}%`,
-                    left: `${specialEventsSliderRef.current ? specialEventsScrollProgress * (1 - specialEventsSliderRef.current.clientWidth / specialEventsSliderRef.current.scrollWidth) : 0}%`
-                  }}
-                />
-              </div>
-
-              {/* Gradient Fade Edges */}
-              <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#00002c]/50 to-transparent pointer-events-none"></div>
-              <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#00002c]/50 to-transparent pointer-events-none"></div>
             </div>
           </div>
 
