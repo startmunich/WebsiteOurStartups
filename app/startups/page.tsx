@@ -51,7 +51,6 @@ function getPreviewText(text: string): string {
 export default function StartupsPage() {
   const [companies, setCompanies] = useState<Company[]>([])
   const [loading, setLoading] = useState(true)
-  const [selectedBatch, setSelectedBatch] = useState<string>("all")
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [selectedYear, setSelectedYear] = useState<string>("all")
   const [selectedProgram, setSelectedProgram] = useState<string>("all")
@@ -81,15 +80,6 @@ export default function StartupsPage() {
     loadCompanies()
   }, [])
 
-  // Extract unique batches from all founders
-  const allBatches = Array.from(
-    new Set(
-      companies.flatMap(company =>
-        company.founders.map(founder => founder.batch)
-      )
-    )
-  ).filter(batch => batch).sort()
-
   // Extract unique categories
   const allCategories = Array.from(
     new Set(
@@ -117,9 +107,6 @@ export default function StartupsPage() {
   // Filter companies based on all selected filters
   const filteredCompanies = companies
     .filter(company => {
-      const matchesBatch = selectedBatch === "all" ||
-        company.founders.some(founder => founder.batch === selectedBatch)
-
       const matchesCategory = selectedCategory === "all" ||
         company.category.some(cat => cat.toLowerCase().includes(selectedCategory.toLowerCase()))
 
@@ -136,7 +123,7 @@ export default function StartupsPage() {
         company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         company.founders.some(founder => founder.name.toLowerCase().includes(searchQuery.toLowerCase()))
 
-      return matchesBatch && matchesCategory && matchesYear && matchesProgram && matchesSearch
+      return matchesCategory && matchesYear && matchesProgram && matchesSearch
     })
     .sort((a, b) => {
       // Sort by total funding (highest first)
@@ -154,7 +141,7 @@ export default function StartupsPage() {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1)
-  }, [selectedBatch, selectedCategory, selectedYear, selectedProgram, searchQuery])
+  }, [selectedCategory, selectedYear, selectedProgram, searchQuery])
 
   // Calculate total statistics
   const totalStartups = companies.length
@@ -680,27 +667,7 @@ export default function StartupsPage() {
 
           {/* Filter Section */}
           <div className="mb-12 p-6 bg-white/5 border border-white/10 rounded-lg">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {/* Batch Filter */}
-              <div>
-                <label htmlFor="batch-filter" className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">
-                  Batch
-                </label>
-                <Select value={selectedBatch} onValueChange={setSelectedBatch}>
-                  <SelectTrigger className="w-full bg-white/5 border-white/20 text-white focus:ring-1 focus:ring-white/30 hover:bg-white/10 transition-all">
-                    <SelectValue placeholder="Select batch" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Batches</SelectItem>
-                    {allBatches.map((batch) => (
-                      <SelectItem key={batch} value={batch}>
-                        {batch}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {/* Category Filter */}
               <div>
                 <label htmlFor="category-filter" className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">
