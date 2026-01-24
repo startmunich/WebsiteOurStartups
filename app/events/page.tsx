@@ -476,7 +476,7 @@ export default function EventsPage() {
                   eventId="rtss"
                   left={calculateTimelinePosition(12, 0)}
                   color="#ff1744"
-                  label="RTSS"
+                  label="RTSS 🚀"
                   position="top"
                   hoveredEvent={hoveredEvent}
                   onHover={handleTimelineMarkerHover}
@@ -487,7 +487,7 @@ export default function EventsPage() {
                   eventId="rtsh"
                   left={calculateTimelinePosition(12, 15)}
                   color="#9c27b0"
-                  label="RTSH"
+                  label="RTSH 🚀"
                   position="bottom"
                   hoveredEvent={hoveredEvent}
                   onHover={handleTimelineMarkerHover}
