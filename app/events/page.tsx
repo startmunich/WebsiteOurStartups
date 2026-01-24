@@ -342,11 +342,7 @@ export default function EventsPage() {
               </p>
             </div>
 
-            <div className="relative rounded-2xl overflow-hidden border-2 border-[#d0006f]/30 bg-white/5 p-4 md:p-8">
-              {/* Decorative background elements */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-[#d0006f]/10 rounded-full blur-3xl"></div>
-              <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#d0006f]/5 rounded-full blur-3xl"></div>
-              
+            <div className="relative rounded-2xl overflow-hidden bg-white/5 p-4 md:p-8 border border-white/10">
               <div className="relative">
                 <iframe
                   src="https://luma.com/embed/calendar/cal-1MxD65bgV0Hcb0r/events"
@@ -365,7 +361,7 @@ export default function EventsPage() {
           <div className="mb-20">
             <div className="mb-10">
               <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                PUBLIC ANNUAL EVENTS
+                PUBLIC <span className="outline-text">ANNUAL</span> EVENTS
               </h2>
               <p className="text-gray-400 text-lg">
                 Mark your calendars! These are our flagship events that happen throughout the year.
@@ -379,7 +375,7 @@ export default function EventsPage() {
               {/* Months */}
               <div className="hidden md:grid grid-cols-12 gap-2 mb-6 text-center">
                 {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((month, i) => (
-                  <div key={month} className="text-sm text-gray-300 font-semibold">
+                  <div key={month} className="text-sm text-gray-300">
                     {month}
                   </div>
                 ))}
@@ -482,7 +478,6 @@ export default function EventsPage() {
                   color="#ff1744"
                   label="RTSS"
                   position="top"
-                  size="lg"
                   hoveredEvent={hoveredEvent}
                   onHover={handleTimelineMarkerHover}
                   onLeave={() => setHoveredEvent(null)}
@@ -494,7 +489,6 @@ export default function EventsPage() {
                   color="#9c27b0"
                   label="RTSH"
                   position="bottom"
-                  size="lg"
                   hoveredEvent={hoveredEvent}
                   onHover={handleTimelineMarkerHover}
                   onLeave={() => setHoveredEvent(null)}
@@ -520,21 +514,21 @@ export default function EventsPage() {
               {/* Mobile Timeline - Simplified */}
               <div className="md:hidden space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 text-gray-400 text-xs font-semibold">Jan</div>
+                  <div className="w-12 text-gray-400 text-xs">Jan</div>
                   <div className="flex-1 flex items-center gap-2">
                     <div className="w-3 h-3 bg-[#ff1744] rounded-full"></div>
                     <span className="text-xs text-white">PITCH & NETWORK</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 text-gray-400 text-xs font-semibold">Mar</div>
+                  <div className="w-12 text-gray-400 text-xs ">Mar</div>
                   <div className="flex-1 flex items-center gap-2">
                     <div className="w-3 h-3 bg-[#9c27b0] rounded-full"></div>
                     <span className="text-xs text-white">Legal Hack</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 text-gray-400 text-xs font-semibold">Apr</div>
+                  <div className="w-12 text-gray-400 text-xs ">Apr</div>
                   <div className="flex-1 flex flex-wrap items-center gap-2">
                     <div className="w-3 h-3 bg-[#4a90e2] rounded-full"></div>
                     <span className="text-xs text-white">Info Event</span>
@@ -544,14 +538,14 @@ export default function EventsPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 text-gray-400 text-xs font-semibold">Jun</div>
+                  <div className="w-12 text-gray-400 text-xs ">Jun</div>
                   <div className="flex-1 flex items-center gap-2">
                     <div className="w-3 h-3 bg-[#ff1744] rounded-full"></div>
                     <span className="text-xs text-white">PITCH & NETWORK</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 text-gray-400 text-xs font-semibold">Oct</div>
+                  <div className="w-12 text-gray-400 text-xs ">Oct</div>
                   <div className="flex-1 flex flex-wrap items-center gap-2">
                     <div className="w-3 h-3 bg-[#4a90e2] rounded-full"></div>
                     <span className="text-xs text-white">Info Event</span>
@@ -564,7 +558,7 @@ export default function EventsPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 text-gray-400 text-xs font-semibold">Nov</div>
+                  <div className="w-12 text-gray-400 text-xs ">Nov</div>
                   <div className="flex-1 flex items-center gap-2">
                     <div className="w-3 h-3 bg-[#9c27b0] rounded-full"></div>
                     <span className="text-xs text-white">Road to START Hack</span>
@@ -618,7 +612,6 @@ export default function EventsPage() {
               <ScrollIndicator sliderRef={sliderRef} scrollProgress={scrollProgress} />
 
               {/* Gradient Fade Edges */}
-              <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#00002c]/50 to-transparent pointer-events-none"></div>
               <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#00002c]/50 to-transparent pointer-events-none"></div>
             </div>
           </div>
@@ -627,7 +620,7 @@ export default function EventsPage() {
           <div className="mb-20">
             <div className="mb-10">
               <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                <span className="text-[#d0006f]">Special</span> Events
+                PUBLIC <span className="outline-text">Special</span> Events
               </h2>
               <p className="text-gray-400 text-lg">
                 Unique experiences and initiatives that make our community special
@@ -656,7 +649,6 @@ export default function EventsPage() {
               <ScrollIndicator sliderRef={specialEventsSliderRef} scrollProgress={specialEventsScrollProgress} />
 
               {/* Gradient Fade Edges */}
-              <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#00002c]/50 to-transparent pointer-events-none"></div>
               <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#00002c]/50 to-transparent pointer-events-none"></div>
             </div>
           </div>
