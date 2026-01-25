@@ -1,410 +1,248 @@
 "use client"
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Script from 'next/script'
 
 export const dynamic = 'force-dynamic'
 
-interface JourneyPhase {
+interface TimelineEvent {
   id: string
   title: string
   description: string
-  month: string
   icon: string
   image: string
-  category: string
   details: string[]
 }
 
-interface MembershipTier {
+interface Department {
   id: string
   name: string
   description: string
-  benefits: string[]
+  icon: string
+  responsibilities: string[]
+}
+
+interface StartEvent {
+  id: string
+  title: string
+  description: string
+  category: string
+  frequency: string
+  icon: string
+  images: string[]
+}
+
+interface MemberStory {
+  id: string
+  name: string
+  role: string
+  company: string
   image: string
+  story: string
+  quote: string
+  department: string
 }
 
-const journeyPhases: JourneyPhase[] = [
+const placeholderImage = "/internalevents.png"
+
+const timelineEvents: TimelineEvent[] = [
   {
-    id: "awareness",
-    title: "Awareness",
-    description: "Discover START Munich and learn about our community through info events and social media.",
-    month: "Anytime",
-    icon: "info",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop",
-    category: "Getting Started",
-    details: ["Info sessions", "Social media", "Campus events", "Networking"]
+    id: "application",
+    title: "Application",
+    description: "Submit your application to START Munich and tell us about your entrepreneurial vision.",
+    icon: "📝",
+    image: placeholderImage,
+    details: ["Apply for summer or winter semester", "Written application + 2 interviews", "Selecting highly motivated and performing individuals"]
   },
   {
-    id: "joining",
-    title: "Joining",
-    description: "Apply to JOIN START Munich and become part of our exclusive member community.",
-    month: "Ongoing",
-    icon: "presentation",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop",
-    category: "Membership",
-    details: ["Application process", "Interview", "Onboarding", "Welcome event"]
+    id: "start-sprint",
+    title: "Start Sprint",
+    description: "Intensive onboarding program where you meet the team, learn about START Munich, and connect with other members.",
+    icon: "🚀",
+    image: placeholderImage,
+    details: ["Get to know the basics for founding a company or prove your knowledge", "First month after being selected", "One month full of trainings and talks with professors, professionals, and VCs", "Pitch events at the end of the sprint, showing which teams learned the most"]
   },
   {
-    id: "learning",
-    title: "Learning & Development",
-    description: "Access workshops, mentorship, and resources to develop your entrepreneurial skills.",
-    month: "Weekly",
-    icon: "code",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop",
-    category: "Growth",
-    details: ["Workshops", "Mentorship", "Resources", "Skill building"]
+    id: "department-selection",
+    title: "Department Selection",
+    description: "Choose your department and get involved in active project teams within START Munich.",
+    icon: "🎯",
+    image: placeholderImage,
+    details: ["After the sprint choose between the 5 departments", "Explore department options further down", "Choose a department where you can grow and support START"]
   },
   {
-    id: "networking",
-    title: "Networking",
-    description: "Connect with fellow founders, investors, and industry experts in our community.",
-    month: "Ongoing",
-    icon: "presentation",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop",
-    category: "Community",
-    details: ["Member events", "Panel discussions", "Investor meetings", "Peer groups"]
+    id: "exchange-trip",
+    title: "Community Program",
+    description: "Enjoy the benefits of being a Stratie and expand your network through exclusive opportunities.",
+    icon: "🌍",
+    image: placeholderImage,
+    details: ["Go on a trip to SF and visit some of our startups", "Write your thesis with our research partner Cambridge", "Get in touch with well-known VCs", "Many more exclusive benefits"]
   },
   {
-    id: "building",
-    title: "Building & Executing",
-    description: "Launch your startup with support from our network and resources.",
-    month: "Ongoing",
-    icon: "code",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop",
-    category: "Action",
-    details: ["Acceleration programs", "Funding support", "Technical resources", "Advisory network"]
-  },
-  {
-    id: "scaling",
-    title: "Scaling & Growth",
-    description: "Take your startup to the next level with advanced mentorship and funding opportunities.",
-    month: "Ongoing",
-    icon: "presentation",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop",
-    category: "Success",
-    details: ["Growth strategies", "Series funding", "Market expansion", "Strategic partnerships"]
+    id: "alumni",
+    title: "Start Alumni",
+    description: "Graduate to alumni status and continue to support the community while building your successful startup.",
+    icon: "⭐",
+    image: placeholderImage,
+    details: ["After being 2 semesters core member, you are a START alumni", "No more department work required", "Time to apply what you learned and make things START"]
   }
 ]
 
-const membershipTiers: MembershipTier[] = [
+const departments: Department[] = [
   {
-    id: "supporter",
-    name: "Supporter",
-    description: "Perfect for those who want to learn about entrepreneurship and support the community.",
-    benefits: [
-      "Access to all public events",
-      "Monthly newsletter",
-      "Community Discord access",
-      "Networking opportunities",
-      "Resource library"
-    ],
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop"
+    id: "finops",
+    name: "Finops",
+    description: "Financial operations and business development",
+    icon: "💰",
+    responsibilities: ["Budgeting and finance", "Partnership management", "Business strategy", "Growth metrics"]
   },
   {
-    id: "member",
-    name: "Member",
-    description: "Our core membership for active entrepreneurs and startup founders.",
-    benefits: [
-      "Everything in Supporter",
-      "Member-only events",
-      "Mentorship matching",
-      "Funding resources",
-      "Startup tools & discounts",
-      "Priority event access"
-    ],
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop"
+    id: "events",
+    name: "Events",
+    description: "Community events and networking experiences",
+    icon: "🎉",
+    responsibilities: ["Event planning", "Community engagement", "Speaker coordination", "Attendee experience"]
   },
   {
-    id: "fellow",
-    name: "Fellow",
-    description: "Premium membership for accepted founders with active startups.",
-    benefits: [
-      "Everything in Member",
-      "Dedicated mentor",
-      "Funding network access",
-      "Private advisor sessions",
-      "Venture partnership",
-      "Capital introduction network"
-    ],
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop"
+    id: "marketing",
+    name: "Marketing",
+    description: "Brand and communication strategy",
+    icon: "📢",
+    responsibilities: ["Social media management", "Content creation", "Brand strategy", "Marketing campaigns"]
+  },
+  {
+    id: "partnerships",
+    name: "Partnerships",
+    description: "Strategic partnerships and collaborations",
+    icon: "🤝",
+    responsibilities: ["Partner outreach", "Collaboration agreements", "Ecosystem building", "Corporate relations"]
+  },
+  {
+    id: "people",
+    name: "People",
+    description: "Member experience and community culture",
+    icon: "👥",
+    responsibilities: ["Member onboarding", "Community culture", "Mentorship programs", "Member support"]
   }
 ]
 
-const TimelineMarker = ({ 
-  eventId, 
-  left, 
-  color, 
-  label, 
-  position, 
-  hoveredEvent, 
-  onHover, 
-  onLeave 
-}: {
-  eventId: string
-  left: string
-  color: string
-  label: string
-  position: 'top' | 'bottom'
-  hoveredEvent: string | null
-  onHover: (id: string) => void
-  onLeave: () => void
-}) => {
-  const isHovered = hoveredEvent === eventId
+const startEvents: StartEvent[] = [
+  {
+    id: "monthly",
+    title: "Monthly",
+    description: "Every month all Munich Straties meet and get updated on START events or pitch their startups. Location: MTZ",
+    category: "Meeting",
+    frequency: "Monthly",
+    icon: "📅",
+    images: [
+      "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop"
+    ]
+  },
+  {
+    id: "department-work",
+    title: "Department Work",
+    description: "Work with your department. Be weekly in presence in the MTZ.",
+    category: "Department",
+    frequency: "Weekly",
+    icon: "💼",
+    images: [
+      "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=800&auto=format&fit=crop"
+    ]
+  },
+  {
+    id: "builders-weekend",
+    title: "Builders Weekend",
+    description: "Meet on the weekend to build your own startup.",
+    category: "Building",
+    frequency: "Monthly",
+    icon: "🔨",
+    images: [
+      "https://images.unsplash.com/photo-1515162305280-9da0c0b0fb47?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1529333166433-0c1df022bdd7?q=80&w=800&auto=format&fit=crop"
+    ]
+  },
+  {
+    id: "workshops",
+    title: "Member Workshops",
+    description: "Workshops with VCs and other professionals.",
+    category: "Learning",
+    frequency: "",
+    icon: "🎓",
+    images: [
+      "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?q=80&w=800&auto=format&fit=crop"
+    ]
+  },
+  {
+    id: "startup-visits",
+    title: "Startup Visits",
+    description: "Visit startups and learn from the experienced.",
+    category: "Networking",
+    frequency: "",
+    icon: "🏢",
+    images: [
+      "https://images.unsplash.com/photo-1519074002996-a69e7ac46a42?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=800&auto=format&fit=crop"
+    ]
+  }
+]
 
-  return (
-    <div
-      className="absolute top-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer group"
-      style={{ left }}
-      onMouseEnter={() => onHover(eventId)}
-      onMouseLeave={onLeave}
-    >
-      {/* Label */}
-      <div className={`absolute whitespace-nowrap text-xs font-semibold text-white bg-gray-900 px-3 py-1 rounded-full border border-white/20 opacity-0 group-hover:opacity-100 transition-opacity ${
-        position === 'top' ? 'bottom-full mb-2' : 'top-full mt-2'
-      }`}>
-        {label}
-      </div>
-
-      {/* Dot */}
-      <div
-        className={`w-4 h-4 rounded-full border-2 border-white transition-all ${
-          isHovered ? 'scale-150 shadow-lg' : 'scale-100'
-        }`}
-        style={{
-          backgroundColor: isHovered ? color : 'transparent',
-          borderColor: color,
-          boxShadow: isHovered ? `0 0 12px ${color}` : 'none'
-        }}
-      ></div>
-    </div>
-  )
-}
-
-const PhaseCard = ({ 
-  phase, 
-  index, 
-  hoveredEvent, 
-  setHoveredEvent 
-}: {
-  phase: JourneyPhase
-  index: number
-  hoveredEvent: string | null
-  setHoveredEvent: (id: string | null) => void
-}) => {
-  return (
-    <div
-      className="flex-shrink-0 w-80 group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#d0006f] rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#d0006f]/20"
-      onMouseEnter={() => setHoveredEvent(phase.id)}
-      onMouseLeave={() => setHoveredEvent(null)}
-    >
-      {/* Image */}
-      <div className="relative h-48 w-full overflow-hidden">
-        <img
-          src={phase.image}
-          alt={phase.title}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/50 to-transparent"></div>
-
-        {/* Phase Number */}
-        <div className="absolute top-4 right-4 w-10 h-10 bg-[#d0006f]/80 backdrop-blur-sm rounded-full flex items-center justify-center border border-[#d0006f]">
-          <span className="text-white font-bold text-sm">{index + 1}</span>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="p-6">
-        <h3 className="text-xl font-bold text-white mb-2">{phase.title}</h3>
-        <p className="text-xs text-[#d0006f] font-semibold mb-3">{phase.category}</p>
-        <p className="text-sm text-gray-300 leading-relaxed mb-4">{phase.description}</p>
-
-        {/* Details */}
-        <div className="space-y-2 pt-4 border-t border-white/10">
-          {phase.details.map((detail, i) => (
-            <div key={i} className="flex items-center gap-2 text-xs text-gray-400">
-              <div className="w-1.5 h-1.5 bg-[#d0006f] rounded-full"></div>
-              {detail}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Hover effect accent */}
-      <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#d0006f] to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
-    </div>
-  )
-}
-
-const MembershipCard = ({ tier, index }: { tier: MembershipTier; index: number }) => {
-  const isMiddle = index === 1
-
-  return (
-    <div
-      className={`flex-shrink-0 w-96 group relative bg-white/5 hover:bg-white/10 border rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl ${
-        isMiddle
-          ? 'border-[#d0006f] hover:border-[#d0006f] shadow-lg shadow-[#d0006f]/30 hover:shadow-[#d0006f]/40'
-          : 'border-white/10 hover:border-[#d0006f] hover:shadow-[#d0006f]/20'
-      }`}
-    >
-      {/* Image */}
-      <div className="relative h-56 w-full overflow-hidden">
-        <img
-          src={tier.image}
-          alt={tier.name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/50 to-transparent"></div>
-
-        {/* Badge */}
-        {isMiddle && (
-          <div className="absolute top-4 right-4 bg-[#d0006f] text-white px-3 py-1 rounded-full text-xs font-bold">
-            POPULAR
-          </div>
-        )}
-
-        {/* Title */}
-        <div className="absolute bottom-4 left-4">
-          <h3 className="text-2xl font-bold text-white">{tier.name}</h3>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="p-6">
-        <p className="text-sm text-gray-300 leading-relaxed mb-6">{tier.description}</p>
-
-        {/* Benefits */}
-        <div className="space-y-3 pt-6 border-t border-white/10">
-          {tier.benefits.map((benefit, i) => (
-            <div key={i} className="flex items-start gap-3">
-              <svg className="w-5 h-5 text-[#d0006f] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-              <span className="text-sm text-gray-300">{benefit}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Hover effect accent */}
-      <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#d0006f] to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
-    </div>
-  )
-}
-
-const ScrollIndicator = ({ 
-  sliderRef, 
-  scrollProgress 
-}: { 
-  sliderRef: React.RefObject<HTMLDivElement>
-  scrollProgress: number 
-}) => {
-  return (
-    <div className="w-full h-1 bg-white/10 rounded-full mt-4 overflow-hidden">
-      <div
-        className="h-full bg-gradient-to-r from-[#d0006f] to-pink-500 transition-all duration-300"
-        style={{ width: `${scrollProgress}%` }}
-      ></div>
-    </div>
-  )
-}
+const memberStories: MemberStory[] = [
+  {
+    id: "story-1",
+    name: "Sarah Mueller",
+    role: "Founder & CEO",
+    company: "TechFlow GmbH",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=500&auto=format&fit=crop",
+    story: "I joined START Munich with just an idea and a lot of passion. Through the intensive onboarding and department selection, I found my place in the Events team. The network and mentorship I received were instrumental in launching TechFlow.",
+    quote: "START Munich didn't just give me a startup, it gave me a community that believed in my vision.",
+    department: "Events"
+  },
+  {
+    id: "story-2",
+    name: "Alex Rodriguez",
+    role: "Founder & CTO",
+    company: "DataSync AI",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=500&auto=format&fit=crop",
+    story: "The San Francisco trip was a game-changer for my startup. Meeting investors and engineers in Silicon Valley opened doors I didn't know existed. Combined with the Marketing team's support, we scaled from 0 to 50k users.",
+    quote: "The global perspective I gained at START Munich accelerated our growth by years.",
+    department: "Marketing"
+  },
+  {
+    id: "story-3",
+    name: "Emma Schmidt",
+    role: "Founder & Product Lead",
+    company: "GreenLeaf Solutions",
+    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=500&auto=format&fit=crop",
+    story: "Coming from a non-technical background, the workshops and Partnerships team helped me bridge the gap. I learned fundraising, business development, and how to build lasting relationships with investors.",
+    quote: "The People team made me feel supported every step of the way. That's what makes START Munich special.",
+    department: "People"
+  }
+]
 
 export default function MemberJourneyPage() {
   const [loading, setLoading] = useState(true)
-  const sliderRef = useRef<HTMLDivElement>(null)
-  const membershipSliderRef = useRef<HTMLDivElement>(null)
-  const dragState = useRef({ isDragging: false, startX: 0, scrollLeft: 0 })
-  const membershipDragState = useRef({ isDragging: false, startX: 0, scrollLeft: 0 })
-  const [scrollProgress, setScrollProgress] = useState(0)
-  const [membershipScrollProgress, setMembershipScrollProgress] = useState(0)
-  const [hoveredEvent, setHoveredEvent] = useState<string | null>(null)
+  const [eventImageIndex, setEventImageIndex] = useState(0)
+
+  const eventImages = startEvents.flatMap((event) =>
+    event.images.map((img) => ({ src: img, title: event.title }))
+  )
+
+  const handleNextImage = () => {
+    if (eventImages.length === 0) return
+    setEventImageIndex((prev) => (prev + 1) % eventImages.length)
+  }
+
+  const handlePrevImage = () => {
+    if (eventImages.length === 0) return
+    setEventImageIndex((prev) => (prev - 1 + eventImages.length) % eventImages.length)
+  }
 
   useEffect(() => {
     setLoading(false)
   }, [])
-
-  useEffect(() => {
-    const slider = sliderRef.current
-    if (!slider || loading) return
-
-    const updateScroll = () => {
-      const maxScroll = slider.scrollWidth - slider.clientWidth
-      const progress = maxScroll > 0 ? (slider.scrollLeft / maxScroll) * 100 : 0
-      setScrollProgress(progress)
-    }
-
-    slider.addEventListener('scroll', updateScroll)
-    updateScroll()
-    setTimeout(updateScroll, 100)
-
-    return () => slider.removeEventListener('scroll', updateScroll)
-  }, [loading])
-
-  useEffect(() => {
-    const slider = membershipSliderRef.current
-    if (!slider || loading) return
-
-    const updateScroll = () => {
-      const maxScroll = slider.scrollWidth - slider.clientWidth
-      const progress = maxScroll > 0 ? (slider.scrollLeft / maxScroll) * 100 : 0
-      setMembershipScrollProgress(progress)
-    }
-
-    slider.addEventListener('scroll', updateScroll)
-    updateScroll()
-    setTimeout(updateScroll, 100)
-
-    return () => slider.removeEventListener('scroll', updateScroll)
-  }, [loading])
-
-  const handleDrag = {
-    start: (e: React.MouseEvent) => {
-      const slider = sliderRef.current
-      if (!slider) return
-      dragState.current = {
-        isDragging: true,
-        startX: e.pageX - slider.offsetLeft,
-        scrollLeft: slider.scrollLeft
-      }
-    },
-    move: (e: React.MouseEvent) => {
-      if (!dragState.current.isDragging || !sliderRef.current) return
-      e.preventDefault()
-      const x = e.pageX - sliderRef.current.offsetLeft
-      sliderRef.current.scrollLeft = dragState.current.scrollLeft - (x - dragState.current.startX) * 2
-    },
-    end: () => {
-      dragState.current.isDragging = false
-    }
-  }
-
-  const handleMembershipDrag = {
-    start: (e: React.MouseEvent) => {
-      const slider = membershipSliderRef.current
-      if (!slider) return
-      membershipDragState.current = {
-        isDragging: true,
-        startX: e.pageX - slider.offsetLeft,
-        scrollLeft: slider.scrollLeft
-      }
-    },
-    move: (e: React.MouseEvent) => {
-      if (!membershipDragState.current.isDragging || !membershipSliderRef.current) return
-      e.preventDefault()
-      const x = e.pageX - membershipSliderRef.current.offsetLeft
-      membershipSliderRef.current.scrollLeft = membershipDragState.current.scrollLeft - (x - membershipDragState.current.startX) * 2
-    },
-    end: () => {
-      membershipDragState.current.isDragging = false
-    }
-  }
-
-  const calculateTimelinePosition = (phaseIndex: number): string => {
-    // Distribute phases evenly across the timeline
-    const totalPhases = journeyPhases.length
-    const position = ((phaseIndex + 0.5) / totalPhases) * 100
-    return `${position.toFixed(2)}%`
-  }
 
   if (loading) {
     return (
@@ -457,7 +295,7 @@ export default function MemberJourneyPage() {
                 <span className="outline-text">JOURNEY</span>
               </h1>
               <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed">
-                From first awareness to building your successful startup, we guide you through every step of your entrepreneurial journey
+                Experience your first two semesters as an active START Munich member
               </p>
             </div>
           </div>
@@ -466,120 +304,269 @@ export default function MemberJourneyPage() {
         {/* Content Below Hero */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-20">
           
-          {/* Journey Phases Section */}
+          {/* Member Journey Timeline Section */}
           <div className="mb-20">
-            <div className="mb-10">
+            <div className="mb-12">
               <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                YOUR <span className="outline-text">6-PHASE</span> JOURNEY
+                YOUR <span className="outline-text">MEMBER JOURNEY</span>
               </h2>
               <p className="text-gray-400 text-lg">
-                Learn how to progress through your entrepreneurial journey with START Munich
+                The 5 milestones of your first two semesters at START Munich
               </p>
             </div>
 
-            {/* Timeline Visualization */}
-            <div className="mb-12 relative bg-white/5 rounded-2xl p-6 md:p-10 border border-white/10">
-              <h3 className="text-2xl font-bold text-white mb-8 text-center">Journey Timeline</h3>
-              
+            {/* Vertical Timeline */}
+            <div className="relative max-w-5xl mx-auto">
               {/* Timeline Line */}
-              <div className="relative h-3 bg-white/10 rounded-full mb-20 mt-16 hidden md:block">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#d0006f] via-pink-500 to-[#d0006f] opacity-40 rounded-full"></div>
-                
-                {/* Phase Markers */}
-                {journeyPhases.map((phase, index) => (
-                  <TimelineMarker
-                    key={phase.id}
-                    eventId={phase.id}
-                    left={calculateTimelinePosition(index)}
-                    color="#d0006f"
-                    label={phase.title}
-                    position={index % 2 === 0 ? 'top' : 'bottom'}
-                    hoveredEvent={hoveredEvent}
-                    onHover={setHoveredEvent}
-                    onLeave={() => setHoveredEvent(null)}
-                  />
-                ))}
-              </div>
+              <div className="absolute left-8 sm:left-10 md:left-12 top-0 bottom-0 w-[10px] bg-[#1b1f3f]"></div>
 
-              {/* Mobile Timeline - Simplified */}
-              <div className="md:hidden space-y-3">
-                {journeyPhases.map((phase, index) => (
-                  <div key={phase.id} className="flex items-center gap-3">
-                    <div className="w-12 text-gray-400 text-xs font-semibold">
-                      Phase {index + 1}
+              {/* Timeline Events */}
+              <div className="space-y-8 md:space-y-10">
+                {timelineEvents.map((event, index) => (
+                  <div key={event.id} className="relative pl-40 md:pl-48">
+                    {/* Timeline Dot + Headline */}
+                    <div className="absolute left-0 top-2 flex flex-col items-center w-32">
+                      <div className="relative w-20 h-20 flex items-center justify-center">
+                        <div className="absolute inset-0 bg-[#1b1f3f]/40 rounded-full"></div>
+                        <div className="relative w-16 h-16 bg-gradient-to-br from-[#1f2345] to-[#2d325f] rounded-full flex items-center justify-center border-4 border-[#00002c] text-2xl shadow-lg shadow-[#0f122f]/50">
+                          {event.icon}
+                        </div>
+                      </div>
+                      <div className="mt-2 text-sm font-semibold text-white leading-tight text-center">
+                        {event.title}
+                      </div>
                     </div>
-                    <div className="flex-1 flex items-center gap-2">
-                      <div className="w-3 h-3 bg-[#d0006f] rounded-full"></div>
-                      <span className="text-xs text-white">{phase.title}</span>
+
+                    {/* Event Card */}
+                      <div className="bg-white/5 border border-white/10 overflow-hidden">
+                        <div className="flex items-stretch gap-0">
+                        <img
+                          src={event.image}
+                          alt={event.title}
+                            className="w-40 md:w-48 lg:w-56 object-cover border-r border-white/10 flex-shrink-0"
+                        />
+                        <div className="flex-1 p-5">
+                          <h3 className="text-2xl font-bold text-white mb-1">{event.title}</h3>
+                          <p className="text-sm text-[#d0006f] font-semibold">Milestone {index + 1}</p>
+                          <p className="text-gray-300 leading-relaxed mt-2">{event.description}</p>
+                          
+                          {/* Details List */}
+                          <ul className="mt-3 space-y-1.5">
+                            {event.details.map((detail, i) => (
+                              <li key={i} className="text-sm text-gray-400 flex items-start">
+                                <span className="text-[#d0006f] mr-2">•</span>
+                                <span>{detail}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-
-            {/* Phases Slider */}
-            <div className="relative">
-              <div 
-                ref={sliderRef}
-                onMouseDown={handleDrag.start}
-                onMouseUp={handleDrag.end}
-                onMouseMove={handleDrag.move}
-                onMouseLeave={handleDrag.end}
-                className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-2 cursor-grab active:cursor-grabbing"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-              >
-                {journeyPhases.map((phase, index) => (
-                  <PhaseCard
-                    key={phase.id}
-                    phase={phase}
-                    index={index}
-                    hoveredEvent={hoveredEvent}
-                    setHoveredEvent={setHoveredEvent}
-                  />
-                ))}
-              </div>
-
-              <ScrollIndicator sliderRef={sliderRef} scrollProgress={scrollProgress} />
-
-              {/* Gradient Fade Edges */}
-              <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#00002c]/50 to-transparent pointer-events-none"></div>
-            </div>
           </div>
 
-          {/* Membership Tiers Section */}
+          {/* Departments Section */}
           <div className="mb-20">
-            <div className="mb-10">
+            <div className="mb-12">
               <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                MEMBERSHIP <span className="outline-text">TIERS</span>
+                START MUNICH <span className="outline-text">DEPARTMENTS</span>
               </h2>
               <p className="text-gray-400 text-lg">
-                Choose the membership level that best fits your entrepreneurial journey
+                Choose your department and contribute to our community
               </p>
             </div>
 
-            <div className="relative">
-              <div 
-                ref={membershipSliderRef}
-                onMouseDown={handleMembershipDrag.start}
-                onMouseUp={handleMembershipDrag.end}
-                onMouseMove={handleMembershipDrag.move}
-                onMouseLeave={handleMembershipDrag.end}
-                className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-2 cursor-grab active:cursor-grabbing"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-              >
-                {membershipTiers.map((tier, index) => (
-                  <MembershipCard
-                    key={tier.id}
-                    tier={tier}
-                    index={index}
-                  />
-                ))}
+            {/* Departments Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              {departments.map((dept) => (
+                <div
+                  key={dept.id}
+                  className="group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-pink-500 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-pink-500/20"
+                >
+                  {/* Header with gradient (uniform brand colors) */}
+                  <div className="bg-gradient-to-br from-[#0f102b] to-[#1b1f3f] p-6 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-8 -mt-8"></div>
+                    <div className="relative z-10">
+                      <div className="text-4xl mb-3">{dept.icon}</div>
+                      <h3 className="text-xl font-bold text-white">{dept.name}</h3>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6">
+                    <p className="text-sm text-gray-300 leading-relaxed mb-4">{dept.description}</p>
+
+                    <div className="space-y-2">
+                      <p className="text-xs text-pink-400 font-semibold">Key Responsibilities:</p>
+                      {dept.responsibilities.map((resp, i) => (
+                        <div key={i} className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 bg-pink-500 rounded-full flex-shrink-0"></div>
+                          <span className="text-xs text-gray-400">{resp}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Hover effect */}
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-[#1f2345] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Internal Events Section */}
+          <div className="mb-20">
+            <div className="mb-12">
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+                START MUNICH <span className="outline-text">INTERNAL EVENTS</span>
+              </h2>
+              <p className="text-gray-400 text-lg">
+                Regular events and activities for our member community
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+              {/* Single large card with all events */}
+              <div className="bg-white/5 border border-white/10 p-8">
+                <div className="space-y-6">
+                  {startEvents.map((event, index) => (
+                    <div key={event.id} className="flex items-start gap-4 pb-6 border-b border-white/10 last:border-b-0 last:pb-0">
+                      <span className="text-4xl flex-shrink-0">{event.icon}</span>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="text-white font-bold text-lg">{event.title}</h3>
+                          {event.frequency && (
+                            <span className="px-2.5 py-1 bg-[#d0006f]/20 border border-[#d0006f]/50 rounded-full text-xs font-semibold text-[#d0006f]">
+                              {event.frequency}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-gray-300 text-sm leading-relaxed">
+                          {event.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  {/* "And a lot more..." */}
+                  <div className="flex items-start gap-4 pt-2">
+                    <span className="text-4xl flex-shrink-0">✨</span>
+                    <div className="flex-1">
+                      <h3 className="text-white font-bold text-lg mb-2">And a lot more...</h3>
+                      <p className="text-gray-300 text-sm leading-relaxed">
+                        Discover many more exciting events and opportunities as part of the START Munich community.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <ScrollIndicator sliderRef={membershipSliderRef} scrollProgress={membershipScrollProgress} />
+              {/* Rotating single image */}
+              <div className="bg-white/5 border border-white/10 h-full min-h-[500px] relative overflow-hidden">
+                {eventImages.length > 0 && (
+                  <>
+                    <div className="relative w-full h-full">
+                      <img
+                        key={eventImages[eventImageIndex]?.src}
+                        src={eventImages[eventImageIndex]?.src}
+                        alt={eventImages[eventImageIndex]?.title}
+                        className="w-full h-full object-cover fade-swap"
+                      />
+                      
+                      {/* Title overlay */}
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+                        <p className="text-base font-bold text-white">
+                          {eventImages[eventImageIndex]?.title}
+                        </p>
+                      </div>
+                      
+                      {/* Navigation controls overlay */}
+                      <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 flex items-center justify-between px-4">
+                        <button
+                          onClick={handlePrevImage}
+                          className="w-12 h-12 flex items-center justify-center bg-black/50 hover:bg-black/70 border border-white/30 hover:border-white/60 text-white text-xl transition-all backdrop-blur-sm"
+                          aria-label="Previous image"
+                        >
+                          ←
+                        </button>
+                        <button
+                          onClick={handleNextImage}
+                          className="w-12 h-12 flex items-center justify-center bg-black/50 hover:bg-black/70 border border-white/30 hover:border-white/60 text-white text-xl transition-all backdrop-blur-sm"
+                          aria-label="Next image"
+                        >
+                          →
+                        </button>
+                      </div>
+                      
+                      {/* Image counter */}
+                      <div className="absolute top-4 right-4 px-3 py-1.5 bg-black/50 backdrop-blur-sm border border-white/30 text-white text-xs font-semibold">
+                        {eventImageIndex + 1} / {eventImages.length}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
 
-              {/* Gradient Fade Edges */}
-              <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#00002c]/50 to-transparent pointer-events-none"></div>
+          {/* Member Stories Section */}
+          <div className="mb-20">
+            <div className="mb-12">
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+                <span className="outline-text">MEMBER STORIES</span>
+              </h2>
+              <p className="text-gray-400 text-lg">
+                Real stories from our members who built successful startups with START Munich
+              </p>
+            </div>
+
+            {/* Stories Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {memberStories.map((story) => (
+                <div
+                  key={story.id}
+                  className="group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#d0006f] overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#0f122f]/30"
+                >
+                  {/* Image */}
+                  <div className="relative h-48 w-full overflow-hidden">
+                    <img
+                      src={story.image}
+                      alt={story.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/50 to-transparent"></div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6">
+                    {/* Member Info */}
+                    <div className="mb-4">
+                      <h3 className="text-lg font-bold text-white mb-1">{story.name}</h3>
+                      <p className="text-sm text-[#d0006f] font-semibold mb-1">{story.role}</p>
+                      <p className="text-xs text-gray-400 mb-2">{story.company}</p>
+                      <span className="inline-block px-2 py-1 bg-[#1b1f3f] border border-[#d0006f]/50 rounded-full text-xs font-semibold text-[#d0006f]">
+                        {story.department}
+                      </span>
+                    </div>
+
+                    {/* Story */}
+                    <p className="text-sm text-gray-300 leading-relaxed mb-4 pt-4 border-t border-white/10">
+                      {story.story}
+                    </p>
+
+                    {/* Quote */}
+                    <blockquote className="border-l-2 border-[#d0006f] pl-4 py-2">
+                      <p className="text-sm italic text-gray-400">"{story.quote}"</p>
+                    </blockquote>
+                  </div>
+
+                  {/* Hover effect accent */}
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-[#1f2345] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -596,7 +583,7 @@ export default function MemberJourneyPage() {
                     Ready to Join?
                   </h3>
                   <p className="text-lg text-gray-300 max-w-2xl">
-                    Start your entrepreneurial journey with START Munich today. Apply to become a member and get access to our exclusive events, mentorship, and resources.
+                    Start your entrepreneurial journey with START Munich today. Apply to become a member and experience our vibrant community.
                   </p>
                 </div>
 
@@ -617,3 +604,14 @@ export default function MemberJourneyPage() {
     </>
   )
 }
+
+{/* Global styles for image fade animation */}
+<style jsx global>{`
+  .fade-swap {
+    animation: fadeSwap 0.8s ease-in-out;
+  }
+  @keyframes fadeSwap {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+`}</style>
