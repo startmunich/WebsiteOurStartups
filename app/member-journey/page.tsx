@@ -10,8 +10,8 @@ interface TimelineEvent {
   title: string
   description: string
   icon: string
-  image: string
-  details: string[]
+  image: string | string[]
+  details: string[] | { text: string; image: string; icon: string }[]
 }
 
 interface Department {
@@ -51,7 +51,7 @@ const timelineEvents: TimelineEvent[] = [
     title: "Application",
     description: "Submit your application to START Munich and tell us about your entrepreneurial vision.",
     icon: "📝",
-    image: placeholderImage,
+    image: "",
     details: ["Apply for summer or winter semester", "Written application + 2 interviews", "Selecting highly motivated and performing individuals"]
   },
   {
@@ -59,7 +59,10 @@ const timelineEvents: TimelineEvent[] = [
     title: "Start Sprint",
     description: "Intensive onboarding program where you meet the team, learn about START Munich, and connect with other members.",
     icon: "🚀",
-    image: placeholderImage,
+    image: [
+      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800&auto=format&fit=crop"
+    ],
     details: ["Get to know the basics for founding a company or prove your knowledge", "First month after being selected", "One month full of trainings and talks with professors, professionals, and VCs", "Pitch events at the end of the sprint, showing which teams learned the most"]
   },
   {
@@ -67,7 +70,7 @@ const timelineEvents: TimelineEvent[] = [
     title: "Department Selection",
     description: "Choose your department and get involved in active project teams within START Munich.",
     icon: "🎯",
-    image: placeholderImage,
+    image: "",
     details: ["After the sprint choose between the 5 departments", "Explore department options further down", "Choose a department where you can grow and support START"]
   },
   {
@@ -76,7 +79,12 @@ const timelineEvents: TimelineEvent[] = [
     description: "Enjoy the benefits of being a Stratie and expand your network through exclusive opportunities.",
     icon: "🌍",
     image: placeholderImage,
-    details: ["Go on a trip to SF and visit some of our startups", "Write your thesis with our research partner Cambridge", "Get in touch with well-known VCs", "Many more exclusive benefits"]
+    details: [
+      { text: "Go on a trip to SF and visit some of our startups", image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=800&auto=format&fit=crop", icon: "✈️" },
+      { text: "Write your thesis with our research partner Cambridge", image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop", icon: "📚" },
+      { text: "Get in touch with well-known VCs", image: "https://images.unsplash.com/photo-1560472355-536de3962603?q=80&w=800&auto=format&fit=crop", icon: "🤝" },
+      { text: "Many more exclusive benefits", image: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=800&auto=format&fit=crop", icon: "⭐" }
+    ]
   },
   {
     id: "alumni",
@@ -310,57 +318,100 @@ export default function MemberJourneyPage() {
               <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
                 YOUR <span className="outline-text">MEMBER JOURNEY</span>
               </h2>
-              <p className="text-gray-400 text-lg">
+              <p className="text-gray-400 text-lg mb-4">
                 The 5 milestones of your first two semesters at START Munich
+              </p>
+              <p className="text-sm text-brand-pink font-semibold">
+                ↓ Scroll down to explore your journey ↓
               </p>
             </div>
 
-            {/* Vertical Timeline */}
-            <div className="relative">
-              {/* Timeline Line */}
-              <div className="absolute left-8 sm:left-10 md:left-12 top-0 bottom-0 w-[10px] bg-[#1b1f3f]"></div>
-
+            {/* Vertical Scrollable Timeline */}
+            <div className="relative max-h-[900px] overflow-y-auto scrollbar-thin-vertical scrollbar-thumb-brand-pink scrollbar-track-white/10 pr-2">
+              {/* Timeline Line (vertical) */}
+              <div className="absolute left-10 top-0 bottom-0 w-[4px] bg-gradient-to-b from-brand-pink via-brand-pink/30 to-brand-pink"></div>
+              
               {/* Timeline Events */}
-              <div className="space-y-8 md:space-y-10">
+              <div className="space-y-12">
                 {timelineEvents.map((event, index) => (
-                  <div key={event.id} className="relative pl-40 md:pl-48">
-                    {/* Timeline Dot + Headline */}
-                    <div className="absolute left-0 top-2 flex flex-col items-center w-32">
-                      <div className="relative w-20 h-20 flex items-center justify-center">
-                        <div className="absolute inset-0 bg-[#1b1f3f]/40 rounded-full"></div>
-                        <div className="relative w-16 h-16 bg-gradient-to-br from-[#1f2345] to-[#2d325f] rounded-full flex items-center justify-center border-4 border-brand-dark-blue text-2xl shadow-lg shadow-[#0f122f]/50">
+                  <div 
+                    key={event.id} 
+                    className="relative pl-24 timeline-card-animate"
+                    style={{ 
+                      animationDelay: `${index * 0.15}s`
+                    }}
+                  >
+                    {/* Timeline Dot */}
+                    <div className="absolute left-0 top-0 flex items-center justify-center">
+                      <div className="relative">
+                        <div className="relative w-20 h-20 bg-brand-secondary-blue rounded-full flex items-center justify-center border-2 border-brand-pink/40 text-3xl shadow-lg">
                           {event.icon}
                         </div>
-                      </div>
-                      <div className="mt-2 text-sm font-semibold text-white leading-tight text-center">
-                        {event.title}
                       </div>
                     </div>
 
                     {/* Event Card */}
-                      <div className="bg-white/5 border border-white/10 overflow-hidden">
-                        <div className="flex items-stretch gap-0">
-                        <img
-                          src={event.image}
-                          alt={event.title}
-                            className="w-40 md:w-48 lg:w-56 object-cover border-r border-white/10 flex-shrink-0"
-                        />
-                        <div className="flex-1 p-5">
-                          <h3 className="text-2xl font-bold text-white mb-1">{event.title}</h3>
-                          <p className="text-sm text-brand-pink font-semibold">Milestone {index + 1}</p>
-                          <p className="text-gray-300 leading-relaxed mt-2">{event.description}</p>
-                          
-                          {/* Details List */}
-                          <ul className="mt-3 space-y-1.5">
-                            {event.details.map((detail, i) => (
-                              <li key={i} className="text-sm text-gray-400 flex items-start">
+                    <div className="bg-brand-secondary-blue/80 border border-white/20 overflow-hidden p-6">
+                      {/* Header and Content Combined */}
+                      <div className="flex items-center gap-3 mb-4">
+                        <span className="px-3 py-1 bg-brand-pink/80 text-white text-xs font-bold rounded-full">
+                          STEP {index + 1}
+                        </span>
+                        <h3 className="text-xl font-black text-white">{event.title}</h3>
+                      </div>
+                      
+                      <p className="text-gray-300 leading-relaxed mb-4 text-sm">{event.description}</p>
+                        
+                        {/* Images for Start Sprint */}
+                        {event.id === "start-sprint" && Array.isArray(event.image) && (
+                          <div className="flex gap-2 mb-4">
+                            <div className="flex-1 h-48 overflow-hidden rounded-lg">
+                              <img
+                                src={event.image[0]}
+                                alt={`${event.title} 1`}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div className="flex-1 h-48 overflow-hidden rounded-lg">
+                              <img
+                                src={event.image[1]}
+                                alt={`${event.title} 2`}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* Details List - Special styling for Community Program */}
+                        {event.id === "exchange-trip" && typeof event.details[0] === 'object' ? (
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {(event.details as { text: string; image: string; icon: string }[]).map((detail, i) => (
+                              <div key={i} className="relative bg-white/5 border border-white/10 overflow-hidden">
+                                <div className="relative h-32 overflow-hidden">
+                                  <img 
+                                    src={detail.image} 
+                                    alt={detail.text}
+                                    className="w-full h-full object-cover"
+                                  />
+                                  <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue via-brand-dark-blue/70 to-transparent"></div>
+                                  <div className="absolute top-2 right-2 text-2xl">{detail.icon}</div>
+                                </div>
+                                <div className="p-3">
+                                  <p className="text-xs text-gray-200">{detail.text}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <ul className="space-y-2">
+                            {(event.details as string[]).map((detail, i) => (
+                              <li key={i} className="text-xs text-gray-400 flex items-start">
                                 <span className="text-brand-pink mr-2">•</span>
                                 <span>{detail}</span>
                               </li>
                             ))}
                           </ul>
-                        </div>
-                      </div>
+                        )}
                     </div>
                   </div>
                 ))}
@@ -384,11 +435,11 @@ export default function MemberJourneyPage() {
               {departments.map((dept) => (
                 <div
                   key={dept.id}
-                  className="group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-pink-500 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-pink-500/20"
+                  className="group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-brand-pink overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-brand-pink/20"
                 >
-                  {/* Header with gradient (uniform brand colors) */}
+                  {/* Header with gradient */}
                   <div className="bg-brand-secondary-blue p-6 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-8 -mt-8"></div>
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-brand-pink/10 rounded-full blur-2xl -mr-8 -mt-8"></div>
                     <div className="relative z-10">
                       <div className="text-4xl mb-3">{dept.icon}</div>
                       <h3 className="text-xl font-bold text-white">{dept.name}</h3>
@@ -400,10 +451,10 @@ export default function MemberJourneyPage() {
                     <p className="text-sm text-gray-300 leading-relaxed mb-4">{dept.description}</p>
 
                     <div className="space-y-2">
-                      <p className="text-xs text-pink-400 font-semibold">Key Responsibilities:</p>
+                      <p className="text-xs text-brand-pink font-semibold">Key Responsibilities:</p>
                       {dept.responsibilities.map((resp, i) => (
                         <div key={i} className="flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 bg-pink-500 rounded-full flex-shrink-0"></div>
+                          <div className="w-1.5 h-1.5 bg-brand-pink rounded-full flex-shrink-0"></div>
                           <span className="text-xs text-gray-400">{resp}</span>
                         </div>
                       ))}
@@ -411,7 +462,7 @@ export default function MemberJourneyPage() {
                   </div>
 
                   {/* Hover effect */}
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-[#1f2345] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-brand-pink transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
                 </div>
               ))}
             </div>
@@ -602,7 +653,7 @@ export default function MemberJourneyPage() {
   )
 }
 
-{/* Global styles for image fade animation */}
+{/* Global styles for animations */}
 <style jsx global>{`
   .fade-swap {
     animation: fadeSwap 0.8s ease-in-out;
@@ -610,5 +661,41 @@ export default function MemberJourneyPage() {
   @keyframes fadeSwap {
     from { opacity: 0; }
     to { opacity: 1; }
+  }
+
+  /* Timeline card entrance animation */
+  .timeline-card-animate {
+    animation: slideInFromBottom 0.6s ease-out forwards;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  @keyframes slideInFromBottom {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Custom scrollbar styling for vertical scroll */
+  .scrollbar-thin-vertical::-webkit-scrollbar {
+    width: 6px;
+  }
+  .scrollbar-thin-vertical::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+  }
+  .scrollbar-thin-vertical::-webkit-scrollbar-thumb {
+    background: rgba(255, 0, 107, 0.3);
+    border-radius: 10px;
+    transition: background 0.3s;
+  }
+  .scrollbar-thin-vertical::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 0, 107, 0.6);
+  }
+
+  /* Smooth scroll behavior */
+  .overflow-y-auto {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
   }
 `}</style>
