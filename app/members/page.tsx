@@ -29,6 +29,21 @@ interface Batch {
   memberCount: number
 }
 
+interface BoardMember {
+  name: string
+  role: string
+  imageUrl: string
+}
+
+interface Board {
+  id: string
+  name: string
+  year: string
+  imageUrl: string
+  executiveBoard: BoardMember[]
+  departmentBoard: BoardMember[]
+}
+
 // Fetch members from API
 async function fetchMembers(): Promise<Member[]> {
   try {
@@ -45,8 +60,12 @@ export default function MembersPage() {
   const [members, setMembers] = useState<Member[]>([])
   const [loading, setLoading] = useState(true)
   const [expandedBatch, setExpandedBatch] = useState<string | null>(null)
+  const [expandedBoard, setExpandedBoard] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 12
+
+  // Feature flags
+  const showAdvisoryBoard = false // Set to true to show the advisory board section
 
   // Animation states for numbers
   const [animatedMembers, setAnimatedMembers] = useState(0)
@@ -64,6 +83,46 @@ export default function MembersPage() {
     }
     loadMembers()
   }, [])
+
+  // Define boards data (sorted newest first)
+  const boards: Board[] = [
+    {
+      id: '25-26',
+      name: 'Board 25-26',
+      year: '2025-2026',
+      imageUrl: '/batch.jpeg',
+      executiveBoard: [
+        { name: 'BOARD MEMBER', role: 'CFO', imageUrl: '/batch.jpeg' },
+        { name: 'BOARD MEMBER', role: 'President', imageUrl: '/batch.jpeg' },
+        { name: 'BOARD MEMBER', role: 'Vice President', imageUrl: '/batch.jpeg' },
+      ],
+      departmentBoard: [
+        { name: 'BOARD MEMBER', role: 'MD Events', imageUrl: '/batch.jpeg' },
+        { name: 'BOARD MEMBER', role: 'MD Marketing', imageUrl: '/batch.jpeg' },
+        { name: 'BOARD MEMBER', role: 'MD People', imageUrl: '/batch.jpeg' },
+        { name: 'BOARD MEMBER', role: 'MD Finance & Operations', imageUrl: '/batch.jpeg' },
+        { name: 'BOARD MEMBER', role: 'MD Partnerships', imageUrl: '/batch.jpeg' },
+      ],
+    },
+    {
+      id: '24-25',
+      name: 'Board 24-25',
+      year: '2024-2025',
+      imageUrl: '/batch.jpeg',
+      executiveBoard: [
+        { name: 'SIMON BURMER', role: 'CFO', imageUrl: '/batch.jpeg' },
+        { name: 'ALI SERAG EL DIN', role: 'President', imageUrl: '/batch.jpeg' },
+        { name: 'DEFNE AYTUNA', role: 'Vice President', imageUrl: '/batch.jpeg' },
+      ],
+      departmentBoard: [
+        { name: 'MOHAMMED THABIT', role: 'MD Events', imageUrl: '/batch.jpeg' },
+        { name: 'PIOTR NOBIS', role: 'MD Marketing', imageUrl: '/batch.jpeg' },
+        { name: 'ANNA HELETYCH', role: 'MD People', imageUrl: '/batch.jpeg' },
+        { name: 'NIKLAS SIMAKOV', role: 'MD Finance & Operations', imageUrl: '/batch.jpeg' },
+        { name: 'MARIUS HEUMADER', role: 'MD Partnerships', imageUrl: '/batch.jpeg' },
+      ],
+    },
+  ]
 
   // Extract unique batches
   const allBatches = Array.from(
@@ -281,7 +340,7 @@ export default function MembersPage() {
           {/* Analytics Section */}
           <div className="mb-16">
             <h2 className="text-3xl md:text-4xl font-black text-white mb-8">
-              Community Analytics
+              COMMUNITY <span className="outline-text">ANALYTICS</span>
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -375,10 +434,215 @@ export default function MembersPage() {
             </div>
           </div>
 
+          {/* The Boards Section */}
+          <div className="mb-16">
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-8">
+              THE <span className="outline-text">BOARDS</span>
+            </h2>
+
+            {/* Show expanded board if selected */}
+            {expandedBoard ? (
+              <div>
+                <button
+                  onClick={() => setExpandedBoard(null)}
+                  className="mb-6 text-white/60 hover:text-white flex items-center gap-2 transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  Back to all boards
+                </button>
+
+                {boards.filter(board => board.id === expandedBoard).map((board) => (
+                  <div key={board.id} className="animate-in fade-in slide-in-from-top-4 duration-500 space-y-12">
+                    {/* Executive Board */}
+                    <div>
+                      <h3 className="text-2xl md:text-3xl font-black text-white mb-6 text-center">
+                        THE <span className="outline-text">EXECUTIVE BOARD</span>
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                        {board.executiveBoard.map((member, index) => (
+                          <div key={index} className="group relative overflow-hidden transition-all duration-300 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#d0006f] rounded-lg">
+                            <div className="relative">
+                              <img
+                                src={member.imageUrl}
+                                alt={member.name}
+                                className="w-full h-64 object-cover"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/50 to-transparent"></div>
+                              <div className="absolute bottom-0 left-0 right-0 p-4 text-center">
+                                <h4 className="font-black text-white text-xl mb-1">{member.name}</h4>
+                                <p className="text-white text-sm font-semibold">{member.role}</p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Department Board */}
+                    <div>
+                      <h3 className="text-2xl md:text-3xl font-black text-white mb-6 text-center">
+                        THE <span className="outline-text">DEPARTMENT BOARD</span>
+                      </h3>
+                      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-6xl mx-auto">
+                        {board.departmentBoard.map((member, index) => (
+                          <div key={index} className="group relative overflow-hidden transition-all duration-300 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#d0006f] rounded-lg">
+                            <div className="relative">
+                              <img
+                                src={member.imageUrl}
+                                alt={member.name}
+                                className="w-full h-48 object-cover"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/50 to-transparent"></div>
+                              <div className="absolute bottom-0 left-0 right-0 p-3 text-center">
+                                <h4 className="font-bold text-white text-sm mb-1">{member.name}</h4>
+                                <p className="text-pink-300 text-xs font-semibold">{member.role}</p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              /* Show grid of board cards */
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {boards.map((board) => (
+                  <button
+                    key={board.id}
+                    onClick={() => setExpandedBoard(board.id)}
+                    className="group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#d0006f] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#d0006f]/20 text-left"
+                  >
+                    <div className="relative overflow-hidden">
+                      <img
+                        src={board.imageUrl}
+                        alt={board.name}
+                        className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/60 to-transparent"></div>
+                      <div className="absolute bottom-0 left-0 right-0 p-4">
+                        <h3 className="text-xl md:text-2xl font-black text-white">{board.name}</h3>
+                        <p className="text-sm text-gray-300 mt-1">Click to view board members</p>
+                      </div>
+                    </div>
+                    <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#d0006f] to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* The Advisory Boards Section */}
+          {showAdvisoryBoard && (
+            <div className="mb-16">
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-8">
+                <span className="outline-text">THE</span> ADVISORY BOARDS
+              </h2>
+
+              {/* Show expanded board if selected */}
+              {expandedBoard ? (
+                <div>
+                  <button
+                    onClick={() => setExpandedBoard(null)}
+                    className="mb-6 text-white/60 hover:text-white flex items-center gap-2 transition-colors"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Back to all boards
+                  </button>
+
+                  {boards.filter(board => board.id === expandedBoard).map((board) => (
+                    <div key={board.id} className="animate-in fade-in slide-in-from-top-4 duration-500 space-y-12">
+                      {/* Executive Board */}
+                      <div>
+                        <h3 className="text-2xl md:text-3xl font-black text-white mb-6 text-center">
+                          THE <span className="outline-text">EXECUTIVE BOARD</span>
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                          {board.executiveBoard.map((member, index) => (
+                            <div key={index} className="group relative overflow-hidden transition-all duration-300 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#d0006f] rounded-lg">
+                              <div className="relative">
+                                <img
+                                  src={member.imageUrl}
+                                  alt={member.name}
+                                  className="w-full h-64 object-cover"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/50 to-transparent"></div>
+                                <div className="absolute bottom-0 left-0 right-0 p-4 text-center">
+                                  <h4 className="font-black text-white text-xl mb-1">{member.name}</h4>
+                                  <p className="text-white text-sm font-semibold">{member.role}</p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Department Board */}
+                      <div>
+                        <h3 className="text-2xl md:text-3xl font-black text-white mb-6 text-center">
+                          THE <span className="outline-text">DEPARTMENT BOARD</span>
+                        </h3>
+                        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-6xl mx-auto">
+                          {board.departmentBoard.map((member, index) => (
+                            <div key={index} className="group relative overflow-hidden transition-all duration-300 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#d0006f] rounded-lg">
+                              <div className="relative">
+                                <img
+                                  src={member.imageUrl}
+                                  alt={member.name}
+                                  className="w-full h-48 object-cover"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/50 to-transparent"></div>
+                                <div className="absolute bottom-0 left-0 right-0 p-3 text-center">
+                                  <h4 className="font-bold text-white text-sm mb-1">{member.name}</h4>
+                                  <p className="text-pink-300 text-xs font-semibold">{member.role}</p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                /* Show grid of board cards */
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {boards.map((board) => (
+                    <button
+                      key={board.id}
+                      onClick={() => setExpandedBoard(board.id)}
+                      className="group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#d0006f] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#d0006f]/20 text-left"
+                    >
+                      <div className="relative overflow-hidden">
+                        <img
+                          src={board.imageUrl}
+                          alt={board.name}
+                          className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#00002c] via-[#00002c]/60 to-transparent"></div>
+                        <div className="absolute bottom-0 left-0 right-0 p-4">
+                          <h3 className="text-xl md:text-2xl font-black text-white">{board.name}</h3>
+                          <p className="text-sm text-gray-300 mt-1">Click to view board members</p>
+                        </div>
+                      </div>
+                      <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#d0006f] to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+
           {/* Batch Images Section */}
           <div className="mb-16">
             <h2 className="text-3xl md:text-4xl font-black text-white mb-8">
-              Our Batches
+              OUR <span className="outline-text">BATCHES</span>
             </h2>
 
             {/* Show expanded batch full width if selected */}

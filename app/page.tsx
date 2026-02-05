@@ -7,13 +7,8 @@ export default function Home() {
         <h1 className="text-4xl font-bold mb-8">Pages</h1>
         <ul className="space-y-4">
           <li>
-            <Link href="/startups" className="text-blue-600 hover:underline text-lg">
-              Startups
-            </Link>
-          </li>
-          <li>
-            <Link href="/members" className="text-blue-600 hover:underline text-lg">
-              Members
+            <Link href="/admin" className="text-blue-600 hover:underline text-lg">
+              Admin - Manage Startups
             </Link>
           </li>
           <li>
@@ -22,20 +17,30 @@ export default function Home() {
             </Link>
           </li>
           <li>
-            <Link href="/admin" className="text-blue-600 hover:underline text-lg">
-              Admin - Manage Startups
-            </Link>
-          </li>
-          <li>
-           <Link href="/member-network" className="text-blue-600 hover:underline text-lg">
-             Member Network
-           </Link>
-          </li>
-          <li>
             <Link href="/member-journey" className="text-blue-600 hover:underline text-lg">
               Member Journey
             </Link>
-            </li>
+          </li>
+          <li>
+            <Link href="/member-network" className="text-blue-600 hover:underline text-lg">
+              Member Network
+            </Link>
+          </li>
+          <li>
+            <Link href="/members" className="text-blue-600 hover:underline text-lg">
+              Our Members
+            </Link>
+          </li>
+          <li>
+            <Link href="/partners" className="text-blue-600 hover:underline text-lg">
+              Our Partners
+            </Link>
+          </li>
+          <li>
+            <Link href="/startups" className="text-blue-600 hover:underline text-lg">
+              Startups
+            </Link>
+          </li>
         </ul>
       </div>
     </main>

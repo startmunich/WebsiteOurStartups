@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Script from 'next/script'
+import { ScrollIndicator } from '@/components/EventComponents'
 
 export const dynamic = 'force-dynamic'
 
@@ -233,10 +234,18 @@ const memberStories: MemberStory[] = [
 export default function MemberJourneyPage() {
   const [loading, setLoading] = useState(true)
   const [eventImageIndex, setEventImageIndex] = useState(0)
+  const timelineSliderRef = useRef<HTMLDivElement>(null)
+  const [scrollProgress, setScrollProgress] = useState(0)
+  const [hoveredEventId, setHoveredEventId] = useState<string | null>(null)
+  const autoRotateTimerRef = useRef<NodeJS.Timeout | null>(null)
 
-  const eventImages = startEvents.flatMap((event) =>
-    event.images.map((img) => ({ src: img, title: event.title }))
-  )
+  const eventImages = hoveredEventId
+    ? startEvents
+        .find((event) => event.id === hoveredEventId)
+        ?.images.map((img) => ({ src: img, title: startEvents.find((e) => e.id === hoveredEventId)!.title })) || []
+    : startEvents.flatMap((event) =>
+        event.images.map((img) => ({ src: img, title: event.title }))
+      )
 
   const handleNextImage = () => {
     if (eventImages.length === 0) return
@@ -251,6 +260,50 @@ export default function MemberJourneyPage() {
   useEffect(() => {
     setLoading(false)
   }, [])
+
+  useEffect(() => {
+    const slider = timelineSliderRef.current
+    if (!slider || loading) return
+
+    const updateScroll = () => {
+      const maxScroll = slider.scrollWidth - slider.clientWidth
+      const progress = maxScroll > 0 ? (slider.scrollLeft / maxScroll) * 100 : 0
+      setScrollProgress(progress)
+    }
+
+    slider.addEventListener('scroll', updateScroll)
+    updateScroll()
+    setTimeout(updateScroll, 100)
+
+    return () => slider.removeEventListener('scroll', updateScroll)
+  }, [loading])
+
+  // Auto-rotate images every 5 seconds
+  useEffect(() => {
+    if (loading || hoveredEventId) {
+      // Clear timer if hovering
+      if (autoRotateTimerRef.current) {
+        clearInterval(autoRotateTimerRef.current)
+        autoRotateTimerRef.current = null
+      }
+      return
+    }
+
+    autoRotateTimerRef.current = setInterval(() => {
+      handleNextImage()
+    }, 5000)
+
+    return () => {
+      if (autoRotateTimerRef.current) {
+        clearInterval(autoRotateTimerRef.current)
+      }
+    }
+  }, [loading, hoveredEventId])
+
+  // Reset image index when hovering event changes
+  useEffect(() => {
+    setEventImageIndex(0)
+  }, [hoveredEventId])
 
   if (loading) {
     return (
@@ -313,7 +366,7 @@ export default function MemberJourneyPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-20">
           
           {/* Member Journey Timeline Section */}
-          <div className="mb-40">
+          <div className="mb-20">
             <div className="mb-12">
               <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
                 YOUR <span className="outline-text">MEMBER JOURNEY</span>
@@ -321,22 +374,23 @@ export default function MemberJourneyPage() {
               <p className="text-gray-400 text-lg mb-4">
                 The 5 milestones of your first two semesters at START Munich
               </p>
-              <p className="text-sm text-brand-pink font-semibold">
-                → Scroll right to explore your journey →
-              </p>
             </div>
 
             {/* Horizontal Scrollable Timeline */}
-            <div className="relative overflow-x-auto scrollbar-thin-horizontal scrollbar-thumb-brand-pink scrollbar-track-white/10 pb-4">
-              {/* Timeline Line (horizontal) */}
-              <div className="absolute left-0 right-0 top-10 h-[4px] bg-gradient-to-r from-brand-pink via-brand-pink/30 to-brand-pink"></div>
-              
-              {/* Timeline Events */}
-              <div className="flex gap-8 min-w-max px-4">
+            <div className="relative">
+              <div
+                ref={timelineSliderRef}
+                className="overflow-x-auto scrollbar-thin-horizontal scrollbar-thumb-brand-pink scrollbar-track-white/10 pb-4"
+              >
+                {/* Timeline Line (horizontal) */}
+                <div className="absolute left-0 right-0 top-10 h-[4px] bg-gradient-to-r from-brand-pink via-brand-pink/30 to-brand-pink"></div>
+                
+                {/* Timeline Events */}
+                <div className="flex gap-8 min-w-max px-4">
                 {timelineEvents.map((event, index) => (
                   <div 
                     key={event.id} 
-                    className="relative pt-24 timeline-card-animate w-[380px] flex-shrink-0"
+                    className="group relative pt-24 timeline-card-animate w-[380px] flex-shrink-0"
                     style={{ 
                       animationDelay: `${index * 0.15}s`
                     }}
@@ -344,23 +398,30 @@ export default function MemberJourneyPage() {
                     {/* Timeline Dot */}
                     <div className="absolute left-1/2 -translate-x-1/2 top-0 flex items-center justify-center">
                       <div className="relative">
-                        <div className="relative w-20 h-20 bg-brand-secondary-blue rounded-full flex items-center justify-center border-2 border-brand-pink/40 text-3xl shadow-lg">
+                        <div className="relative w-20 h-20 bg-brand-secondary-blue rounded-full flex items-center justify-center border-2 border-brand-pink/40 text-3xl shadow-lg group-hover:border-brand-pink transition-all duration-300">
                           {event.icon}
                         </div>
                       </div>
                     </div>
 
                     {/* Event Card */}
-                    <div className="bg-brand-secondary-blue/80 border border-white/20 overflow-hidden p-6 h-full">
-                      {/* Header and Content Combined */}
-                      <div className="flex items-center gap-3 mb-4">
-                        <span className="px-3 py-1 bg-brand-pink/80 text-white text-xs font-bold rounded-full">
-                          STEP {index + 1}
-                        </span>
-                        <h3 className="text-xl font-black text-white">{event.title}</h3>
+                    <div className="bg-white/5 hover:bg-white/10 border border-white/10 hover:border-brand-pink overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-brand-pink/20 h-full">
+                      {/* Header with gradient */}
+                      <div className="bg-brand-secondary-blue p-6 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-brand-pink/10 rounded-full blur-2xl -mr-8 -mt-8"></div>
+                        <div className="relative z-10">
+                          <div className="flex items-center gap-3 mb-3">
+                            <span className="px-3 py-1 bg-brand-pink/80 text-white text-xs font-bold rounded-full">
+                              STEP {index + 1}
+                            </span>
+                          </div>
+                          <h3 className="text-xl font-bold text-white">{event.title}</h3>
+                        </div>
                       </div>
-                      
-                      <p className="text-gray-300 leading-relaxed mb-4 text-sm">{event.description}</p>
+
+                      {/* Content */}
+                      <div className="p-6">
+                        <p className="text-sm text-gray-300 leading-relaxed mb-4">{event.description}</p>
                         
                         {/* Images for Start Sprint */}
                         {event.id === "start-sprint" && Array.isArray(event.image) && (
@@ -403,19 +464,26 @@ export default function MemberJourneyPage() {
                             ))}
                           </div>
                         ) : (
-                          <ul className="space-y-2">
+                          <div className="space-y-2">
                             {(event.details as string[]).map((detail, i) => (
-                              <li key={i} className="text-xs text-gray-400 flex items-start">
-                                <span className="text-brand-pink mr-2">•</span>
-                                <span>{detail}</span>
-                              </li>
+                              <div key={i} className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 bg-brand-pink rounded-full flex-shrink-0"></div>
+                                <span className="text-xs text-gray-400">{detail}</span>
+                              </div>
                             ))}
-                          </ul>
+                          </div>
                         )}
+                      </div>
+
+                      {/* Hover effect */}
+                      <div className="absolute bottom-0 left-0 w-full h-1 bg-brand-pink transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
                     </div>
                   </div>
                 ))}
               </div>
+              </div>
+              
+              <ScrollIndicator sliderRef={timelineSliderRef} scrollProgress={scrollProgress} />
             </div>
           </div>
 
@@ -423,7 +491,7 @@ export default function MemberJourneyPage() {
           <div className="mb-20">
             <div className="mb-12">
               <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                START MUNICH <span className="outline-text">DEPARTMENTS</span>
+                OUR <span className="outline-text">DEPARTMENTS</span>
               </h2>
               <p className="text-gray-400 text-lg">
                 Choose your department and contribute to our community
@@ -472,7 +540,7 @@ export default function MemberJourneyPage() {
           <div className="mb-20">
             <div className="mb-12">
               <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                START MUNICH <span className="outline-text">INTERNAL EVENTS</span>
+                INTERNAL <span className="outline-text">EVENTS</span>
               </h2>
               <p className="text-gray-400 text-lg">
                 Regular events and activities for our member community
@@ -484,7 +552,12 @@ export default function MemberJourneyPage() {
               <div className="bg-white/5 border border-white/10 p-8">
                 <div className="space-y-6">
                   {startEvents.map((event, index) => (
-                    <div key={event.id} className="flex items-start gap-4 pb-6 border-b border-white/10 last:border-b-0 last:pb-0">
+                    <div
+                      key={event.id}
+                      className="flex items-start gap-4 pb-6 border-b border-white/10 last:border-b-0 last:pb-0 cursor-pointer transition-all duration-200 hover:bg-white/5 px-4 -mx-4 rounded-lg"
+                      onMouseEnter={() => setHoveredEventId(event.id)}
+                      onMouseLeave={() => setHoveredEventId(null)}
+                    >
                       <span className="text-4xl flex-shrink-0">{event.icon}</span>
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
