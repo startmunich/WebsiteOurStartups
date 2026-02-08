@@ -307,6 +307,42 @@ export default function ForPartnersPage() {
             </div>
           </section>
 
+          {/* What Partners Can Do With Us */}
+          <section>
+            <div className="mb-12">
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+                WHAT <span className="outline-text">PARTNERS CAN DO</span> WITH US
+              </h2>
+              <p className="text-gray-400 text-lg max-w-3xl">
+                Multiple ways to engage with our entrepreneurial community
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {partnershipOpportunities.map((opportunity, index) => (
+                <div
+                  key={index}
+                  className="group relative bg-white/5 border border-white/10 hover:bg-white/10 hover:border-brand-pink transition-all duration-300 overflow-hidden"
+                >
+                  {/* Gradient overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-brand-pink/0 to-brand-pink/0 group-hover:from-brand-pink/5 group-hover:to-transparent transition-all duration-300"></div>
+                  
+                  <div className="relative p-8">
+                    <div className="text-5xl mb-4 transform group-hover:scale-110 transition-transform duration-300 inline-block">{opportunity.icon}</div>
+                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-brand-pink transition-colors duration-300">{opportunity.title}</h3>
+                    <p className="text-gray-400 text-sm leading-relaxed">
+                      {opportunity.description}
+                    </p>
+                  </div>
+
+                  {/* Bottom stripe */}
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-brand-pink transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+
           {/* Partner Testimonials */}
           <section>
             <div className="mb-12">
@@ -373,40 +409,6 @@ export default function ForPartnersPage() {
             </div>
           </section>
 
-          {/* What Partners Can Do With Us */}
-          <section>
-            <div className="mb-12">
-              <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                WHAT <span className="outline-text">PARTNERS CAN DO</span> WITH US
-              </h2>
-              <p className="text-gray-400 text-lg max-w-3xl">
-                Multiple ways to engage with our entrepreneurial community
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {partnershipOpportunities.map((opportunity, index) => (
-                <div
-                  key={index}
-                  className="group relative bg-white/5 border border-white/10 hover:bg-white/10 hover:border-brand-pink transition-all duration-300 overflow-hidden"
-                >
-                  {/* Gradient overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-brand-pink/0 to-brand-pink/0 group-hover:from-brand-pink/5 group-hover:to-transparent transition-all duration-300"></div>
-                  
-                  <div className="relative p-8">
-                    <div className="text-5xl mb-4 transform group-hover:scale-110 transition-transform duration-300 inline-block">{opportunity.icon}</div>
-                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-brand-pink transition-colors duration-300">{opportunity.title}</h3>
-                    <p className="text-gray-400 text-sm leading-relaxed">
-                      {opportunity.description}
-                    </p>
-                  </div>
-
-                  {/* Bottom stripe */}
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-brand-pink transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-                </div>
-              ))}
-            </div>
-          </section>
 
           {/* Pictures of Partners at Events */}
           <section>
@@ -440,13 +442,13 @@ export default function ForPartnersPage() {
             </div>
           </section>
 
-                    {/* Partner Overview - Logos */}
+         {/* Partner Overview - Logos */}
           <section>
             <div className="mb-12">
               <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-4">
                 <div>
                   <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                    OUR <span className="outline-text">PARTNERS</span>
+                    WITH WHOM WE WORKED <span className="outline-text">ALREADY:</span>
                   </h2>
                   <p className="text-gray-400 text-lg max-w-3xl">
                     Trusted by leading companies and organizations
