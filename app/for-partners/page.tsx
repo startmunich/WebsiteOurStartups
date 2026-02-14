@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Script from 'next/script'
+import Marquee from "react-fast-marquee";
 
 export const dynamic = 'force-dynamic'
 
@@ -16,10 +17,41 @@ interface Testimonial {
   story: string
 }
 
+interface Partner {
+  id: string
+  name: string
+  logoUrl: string
+  featured?: boolean
+}
+
 interface FAQ {
   id: string
   question: string
   answer: string
+}
+
+// Fetch partners from API
+async function fetchPartners(): Promise<Partner[]> {
+  try {
+    // Use absolute URL in production, relative in development
+    const baseUrl = typeof window !== 'undefined'
+      ? window.location.origin
+      : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+
+    const response = await fetch(`${baseUrl}/api/partners`, {
+      cache: 'no-store', // Ensure fresh data
+    });
+
+    if (!response.ok) {
+      console.error(`API error: ${response.status} ${response.statusText}`);
+      throw new Error('Failed to fetch partners');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching partners:', error);
+    return [];
+  }
 }
 
 const testimonials: Testimonial[] = [
@@ -187,25 +219,25 @@ const eventPhotos = [
   }
 ]
 
-const partnerLogos = [
-  { name: "Sequoia Capital", logo: "https://logo.clearbit.com/sequoiacap.com" },
-  { name: "Google", logo: "https://logo.clearbit.com/google.com" },
-  { name: "Microsoft", logo: "https://logo.clearbit.com/microsoft.com" },
-  { name: "Amazon Web Services", logo: "https://logo.clearbit.com/aws.amazon.com" },
-  { name: "TU Munich", logo: "https://logo.clearbit.com/tum.de" },
-  { name: "SAP", logo: "https://logo.clearbit.com/sap.com" },
-  { name: "Andreessen Horowitz", logo: "https://logo.clearbit.com/a16z.com" },
-  { name: "Accel", logo: "https://logo.clearbit.com/accel.com" },
-  { name: "UnternehmerTUM", logo: "https://logo.clearbit.com/unternehmertum.de" },
-  { name: "Nvidia", logo: "https://logo.clearbit.com/nvidia.com" }
-]
+
 
 export default function ForPartnersPage() {
   const [loading, setLoading] = useState(true)
+  const [partners, setPartners] = useState<Partner[]>([])
   const [openFaq, setOpenFaq] = useState<string | null>(null)
 
   useEffect(() => {
-    setLoading(false)
+    const loadData = async () => {
+      try {
+        const data = await fetchPartners()
+        setPartners(data)
+      } catch (error) {
+        console.error("Failed to load partners", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadData()
   }, [])
 
   if (loading) {
@@ -318,7 +350,7 @@ export default function ForPartnersPage() {
               <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-4">
                 <div>
                   <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                    WITH WHOM WE WORKED <span className="outline-text">ALREADY:</span>
+                    WITH WHOM WE  <span className="outline-text">WORKED:</span>
                   </h2>
                   <p className="text-gray-400 text-lg max-w-3xl">
                     Trusted by leading companies and organizations
@@ -333,17 +365,17 @@ export default function ForPartnersPage() {
               </div>
             </div>
 
-            <div className="bg-white/5 border border-white/10 p-12 rounded-2xl">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
-                {partnerLogos.map((partner, index) => (
+            <div className="bg-white/5 border border-white/10 py-12 rounded-2xl overflow-hidden">
+              <Marquee gradient={false} speed={40}>
+                {partners.filter(p => p.featured).map((partner) => (
                   <div
-                    key={index}
-                    className="bg-white rounded-lg p-6 h-28 flex items-center justify-center hover:shadow-lg hover:shadow-brand-pink/20 transition-all duration-300"
+                    key={partner.id}
+                    className="bg-white rounded-lg p-6 h-28 flex items-center justify-center mx-6 w-48 shadow-lg transition-transform hover:scale-105"
                   >
                     <img
-                      src={partner.logo}
+                      src={partner.logoUrl}
                       alt={partner.name}
-                      className="max-w-full max-h-full object-contain filter grayscale hover:grayscale-0 transition-all duration-300"
+                      className="max-w-full max-h-full object-contain"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement
                         target.style.display = 'none'
@@ -358,7 +390,7 @@ export default function ForPartnersPage() {
                     />
                   </div>
                 ))}
-              </div>
+              </Marquee>
             </div>
           </section>
 

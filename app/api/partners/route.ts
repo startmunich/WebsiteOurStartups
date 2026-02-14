@@ -11,6 +11,7 @@ export interface Partner {
     name: string;
     category: string;
     logoUrl: string;
+    featured?: boolean;
 }
 
 // Transform NocoDB record to Partner format
@@ -32,6 +33,7 @@ function transformNocoDBRecord(record: any): Partner {
         name: record.Name || 'Unnamed Partner',
         category: record.Categrory || 'Other', // Using the exact spelling from DB
         logoUrl: logoUrl,
+        featured: record.Featured === true || record.Featured === 1 || String(record.Featured).toLowerCase() === 'true',
     };
 }
 
