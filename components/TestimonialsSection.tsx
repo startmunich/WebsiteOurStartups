@@ -44,7 +44,7 @@ export default function TestimonialsSection({
                         className="group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-brand-pink overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#0f122f]/30"
                     >
                         {/* Image */}
-                        <div className="relative h-48 w-full overflow-hidden">
+                        <div className="relative h-64 w-full overflow-hidden">
                             <img
                                 src={item.image}
                                 alt={item.name}
@@ -78,14 +78,14 @@ export default function TestimonialsSection({
                             </div>
 
                             {/* Story */}
-                            <p className="text-sm text-gray-300 leading-relaxed mb-4 pt-4 border-t border-white/10">
-                                {item.story}
-                            </p>
-
-                            {/* Quote */}
-                            <blockquote className="border-l-2 border-brand-pink pl-4 py-2">
-                                <p className="text-sm italic text-gray-400">"{item.quote}"</p>
-                            </blockquote>
+                            {/* Story */}
+                            <div className="pt-4 border-t border-white/10">
+                                <blockquote className="border-l-2 border-brand-pink pl-4 py-1">
+                                    <p className="text-sm text-gray-300 leading-relaxed">
+                                        {item.story}
+                                    </p>
+                                </blockquote>
+                            </div>
                         </div>
 
                         {/* Hover effect accent */}
