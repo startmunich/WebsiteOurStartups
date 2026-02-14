@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Script from 'next/script'
 import { cn } from "@/lib/utils"
+import Hero from "@/components/Hero"
 
 export const dynamic = 'force-dynamic'
 
@@ -191,64 +192,44 @@ export default function PartnersPage() {
       <main className="min-h-screen bg-brand-dark-blue selection:bg-brand-pink selection:text-white">
 
         {/* Hero Section - Restored Old Style with Stats Added */}
-        <div className="relative w-full overflow-hidden h-[650px]">
-          {/* Background Image + Overlay */}
-          <div className="absolute inset-0 h-full">
-            <img
-              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop"
-              alt="Our Partners"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 h-full bg-brand-dark-blue/70"></div>
-          </div>
-
-          {/* Content Overlay */}
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 h-full flex items-center">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 w-full">
-              {/* Left Side - Text */}
-              <div className="flex-1 max-w-3xl text-left">
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black text-white mb-4 sm:mb-6 animate-[flyInFromTop_0.6s_ease-out]">
-                  OUR
-                  <br />
-                  <span className="outline-text">PARTNERS</span>
-                </h1>
-                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed">
-                  Powering the next generation of entrepreneurs through world-class collaboration.
-                </p>
+        <Hero
+          backgroundImage="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop"
+          title={
+            <>
+              OUR
+              <br />
+              <span className="outline-text">PARTNERS</span>
+            </>
+          }
+          description="Powering the next generation of entrepreneurs through world-class collaboration."
+        >
+          {/** Stat 1 **/}
+          <div className="group relative backdrop-blur-lg bg-white/10 p-6 sm:p-8 rounded-2xl border border-white/20 hover:border-brand-pink/50 transition transform hover:scale-105 w-full">
+            <div className="absolute top-3 right-3 w-12 h-12 bg-brand-pink/20 rounded-full blur-xl group-hover:bg-brand-pink/30 transition"></div>
+            <div className="relative text-center">
+              <div className="flex items-baseline justify-center gap-2 mb-3">
+                <span className="text-6xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-300 group-hover:to-brand-pink transition">
+                  {Math.floor(animatedPartners)}
+                </span>
+                <span className="text-3xl font-bold text-brand-pink">+</span>
               </div>
-
-              {/* Right Side - Stats (Similar to Startups Page) */}
-              <div className="hidden lg:flex flex-col gap-6 min-w-[280px] mt-6 lg:mt-11 ml-auto">
-                {/** Stat 1 **/}
-                <div className="group relative backdrop-blur-lg bg-white/10 p-6 sm:p-8 rounded-2xl border border-white/20 hover:border-brand-pink/50 transition transform hover:scale-105 w-full">
-                  <div className="absolute top-3 right-3 w-12 h-12 bg-brand-pink/20 rounded-full blur-xl group-hover:bg-brand-pink/30 transition"></div>
-                  <div className="relative text-center">
-                    <div className="flex items-baseline justify-center gap-2 mb-3">
-                      <span className="text-6xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-300 group-hover:to-brand-pink transition">
-                        {Math.floor(animatedPartners)}
-                      </span>
-                      <span className="text-3xl font-bold text-brand-pink">+</span>
-                    </div>
-                    <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Partners</p>
-                  </div>
-                </div>
-
-                {/** Stat 2 **/}
-                <div className="group relative backdrop-blur-lg bg-white/10 p-6 sm:p-8 rounded-2xl border border-white/20 hover:border-brand-pink/50 transition transform hover:scale-105">
-                  <div className="absolute top-3 right-3 w-12 h-12 bg-brand-pink/20 rounded-full blur-xl group-hover:bg-brand-pink/30 transition"></div>
-                  <div className="relative text-center">
-                    <div className="flex items-baseline justify-center gap-2 mb-3">
-                      <span className="text-6xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-300 group-hover:to-brand-pink transition">
-                        {Math.floor(animatedCategories)}
-                      </span>
-                    </div>
-                    <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Industries</p>
-                  </div>
-                </div>
-              </div>
+              <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Partners</p>
             </div>
           </div>
-        </div>
+
+          {/** Stat 2 **/}
+          <div className="group relative backdrop-blur-lg bg-white/10 p-6 sm:p-8 rounded-2xl border border-white/20 hover:border-brand-pink/50 transition transform hover:scale-105">
+            <div className="absolute top-3 right-3 w-12 h-12 bg-brand-pink/20 rounded-full blur-xl group-hover:bg-brand-pink/30 transition"></div>
+            <div className="relative text-center">
+              <div className="flex items-baseline justify-center gap-2 mb-3">
+                <span className="text-6xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-300 group-hover:to-brand-pink transition">
+                  {Math.floor(animatedCategories)}
+                </span>
+              </div>
+              <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Industries</p>
+            </div>
+          </div>
+        </Hero>
 
         {/* Mobile Stats (static, below hero) */}
         <div className="lg:hidden backdrop-blur-md bg-white/5 border-b border-white/10">

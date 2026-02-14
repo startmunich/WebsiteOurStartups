@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import Script from 'next/script'
 import Marquee from "react-fast-marquee";
+import Hero from "@/components/Hero"
+import TestimonialsSection from '@/components/TestimonialsSection'
 
 export const dynamic = 'force-dynamic'
 
@@ -271,74 +273,55 @@ export default function ForPartnersPage() {
 
       <main className="min-h-screen bg-brand-dark-blue">
         {/* Hero Section */}
-        <div className="relative w-full overflow-hidden h-[600px]">
-          {/* Background Image + Overlay */}
-          <div className="absolute inset-0 h-full">
-            <img
-              src="https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=2074&auto=format&fit=crop"
-              alt="For Partners"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 h-full bg-brand-dark-blue/70"></div>
-          </div>
-
-          {/* Content Overlay */}
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 h-full flex items-center">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 w-full">
-              {/* Left Side */}
-              <div className="flex-1 max-w-2xl text-left">
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black text-white mb-4 sm:mb-6 animate-[flyInFromTop_0.6s_ease-out]">
-                  FOR
-                  <br />
-                  <span className="outline-text">PARTNERS</span>
-                </h1>
-                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed">
-                  Partner with Europe's leading student entrepreneurship community and shape the future of innovation
-                </p>
+        <Hero
+          backgroundImage="https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=2074&auto=format&fit=crop"
+          className="h-[600px]"
+          title={
+            <>
+              FOR
+              <br />
+              <span className="outline-text">PARTNERS</span>
+            </>
+          }
+          description="Partner with Europe's leading student entrepreneurship community and shape the future of innovation"
+        >
+          {/* MD Partnerships Card */}
+          <div className="group relative backdrop-blur-lg bg-white/10 p-6 sm:p-8 border border-white/20 hover:border-brand-pink/50 transition transform hover:scale-105 w-full">
+            <div className="absolute top-3 right-3 w-12 h-12 bg-brand-pink/20 rounded-full blur-xl group-hover:bg-brand-pink/30 transition"></div>
+            <div className="relative text-center">
+              <div className="mb-4 mx-auto w-32 h-32 overflow-hidden border-2 border-white/20 group-hover:border-brand-pink/50 transition-all duration-300">
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop"
+                  alt="MD Partnerships"
+                  className="w-full h-full object-cover"
+                />
               </div>
+              <h3 className="text-lg font-bold text-white mb-1">MD Partnerships</h3>
+              <p className="text-brand-pink text-sm font-semibold mb-4">Head of Partnerships</p>
 
-              {/* Right Side - Contact and MD Image */}
-              <div className="hidden lg:flex flex-col gap-6 min-w-[280px] mt-6 lg:mt-11 ml-auto">
-                {/* MD Partnerships Card */}
-                <div className="group relative backdrop-blur-lg bg-white/10 p-6 sm:p-8 border border-white/20 hover:border-brand-pink/50 transition transform hover:scale-105 w-full">
-                  <div className="absolute top-3 right-3 w-12 h-12 bg-brand-pink/20 rounded-full blur-xl group-hover:bg-brand-pink/30 transition"></div>
-                  <div className="relative text-center">
-                    <div className="mb-4 mx-auto w-32 h-32 overflow-hidden border-2 border-white/20 group-hover:border-brand-pink/50 transition-all duration-300">
-                      <img
-                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop"
-                        alt="MD Partnerships"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <h3 className="text-lg font-bold text-white mb-1">MD Partnerships</h3>
-                    <p className="text-brand-pink text-sm font-semibold mb-4">Head of Partnerships</p>
-
-                    {/* Contact Button */}
-                    <a
-                      href="mailto:partnerships@start.tum.de"
-                      className="group/btn inline-flex items-center gap-2 px-6 py-3 bg-brand-pink hover:bg-brand-pink/90 text-white font-bold transition-all duration-300 hover:shadow-lg hover:shadow-brand-pink/50 w-full justify-center"
-                    >
-                      <svg
-                        className="w-5 h-5 group-hover/btn:scale-110 transition-transform duration-300"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                        />
-                      </svg>
-                      <span>Contact Us</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
+              {/* Contact Button */}
+              <a
+                href="mailto:partnerships@start.tum.de"
+                className="group/btn inline-flex items-center gap-2 px-6 py-3 bg-brand-pink hover:bg-brand-pink/90 text-white font-bold transition-all duration-300 hover:shadow-lg hover:shadow-brand-pink/50 w-full justify-center"
+              >
+                <svg
+                  className="w-5 h-5 group-hover/btn:scale-110 transition-transform duration-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
+                </svg>
+                <span>Contact Us</span>
+              </a>
             </div>
           </div>
-        </div>
+        </Hero>
 
         {/* Content Below Hero */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-20 space-y-24">
@@ -470,70 +453,23 @@ export default function ForPartnersPage() {
 
 
           {/* Partner Testimonials */}
-          <section>
-            <div className="mb-12">
-              <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                PARTNER <span className="outline-text">TESTIMONIALS</span>
-              </h2>
-              <p className="text-gray-400 text-lg max-w-3xl">
-                What our partners say about working with START
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {testimonials.map((testimonial) => (
-                <div
-                  key={testimonial.id}
-                  className="group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-brand-pink overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#0f122f]/30"
-                >
-                  {/* Image */}
-                  <div className="relative h-48 w-full overflow-hidden">
-                    <img
-                      src={testimonial.personImage}
-                      alt={testimonial.personName}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue via-brand-dark-blue/50 to-transparent"></div>
-                    {/* Partner logo overlay */}
-                    <div className="absolute top-4 right-4 bg-white rounded p-2 shadow-lg">
-                      <img
-                        src={testimonial.partnerLogo}
-                        alt={testimonial.partnerName}
-                        className="w-8 h-8 object-contain"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement
-                          target.style.display = 'none'
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6">
-                    {/* Person Info */}
-                    <div className="mb-4">
-                      <h3 className="text-lg font-bold text-white mb-1">{testimonial.personName}</h3>
-                      <p className="text-sm text-brand-pink font-semibold mb-1">{testimonial.personRole}</p>
-                      <p className="text-xs text-gray-400">{testimonial.partnerName}</p>
-                    </div>
-
-                    {/* Story */}
-                    <p className="text-sm text-gray-300 leading-relaxed mb-4 pt-4 border-t border-white/10">
-                      {testimonial.story}
-                    </p>
-
-                    {/* Quote */}
-                    <blockquote className="border-l-2 border-brand-pink pl-4 py-2">
-                      <p className="text-sm italic text-gray-400">"{testimonial.quote}"</p>
-                    </blockquote>
-                  </div>
-
-                  {/* Hover effect accent */}
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-[#1f2345] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
-                </div>
-              ))}
-            </div>
-          </section>
+          <TestimonialsSection
+            title={<>
+              PARTNER <span className="outline-text">TESTIMONIALS</span>
+            </>}
+            description="What our partners say about working with START"
+            items={testimonials.map(t => ({
+              id: t.id,
+              name: t.personName,
+              role: t.personRole,
+              company: t.partnerName,
+              image: t.personImage,
+              story: t.story,
+              quote: t.quote,
+              logo: t.partnerLogo,
+              logoAlt: t.partnerName
+            }))}
+          />
 
 
           {/* Pictures of Partners at Events */}
