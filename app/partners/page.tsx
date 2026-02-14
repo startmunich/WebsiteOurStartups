@@ -8,206 +8,64 @@ export const dynamic = 'force-dynamic'
 interface Partner {
   id: string
   name: string
-  logo: string
-  reason: string
-  website?: string
+  category: string
+  logoUrl: string
 }
 
-interface PartnerCategory {
-  id: string
-  name: string
-  description: string
-  icon: string
-  partners: Partner[]
-}
+// Fetch partners from API
+async function fetchPartners(): Promise<Partner[]> {
+  try {
+    // Use absolute URL in production, relative in development
+    const baseUrl = typeof window !== 'undefined'
+      ? window.location.origin
+      : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
-const partnerCategories: PartnerCategory[] = [
-  {
-    id: "vc",
-    name: "Venture Capital",
-    description: "Leading VCs supporting our founders with funding and mentorship",
-    icon: "💰",
-    partners: [
-      {
-        id: "vc-1",
-        name: "Sequoia Capital",
-        logo: "https://logo.clearbit.com/sequoiacap.com",
-        reason: "Mentorship program & investor networking events",
-        website: "https://sequoiacap.com"
-      },
-      {
-        id: "vc-2",
-        name: "Andreessen Horowitz",
-        logo: "https://logo.clearbit.com/a16z.com",
-        reason: "Annual pitch competition sponsor",
-        website: "https://a16z.com"
-      },
-      {
-        id: "vc-3",
-        name: "Accel",
-        logo: "https://logo.clearbit.com/accel.com",
-        reason: "Startup workshops & office hours",
-        website: "https://accel.com"
-      },
-      {
-        id: "vc-4",
-        name: "Index Ventures",
-        logo: "https://logo.clearbit.com/indexventures.com",
-        reason: "European expansion guidance",
-        website: "https://indexventures.com"
-      },
-      {
-        id: "vc-5",
-        name: "Cherry Ventures",
-        logo: "https://logo.clearbit.com/cherry.vc",
-        reason: "Early-stage founder support",
-        website: "https://cherry.vc"
-      },
-      {
-        id: "vc-6",
-        name: "HV Capital",
-        logo: "https://logo.clearbit.com/hvcapital.com",
-        reason: "DACH region expertise & networking",
-        website: "https://hvcapital.com"
-      }
-    ]
-  },
-  {
-    id: "bigtech",
-    name: "Big Tech",
-    description: "Technology giants providing resources and opportunities",
-    icon: "🏢",
-    partners: [
-      {
-        id: "bt-1",
-        name: "Google",
-        logo: "https://logo.clearbit.com/google.com",
-        reason: "Cloud credits & technical workshops",
-        website: "https://google.com"
-      },
-      {
-        id: "bt-2",
-        name: "Microsoft",
-        logo: "https://logo.clearbit.com/microsoft.com",
-        reason: "Azure sponsorship & startup program",
-        website: "https://microsoft.com"
-      },
-      {
-        id: "bt-3",
-        name: "Amazon Web Services",
-        logo: "https://logo.clearbit.com/aws.amazon.com",
-        reason: "AWS credits & infrastructure support",
-        website: "https://aws.amazon.com"
-      },
-      {
-        id: "bt-4",
-        name: "SAP",
-        logo: "https://logo.clearbit.com/sap.com",
-        reason: "Enterprise software & B2B connections",
-        website: "https://sap.com"
-      },
-      {
-        id: "bt-5",
-        name: "Nvidia",
-        logo: "https://logo.clearbit.com/nvidia.com",
-        reason: "AI/ML hardware access & GPU credits",
-        website: "https://nvidia.com"
-      }
-    ]
-  },
-  {
-    id: "education",
-    name: "Education",
-    description: "Academic institutions fostering entrepreneurial talent",
-    icon: "🎓",
-    partners: [
-      {
-        id: "edu-1",
-        name: "TU Munich",
-        logo: "https://logo.clearbit.com/tum.de",
-        reason: "Primary university partner & talent pipeline",
-        website: "https://tum.de"
-      },
-      {
-        id: "edu-2",
-        name: "LMU Munich",
-        logo: "https://logo.clearbit.com/lmu.de",
-        reason: "Research collaboration & student exchange",
-        website: "https://lmu.de"
-      },
-      {
-        id: "edu-3",
-        name: "University of Cambridge",
-        logo: "https://logo.clearbit.com/cam.ac.uk",
-        reason: "Research partnership & thesis opportunities",
-        website: "https://cam.ac.uk"
-      },
-      {
-        id: "edu-4",
-        name: "Stanford University",
-        logo: "https://logo.clearbit.com/stanford.edu",
-        reason: "Silicon Valley exchange program",
-        website: "https://stanford.edu"
-      },
-      {
-        id: "edu-5",
-        name: "UnternehmerTUM",
-        logo: "https://logo.clearbit.com/unternehmertum.de",
-        reason: "Incubation space & acceleration programs",
-        website: "https://unternehmertum.de"
-      }
-    ]
-  },
-  {
-    id: "studentclubs",
-    name: "Student Clubs",
-    description: "Fellow student organizations sharing our entrepreneurial mission",
-    icon: "🤝",
-    partners: [
-      {
-        id: "sc-1",
-        name: "TUM.ai",
-        logo: "https://logo.clearbit.com/tum-ai.com",
-        reason: "Joint AI hackathons & knowledge sharing",
-        website: "https://tum-ai.com"
-      },
-      {
-        id: "sc-2",
-        name: "CDTM",
-        logo: "https://logo.clearbit.com/cdtm.de",
-        reason: "Cross-disciplinary innovation events",
-        website: "https://cdtm.de"
-      },
-      {
-        id: "sc-3",
-        name: "180 Degrees Consulting",
-        logo: "https://logo.clearbit.com/180dc.org",
-        reason: "Social impact collaboration",
-        website: "https://180dc.org"
-      },
-      {
-        id: "sc-4",
-        name: "TUM Blockchain Club",
-        logo: "https://logo.clearbit.com/tum-blockchain.com",
-        reason: "Web3 workshops & networking",
-        website: "https://tum-blockchain.com"
-      },
-      {
-        id: "sc-5",
-        name: "Enactus Munich",
-        logo: "https://logo.clearbit.com/enactus.org",
-        reason: "Sustainable entrepreneurship initiatives",
-        website: "https://enactus.org"
-      }
-    ]
+    const response = await fetch(`${baseUrl}/api/partners`, {
+      cache: 'no-store', // Ensure fresh data
+    });
+
+    if (!response.ok) {
+      console.error(`API error: ${response.status} ${response.statusText}`);
+      throw new Error('Failed to fetch partners');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching partners:', error);
+    return [];
   }
-]
+}
+
+interface PartnersByCategory {
+  [category: string]: Partner[]
+}
 
 export default function PartnersPage() {
   const [loading, setLoading] = useState(true)
+  const [partners, setPartners] = useState<Partner[]>([])
+  const [partnersByCategory, setPartnersByCategory] = useState<PartnersByCategory>({})
 
   useEffect(() => {
-    setLoading(false)
+    const loadPartners = async () => {
+      setLoading(true)
+      const data = await fetchPartners()
+      setPartners(data)
+
+      // Group partners by category
+      const grouped = data.reduce((acc: PartnersByCategory, partner) => {
+        const category = partner.category || 'Other'
+        if (!acc[category]) {
+          acc[category] = []
+        }
+        acc[category].push(partner)
+        return acc
+      }, {})
+
+      setPartnersByCategory(grouped)
+      setLoading(false)
+    }
+
+    loadPartners()
   }, [])
 
   if (loading) {
@@ -269,66 +127,53 @@ export default function PartnersPage() {
 
         {/* Content Below Hero */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-20">
-          
-          {/* Why Partners Section */}
-          <div className="mb-20">
-            <div className="mb-12">
-              <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                WHY <span className="outline-text">PARTNERSHIPS MATTER</span>
-              </h2>
-              <p className="text-gray-400 text-lg max-w-3xl">
-                Building the future together with industry leaders
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-white/5 border border-white/10 p-8 hover:border-brand-pink/50 transition-all duration-300">
-                <div className="text-4xl mb-4">🚀</div>
-                <h3 className="text-xl font-bold text-white mb-3">Accelerate Growth</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">
-                  Our partners provide resources, mentorship, and funding opportunities that help START members transform ideas into successful ventures.
-                </p>
-              </div>
-              
-              <div className="bg-white/5 border border-white/10 p-8 hover:border-brand-pink/50 transition-all duration-300">
-                <div className="text-4xl mb-4">🌐</div>
-                <h3 className="text-xl font-bold text-white mb-3">Expand Networks</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">
-                  Through strategic partnerships, we connect our members with industry experts, investors, and fellow entrepreneurs across the globe.
-                </p>
-              </div>
-              
-              <div className="bg-white/5 border border-white/10 p-8 hover:border-brand-pink/50 transition-all duration-300">
-                <div className="text-4xl mb-4">💡</div>
-                <h3 className="text-xl font-bold text-white mb-3">Share Knowledge</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">
-                  Partners bring invaluable expertise through workshops, talks, and hands-on sessions that shape the next generation of founders.
-                </p>
-              </div>
-            </div>
-          </div>
 
           {/* Partner Categories */}
-          {partnerCategories.map((category) => (
-            <div key={category.id} className="mb-20">
+          {Object.keys(partnersByCategory).sort((a, b) => {
+            const order = [
+              'TECHNOLOGY',
+              'VENTURE CAPITAL',
+              'ECOSYSTEM',
+              'INITIATIVES',
+              'STARTUP',
+              'INDUSTRY',
+              'OTHER'
+            ];
+
+            const indexA = order.indexOf(a.toUpperCase());
+            const indexB = order.indexOf(b.toUpperCase());
+
+            // If both are in the list, sort by index
+            if (indexA !== -1 && indexB !== -1) {
+              return indexA - indexB;
+            }
+
+            // If only A is in the list, it comes first
+            if (indexA !== -1) {
+              return -1;
+            }
+
+            // If only B is in the list, it comes first
+            if (indexB !== -1) {
+              return 1;
+            }
+
+            // If neither is in the list, sort alphabetically
+            return a.localeCompare(b);
+          }).map((categoryName) => (
+            <div key={categoryName} className="mb-20">
               <div className="mb-10">
-                <div className="flex items-center gap-4 mb-3">
-                  <span className="text-4xl">{category.icon}</span>
-                  <h2 className="text-3xl md:text-4xl font-black text-white">
-                    {category.name.toUpperCase().split(' ')[0]}{' '}
-                    <span className="outline-text">
-                      {category.name.toUpperCase().split(' ').slice(1).join(' ') || category.name.toUpperCase()}
-                    </span>
-                  </h2>
-                </div>
-                <p className="text-gray-400 text-lg ml-14">
-                  {category.description}
-                </p>
+                <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+                  {categoryName.toUpperCase().split(' ')[0]}{' '}
+                  <span className="outline-text">
+                    {categoryName.toUpperCase().split(' ').slice(1).join(' ') || ''}
+                  </span>
+                </h2>
               </div>
 
               {/* Partners Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                {category.partners.map((partner) => (
+                {partnersByCategory[categoryName].map((partner: Partner) => (
                   <div
                     key={partner.id}
                     className="group relative"
@@ -336,9 +181,9 @@ export default function PartnersPage() {
                     {/* Logo Card */}
                     <div className="relative bg-white rounded-lg p-6 h-32 flex items-center justify-center transition-all duration-300 group-hover:shadow-xl group-hover:shadow-brand-pink/20 group-hover:scale-105 border-2 border-transparent group-hover:border-brand-pink">
                       <img
-                        src={partner.logo}
+                        src={partner.logoUrl}
                         alt={partner.name}
-                        className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                        className="max-w-full max-h-full object-contain transition-all duration-300"
                         onError={(e) => {
                           // Fallback to initials if logo fails to load
                           const target = e.target as HTMLImageElement
@@ -347,48 +192,23 @@ export default function PartnersPage() {
                           if (parent) {
                             const fallback = document.createElement('div')
                             fallback.className = 'text-2xl font-bold text-gray-600'
-                            fallback.textContent = partner.name.split(' ').map(w => w[0]).join('').slice(0, 2)
+                            fallback.textContent = partner.name.split(' ').map((w: string) => w[0]).join('').slice(0, 2)
                             parent.appendChild(fallback)
                           }
                         }}
                       />
+                    </div>
+                    {/* Partner Name */}
+                    <div className="mt-3 text-center">
+                      <p className="text-white font-bold text-sm group-hover:text-brand-pink transition-colors duration-300">
+                        {partner.name}
+                      </p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
           ))}
-
-          {/* Become a Partner CTA */}
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a3e] via-brand-dark-blue to-[#0d0d1f] border-2 border-brand-pink/50 shadow-2xl shadow-brand-pink/20">
-            {/* Decorative Elements */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-brand-pink/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-brand-pink/5 rounded-full blur-3xl"></div>
-            
-            <div className="relative p-8 md:p-12">
-              <div className="flex flex-col items-center gap-8 text-center">
-                <div>
-                  <h3 className="text-3xl md:text-4xl font-black text-white mb-4">
-                    Become a Partner
-                  </h3>
-                  <p className="text-lg text-gray-300 max-w-2xl">
-                    Join our network of leading companies supporting the next generation of entrepreneurs. 
-                    Partner with START Munich and make an impact on the startup ecosystem.
-                  </p>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                  <button className="px-8 py-3 bg-brand-pink hover:bg-brand-pink/90 text-white font-bold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-brand-pink/50">
-                    Get in Touch
-                  </button>
-                  <button className="px-8 py-3 border border-brand-pink text-brand-pink hover:bg-brand-pink/10 font-bold rounded-lg transition-all duration-300">
-                    Learn More
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
         </div>
       </main>
     </>

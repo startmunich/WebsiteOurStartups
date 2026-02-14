@@ -252,22 +252,116 @@ export default function ForPartnersPage() {
 
           {/* Content Overlay */}
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 h-full flex items-center">
-            <div className="flex-1 max-w-3xl text-left">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black text-white mb-4 sm:mb-6 animate-[flyInFromTop_0.6s_ease-out]">
-                FOR
-                <br />
-                <span className="outline-text">PARTNERS</span>
-              </h1>
-              <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed">
-                Partner with Europe's leading student entrepreneurship community and shape the future of innovation
-              </p>
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 w-full">
+              {/* Left Side */}
+              <div className="flex-1 max-w-2xl text-left">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black text-white mb-4 sm:mb-6 animate-[flyInFromTop_0.6s_ease-out]">
+                  FOR
+                  <br />
+                  <span className="outline-text">PARTNERS</span>
+                </h1>
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed">
+                  Partner with Europe's leading student entrepreneurship community and shape the future of innovation
+                </p>
+              </div>
+
+              {/* Right Side - Contact and MD Image */}
+              <div className="hidden lg:flex flex-col gap-6 min-w-[280px] mt-6 lg:mt-11 ml-auto">
+                {/* MD Partnerships Card */}
+                <div className="group relative backdrop-blur-lg bg-white/10 p-6 sm:p-8 border border-white/20 hover:border-brand-pink/50 transition transform hover:scale-105 w-full">
+                  <div className="absolute top-3 right-3 w-12 h-12 bg-brand-pink/20 rounded-full blur-xl group-hover:bg-brand-pink/30 transition"></div>
+                  <div className="relative text-center">
+                    <div className="mb-4 mx-auto w-32 h-32 overflow-hidden border-2 border-white/20 group-hover:border-brand-pink/50 transition-all duration-300">
+                      <img
+                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop"
+                        alt="MD Partnerships"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <h3 className="text-lg font-bold text-white mb-1">MD Partnerships</h3>
+                    <p className="text-brand-pink text-sm font-semibold mb-4">Head of Partnerships</p>
+
+                    {/* Contact Button */}
+                    <a
+                      href="mailto:partnerships@start.tum.de"
+                      className="group/btn inline-flex items-center gap-2 px-6 py-3 bg-brand-pink hover:bg-brand-pink/90 text-white font-bold transition-all duration-300 hover:shadow-lg hover:shadow-brand-pink/50 w-full justify-center"
+                    >
+                      <svg
+                        className="w-5 h-5 group-hover/btn:scale-110 transition-transform duration-300"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                        />
+                      </svg>
+                      <span>Contact Us</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Content Below Hero */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-20 space-y-24">
-          
+
+
+          {/* Partner Overview - Logos */}
+          <section>
+            <div className="mb-12">
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-4">
+                <div>
+                  <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+                    WITH WHOM WE WORKED <span className="outline-text">ALREADY:</span>
+                  </h2>
+                  <p className="text-gray-400 text-lg max-w-3xl">
+                    Trusted by leading companies and organizations
+                  </p>
+                </div>
+                <a
+                  href="/partners"
+                  className="px-6 py-2.5 border-2 border-brand-pink text-brand-pink hover:bg-brand-pink hover:text-white font-bold rounded-lg transition-all duration-300 whitespace-nowrap text-center"
+                >
+                  View All Partners →
+                </a>
+              </div>
+            </div>
+
+            <div className="bg-white/5 border border-white/10 p-12 rounded-2xl">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
+                {partnerLogos.map((partner, index) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-lg p-6 h-28 flex items-center justify-center hover:shadow-lg hover:shadow-brand-pink/20 transition-all duration-300"
+                  >
+                    <img
+                      src={partner.logo}
+                      alt={partner.name}
+                      className="max-w-full max-h-full object-contain filter grayscale hover:grayscale-0 transition-all duration-300"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement
+                        target.style.display = 'none'
+                        const parent = target.parentElement
+                        if (parent) {
+                          const fallback = document.createElement('div')
+                          fallback.className = 'text-xl font-bold text-gray-600'
+                          fallback.textContent = partner.name.split(' ').map(w => w[0]).join('').slice(0, 2)
+                          parent.appendChild(fallback)
+                        }
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
           {/* Why Partner with START */}
           <section>
             <div className="mb-12">
@@ -290,7 +384,7 @@ export default function ForPartnersPage() {
                     <div className="mb-6 transform group-hover:scale-110 group-hover:-rotate-6 transition-all duration-300">
                       <span className="text-5xl inline-block">{reason.icon}</span>
                     </div>
-                    
+
                     <h3 className="text-xl font-bold text-white mb-3 group-hover:text-brand-pink transition-colors duration-300">
                       {reason.title}
                     </h3>
@@ -326,7 +420,7 @@ export default function ForPartnersPage() {
                 >
                   {/* Gradient overlay on hover */}
                   <div className="absolute inset-0 bg-gradient-to-br from-brand-pink/0 to-brand-pink/0 group-hover:from-brand-pink/5 group-hover:to-transparent transition-all duration-300"></div>
-                  
+
                   <div className="relative p-8">
                     <div className="text-5xl mb-4 transform group-hover:scale-110 transition-transform duration-300 inline-block">{opportunity.icon}</div>
                     <h3 className="text-xl font-bold text-white mb-3 group-hover:text-brand-pink transition-colors duration-300">{opportunity.title}</h3>
@@ -442,56 +536,6 @@ export default function ForPartnersPage() {
             </div>
           </section>
 
-         {/* Partner Overview - Logos */}
-          <section>
-            <div className="mb-12">
-              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-4">
-                <div>
-                  <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                    WITH WHOM WE WORKED <span className="outline-text">ALREADY:</span>
-                  </h2>
-                  <p className="text-gray-400 text-lg max-w-3xl">
-                    Trusted by leading companies and organizations
-                  </p>
-                </div>
-                <a
-                  href="/partners"
-                  className="px-6 py-2.5 border-2 border-brand-pink text-brand-pink hover:bg-brand-pink hover:text-white font-bold rounded-lg transition-all duration-300 whitespace-nowrap text-center"
-                >
-                  View All Partners →
-                </a>
-              </div>
-            </div>
-
-            <div className="bg-white/5 border border-white/10 p-12 rounded-2xl">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
-                {partnerLogos.map((partner, index) => (
-                  <div
-                    key={index}
-                    className="bg-white rounded-lg p-6 h-28 flex items-center justify-center hover:shadow-lg hover:shadow-brand-pink/20 transition-all duration-300"
-                  >
-                    <img
-                      src={partner.logo}
-                      alt={partner.name}
-                      className="max-w-full max-h-full object-contain filter grayscale hover:grayscale-0 transition-all duration-300"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement
-                        target.style.display = 'none'
-                        const parent = target.parentElement
-                        if (parent) {
-                          const fallback = document.createElement('div')
-                          fallback.className = 'text-xl font-bold text-gray-600'
-                          fallback.textContent = partner.name.split(' ').map(w => w[0]).join('').slice(0, 2)
-                          parent.appendChild(fallback)
-                        }
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
           {/* FAQ Section */}
           <section>
             <div className="mb-12">
@@ -534,7 +578,7 @@ export default function ForPartnersPage() {
               {/* Decorative Elements */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-brand-pink/10 rounded-full blur-3xl"></div>
               <div className="absolute bottom-0 left-0 w-48 h-48 bg-brand-pink/5 rounded-full blur-3xl"></div>
-              
+
               <div className="relative p-8 md:p-12">
                 <div className="flex flex-col items-center gap-8 text-center">
                   <div>
@@ -542,7 +586,7 @@ export default function ForPartnersPage() {
                       READY TO <span className="outline-text">PARTNER?</span>
                     </h3>
                     <p className="text-lg text-gray-300 max-w-2xl mb-6">
-                      Join our network of leading companies supporting the next generation of entrepreneurs. 
+                      Join our network of leading companies supporting the next generation of entrepreneurs.
                       Let's build the future together.
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left max-w-4xl mx-auto mb-8">
