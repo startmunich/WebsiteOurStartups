@@ -669,7 +669,7 @@ export default function StartupsPage() {
         </div>
 
         {/* Footer CTA Section */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pb-16">
           <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a3e] via-[#00002c] to-[#0d0d1f] border-2 border-[#d0006f]/50 shadow-2xl shadow-[#d0006f]/20">
             {/* Decorative Elements */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-[#d0006f]/10 rounded-full blur-3xl"></div>
