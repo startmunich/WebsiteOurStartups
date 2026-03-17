@@ -147,7 +147,6 @@ export default function StartupsPage() {
     const amount = parseInt(company.totalRaised?.replace(/[€,]/g, '') || '0')
     return sum + amount
   }, 0)
-  const totalEmployees = companies.reduce((sum, company) => sum + (company.employees || 0), 0)
 
   // Get spotlight startups (show all featured startups)
   const spotlightStartups = companies.filter(company => company.isSpotlight)
@@ -161,7 +160,6 @@ export default function StartupsPage() {
   // Use animated number hook for statistics
   const animatedStartups = useAnimatedNumber(totalStartups, loading)
   const animatedFunding = useAnimatedNumber(totalRaised / 1000000, loading)
-  const animatedEmployees = useAnimatedNumber(totalEmployees || 333, loading)
 
   if (loading) {
     return (
@@ -228,23 +226,12 @@ export default function StartupsPage() {
             </div>
             <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Funding</p>
           </HeroCard>
-
-          {/** Stat 3 **/}
-          <HeroCard>
-            <div className="flex items-baseline justify-center gap-2 mb-3">
-              <span className="text-6xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-300 group-hover:to-[#d0006f] transition">
-                {Math.floor(animatedEmployees)}
-              </span>
-              <span className="text-3xl font-bold text-[#d0006f]">+</span>
-            </div>
-            <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Employees</p>
-          </HeroCard>
         </Hero>
 
         {/* Mobile Stats (static, below hero) */}
         <div className="lg:hidden backdrop-blur-md mt-10">
           <div className="max-w-7xl mx-auto px-4 py-6">
-            <div className="grid grid-cols-3 gap-4 text-center">
+            <div className="grid grid-cols-2 gap-4 text-center">
               <div>
                 <p className="text-2xl font-black text-white">
                   {Math.floor(animatedStartups)}+
@@ -256,12 +243,6 @@ export default function StartupsPage() {
                   €{animatedFunding.toFixed(1)}M
                 </p>
                 <p className="text-xs font-bold text-gray-300 uppercase">Funding</p>
-              </div>
-              <div>
-                <p className="text-2xl font-black text-white">
-                  {Math.floor(animatedEmployees)}+
-                </p>
-                <p className="text-xs font-bold text-gray-300 uppercase">Employees</p>
               </div>
             </div>
           </div>
@@ -688,23 +669,41 @@ export default function StartupsPage() {
         </div>
 
         {/* Footer CTA Section */}
-        <div className="border-t border-white/10 mt-20 py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Join Our Community
-            </h2>
-            <p className="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
-              Be part of Munich's most vibrant student entrepreneur ecosystem
-            </p>
-            <a
-              href="https://www.startmunich.de/apply"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-3 text-base font-medium text-[#00002c] bg-white hover:bg-gray-100 transition-all rounded group"
-            >
-              Apply Now
-              <span className="group-hover:translate-x-1 transition-transform">→</span>
-            </a>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 pb-16">
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a3e] via-[#00002c] to-[#0d0d1f] border-2 border-[#d0006f]/50 shadow-2xl shadow-[#d0006f]/20">
+            {/* Decorative Elements */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#d0006f]/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#d0006f]/5 rounded-full blur-3xl"></div>
+
+            <div className="relative p-8 md:p-12">
+              <div className="flex flex-col items-center gap-8 text-center">
+                <div>
+                  <h3 className="text-3xl md:text-4xl font-black text-white mb-4">
+                    Want to Start Your Own Journey?
+                  </h3>
+                  <p className="text-lg text-gray-300 max-w-2xl">
+                    Join START Munich and get the support, network, and resources you need to turn your idea into reality. Our community has helped launch {companies.length}+ startups — yours could be next.
+                  </p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                  <a
+                    href="/member-journey"
+                    className="px-8 py-3 bg-[#d0006f] hover:bg-[#d0006f]/90 text-white font-bold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-[#d0006f]/50"
+                  >
+                    Discover the Member Journey
+                  </a>
+                  <a
+                    href="https://www.startmunich.de/apply"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-8 py-3 border border-[#d0006f] text-[#d0006f] hover:bg-[#d0006f]/10 font-bold rounded-lg transition-all duration-300"
+                  >
+                    Apply Now
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </main>

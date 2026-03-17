@@ -394,7 +394,7 @@ export default function PartnersPage() {
                   View Partnership Benefits
                 </a>
                 <a
-                  href="mailto:partnerships@start.tum.de"
+                  href="mailto:m.heumader@startmunich.de"
                   className="px-8 py-4 bg-brand-dark-blue/30 border-2 border-white text-white font-bold rounded-full text-lg hover:bg-white hover:text-brand-dark-blue hover:scale-105 transition-all duration-300 backdrop-blur-sm"
                 >
                   Contact Us

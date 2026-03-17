@@ -119,7 +119,7 @@ const faqs: FAQ[] = [
   {
     id: "faq6",
     question: "How do we get started?",
-    answer: "Simply reach out to our partnerships team at partnerships@start.tum.de or use the contact form below. We'll schedule a call to discuss your goals and how START can help achieve them."
+    answer: "Simply reach out to our partnerships team at m.heumader@startmunich.de or use the contact form below. We'll schedule a call to discuss your goals and how START can help achieve them."
   }
 ]
 
@@ -291,9 +291,9 @@ export default function ForPartnersPage() {
         >
           {/* MD Partnerships Card */}
           <HeroCard accentColor="brand-pink">
-            <div className="mb-4 mx-auto w-32 h-32 rounded-full overflow-hidden border-2 border-white/20 group-hover:border-brand-pink/50 transition-all duration-300">
+            <div className="mb-4 mx-auto w-40 h-40 rounded-full overflow-hidden border-2 border-white/20 group-hover:border-brand-pink/50 transition-all duration-300">
               <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop"
+                src="/partners/md-partnerships.jpg"
                 alt="MD Partnerships"
                 className="w-full h-full object-cover"
               />
@@ -303,7 +303,7 @@ export default function ForPartnersPage() {
 
             {/* Contact Button */}
             <a
-              href="mailto:partnerships@start.tum.de"
+              href="mailto:m.heumader@startmunich.de"
               className="group/btn inline-flex items-center gap-2 px-6 py-3 bg-brand-pink hover:bg-brand-pink/90 text-white font-bold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-brand-pink/50 w-full justify-center"
             >
               <svg
@@ -645,7 +645,7 @@ export default function ForPartnersPage() {
                       READY TO <span className="outline-text">PARTNER?</span>
                     </h3>
                     <p className="text-lg text-gray-300 mb-6">
-                      Join our network of leading companies supporting the next generation of entrepreneurs.
+                      Join our network of leading companies and get in touch with ambitious students from TUM, LMU, and other Munich universities.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4">
                       <button className="px-8 py-3 bg-brand-pink hover:bg-brand-pink/90 text-white font-bold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-brand-pink/50 text-lg">
@@ -662,7 +662,7 @@ export default function ForPartnersPage() {
                     <div className="bg-white/5 p-5 rounded-lg">
                       <div className="text-3xl mb-2">📧</div>
                       <h4 className="text-white font-bold mb-1">Email Us</h4>
-                      <p className="text-gray-400 text-sm">partnerships@start.tum.de</p>
+                      <p className="text-gray-400 text-sm">m.heumader@startmunich.de</p>
                     </div>
                     <div className="bg-white/5 p-5 rounded-lg">
                       <div className="text-3xl mb-2">📅</div>

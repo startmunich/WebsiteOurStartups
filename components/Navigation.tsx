@@ -163,7 +163,7 @@ export default function Navigation() {
           <div className="hidden lg:flex items-center">
             <Link
               href="/apply"
-              className="bg-white text-brand-dark-blue px-6 py-2.5 font-black text-base rounded hover:bg-brand-pink hover:text-white transition-all duration-300 uppercase tracking-wide"
+              className="bg-white text-brand-dark-blue px-4 py-1.5 font-bold text-sm rounded hover:bg-brand-pink hover:text-white transition-all duration-300 uppercase tracking-wide"
             >
               APPLY NOW
             </Link>
