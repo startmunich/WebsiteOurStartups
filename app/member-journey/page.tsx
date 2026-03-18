@@ -359,7 +359,7 @@ export default function MemberJourneyPage() {
       <main className="min-h-screen bg-brand-dark-blue">
         {/* Hero Section */}
         <Hero
-          backgroundImage="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop"
+          backgroundImage="/memberJourney/hero.png"
           title={
             <>
               YOUR START MUNICH
@@ -690,7 +690,7 @@ export default function MemberJourneyPage() {
               <div className="group relative overflow-hidden bg-white/5 border border-white/10 hover:border-brand-pink/50 transition-all duration-300">
                 <div className="aspect-video relative overflow-hidden">
                   <img
-                    src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=2070&auto=format&fit=crop"
+                    src="/memberJourney/SF.png"
                     alt="San Francisco Bay Area"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
@@ -726,7 +726,7 @@ export default function MemberJourneyPage() {
               <div className="group relative overflow-hidden bg-white/5 border border-white/10 hover:border-brand-pink/50 transition-all duration-300">
                 <div className="aspect-video relative overflow-hidden">
                   <img
-                    src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop"
+                    src="/memberJourney/cambridge-aerial.png"
                     alt="University Research"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />

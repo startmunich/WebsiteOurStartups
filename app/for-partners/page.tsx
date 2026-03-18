@@ -183,33 +183,53 @@ const whyStartSpecial = [
 const eventPhotos = [
   {
     id: "ep1",
-    url: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop",
-    caption: "Annual Pitch Competition"
+    url: "/partners/partnerEvents/RTSH.JPG",
+    caption: "Road to Startup Hero"
   },
   {
     id: "ep2",
-    url: "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=2069&auto=format&fit=crop",
-    caption: "Partner Networking Event"
+    url: "/partners/partnerEvents/RTSH2.JPG",
+    caption: "Road to Startup Hero"
   },
   {
     id: "ep3",
-    url: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2012&auto=format&fit=crop",
-    caption: "Workshop with Google"
+    url: "/partners/partnerEvents/RTSS1.jpg",
+    caption: "Road to Startup School"
   },
   {
     id: "ep4",
-    url: "https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=2070&auto=format&fit=crop",
-    caption: "Startup Week Opening"
+    url: "/partners/partnerEvents/RTSS2.JPG",
+    caption: "Road to Startup School"
   },
   {
     id: "ep5",
-    url: "https://images.unsplash.com/photo-1591115765373-5207764f72e7?q=80&w=2070&auto=format&fit=crop",
-    caption: "Mentorship Session"
+    url: "/partners/partnerEvents/PitchUNetwork.JPG",
+    caption: "Pitch & Network Event"
   },
   {
     id: "ep6",
-    url: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=2070&auto=format&fit=crop",
-    caption: "Partner Appreciation Night"
+    url: "/partners/partnerEvents/MHL1.jpg",
+    caption: "Munich Hacks for Legaltech"
+  },
+  {
+    id: "ep7",
+    url: "/partners/partnerEvents/MHL2.jpg",
+    caption: "Munich Hacks for Legaltech"
+  },
+  {
+    id: "ep8",
+    url: "/partners/partnerEvents/IsarUnfiltered.jpg",
+    caption: "Isar Unfiltered"
+  },
+  {
+    id: "ep9",
+    url: "/partners/partnerEvents/IsarUnfiltered2.jpg",
+    caption: "Isar Unfiltered"
+  },
+  {
+    id: "ep10",
+    url: "/partners/partnerEvents/FounderFailTails.JPG",
+    caption: "Founder Fail Tales"
   }
 ]
 
@@ -219,6 +239,7 @@ export default function ForPartnersPage() {
   const [loading, setLoading] = useState(true)
   const [partners, setPartners] = useState<Partner[]>([])
   const [openFaq, setOpenFaq] = useState<string | null>(null)
+  const [photoIndex, setPhotoIndex] = useState(0)
 
   useEffect(() => {
     const loadData = async () => {
@@ -573,24 +594,50 @@ export default function ForPartnersPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {eventPhotos.map((photo) => (
-                <div
-                  key={photo.id}
-                  className="group relative overflow-hidden rounded-xl aspect-video border border-white/10 hover:border-brand-pink/50 transition-all duration-300"
+            <div className="relative">
+              {/* Left Arrow */}
+              {photoIndex > 0 && (
+                <button
+                  onClick={() => setPhotoIndex(Math.max(0, photoIndex - 6))}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 bg-brand-dark-blue/90 hover:bg-brand-pink text-white rounded-full flex items-center justify-center transition-all border border-white/20 shadow-lg"
                 >
-                  <img
-                    src={photo.url}
-                    alt={photo.caption}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue via-brand-dark-blue/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="absolute bottom-0 left-0 right-0 p-6">
-                      <p className="text-white font-bold text-lg">{photo.caption}</p>
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {eventPhotos.slice(photoIndex, photoIndex + 6).map((photo) => (
+                  <div
+                    key={photo.id}
+                    className="group relative overflow-hidden rounded-xl aspect-video border border-white/10 hover:border-brand-pink/50 transition-all duration-300"
+                  >
+                    <img
+                      src={photo.url}
+                      alt={photo.caption}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue via-brand-dark-blue/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="absolute bottom-0 left-0 right-0 p-6">
+                        <p className="text-white font-bold text-lg">{photo.caption}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+
+              {/* Right Arrow */}
+              {photoIndex + 6 < eventPhotos.length && (
+                <button
+                  onClick={() => setPhotoIndex(Math.min(eventPhotos.length - 6, photoIndex + 6))}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 bg-brand-dark-blue/90 hover:bg-brand-pink text-white rounded-full flex items-center justify-center transition-all border border-white/20 shadow-lg"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              )}
             </div>
           </section>
 
