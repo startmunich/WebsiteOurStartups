@@ -7,6 +7,25 @@ import { useAnimatedNumber, useInView } from '@/lib/hooks'
 
 export const dynamic = 'force-dynamic'
 
+// ── Types ───────────────────────────────────────────────────────────────────────
+
+interface Partner {
+  id: string
+  name: string
+  category: string
+  logoUrl: string
+  featured?: boolean
+}
+
+interface Startup {
+  id: string
+  name: string
+  logoUrl: string
+  isSpotlight?: boolean
+  isYCombinator?: boolean
+  isEWOR?: boolean
+}
+
 // ── Images ──────────────────────────────────────────────────────────────────────
 
 const heroImages = [
@@ -15,16 +34,53 @@ const heroImages = [
   "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop",
 ]
 
-const startupLogos = [
-  { name: "Celonis", logo: "https://cdn.brandfetch.io/celonis.com/w/512/h/512/logo" },
-  { name: "Personio", logo: "https://cdn.brandfetch.io/personio.de/w/512/h/512/logo" },
-  { name: "Helsing", logo: "https://cdn.brandfetch.io/helsing.ai/w/512/h/512/logo" },
-  { name: "Isar Aerospace", logo: "https://cdn.brandfetch.io/isaraerospace.com/w/512/h/512/logo" },
-  { name: "Lilium", logo: "https://cdn.brandfetch.io/lilium.com/w/512/h/512/logo" },
-  { name: "FlixBus", logo: "https://cdn.brandfetch.io/flixbus.com/w/512/h/512/logo" },
-  { name: "Konux", logo: "https://cdn.brandfetch.io/konux.com/w/512/h/512/logo" },
-  { name: "Tado", logo: "https://cdn.brandfetch.io/tado.com/w/512/h/512/logo" },
-]
+// ── Fetch Partners ──────────────────────────────────────────────────────────────
+
+async function fetchPartners(): Promise<Partner[]> {
+  try {
+    const baseUrl = typeof window !== 'undefined'
+      ? window.location.origin
+      : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+
+    const response = await fetch(`${baseUrl}/api/partners`, {
+      cache: 'no-store',
+    })
+
+    if (!response.ok) {
+      console.error(`API error: ${response.status} ${response.statusText}`)
+      return []
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.error('Error fetching partners:', error)
+    return []
+  }
+}
+
+// ── Fetch Startups ──────────────────────────────────────────────────────────────
+
+async function fetchStartups(): Promise<Startup[]> {
+  try {
+    const baseUrl = typeof window !== 'undefined'
+      ? window.location.origin
+      : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+
+    const response = await fetch(`${baseUrl}/api/startups`, {
+      cache: 'no-store',
+    })
+
+    if (!response.ok) {
+      console.error(`API error: ${response.status} ${response.statusText}`)
+      return []
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.error('Error fetching startups:', error)
+    return []
+  }
+}
 
 // ── Data ────────────────────────────────────────────────────────────────────────
 
@@ -82,6 +138,8 @@ export default function HomePage() {
   const [loaded, setLoaded] = useState(false)
   const [heroIdx, setHeroIdx] = useState(0)
   const [turningIdx, setTurningIdx] = useState(0)
+  const [brandPartners, setBrandPartners] = useState<Partner[]>([])
+  const [featuredStartups, setFeaturedStartups] = useState<Startup[]>([])
   const factsView = useInView(0.25)
   const missionView = useInView(0.15)
   // const specialView = useInView(0.1)
@@ -95,6 +153,28 @@ export default function HomePage() {
   ]
 
   useEffect(() => { setLoaded(true) }, [])
+
+  // Fetch brand partners from database
+  useEffect(() => {
+    const loadPartners = async () => {
+      const data = await fetchPartners()
+      // Filter for featured partners (same as "WITH WHOM WE WORKED" section)
+      const featuredPartners = data.filter(p => p.featured)
+      setBrandPartners(featuredPartners)
+    }
+    loadPartners()
+  }, [])
+
+  // Fetch featured startups from database (Featured, YC, EWOR)
+  useEffect(() => {
+    const loadStartups = async () => {
+      const data = await fetchStartups()
+      // Filter for featured, YC, or EWOR startups
+      const featured = data.filter(s => s.isSpotlight || s.isYCombinator || s.isEWOR)
+      setFeaturedStartups(featured)
+    }
+    loadStartups()
+  }, [])
 
   // Hero image crossfade
   useEffect(() => {
@@ -204,29 +284,22 @@ export default function HomePage() {
         </section>
 
         {/* ═══════════════════════════ BACKED BY BRANDS ═══════════════════════════ */}
-        <section className="py-16 border-b border-white/5 overflow-hidden">
+        <section className="py-16 overflow-hidden">
           <p className="text-center text-gray-500 text-sm tracking-[0.2em] uppercase mb-10">Backed by brands like:</p>
           <div className="relative">
             <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-brand-dark-blue to-transparent z-10" />
             <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-brand-dark-blue to-transparent z-10" />
             <div className="animate-scroll opacity-60">
-              {[...Array(2)].flatMap(() => [
-                { name: "HV Capital", logo: "https://cdn.brandfetch.io/hv.capital/w/512/h/512/logo" },
-                { name: "Redalpine", logo: "https://cdn.brandfetch.io/redalpine.com/w/512/h/512/logo" },
-                { name: "Cherry Ventures", logo: "https://cdn.brandfetch.io/cherry.vc/w/512/h/512/logo" },
-                { name: "Merantix", logo: "https://cdn.brandfetch.io/merantix.com/w/512/h/512/logo" },
-                { name: "Founderful", logo: "https://cdn.brandfetch.io/founderful.com/w/512/h/512/logo" },
-                { name: "Northzone", logo: "https://cdn.brandfetch.io/northzone.com/w/512/h/512/logo" },
-              ]).map((brand, i) => (
-                <div key={`${brand.name}-${i}`} className="inline-flex items-center justify-center mx-12 h-12">
+              {[...brandPartners, ...brandPartners].map((partner, i) => (
+                <div key={`${partner.id}-${i}`} className="inline-flex items-center justify-center mx-12 h-12">
                   <img
-                    src={brand.logo}
-                    alt={brand.name}
+                    src={partner.logoUrl}
+                    alt={partner.name}
                     className="h-8 sm:h-10 object-contain brightness-0 invert"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement
                       target.style.display = 'none'
-                      target.parentElement!.innerHTML = `<span class="text-white/70 font-bold text-base sm:text-lg tracking-tight">${brand.name}</span>`
+                      target.parentElement!.innerHTML = `<span class="text-white/70 font-bold text-base sm:text-lg tracking-tight">${partner.name}</span>`
                     }}
                   />
                 </div>
@@ -235,85 +308,186 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ═══════════════════════════ MISSION — BENTO GRID ═══════════════════════════ */}
-        <section className="py-28 px-4 sm:px-6 lg:px-8">
-          <div ref={missionView.ref} className="max-w-7xl mx-auto">
-            <div className={`text-center mb-20 transition-all duration-700 ${missionView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              <span className="text-brand-pink text-sm font-bold tracking-[0.3em] uppercase">Who we are</span>
-              <h2 className="text-5xl sm:text-6xl font-black text-white mt-3 mb-4">MISSION &amp; VISION</h2>
-              <div className="w-20 h-1 bg-brand-pink mx-auto" />
-            </div>
+        {/* ═══════════════════════════ MISSION & VISION — SPLIT DESIGN ═══════════════════════════ */}
+        <section className="relative overflow-hidden">
+          <div ref={missionView.ref}>
+            {/* Hero statement with turning phrases */}
+            <div className="relative py-32 px-4 sm:px-6 lg:px-8">
+              {/* Background decorations */}
+              <div className="absolute inset-0 overflow-hidden">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-pink/5 rounded-full blur-[200px]" />
+                <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+              </div>
 
-            {/* Turning phrase animation */}
-            <div className="flex flex-col items-center mb-16">
-              <span className="text-gray-500 text-3xl sm:text-4xl lg:text-5xl font-black mb-2">Turning</span>
-              <div className="flex items-center justify-center gap-4 text-3xl sm:text-4xl lg:text-5xl font-black">
-                <div className="relative h-[1.2em] overflow-hidden min-w-[200px] sm:min-w-[280px] text-right">
-                  {turningPhrases.map((phrase, i) => (
-                    <div
-                      key={phrase.from}
-                      className={`absolute inset-0 flex items-center justify-end transition-all duration-500 ${
-                        i === turningIdx ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full'
-                      }`}
-                    >
-                      <span className="text-brand-pink">{phrase.from}</span>
-                    </div>
-                  ))}
+              <div className="relative max-w-7xl mx-auto text-center">
+                <div className={`transition-all duration-700 ${missionView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                  <span className="text-brand-pink text-sm font-bold tracking-[0.3em] uppercase">Our Purpose</span>
                 </div>
-                <span className="text-gray-500">into</span>
-                <div className="relative h-[1.2em] overflow-hidden min-w-[180px] sm:min-w-[240px] text-left">
-                  {turningPhrases.map((phrase, i) => (
-                    <div
-                      key={phrase.to}
-                      className={`absolute inset-0 flex items-center justify-start transition-all duration-500 ${
-                        i === turningIdx ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-full'
-                      }`}
-                    >
-                      <span className="text-white">{phrase.to}</span>
-                    </div>
-                  ))}
+
+                {/* Large turning phrase */}
+                <div className={`mt-10 transition-all duration-700 delay-200 ${missionView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                  <div className="text-3xl sm:text-4xl lg:text-5xl font-black leading-none flex items-baseline justify-center gap-x-3 whitespace-nowrap">
+                    <span className="text-gray-600">TURNING</span>
+                    <span className="relative inline-flex min-w-[200px] sm:min-w-[300px] lg:min-w-[400px] h-[1.1em] overflow-hidden">
+                      {turningPhrases.map((phrase, i) => (
+                        <span
+                          key={phrase.from}
+                          className={`absolute inset-0 flex items-end transition-all duration-700 ${
+                            i === turningIdx ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full'
+                          }`}
+                        >
+                          <span className="text-brand-pink whitespace-nowrap">{phrase.from}</span>
+                        </span>
+                      ))}
+                    </span>
+                  </div>
+                  <div className="text-3xl sm:text-4xl lg:text-5xl font-black leading-none flex items-baseline justify-center gap-x-3 whitespace-nowrap mt-3">
+                    <span className="text-gray-600">INTO</span>
+                    <span className="relative inline-flex min-w-[180px] sm:min-w-[280px] lg:min-w-[360px] h-[1.1em] overflow-hidden">
+                      {turningPhrases.map((phrase, i) => (
+                        <span
+                          key={phrase.to}
+                          className={`absolute inset-0 flex items-end transition-all duration-700 ${
+                            i === turningIdx ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-full'
+                          }`}
+                        >
+                          <span className="text-white whitespace-nowrap">{phrase.to}</span>
+                        </span>
+                      ))}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Bento grid with images */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {/* Large card — Gemeinnützig */}
-              <div className={`lg:col-span-2 relative overflow-hidden rounded-3xl group min-h-[320px] transition-all duration-700 delay-100 ${missionView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=1200&auto=format&fit=crop" alt="Community" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue via-brand-dark-blue/60 to-transparent" />
-                <div className="relative p-10 flex flex-col justify-end h-full">
-                  <div className="w-14 h-14 bg-brand-pink/30 backdrop-blur-md rounded-2xl flex items-center justify-center text-3xl mb-4">🤲</div>
-                  <h3 className="text-3xl font-black text-white mb-3">Gemeinnützig</h3>
-                  <p className="text-gray-200 leading-relaxed max-w-lg text-lg">
-                    As a registered non-profit, everything we do is driven by impact — empowering students to become the entrepreneurs of tomorrow.
-                  </p>
+            {/* Split cards - TUM Image, Mission & Vision */}
+            <div className="relative">
+              {/* TUM Image - Absolute Left */}
+              <div className={`absolute left-0 top-0 bottom-0 hidden lg:block w-[280px] transition-all duration-700 delay-200 ${missionView.visible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
+                <div className="relative h-full overflow-hidden">
+                  <img
+                    src="https://www.tum.de/fileadmin/_processed_/f/7/csm_1436302_39af3c4190.jpg"
+                    alt="TU Munich"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-brand-dark-blue" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue/60 via-transparent to-brand-dark-blue/40" />
                 </div>
               </div>
 
-              {/* Tall card — Impact on Munich */}
-              <div className={`relative overflow-hidden rounded-3xl group min-h-[320px] transition-all duration-700 delay-200 ${missionView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1600&auto=format&fit=crop" alt="Munich" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue via-brand-dark-blue/70 to-transparent" />
-                <div className="relative p-8 flex flex-col justify-end h-full">
-                  <div className="w-14 h-14 bg-brand-pink/30 backdrop-blur-md rounded-2xl flex items-center justify-center text-3xl mb-4">🏙️</div>
-                  <h3 className="text-2xl font-black text-white mb-3">Impact on Munich</h3>
-                  <p className="text-gray-200 leading-relaxed">
-                    We shape Munich's startup ecosystem by connecting students, founders, investors, and industry leaders.
-                  </p>
+              {/* Mission & Vision Container - Centered */}
+              <div className="grid grid-cols-1 lg:grid-cols-2">
+                {/* MISSION */}
+                <div className={`relative group transition-all duration-700 delay-300 ${missionView.visible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
+                  <div className="relative min-h-[500px] lg:min-h-[600px] bg-gradient-to-br from-brand-pink/20 via-brand-pink/10 to-transparent p-10 sm:p-16 flex flex-col justify-between overflow-hidden">
+                  {/* Decorative elements */}
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-brand-pink/10 rounded-full blur-[80px]" />
+                  <div className="absolute bottom-0 left-0 w-40 h-40 border border-brand-pink/20 rounded-full" />
+                  <div className="absolute top-1/2 right-10 w-px h-32 bg-gradient-to-b from-brand-pink/50 to-transparent" />
+
+                  {/* Content */}
+                  <div className="relative text-right">
+                    <div className="flex items-center gap-4 mb-8 justify-end">
+                      <span className="text-brand-pink text-sm font-bold tracking-[0.2em] uppercase">Mission</span>
+                      <div className="w-12 h-12 rounded-xl bg-brand-pink/20 border border-brand-pink/30 flex items-center justify-center">
+                        <svg className="w-6 h-6 text-brand-pink" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <h3 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight mb-6">
+                      Empowering<br />
+                      <span className="text-brand-pink">founders</span><br />
+                      of tomorrow
+                    </h3>
+                  </div>
+
+                  <div className="relative text-right">
+                    <p className="text-gray-300 text-lg leading-relaxed max-w-md ml-auto">
+                      We provide the education, network, and hands-on experience that transforms ambitious students into successful entrepreneurs.
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              {/* Wide card — Unternehmertum */}
-              <div className={`lg:col-span-3 relative overflow-hidden rounded-3xl group min-h-[260px] transition-all duration-700 delay-300 ${missionView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1600&auto=format&fit=crop" alt="Innovation" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-r from-brand-dark-blue via-brand-dark-blue/70 to-transparent" />
-                <div className="relative p-10 flex flex-col justify-center h-full max-w-2xl">
-                  <div className="w-14 h-14 bg-brand-pink/30 backdrop-blur-md rounded-2xl flex items-center justify-center text-3xl mb-4">💡</div>
-                  <h3 className="text-3xl font-black text-white mb-3">Unternehmertum &amp; Innovation</h3>
-                  <p className="text-gray-200 leading-relaxed text-lg">
-                    We bridge the gap between TUM's technical excellence and the entrepreneurial skills needed to turn ideas into companies that change the world.
-                  </p>
+              {/* VISION - Right side */}
+              <div className={`relative group transition-all duration-700 delay-400 ${missionView.visible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
+                <div className="relative min-h-[500px] lg:min-h-[600px] bg-gradient-to-bl from-white/5 via-transparent to-transparent p-10 sm:p-16 flex flex-col justify-between overflow-hidden border-l border-white/5">
+                  {/* Decorative elements */}
+                  <div className="absolute top-10 left-10 w-32 h-32 border border-white/10 rounded-full" />
+                  <div className="absolute bottom-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-[80px]" />
+                  <div className="absolute bottom-1/3 left-0 w-20 h-px bg-gradient-to-r from-brand-pink/50 to-transparent" />
+
+                  {/* Content */}
+                  <div className="relative">
+                    <div className="flex items-center gap-4 mb-8">
+                      <div className="w-12 h-12 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center">
+                        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                      </div>
+                      <span className="text-white/60 text-sm font-bold tracking-[0.2em] uppercase">Vision</span>
+                    </div>
+                    <h3 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight mb-6">
+                      Munich as<br />
+                      <span className="text-gray-500">Europe's</span><br />
+                      startup hub
+                    </h3>
+                  </div>
+
+                  <div className="relative">
+                    <p className="text-gray-400 text-lg leading-relaxed max-w-md">
+                      We envision a Munich where every ambitious idea has the chance to become reality — a thriving ecosystem that rivals Silicon Valley.
+                    </p>
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom values strip */}
+            <div className="relative border-t border-white/5">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div className={`grid grid-cols-1 md:grid-cols-3 gap-8 transition-all duration-700 delay-500 ${missionView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                  {/* Value 1 */}
+                  <div className="group">
+                    <div className="flex items-start gap-4">
+                      <div className="w-1 h-16 bg-gradient-to-b from-brand-pink to-transparent rounded-full group-hover:h-20 transition-all duration-300" />
+                      <div>
+                        <h4 className="text-xl font-bold text-white mb-2">Gemeinnützig</h4>
+                        <p className="text-gray-400 text-sm leading-relaxed">
+                          As a registered non-profit, we're driven purely by impact and the mission to foster entrepreneurship.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Value 2 */}
+                  <div className="group">
+                    <div className="flex items-start gap-4">
+                      <div className="w-1 h-16 bg-gradient-to-b from-brand-pink to-transparent rounded-full group-hover:h-20 transition-all duration-300" />
+                      <div>
+                        <h4 className="text-xl font-bold text-white mb-2">Student-Led</h4>
+                        <p className="text-gray-400 text-sm leading-relaxed">
+                          Built by students, for students. We understand the unique challenges of starting something from nothing.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Value 3 */}
+                  <div className="group">
+                    <div className="flex items-start gap-4">
+                      <div className="w-1 h-16 bg-gradient-to-b from-brand-pink to-transparent rounded-full group-hover:h-20 transition-all duration-300" />
+                      <div>
+                        <h4 className="text-xl font-bold text-white mb-2">Action-Oriented</h4>
+                        <p className="text-gray-400 text-sm leading-relaxed">
+                          We don't just talk about startups — we build them. Over 120 founders have emerged from our community.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -321,49 +495,117 @@ export default function HomePage() {
         </section>
 
         {/* ═══════════════════════════ FACTS & STARTUPS ═══════════════════════════ */}
-        <section ref={factsView.ref} className="relative py-28 px-4 sm:px-6 lg:px-8">
-          {/* Background image */}
-          <div className="absolute inset-0">
-            <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2070&auto=format&fit=crop" alt="" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-brand-dark-blue/90" />
-          </div>
+        <section ref={factsView.ref} className="relative py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+          {/* Abstract background elements */}
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-dark-blue via-[#0a0a2e] to-brand-dark-blue" />
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-pink/5 rounded-full blur-[150px]" />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px]" />
 
           <div className="relative max-w-7xl mx-auto">
-            {/* Facts row */}
-            <div className={`flex flex-wrap justify-center gap-8 sm:gap-16 lg:gap-24 mb-20 transition-all duration-700 ${factsView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              {facts.map((fact, i) => (
-                <div
-                  key={fact.label}
-                  className="text-center"
-                  style={{ transitionDelay: `${i * 100}ms` }}
-                >
-                  <div className="text-6xl sm:text-7xl lg:text-8xl font-black text-white mb-1 tabular-nums whitespace-nowrap">
-                    {(fact as any).prefix}{Math.round(animatedValues[i])}<span className="text-brand-pink">{fact.suffix}</span>
-                  </div>
-                  <div className="text-sm text-gray-400 font-medium uppercase tracking-wider">{fact.label}</div>
-                </div>
-              ))}
+            {/* Section header */}
+            <div className={`mb-20 transition-all duration-700 ${factsView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+              <span className="text-brand-pink text-sm font-bold tracking-[0.3em] uppercase">By the Numbers</span>
+              <h2 className="text-5xl sm:text-6xl font-black text-white mt-3">THE FACTS</h2>
             </div>
 
-            {/* Divider */}
-            <div className="flex items-center justify-center gap-4 mb-16">
-              <div className="h-px w-16 bg-gradient-to-r from-transparent to-brand-pink/50" />
+            {/* Facts - Modern asymmetric grid */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-24">
+              {/* Big featured stat - Capital Raised */}
+              <div className={`md:col-span-7 relative group transition-all duration-700 delay-100 ${factsView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                <div className="relative bg-gradient-to-br from-brand-pink/20 via-brand-pink/10 to-transparent border border-brand-pink/20 rounded-[2rem] p-10 sm:p-14 h-full overflow-hidden">
+                  {/* Decorative corner accent */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-brand-pink/10 rounded-bl-[80px]" />
+                  <div className="absolute -bottom-4 -left-4 w-24 h-24 border-2 border-brand-pink/20 rounded-full" />
+
+                  <div className="relative">
+                    <div className="text-gray-400 text-sm font-medium uppercase tracking-[0.2em] mb-4">Capital Raised</div>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-7xl sm:text-8xl lg:text-[120px] font-black text-white leading-none tabular-nums">
+                        €{Math.round(animatedValues[2])}
+                      </span>
+                      <span className="text-4xl sm:text-5xl lg:text-6xl font-black text-brand-pink">M+</span>
+                    </div>
+                    <p className="text-gray-400 mt-6 max-w-sm">Raised by our alumni founders and community startups.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Stacked stats */}
+              <div className="md:col-span-5 flex flex-col gap-6">
+                {/* Members */}
+                <div className={`relative group flex-1 transition-all duration-700 delay-200 ${factsView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                  <div className="relative bg-white/5 border border-white/10 rounded-[1.5rem] p-8 h-full hover:border-brand-pink/30 hover:bg-white/[0.07] transition-all duration-300">
+                    <div className="flex items-end justify-between">
+                      <div>
+                        <div className="text-gray-500 text-xs font-medium uppercase tracking-[0.2em] mb-2">Members</div>
+                        <div className="text-5xl sm:text-6xl font-black text-white tabular-nums">
+                          {Math.round(animatedValues[0])}<span className="text-brand-pink">+</span>
+                        </div>
+                      </div>
+                      <div className="w-14 h-14 rounded-xl bg-brand-pink/10 flex items-center justify-center">
+                        <svg className="w-7 h-7 text-brand-pink" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Two side-by-side stats */}
+                <div className="flex gap-6">
+                  {/* Diversity */}
+                  <div className={`flex-1 transition-all duration-700 delay-300 ${factsView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                    <div className="relative bg-white/5 border border-white/10 rounded-[1.5rem] p-6 h-full hover:border-brand-pink/30 hover:bg-white/[0.07] transition-all duration-300">
+                      <div className="text-gray-500 text-xs font-medium uppercase tracking-[0.2em] mb-2">MINT</div>
+                      <div className="text-4xl sm:text-5xl font-black text-white tabular-nums">
+                        {Math.round(animatedValues[1])}<span className="text-brand-pink">%</span>
+                      </div>
+                      <div className="mt-3 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-brand-pink to-brand-pink/60 rounded-full transition-all duration-1000"
+                          style={{ width: factsView.visible ? `${animatedValues[1]}%` : '0%' }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* YC & Top Programs */}
+                  <div className={`flex-1 transition-all duration-700 delay-400 ${factsView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                    <div className="relative bg-white/5 border border-white/10 rounded-[1.5rem] p-6 h-full hover:border-brand-pink/30 hover:bg-white/[0.07] transition-all duration-300">
+                      <div className="text-gray-500 text-xs font-medium uppercase tracking-[0.2em] mb-2">YC Alumni</div>
+                      <div className="text-4xl sm:text-5xl font-black text-white tabular-nums">
+                        {Math.round(animatedValues[3])}<span className="text-brand-pink">+</span>
+                      </div>
+                      <div className="mt-3 flex gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <div key={i} className={`h-1.5 flex-1 rounded-full ${i < 4 ? 'bg-brand-pink' : 'bg-white/10'}`} />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Divider with line */}
+            <div className="flex items-center gap-6 mb-16">
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
               <span className="text-brand-pink text-sm font-bold tracking-[0.2em] uppercase">Our Startups</span>
-              <div className="h-px w-16 bg-gradient-to-l from-transparent to-brand-pink/50" />
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
             </div>
 
             {/* Startup logos */}
             <div className="relative overflow-hidden">
-              <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-brand-dark-blue/90 to-transparent z-10" />
-              <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-brand-dark-blue/90 to-transparent z-10" />
+              <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#0a0a2e] to-transparent z-10" />
+              <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#0a0a2e] to-transparent z-10" />
               <div className="animate-scroll">
-                {[...startupLogos, ...startupLogos].map((startup, i) => (
-                  <div key={`${startup.name}-${i}`} className="inline-flex items-center justify-center mx-6 flex-shrink-0">
-                    <div className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-4 w-36 h-20 flex items-center justify-center hover:bg-white/20 hover:border-white/20 transition-all duration-300">
+                {[...featuredStartups, ...featuredStartups].map((startup, i) => (
+                  <div key={`${startup.id}-${i}`} className="inline-flex items-center justify-center mx-6 flex-shrink-0">
+                    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 w-36 h-20 flex items-center justify-center hover:bg-white/10 hover:border-brand-pink/30 transition-all duration-300">
                       <img
-                        src={startup.logo}
+                        src={startup.logoUrl}
                         alt={startup.name}
-                        className="max-h-10 max-w-[100px] object-contain brightness-0 invert opacity-80 hover:opacity-100 transition-opacity"
+                        className="max-h-10 max-w-[100px] object-contain brightness-0 invert opacity-70 hover:opacity-100 transition-opacity"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement
                           target.style.display = 'none'
