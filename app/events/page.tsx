@@ -821,7 +821,7 @@ export default function EventsPage() {
           </div>
 
           {/* Past Events Calendar Section */}
-          <div className="mb-20">
+          <div className="pb-20">
             <div className="mb-10">
               <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
                 PAST EVENTS
