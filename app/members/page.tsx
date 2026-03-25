@@ -732,15 +732,22 @@ export default function MembersPage() {
             {/* Show expanded batch full width if selected */}
             {expandedBatch ? (
               <div>
+                <button
+                  onClick={() => setExpandedBatch(null)}
+                  className="mb-6 text-white/60 hover:text-white flex items-center gap-2 transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                  </svg>
+                  Back to all batches
+                </button>
+
                 {sortedBatches.filter(b => b.name === expandedBatch).map((batch) => (
                   <div key={batch.name} className="space-y-0">
                     <h3 className="text-2xl md:text-3xl font-black text-white text-left">
                       {batch.name}
                     </h3>
-                    <button
-                      onClick={() => setExpandedBatch(null)}
-                      className="w-full block group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#d0006f] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#d0006f]/20"
-                    >
+                    <div className="w-full block relative bg-white/5 border border-white/10 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#d0006f]/20">
                       {/* Background Image - Large (80% viewport height) */}
                       <div className="relative w-full h-[70vh] md:h-[70vh] overflow-hidden bg-[#00002c]">
                         <img
@@ -753,7 +760,7 @@ export default function MembersPage() {
 
                       {/* Hover effect accent */}
                       <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#d0006f] to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
-                    </button>
+                    </div>
 
                     {/* Members Grid */}
                     <div className="animate-in fade-in slide-in-from-top-4 duration-500">
