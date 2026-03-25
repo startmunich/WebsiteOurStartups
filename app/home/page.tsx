@@ -91,47 +91,6 @@ const facts = [
   { label: "Members in YC & other top programs", value: 25, suffix: "+" },
 ]
 
-/*
-const specialReasons = [
-  {
-    icon: "🎓",
-    title: "Biggest Entrepreneurship Initiative",
-    description: "The largest student-run entrepreneurship initiative at TU Munich — connecting academia with the startup world.",
-    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    icon: "🌍",
-    title: "Global Network",
-    description: "Strong ties to Silicon Valley, London, Berlin, and top accelerators like Y Combinator and EWOR.",
-    image: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    icon: "🤝",
-    title: "Gemeinnützig — Non-Profit",
-    description: "We are a registered non-profit (gemeinnützig), driven purely by impact and the mission to foster entrepreneurship in Munich.",
-    image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    icon: "⚡",
-    title: "Action-Oriented Builders",
-    description: "Our members don't just talk about startups — they build them. Over 120 founders have emerged from our community.",
-    image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    icon: "🏙️",
-    title: "Impact on Munich",
-    description: "We shape Munich's innovation ecosystem — from organizing flagship events to producing the next generation of founders.",
-    image: "https://images.unsplash.com/photo-1577462800662-7511e228c0e6?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    icon: "🔬",
-    title: "Unternehmertum & Innovation",
-    description: "We bridge the gap between technical excellence at TUM and the entrepreneurial skills needed to bring ideas to life.",
-    image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=800&auto=format&fit=crop",
-  },
-]
-*/
-
 // ── Component ───────────────────────────────────────────────────────────────────
 
 export default function HomePage() {
@@ -233,14 +192,9 @@ export default function HomePage() {
           <div className="absolute bottom-20 left-[5%] w-[400px] h-[400px] bg-brand-pink/10 rounded-full blur-[100px] animate-blob animation-delay-2000" />
           <div className="absolute top-[40%] right-[5%] w-[300px] h-[300px] bg-blue-500/10 rounded-full blur-[80px] animate-blob animation-delay-4000" />
 
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col lg:flex-row items-center gap-12">
-            {/* Left – Text */}
-            <div className="flex-1 max-w-2xl">
-              <div className={`inline-flex items-center gap-2 bg-brand-pink/20 backdrop-blur-sm border border-brand-pink/40 text-brand-pink px-5 py-2 rounded-full text-sm font-medium mb-8 transition-all duration-700 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                🎓 Biggest Entrepreneurship Initiative at TUM
-              </div>
-
-              <h1 className={`text-7xl sm:text-8xl lg:text-9xl font-black tracking-tight leading-[0.9] mb-8 transition-all duration-1000 delay-200 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div className="max-w-2xl">
+<h1 className={`text-7xl sm:text-8xl lg:text-9xl font-black tracking-tight leading-[0.9] mb-8 transition-all duration-1000 delay-200 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 <span className="text-white drop-shadow-lg">DARE.</span><br />
                 <span className="text-brand-pink drop-shadow-lg">BUILD.</span><br />
                 <span className="outline-text drop-shadow-lg">BELONG.</span>
@@ -251,30 +205,8 @@ export default function HomePage() {
                 We empower the next generation of founders to dare, build, and belong.
               </p>
 
-              <div className={`flex flex-wrap gap-4 transition-all duration-1000 delay-[600ms] ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-                <Link href="/member-journey" className="group relative px-10 py-4 bg-brand-pink text-white font-bold rounded-xl text-lg overflow-hidden transition-all hover:shadow-[0_0_40px_rgba(208,0,111,0.4)]">
-                  <span className="relative z-10">Join Us</span>
-                  <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                </Link>
-                <Link href="/for-partners" className="px-10 py-4 border-2 border-white/30 backdrop-blur-sm text-white font-bold rounded-xl hover:bg-white/10 hover:border-white/50 transition-all text-lg">
-                  Become a Partner
-                </Link>
-              </div>
             </div>
 
-            {/* Right – Floating photo collage (desktop only) */}
-            <div className={`hidden lg:block flex-1 relative h-[500px] w-full transition-all duration-1000 delay-[800ms] ${loaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
-              <div className="absolute top-0 right-0 w-72 h-52 rounded-2xl overflow-hidden shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500 border-2 border-white/10">
-                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=600&auto=format&fit=crop" alt="Team" className="w-full h-full object-cover" />
-              </div>
-              <div className="absolute top-32 right-48 w-64 h-48 rounded-2xl overflow-hidden shadow-2xl -rotate-2 hover:rotate-0 transition-transform duration-500 border-2 border-white/10">
-                <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=600&auto=format&fit=crop" alt="Workshop" className="w-full h-full object-cover" />
-              </div>
-              <div className="absolute bottom-0 right-12 w-60 h-44 rounded-2xl overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500 border-2 border-brand-pink/30">
-                <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=600&auto=format&fit=crop" alt="Pitch Night" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-pink/40 to-transparent" />
-              </div>
-            </div>
           </div>
 
           {/* Scroll indicator */}
@@ -502,19 +434,19 @@ export default function HomePage() {
 
                 <div className="grid grid-cols-2 gap-6">
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-pink/30 transition-all">
-                  <div className="text-4xl sm:text-5xl font-black text-brand-pink mb-2">300+</div>
+                  <div className="text-4xl sm:text-5xl font-black text-white mb-2">300<span className="text-brand-pink">+</span></div>
                   <div className="text-gray-400 text-sm uppercase tracking-wider">Active Members</div>
                 </div>
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-pink/30 transition-all">
-                  <div className="text-4xl sm:text-5xl font-black text-brand-pink mb-2">2015</div>
+                  <div className="text-4xl sm:text-5xl font-black text-white mb-2">2015</div>
                   <div className="text-gray-400 text-sm uppercase tracking-wider">Founding Year</div>
                 </div>
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-pink/30 transition-all">
-                  <div className="text-4xl sm:text-5xl font-black text-brand-pink mb-2">10+</div>
+                  <div className="text-4xl sm:text-5xl font-black text-white mb-2">10<span className="text-brand-pink">+</span></div>
                   <div className="text-gray-400 text-sm uppercase tracking-wider">Events / Year</div>
                 </div>
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-pink/30 transition-all">
-                  <div className="text-4xl sm:text-5xl font-black text-brand-pink mb-2">800+</div>
+                  <div className="text-4xl sm:text-5xl font-black text-white mb-2">800<span className="text-brand-pink">+</span></div>
                   <div className="text-gray-400 text-sm uppercase tracking-wider">Attendees</div>
                 </div>
                 </div>
@@ -709,9 +641,6 @@ export default function HomePage() {
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                  <div className="absolute top-6 left-6 right-6">
-                    <div className="inline-block px-3 py-1 bg-brand-pink/90 rounded-full text-white text-xs font-bold uppercase tracking-wider">Trip 2024</div>
-                  </div>
                   <div className="absolute bottom-6 left-6 right-6">
                     <div className="text-white/60 text-xs uppercase tracking-wider mb-2">START Goes</div>
                     <div className="text-white font-black text-2xl mb-2">BAY AREA</div>
@@ -734,9 +663,6 @@ export default function HomePage() {
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                  <div className="absolute top-6 left-6 right-6">
-                    <div className="inline-block px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full text-green-400 text-xs font-bold uppercase tracking-wider">Funding News</div>
-                  </div>
                   <div className="absolute bottom-6 left-6 right-6">
                     <div className="text-white font-bold text-xl mb-1">Lio raises €30M</div>
                     <p className="text-white/60 text-sm">Huge congratulations to START Munich alumni! 🎉</p>
@@ -751,41 +677,6 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-
-        {/* ═══════════════════════════ WHAT MAKES START SPECIAL — IMAGE-BACKED CARDS ═══════════════════════════ */}
-        {/*
-        <section className="py-28 px-4 sm:px-6 lg:px-8 relative">
-          <div className="absolute inset-0 bg-gradient-to-b from-brand-dark-blue via-[#060620] to-brand-dark-blue" />
-
-          <div ref={specialView.ref} className="relative max-w-7xl mx-auto">
-            <div className={`mb-20 transition-all duration-700 ${specialView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              <span className="text-brand-pink text-sm font-bold tracking-[0.3em] uppercase">Our Difference</span>
-              <h2 className="text-5xl sm:text-6xl font-black text-white mt-3">WHAT MAKES START SPECIAL</h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {specialReasons.map((reason, i) => (
-                <div
-                  key={reason.title}
-                  className={`group relative overflow-hidden rounded-3xl min-h-[280px] transition-all duration-700 ${specialView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-                  style={{ transitionDelay: `${150 + i * 100}ms` }}
-                >
-                  <img src={reason.image} alt="" className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue via-brand-dark-blue/70 to-brand-dark-blue/40" />
-
-                  <div className="relative p-8 flex flex-col justify-end h-full">
-                    <div className="w-12 h-12 bg-brand-pink/30 backdrop-blur-md rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
-                      {reason.icon}
-                    </div>
-                    <h3 className="text-xl font-black text-white mb-2">{reason.title}</h3>
-                    <p className="text-gray-300 leading-relaxed text-sm">{reason.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-        */}
 
         {/* ═══════════════════════════ START NETWORK ═══════════════════════════ */}
         <section className="py-28 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -892,23 +783,10 @@ export default function HomePage() {
                   ))}
                 </div>
 
-                {/* Stats bar */}
-                <div className="flex items-center gap-8 p-6 bg-white/5 border border-white/10 rounded-2xl mb-10">
-                  <div className="text-center">
-                    <div className="text-3xl font-black text-brand-pink">2015</div>
-                    <div className="text-xs text-gray-500 uppercase tracking-wider">Founded in</div>
-                  </div>
-                  <div className="w-px h-12 bg-white/10" />
-                  <div className="text-center">
-                    <div className="text-3xl font-black text-brand-pink">300+</div>
-                    <div className="text-xs text-gray-500 uppercase tracking-wider">Members</div>
-                  </div>
-                  <div className="w-px h-12 bg-white/10" />
-                  <Link href="/member-journey" className="group flex items-center gap-2 px-5 py-2 border border-brand-pink/50 text-brand-pink font-bold rounded-lg hover:bg-brand-pink hover:text-white transition-all">
-                    <span>Join the Team</span>
-                    <span className="group-hover:translate-x-1 transition-transform">→</span>
-                  </Link>
-                </div>
+                <Link href="/member-journey" className="group inline-flex items-center gap-3 px-8 py-4 bg-brand-pink text-white font-bold rounded-xl text-lg hover:shadow-[0_0_40px_rgba(208,0,111,0.4)] transition-all mb-10">
+                  <span>Discover How Our Community Is Run</span>
+                  <span className="group-hover:translate-x-1 transition-transform">→</span>
+                </Link>
               </div>
 
               {/* Right side - Image */}
