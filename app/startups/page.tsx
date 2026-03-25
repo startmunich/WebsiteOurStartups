@@ -125,10 +125,8 @@ export default function StartupsPage() {
       return matchesCategory && matchesYear && matchesProgram && matchesSearch
     })
     .sort((a, b) => {
-      // Sort by total funding (highest first)
-      const fundingA = parseInt(a.totalRaised?.replace(/[€,]/g, '') || '0')
-      const fundingB = parseInt(b.totalRaised?.replace(/[€,]/g, '') || '0')
-      return fundingB - fundingA
+      // Sort alphabetically by name
+      return a.name.localeCompare(b.name)
     })
 
   // Pagination calculations
@@ -144,10 +142,6 @@ export default function StartupsPage() {
 
   // Calculate total statistics
   const totalStartups = companies.length
-  const totalRaised = companies.reduce((sum, company) => {
-    const amount = parseInt(company.totalRaised?.replace(/[€,]/g, '') || '0')
-    return sum + amount
-  }, 0)
 
   // Get spotlight startups (show all featured startups)
   const spotlightStartups = companies.filter(company => company.isSpotlight)
@@ -158,9 +152,9 @@ export default function StartupsPage() {
   // Get EWOR startups
   const eworStartups = companies.filter(company => company.isEWOR)
 
-  // Use animated number hook for statistics
+  // Use animated number hook for statistics - hardcoded 3B+ funding
   const animatedStartups = useAnimatedNumber(totalStartups, loading)
-  const animatedFunding = useAnimatedNumber(totalRaised / 1000000, loading)
+  const animatedFunding = useAnimatedNumber(3, loading)
 
   if (loading) {
     return (
@@ -221,9 +215,9 @@ export default function StartupsPage() {
             <div className="flex items-baseline justify-center gap-1 mb-3">
               <span className="text-2xl font-bold text-[#d0006f]">€</span>
               <span className="text-6xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-300 group-hover:to-[#d0006f] transition">
-                {animatedFunding.toFixed(1)}
+                {Math.floor(animatedFunding)}
               </span>
-              <span className="text-3xl font-bold text-[#d0006f]">M</span>
+              <span className="text-3xl font-bold text-[#d0006f]">B+</span>
             </div>
             <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Funding</p>
           </HeroCard>
@@ -241,7 +235,7 @@ export default function StartupsPage() {
               </div>
               <div>
                 <p className="text-2xl font-black text-white">
-                  €{animatedFunding.toFixed(1)}M
+                  €{Math.floor(animatedFunding)}B+
                 </p>
                 <p className="text-xs font-bold text-gray-300 uppercase">Funding</p>
               </div>
@@ -614,8 +608,6 @@ export default function StartupsPage() {
                 summary={company.summary}
                 category={company.category}
                 foundingYear={company.foundingYear}
-                totalRaised={company.totalRaised}
-                investmentRound={company.investmentRound}
                 founders={company.founders}
                 isMTZ={company.isMTZ}
                 showDetails={true}
