@@ -309,6 +309,8 @@ export default function HomePage() {
         </section>
 
         {/* ═══════════════════════════ MISSION & VISION — SPLIT DESIGN ═══════════════════════════ */}
+        
+        {false && (
         <section className="relative overflow-hidden">
           <div ref={missionView.ref}>
             {/* Hero statement with turning phrases */}
@@ -446,6 +448,80 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+        )}
+
+        {/* ═══════════════════════════ WHAT IS START? ═══════════════════════════ */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+          <div className="max-w-7xl mx-auto">
+            {/* Group Photo */}
+            <div className="relative rounded-3xl overflow-hidden mb-16">
+              <img
+                src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=2000&auto=format&fit=crop"
+                alt="START Munich Community"
+                className="w-full h-[300px] sm:h-[400px] lg:h-[500px] object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue/60 via-transparent to-transparent" />
+            </div>
+
+            {/* Content Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+              {/* Left - Text Content */}
+              <div>
+                <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">
+                  What is <span className="text-brand-pink">START Munich</span>?
+                </h2>
+                <p className="text-gray-300 text-lg leading-relaxed mb-4">
+                  With over 300 active members, START Munich empowers the next generation of entrepreneurs. Founded in 2015, our mission is to create{' '}
+                  <span className="text-brand-pink font-semibold">a community of students who dare to build, innovate, and lead</span>, fostering both groundbreaking ventures and meaningful connections across industries.
+                </p>
+                <p className="text-gray-300 leading-relaxed mb-6">
+                  Together with our highly-talented members, we launch ambitious startups, connect founders with industry partners and investors, host flagship events like pitch nights and founder talks, and run hands-on programs that bridge academic excellence with entrepreneurial success.
+                </p>
+
+                <div className="flex flex-wrap gap-4 mt-8">
+                  <Link href="/members" className="px-8 py-3 bg-brand-pink text-white font-bold rounded-xl hover:shadow-[0_0_30px_rgba(208,0,111,0.4)] transition-all">
+                    Meet our Members
+                  </Link>
+                  <Link href="/events" className="px-8 py-3 bg-brand-pink text-white font-bold rounded-xl hover:shadow-[0_0_30px_rgba(208,0,111,0.4)] transition-all">
+                    See our Events
+                  </Link>
+                </div>
+              </div>
+
+              {/* Right - Stats Grid */}
+              <div className="flex flex-col gap-6">
+                {/* Academic Excellence Card */}
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-pink/30 transition-all">
+                  <div className="flex items-center justify-center gap-8 mb-3">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Logo_of_the_Technical_University_of_Munich.svg" alt="TUM" className="h-10 brightness-0 invert opacity-80" />
+                    <span className="text-white/30 text-2xl font-light">×</span>
+                    <img src="https://www.lmu.de/fileadmin/webtool/css/images/lmu-logo-text.svg" alt="LMU" className="h-8 brightness-0 invert opacity-80" />
+                  </div>
+                  <div className="text-gray-400 text-sm uppercase tracking-wider text-center">Academic Excellence</div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-6">
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-pink/30 transition-all">
+                  <div className="text-4xl sm:text-5xl font-black text-brand-pink mb-2">300+</div>
+                  <div className="text-gray-400 text-sm uppercase tracking-wider">Active Members</div>
+                </div>
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-pink/30 transition-all">
+                  <div className="text-4xl sm:text-5xl font-black text-brand-pink mb-2">2015</div>
+                  <div className="text-gray-400 text-sm uppercase tracking-wider">Founding Year</div>
+                </div>
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-pink/30 transition-all">
+                  <div className="text-4xl sm:text-5xl font-black text-brand-pink mb-2">10+</div>
+                  <div className="text-gray-400 text-sm uppercase tracking-wider">Events / Year</div>
+                </div>
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-pink/30 transition-all">
+                  <div className="text-4xl sm:text-5xl font-black text-brand-pink mb-2">800+</div>
+                  <div className="text-gray-400 text-sm uppercase tracking-wider">Attendees</div>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* ═══════════════════════════ FACTS & STARTUPS ═══════════════════════════ */}
         <section ref={factsView.ref} className="relative py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -462,7 +538,7 @@ export default function HomePage() {
             </div>
 
             {/* Facts - Modern asymmetric grid */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-24">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-12">
               {/* Big featured stat - Capital Raised */}
               <div className={`md:col-span-7 relative group transition-all duration-700 delay-100 ${factsView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                 <div className="relative bg-gradient-to-br from-brand-pink/20 via-brand-pink/10 to-transparent border border-brand-pink/20 rounded-[2rem] p-10 sm:p-14 h-full overflow-hidden">
