@@ -8,6 +8,7 @@ import {
     type BayAreaYearId,
 } from '@/lib/startGoesBayAreaData'
 import MemberCard from '@/components/MemberCard'
+import BayAreaYearPreview from '@/components/BayAreaYearPreview'
 
 interface Member {
     id: number
@@ -70,6 +71,10 @@ export default function BayAreaYearTabs({ activeYear }: BayAreaYearTabsProps) {
         if (visitType === 'community') return 'Community Event'
         if (visitType === 'hackathon') return 'Hackathon'
         return 'Person Visit'
+    }
+
+    if (activeContent.isPreview) {
+        return <BayAreaYearPreview yearLabel={activeContent.label} />
     }
 
     return (
