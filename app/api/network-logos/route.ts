@@ -32,7 +32,10 @@ function transformNocoDBRecord(record: any): NetworkLogo {
         logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(record.Name || 'Company')}&size=300&background=00002c&color=fff&bold=true&font-size=0.4`;
     }
     return {
-        id: record.Id || String(record.id || Math.random()),
+        id:
+            record.Id ??
+            record.id ??
+            `${record.Name || 'Unnamed Company'}-${record.Category || record.Categrory || 'Other'}`,
         name: record.Name || 'Unnamed Company',
         category: record.Category || record.Categrory || 'Other',
         logoUrl,
@@ -68,14 +71,16 @@ export async function GET() {
 
         const data = await response.json();
 
-        // Log first record for debugging column names
-        if (data.list && data.list[0]) {
+        // Log first record for debugging column names in non-production environments
+        if (process.env.NODE_ENV !== 'production' && data.list && data.list[0]) {
             console.log('Network logos sample record:', JSON.stringify(data.list[0], null, 2));
         }
 
         const logos = (data.list || []).map(transformNocoDBRecord);
 
-        console.log(`Successfully fetched ${logos.length} network logos from NocoDB`);
+        if (process.env.NODE_ENV !== 'production') {
+            console.log(`Successfully fetched ${logos.length} network logos from NocoDB`);
+        }
         return NextResponse.json(logos);
 
     } catch (error) {

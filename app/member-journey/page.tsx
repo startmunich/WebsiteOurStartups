@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, type CSSProperties } from 'react'
 import Script from 'next/script'
 import Hero from "@/components/Hero"
 
@@ -456,7 +456,7 @@ export default function MemberJourneyPage() {
                 {(() => {
                   // Finops, Events, Marketing, Partnerships, People
                   // Arc: left, center-left, center, center-right, right
-                  const positions: React.CSSProperties[] = [
+                  const positions: CSSProperties[] = [
                     { top: '40%', left: '0' },
                     { top: '5%', left: '10%' },
                     { top: '0', left: '50%', transform: 'translateX(-50%)' },
@@ -534,9 +534,10 @@ export default function MemberJourneyPage() {
               <div className="bg-gray-50 border border-gray-200 p-8">
                 <div className="space-y-2">
                   {startEvents.map((event, index) => (
-                    <div
+                    <button
                       key={event.id}
-                      className={`relative flex items-start gap-4 py-4 px-5 cursor-pointer transition-all duration-300 ${
+                      type="button"
+                      className={`relative flex items-start gap-4 py-4 px-5 cursor-pointer transition-all duration-300 w-full text-left ${
                         activeEventIdx === index ? 'bg-brand-pink/10' : 'hover:bg-gray-100'
                       }`}
                       onClick={() => {
@@ -556,7 +557,7 @@ export default function MemberJourneyPage() {
                           {event.description}
                         </p>
                       </div>
-                    </div>
+                    </button>
                   ))}
 
                   {/* "And a lot more..." */}
@@ -752,7 +753,7 @@ export default function MemberJourneyPage() {
                         <p className="text-gray-400 text-sm whitespace-pre-line">{alumni.role}</p>
                         <div className="flex items-center gap-3" style={{"flexDirection": "column"}}>
                           {alumni.logos.map((logo, i) => (
-                            <a key={i} href={logo.url} target="_blank" rel="noopener noreferrer">
+                            <a key={i} href={logo.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${logo.url}`}>
                               <img src={logo.src} alt="" className="h-6 opacity-80 hover:opacity-100 transition-opacity" />
                             </a>
                           ))}
