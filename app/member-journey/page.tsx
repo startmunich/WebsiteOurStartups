@@ -1,8 +1,12 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback, type CSSProperties } from 'react'
+import { useState, useEffect, useRef, type CSSProperties } from 'react'
 import Script from 'next/script'
 import Hero from "@/components/Hero"
+import HeroCard from "@/components/HeroCard"
+import TestimonialsSection from '@/components/TestimonialsSection'
+import CTA from "@/components/CTA"
+import { useAnimatedNumber } from '@/lib/hooks'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,7 +16,7 @@ interface TimelineEvent {
   description: string
   icon: string
   image: string | string[]
-  details: string[] | { text: string; image: string; icon: string }[]
+  details: string[]
 }
 
 interface Department {
@@ -33,6 +37,16 @@ interface StartEvent {
   images: string[]
 }
 
+interface MemberStory {
+  id: string
+  name: string
+  role: string
+  company: string
+  image: string
+  story: string
+  department: string
+  logos?: { src: string; url?: string }[]
+}
 
 const placeholderImage = "/internalevents.png"
 
@@ -40,88 +54,88 @@ const timelineEvents: TimelineEvent[] = [
   {
     id: "application",
     title: "Application",
-    description: "Submit your application to START Munich and tell us about your entrepreneurial vision.",
+    description: "Your entry into START Munich.",
     icon: "📝",
     image: "",
-    details: ["Apply for summer or winter semester", "Written application + 2 interviews", "Selecting highly motivated and performing individuals"]
+    details: ["Apply in April or October", "Stage 1: Written Application", "Stage 2: Two Interviews (same day, 30 minutes each)"]
   },
   {
     id: "start-sprint",
     title: "START Sprint",
-    description: "Intensive onboarding program where you meet the team, learn about START Munich, and connect with other members.",
+    description: "Your first month at START. Get to know and bond with ambitious people you wouldn't meet in your usual circles, and build a real product together.",
     icon: "🚀",
     image: [
       "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800&auto=format&fit=crop"
     ],
-    details: ["Get to know the basics for founding a company or prove your knowledge", "First month after being selected", "One month full of trainings and talks with professors, professionals, and VCs", "Pitch events at the end of the sprint, showing which teams learned the most"]
+    details: ["Develop your own idea from concept to MVP in just 4 weeks", "Two workshops per week to learn foundations of building a startup", "Get to know key players within Munich startup ecosystem", "Hut weekend in Austria"]
   },
   {
     id: "department-selection",
     title: "Department Selection",
-    description: "Choose your department and get involved in active project teams within START Munich.",
+    description: "Develop yourself and shape the future of START.",
     icon: "🎯",
     image: "",
-    details: ["After the sprint choose between the 5 departments", "Explore department options further down", "Choose a department where you can grow and support START"]
+    details: ["Choose one of five departments", "Work on real projects with visible impact inside and outside START", "Learn useful startup skills in practice", "Grow fast by taking ownership", "Initiate new formats"]
   },
   {
-    id: "exchange-trip",
+    id: "active-member",
     title: "Active Member",
-    description: "Enjoy the benefits of being a Stratie and expand your network through exclusive opportunities.",
+    description: "Enjoy the benefits of being a STARTie and expand your network through exclusive opportunities.",
     icon: "🌍",
     image: placeholderImage,
     details: [
-      { text: "Go on a trip to SF and visit some of our startups", image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=800&auto=format&fit=crop", icon: "✈️" },
-      { text: "Write your thesis with our research partner Cambridge", image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop", icon: "📚" },
-      { text: "Get in touch with well-known VCs", image: "https://images.unsplash.com/photo-1560472355-536de3962603?q=80&w=800&auto=format&fit=crop", icon: "🤝" },
-      { text: "Many more exclusive benefits", image: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=800&auto=format&fit=crop", icon: "⭐" }
+      "Join the Bay Area trip, 2 weeks, 20+ curated visits to top startups, VCs, and labs",
+      "Write your thesis with Cambridge through direct research collaboration",
+      "Become part of the START Network, 20+ chapters worldwide",
+      "Find co-founders or start your own venture within a community of 70+ startups, including teams backed by Y Combinator"
     ]
   },
   {
     id: "alumni",
     title: "START Alumni",
-    description: "Graduate to alumni status and continue to support the community while building your successful startup.",
+    description: "Once a STARTie, always a STARTie. Stay connected as you build your own path.",
     icon: "⭐",
     image: placeholderImage,
-    details: ["After being 2 semesters core member, you are a START alumni", "No more department work required", "Time to apply what you learned and make things START"]
+    details: ["Become alumni after two active semesters", "Find co-founders, investors, and collaborators across the START Global Network", "Give back by mentoring, sharing, and supporting new STARTies", "Stay involved as much as you want, department work is optional"]
   }
 ]
 
 const departments: Department[] = [
   {
-    id: "finops",
-    name: "Finops",
-    description: "Financial operations and business development",
-    icon: "💰",
-    responsibilities: ["Budgeting and finance", "Partnership management", "Business strategy", "Growth metrics"]
-  },
-  {
-    id: "events",
-    name: "Events",
-    description: "Community events and networking experiences",
-    icon: "🎉",
-    responsibilities: ["Event planning", "Community engagement", "Speaker coordination", "Attendee experience"]
+    id: "people",
+    name: "People",
+    description: "Learn how to spot the right talent, keep them motivated, and build a community that accelerates your startup journey.",
+    icon: "👥",
+    responsibilities: ["Run recruiting, interviews, and onboarding.", "Organize START Sprint and shape new batches.", "Keep members engaged and connected through formats like Hut Weekend, START Goes Eating, and more."]
   },
   {
     id: "marketing",
     name: "Marketing",
-    description: "Brand and communication strategy",
+    description: "Learn strategy and how to highlight START's people, events, and achievements to reach millions and push the ecosystem forward.",
     icon: "📢",
-    responsibilities: ["Social media management", "Content creation", "Brand strategy", "Marketing campaigns"]
+    responsibilities: ["Create content, posts, and campaigns for LinkedIn and Instagram.", "Shoot and edit photos and videos from events.", "Build and maintain START's brand and image."]
+  },
+  {
+    id: "finops",
+    name: "FinOps",
+    description: "Learn how to design and build custom tools and automate workflows to expand START's output and influence.",
+    icon: "💰",
+    responsibilities: ["Build internal tools like Members Platform or Financial Dashboard.", "Improve our core systems like Slack, n8n and Notion.", "Handle contract management, ensuring compliance."]
   },
   {
     id: "partnerships",
     name: "Partnerships",
-    description: "Strategic partnerships and collaborations",
+    description: "Learn how to secure partners, close deals, and bring in the resources that multiply START's impact across the ecosystem.",
     icon: "🤝",
-    responsibilities: ["Partner outreach", "Collaboration agreements", "Ecosystem building", "Corporate relations"]
+    responsibilities: ["Run persistent outreach, handle rejection, and keep going.", "Build and manage relationships that create long-term value.", "Close deals that fund START's projects."]
   },
   {
-    id: "people",
-    name: "People",
-    description: "Member experience and community culture",
-    icon: "👥",
-    responsibilities: ["Member onboarding", "Community culture", "Mentorship programs", "Member support"]
+    id: "events",
+    name: "Events",
+    description: "Learn how to run flagship events where people meet, learn, and build across START, the Munich ecosystem, and beyond.",
+    icon: "🎉",
+    responsibilities: ["Organize and run large-scale events with 300+ attendees, like hackathons and summits.", "Organize workshops, startup visits, and other learning opportunities.", "Create experiences people remember and come back for."]
   }
 ]
 
@@ -191,50 +205,59 @@ const startEvents: StartEvent[] = [
   }
 ]
 
-const alumniTestimonials = [
+const alumniTestimonials: MemberStory[] = [
   {
-    id: "felix",
-    name: "FELIX HAAS",
-    role: "Co-Founder IDnow,\nHost Bits & Pretzels",
-    image: "https://cdn.prod.website-files.com/65f98ea7c70b10b668ccbeb3/6601560cc17c4d47b2882ffb_img-alumni.png",
-    quote: "At START Munich, I laid the foundation for my current network. From this starting point, I built several companies, invested in more than 80 start-ups and helped set up Bits & Pretzels.",
+    id: "story-1",
+    name: "Felix Haas",
+    role: "Founder & Investor",
+    company: "IDNow | Bits & Pretzels",
+    image: "/memberJourney/alumni/FelixHaas.png",
+    story: "At START Munich, I laid the foundation for my current network. From this starting point, I built several companies, invested in more than 80 start-ups and helped set up Bits & Pretzels.",
+    department: "Alumni",
     logos: [
-      { src: "https://cdn.prod.website-files.com/65f98ea7c70b10b668ccbeb3/65f98ea7c70b10b668ccbece_logo.svg", url: "https://www.bitsandpretzels.com/" },
-      { src: "https://cdn.prod.website-files.com/65f98ea7c70b10b668ccbeb3/65f98ea7c70b10b668ccbeea_Vectors-Wrapper.svg", url: "https://www.idnow.io/" }
+      { src: "https://cdn.prod.website-files.com/65f98ea7c70b10b668ccbeb3/65f98ea7c70b10b668ccbeea_Vectors-Wrapper.svg", url: "https://www.idnow.io/" },
+      { src: "https://cdn.prod.website-files.com/65f98ea7c70b10b668ccbeb3/65f98ea7c70b10b668ccbece_logo.svg", url: "https://www.bitsandpretzels.com/" }
     ]
   },
   {
-    id: "joshua",
-    name: "JOSHUA CORNELIUS",
-    role: "Co-Founder, Freeletics",
-    image: "https://cdn.prod.website-files.com/65f98ea7c70b10b668ccbeb3/6601560a8bf0f64332a0263b_img-alumni-1.png",
-    quote: "Before we founded Freeletics, START Munich - in addition to CDTM - gave my co-founder and me the ideal opportunity to make first contacts in the Munich startup scene.",
+    id: "story-2",
+    name: "Joshua Cornelius",
+    role: "Co-Founder",
+    company: "Freeletics | CDTM",
+    image: "/memberJourney/alumni/JoshuaCornelius.png",
+    story: "Before we founded Freeletics, START Munich - in addition to CDTM - gave my co-founder and me the ideal opportunity to make first contacts in the Munich startup scene.",
+    department: "Alumni",
     logos: [
       { src: "https://cdn.prod.website-files.com/65f98ea7c70b10b668ccbeb3/65f98ea7c70b10b668ccbeef_5eb3c929c8c4590004435152.png", url: "https://www.freeletics.com/" }
     ]
   },
   {
-    id: "jennifer",
-    name: "JENNIFER DUSSILEK",
-    role: "Co-Founder, Finway",
-    image: "https://cdn.prod.website-files.com/65f98ea7c70b10b668ccbeb3/6601560ac1b43a886293443e_img-alumni-2.png",
-    quote: "The insights and connections I made at START Munich are immeasurable. They led to the inception of finway, finding co-founders and meeting future investors.",
+    id: "story-3",
+    name: "Elisabeth Goebel",
+    role: "Early Operator",
+    company: "ZeitAI | CDTM",
+    image: "/memberJourney/alumni/Elisa.png",
+    story: "START is where things actually happen. I co-founded ISAR Unfiltered, met people who think and move the way I do, and built a network that directly led me to where I am today: Early Operator at a YC-backed AI startup.",
+    department: "People",
     logos: [
-      { src: "https://cdn.prod.website-files.com/65f98ea7c70b10b668ccbeb3/65f98ea7c70b10b668ccbee5_Vectors-Wrapper.svg", url: "https://www.finway.de/" }
+      { src: "https://cdn.prod.website-files.com/6902359088cc8683c4db0171/69249d98617b1b96682cca65_44a5d2ba9e6004a1281eed9068c62a95_zeitai-logo.png", url: "https://www.zeit.ai/" },
     ]
   }
 ]
 
 export default function MemberJourneyPage() {
   const [loading, setLoading] = useState(true)
+  const [eventImageIndex, setEventImageIndex] = useState(0)
+  const [currentEventIndex, setCurrentEventIndex] = useState(0)
+  const timelineSliderRef = useRef<HTMLDivElement>(null)
+  const [scrollProgress, setScrollProgress] = useState(0)
+  const [hoveredEventId, setHoveredEventId] = useState<string | null>(null)
+  const [isMoreHovered, setIsMoreHovered] = useState(false)
+  const autoRotateTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const eventImageRef = useRef<HTMLDivElement>(null)
 
-  // Internal events state
-  const [activeEventIdx, setActiveEventIdx] = useState(0)
-  const [eventImgIdx, setEventImgIdx] = useState(0)
-  const eventAutoTimerRef = useRef<NodeJS.Timeout | null>(null)
-  const eventDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
-
-  const totalEventItems = startEvents.length + 1 // +1 for "And a lot more..."
+  // Animated counter for hero stats
+  const semesterCount = useAnimatedNumber(2, loading, 500)
 
   const moreImages = [
     "/more-isar-unfiltered.jpg",
@@ -243,53 +266,93 @@ export default function MemberJourneyPage() {
     "/more-img4955.jpg"
   ]
 
-  const isMoreActive = activeEventIdx >= startEvents.length
-  const activeImages = !isMoreActive ? startEvents[activeEventIdx]?.images : null
-  const activeEventTitle = !isMoreActive ? startEvents[activeEventIdx]?.title : "And a lot more..."
-  const safeImgIdx = activeImages ? eventImgIdx % activeImages.length : 0
+  // Get current event for auto-rotation (only if not showing "more")
+  const currentEvent = !hoveredEventId && !isMoreHovered && currentEventIndex < startEvents.length
+    ? startEvents[currentEventIndex]
+    : null
+  const currentEventImages = currentEvent
+    ? currentEvent.images.map((img) => ({ src: img, title: currentEvent.title }))
+    : []
 
-  const handlePrevImg = () => {
-    if (!activeImages || activeImages.length <= 1) return
-    setEventImgIdx(prev => (prev - 1 + activeImages.length) % activeImages.length)
+  // Derive images for hovered event
+  const hoveredEvent = hoveredEventId ? startEvents.find(e => e.id === hoveredEventId) : null
+  const eventImages = hoveredEvent
+    ? hoveredEvent.images.map(img => ({ src: img, title: hoveredEvent.title }))
+    : []
+
+  const scrollToEventImage = () => {
+    if (window.innerWidth < 1024 && eventImageRef.current) {
+      eventImageRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
   }
 
-  const handleNextImg = () => {
-    if (!activeImages || activeImages.length <= 1) return
-    setEventImgIdx(prev => (prev + 1) % activeImages.length)
+  const handlePrevImage = () => {
+    if (eventImages.length === 0) return
+    setEventImageIndex((prev) => (prev - 1 + eventImages.length) % eventImages.length)
+  }
+
+  const handleNextImage = () => {
+    if (eventImages.length === 0) return
+    setEventImageIndex((prev) => (prev + 1) % eventImages.length)
   }
 
   useEffect(() => {
     setLoading(false)
   }, [])
 
-
-
-  // Start auto-cycle for events
-  const startEventAutoCycle = useCallback(() => {
-    if (eventAutoTimerRef.current) clearInterval(eventAutoTimerRef.current)
-    eventAutoTimerRef.current = setInterval(() => {
-      setActiveEventIdx(prev => (prev + 1) % totalEventItems)
-      setEventImgIdx(0)
-    }, 4000)
-  }, [totalEventItems])
-
-  // Restart auto-cycle with a 5s delay (used after click)
-  const restartEventAutoCycle = useCallback(() => {
-    if (eventAutoTimerRef.current) clearInterval(eventAutoTimerRef.current)
-    if (eventDelayTimerRef.current) clearTimeout(eventDelayTimerRef.current)
-    eventDelayTimerRef.current = setTimeout(() => {
-      startEventAutoCycle()
-    }, 5000)
-  }, [startEventAutoCycle])
-
+  // Timeline scroll tracking
   useEffect(() => {
     if (loading) return
-    startEventAutoCycle()
-    return () => {
-      if (eventAutoTimerRef.current) clearInterval(eventAutoTimerRef.current)
-      if (eventDelayTimerRef.current) clearTimeout(eventDelayTimerRef.current)
+    const slider = timelineSliderRef.current
+    if (!slider) return
+    const updateScroll = () => {
+      const { scrollLeft, scrollWidth, clientWidth } = slider
+      setScrollProgress(scrollLeft / (scrollWidth - clientWidth))
     }
-  }, [loading, startEventAutoCycle])
+    slider.addEventListener('scroll', updateScroll)
+    return () => slider.removeEventListener('scroll', updateScroll)
+  }, [loading])
+
+  // Auto-rotate events every 3 seconds
+  useEffect(() => {
+    if (loading || hoveredEventId || isMoreHovered) {
+      // Clear timer if hovering
+      if (autoRotateTimerRef.current) {
+        clearInterval(autoRotateTimerRef.current)
+        autoRotateTimerRef.current = null
+      }
+      return
+    }
+
+    autoRotateTimerRef.current = setInterval(() => {
+      setCurrentEventIndex((prev) => (prev + 1) % (startEvents.length + 1))
+    }, 3000)
+
+    return () => {
+      if (autoRotateTimerRef.current) clearInterval(autoRotateTimerRef.current)
+    }
+  }, [loading, hoveredEventId, isMoreHovered])
+
+  // Reset image index when event changes
+  useEffect(() => {
+    setEventImageIndex(0)
+  }, [hoveredEventId, isMoreHovered, currentEventIndex])
+
+  // When hovering ends, continue auto-rotation from the hovered item
+  useEffect(() => {
+    if (!hoveredEventId && !isMoreHovered) {
+      return // Don't reset - let auto-rotation continue from current position
+    }
+    // Set currentEventIndex to match the hovered item so auto-rotation continues from there
+    if (hoveredEventId) {
+      const index = startEvents.findIndex(e => e.id === hoveredEventId)
+      if (index !== -1) {
+        setCurrentEventIndex(index)
+      }
+    } else if (isMoreHovered) {
+      setCurrentEventIndex(startEvents.length)
+    }
+  }, [hoveredEventId, isMoreHovered])
 
   if (loading) {
     return (
@@ -323,7 +386,7 @@ export default function MemberJourneyPage() {
       <main className="min-h-screen bg-brand-dark-blue">
         {/* Hero Section */}
         <Hero
-          backgroundImage="/member-journey-hero.jpg"
+          backgroundImage="/memberJourney/hero.png"
           title={
             <>
               YOUR START MUNICH
@@ -331,11 +394,33 @@ export default function MemberJourneyPage() {
               <span className="outline-text">JOURNEY</span>
             </>
           }
-          description="Experience your first two semesters as an active START Munich member"
-        />
+          description="Become a member and spend two active semesters contributing to the community"
+        >
+          <div className="grid grid-cols-2 lg:flex lg:flex-col gap-4 lg:gap-6">
+            {/* Stat Card 1 - 2 Semesters */}
+            <HeroCard>
+              <div className="flex items-baseline justify-center gap-2 mb-3">
+                <span className="text-4xl lg:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-300 transition">
+                  {semesterCount}
+                </span>
+                <span className="text-xl lg:text-3xl font-bold text-brand-pink">+</span>
+              </div>
+              <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Semesters</p>
+            </HeroCard>
+
+            {/* Stat Card 2 - Infinite Possibilities */}
+            <HeroCard>
+              <div className="flex items-baseline justify-center gap-2 mb-3">
+                <span className="text-4xl lg:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-300 transition">
+                  ∞
+                </span>
+              </div>
+              <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Possibilities</p>
+            </HeroCard>
+          </div>
+        </Hero>
 
         {/* Content Below Hero */}
-
 
         {/* Member Journey Timeline Section */}
         <div className="mb-20 w-full pt-8 lg:pt-20">
@@ -348,54 +433,56 @@ export default function MemberJourneyPage() {
             </p>
           </div>
 
-          <div className="overflow-x-auto scrollbar-hide pl-[max(1rem,calc((100%-80rem)/2+1rem))] sm:pl-[max(1.5rem,calc((100%-80rem)/2+1.5rem))] lg:pl-[max(2rem,calc((100%-80rem)/2+2rem))] pr-4 sm:pr-6 lg:pr-8">
-            <div className="flex gap-6 min-w-max">
-              {timelineEvents.map((event, index) => (
-                <div
-                  key={event.id}
-                  className="relative bg-white/[0.03] border border-white/10 overflow-hidden min-w-[320px] w-[320px]"
-                >
-                  {/* Header */}
-                  <div className="p-6 pb-4">
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className="text-4xl font-black text-white">
-                        0{index + 1}
-                      </span>
-                      <div className="h-[1px] flex-1 bg-white/10"></div>
+          <div className="relative group/timeline">
+            <div
+              ref={timelineSliderRef}
+              className="overflow-x-auto scrollbar-hide pb-12 cursor-grab active:cursor-grabbing"
+            >
+              {/* Timeline Events */}
+              <div className="flex gap-6 min-w-max px-8 lg:px-20">
+                {timelineEvents.map((event, index) => (
+                  <div
+                    key={event.id}
+                    className="group relative timeline-card-animate w-[340px] flex-shrink-0"
+                    style={{
+                      animationDelay: `${index * 0.15}s`
+                    }}
+                  >
+                    {/* Event Card */}
+                    <div className="relative h-full bg-white/5 border border-white/20 overflow-hidden transition-all duration-300 hover:border-brand-pink/50">
+                      <div className="p-8 h-full flex flex-col">
+                        {/* Number with divider */}
+                        <div className="flex items-center gap-4 mb-6">
+                          <span className="text-4xl font-black text-white tracking-tight">
+                            0{index + 1}
+                          </span>
+                          <div className="h-[1px] flex-1 bg-white/20"></div>
+                        </div>
+
+                        {/* Title with emoji */}
+                        <h3 className="text-lg font-black text-white mb-3">
+                          {event.title} <span className="ml-1">{event.icon}</span>
+                        </h3>
+
+                        {/* Description */}
+                        <p className="text-sm text-gray-400 leading-relaxed mb-5">
+                          {event.description}
+                        </p>
+
+                        {/* Details List */}
+                        <div className="space-y-3">
+                          {(event.details as string[]).map((detail, i) => (
+                            <div key={i} className="flex items-start gap-3">
+                              <div className="w-1.5 h-1.5 bg-brand-pink rounded-full mt-1.5 flex-shrink-0"></div>
+                              <span className="text-sm text-gray-400 leading-relaxed">{detail}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-
-                    <h3 className="text-xl font-bold text-white mb-2">
-                      {event.title} {event.icon}
-                    </h3>
-                    <p className="text-sm text-gray-400 leading-relaxed">
-                      {event.description}
-                    </p>
                   </div>
-
-                  {/* Content */}
-                  <div className="p-6 pt-0">
-                    {event.id === "exchange-trip" && typeof event.details[0] === 'object' ? (
-                      <div className="space-y-3 mt-4 mt-0">
-                        {(event.details as { text: string; image: string; icon: string }[]).map((detail, i) => (
-                          <div key={i} className="flex items-start gap-3">
-                            <div className="w-1.5 h-1.5 min-w-[6px] min-h-[6px] bg-brand-pink rounded-full mt-1.5 flex-shrink-0"></div>
-                            <span className="text-sm text-gray-400">{detail.text}</span>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="space-y-3 mt-4 mt-0">
-                        {(event.details as string[]).map((detail, i) => (
-                          <div key={i} className="flex items-start gap-3">
-                            <div className="w-1.5 h-1.5 min-w-[6px] min-h-[6px] bg-brand-pink rounded-full mt-1.5 flex-shrink-0"></div>
-                            <span className="text-sm text-gray-400">{detail}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -415,27 +502,27 @@ export default function MemberJourneyPage() {
 
             {/* Mindmap - Desktop only */}
             <div className="hidden lg:block">
-              <div className="relative w-full" style={{ height: '750px', marginBottom: '-200px' }}>
+              <div className="relative w-full" style={{ height: '900px', marginBottom: '-100px' }}>
                 {/* Connecting lines (SVG) - rendered first so boxes cover them */}
                 <svg className="absolute inset-0 w-full h-full pointer-events-none">
                   <defs>
                     <mask id="logo-mask">
                       <rect width="100%" height="100%" fill="white" />
-                      <circle cx="50%" cy="52%" r="50" fill="black" />
+                      <circle cx="50%" cy="40%" r="50" fill="black" />
                     </mask>
                   </defs>
                   <g mask="url(#logo-mask)">
                     {[
-                      { x2: '10%', y2: '50%' },
-                      { x2: '20%', y2: '15%' },
-                      { x2: '50%', y2: '10%' },
-                      { x2: '80%', y2: '15%' },
-                      { x2: '90%', y2: '50%' },
+                      { x2: '10%', y2: '62%' },
+                      { x2: '10%', y2: '12%' },
+                      { x2: '50%', y2: '20%' },
+                      { x2: '90%', y2: '12%' },
+                      { x2: '90%', y2: '62%' },
                     ].map((line, i) => (
                       <line
                         key={i}
                         x1="50%"
-                        y1="52%"
+                        y1="40%"
                         x2={line.x2}
                         y2={line.y2}
                         stroke="rgba(208,0,111,0.3)"
@@ -447,21 +534,22 @@ export default function MemberJourneyPage() {
                   </g>
                 </svg>
 
-                {/* Logo - bottom center */}
-                <div className="absolute left-1/2 -translate-x-1/2 z-10" style={{ top: '38%' }}>
+                {/* Logo - center of U */}
+                <div className="absolute left-1/2 -translate-x-1/2 z-10" style={{ top: '30%' }}>
                   <img src="/startlogo.svg" alt="START Munich" className="w-44 h-44" />
                 </div>
 
-                {/* Department Nodes */}
+                {/* Department Nodes - U shape around logo */}
                 {(() => {
-                  // Finops, Events, Marketing, Partnerships, People
-                  // Arc: left, center-left, center, center-right, right
+                  // People, Marketing, FinOps, Partnerships, Events
+                  // Top of U: Marketing (left), FinOps (center), Partnerships (right)
+                  // Bottom of U: People (left), Events (right)
                   const positions: CSSProperties[] = [
-                    { top: '40%', left: '0' },
+                    { top: '45%', left: '0' },
                     { top: '5%', left: '10%' },
-                    { top: '0', left: '50%', transform: 'translateX(-50%)' },
+                    { top: '-5%', left: '50%', transform: 'translateX(-50%)' },
                     { top: '5%', right: '10%' },
-                    { top: '40%', right: '0' },
+                    { top: '45%', right: '0' },
                   ]
                   return departments.map((dept, i) => (
                     <div
@@ -495,7 +583,7 @@ export default function MemberJourneyPage() {
               {departments.map((dept) => (
                 <div
                   key={dept.id}
-                  className="bg-white/5 border border-white/10 p-5"
+                  className="relative bg-white/5 border border-white/10 overflow-hidden"
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <span className="text-2xl">{dept.icon}</span>
@@ -530,65 +618,70 @@ export default function MemberJourneyPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-              {/* Event list */}
-              <div className="bg-gray-50 border border-gray-200 p-8">
+              {/* Single large card with all events */}
+              <div
+                className="bg-gray-50 border border-gray-200 p-8"
+                onMouseLeave={() => {
+                  setHoveredEventId(null)
+                  setIsMoreHovered(false)
+                }}
+              >
                 <div className="space-y-2">
-                  {startEvents.map((event, index) => (
-                    <button
-                      key={event.id}
-                      type="button"
-                      className={`relative flex items-start gap-4 py-4 px-5 cursor-pointer transition-all duration-300 w-full text-left ${
-                        activeEventIdx === index ? 'bg-brand-pink/10' : 'hover:bg-gray-100'
-                      }`}
-                      onClick={() => {
-                        setActiveEventIdx(index)
-                        setEventImgIdx(0)
-                        restartEventAutoCycle()
-                      }}
-                    >
-                      {/* Active indicator bar */}
-                      <div className={`absolute left-0 top-2 bottom-2 w-0.5 rounded-full transition-all duration-300 ${
-                        activeEventIdx === index ? 'bg-brand-pink' : 'bg-transparent'
-                      }`}></div>
-                      <span className="text-4xl flex-shrink-0">{event.icon}</span>
-                      <div className="flex-1">
-                        <h3 className="text-brand-dark-blue font-bold text-lg mb-1">{event.title}</h3>
-                        <p className="text-gray-600 text-sm leading-relaxed">
-                          {event.description}
-                        </p>
+                  {startEvents.map((event, index) => {
+                    const isActive = hoveredEventId === event.id || (!hoveredEventId && !isMoreHovered && currentEventIndex === index)
+                    return (
+                      <div
+                        key={event.id}
+                        className={`flex items-start gap-4 p-4 cursor-pointer transition-all duration-200 rounded-lg border-l-4 ${isActive ? 'border-l-brand-pink bg-brand-pink/10' : 'border-l-transparent hover:bg-gray-100'}`}
+                        role="button"
+                        tabIndex={0}
+                        onMouseEnter={() => setHoveredEventId(event.id)}
+                        onMouseLeave={() => setHoveredEventId(null)}
+                        onClick={() => { setHoveredEventId(event.id); scrollToEventImage() }}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setHoveredEventId(event.id); scrollToEventImage() } }}
+                      >
+                        <span className="text-4xl flex-shrink-0">{event.icon}</span>
+                        <div className="flex-1">
+                          <h3 className="text-brand-dark-blue font-bold text-lg mb-2">{event.title}</h3>
+                          <p className="text-gray-600 text-sm leading-relaxed">
+                            {event.description}
+                          </p>
+                        </div>
                       </div>
-                    </button>
-                  ))}
+                    )
+                  })}
 
                   {/* "And a lot more..." */}
-                  <div
-                    className={`relative flex items-start gap-4 py-4 px-5 cursor-pointer transition-all duration-300 ${
-                      isMoreActive ? 'bg-brand-pink/10' : 'hover:bg-gray-100'
-                    }`}
-                    onClick={() => {
-                      setActiveEventIdx(startEvents.length)
-                      setEventImgIdx(0)
-                      restartEventAutoCycle()
-                    }}
-                  >
-                    <div className={`absolute left-0 top-2 bottom-2 w-0.5 rounded-full transition-all duration-300 ${
-                      isMoreActive ? 'bg-brand-pink' : 'bg-transparent'
-                    }`}></div>
-                    <span className="text-4xl flex-shrink-0">✨</span>
-                    <div className="flex-1">
-                      <h3 className="text-brand-dark-blue font-bold text-lg mb-1">And a lot more...</h3>
-                      <p className="text-gray-600 text-sm leading-relaxed">
-                        Discover many more exciting events and opportunities as part of the START Munich community.
-                      </p>
-                    </div>
-                  </div>
+                  {(() => {
+                    const isMoreActive = isMoreHovered || (!hoveredEventId && !isMoreHovered && currentEventIndex === startEvents.length)
+                    return (
+                      <div
+                        className={`flex items-start gap-4 p-4 cursor-pointer transition-all duration-200 rounded-lg border-l-4 ${isMoreActive ? 'border-l-brand-pink bg-brand-pink/10' : 'border-l-transparent hover:bg-gray-100'}`}
+                        role="button"
+                        tabIndex={0}
+                        onMouseEnter={() => setIsMoreHovered(true)}
+                        onMouseLeave={() => setIsMoreHovered(false)}
+                        onClick={() => { setIsMoreHovered(true); scrollToEventImage() }}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setIsMoreHovered(true); scrollToEventImage() } }}
+                      >
+                        <span className="text-4xl flex-shrink-0">✨</span>
+                        <div className="flex-1">
+                          <h3 className="text-brand-dark-blue font-bold text-lg mb-2">And a lot more...</h3>
+                          <p className="text-gray-600 text-sm leading-relaxed">
+                            Discover many more exciting events and opportunities as part of the START Munich community.
+                          </p>
+                        </div>
+                      </div>
+                    )
+                  })()}
                 </div>
               </div>
 
-              {/* Image panel */}
-              <div className="bg-gray-50 border border-gray-200 h-full min-h-[500px] relative overflow-hidden">
-                {isMoreActive ? (
-                  <div className="absolute inset-0 grid grid-cols-2 grid-rows-2">
+              {/* Rotating single image or grid */}
+              <div ref={eventImageRef} className="bg-gray-50 border border-gray-200 h-full min-h-[500px] relative overflow-hidden">
+                {isMoreHovered || (!hoveredEventId && !isMoreHovered && currentEventIndex === startEvents.length) ? (
+                  /* Grid of 4 images for "And a lot more..." */
+                  <div className="grid grid-cols-2 grid-rows-2 w-full h-full gap-0">
                     {moreImages.map((img, i) => (
                       <div key={i} className="relative overflow-hidden">
                         <img
@@ -606,20 +699,80 @@ export default function MemberJourneyPage() {
                       </div>
                     </div>
                   </div>
-                ) : activeImages && activeImages.length > 0 ? (
+                ) : hoveredEventId && eventImages.length > 0 ? (
+                  /* Hovered event with manual navigation */
+                  <>
+                    <div className="relative w-full h-full">
+                      <img
+                        key={eventImages[eventImageIndex]?.src}
+                        src={eventImages[eventImageIndex]?.src}
+                        alt={eventImages[eventImageIndex]?.title}
+                        className="w-full h-full object-cover fade-swap"
+                      />
+
+                      {/* Title overlay */}
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+                        <p className="text-base font-bold text-white">
+                          {eventImages[eventImageIndex]?.title}
+                        </p>
+                      </div>
+
+                      {/* Navigation controls overlay */}
+                      <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 flex items-center justify-between px-4">
+                        <button
+                          onClick={handlePrevImage}
+                          className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 hover:bg-brand-pink/80 border border-white/20 hover:border-brand-pink text-white transition-all duration-300 backdrop-blur-md hover:scale-110"
+                          aria-label="Previous image"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                        </button>
+                        <button
+                          onClick={handleNextImage}
+                          className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 hover:bg-brand-pink/80 border border-white/20 hover:border-brand-pink text-white transition-all duration-300 backdrop-blur-md hover:scale-110"
+                          aria-label="Next image"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                        </button>
+                      </div>
+
+                    </div>
+                  </>
+                ) : currentEventImages.length > 0 ? (
+                  /* Auto-rotating event display */
                   <div className="relative w-full h-full">
                     <img
-                      key={activeImages[safeImgIdx]}
-                      src={activeImages[safeImgIdx]}
-                      alt={activeEventTitle}
+                      key={currentEventImages[eventImageIndex % currentEventImages.length]?.src}
+                      src={currentEventImages[eventImageIndex % currentEventImages.length]?.src}
+                      alt={currentEventImages[eventImageIndex % currentEventImages.length]?.title}
                       className="w-full h-full object-cover fade-swap"
                       onError={(e) => { (e.target as HTMLImageElement).src = '/internalevents.png' }}
                     />
 
                     {/* Title overlay */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-                      <p className="text-base font-bold text-white">{activeEventTitle}</p>
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+                      <p className="text-base font-bold text-white">
+                        {currentEventImages[eventImageIndex % currentEventImages.length]?.title}
+                      </p>
                     </div>
+
+                    {/* Navigation controls overlay */}
+                    <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 flex items-center justify-between px-4">
+                      <button
+                        onClick={() => setEventImageIndex((prev) => (prev - 1 + currentEventImages.length) % currentEventImages.length)}
+                        className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 hover:bg-brand-pink/80 border border-white/20 hover:border-brand-pink text-white transition-all duration-300 backdrop-blur-md hover:scale-110"
+                        aria-label="Previous image"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                      </button>
+                      <button
+                        onClick={() => setEventImageIndex((prev) => (prev + 1) % currentEventImages.length)}
+                        className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 hover:bg-brand-pink/80 border border-white/20 hover:border-brand-pink text-white transition-all duration-300 backdrop-blur-md hover:scale-110"
+                        aria-label="Next image"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                      </button>
+                    </div>
+
                   </div>
                 ) : null}
               </div>
@@ -641,19 +794,19 @@ export default function MemberJourneyPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* START goes Bay Area */}
-              <div className="relative overflow-hidden bg-white/5 border border-white/10">
+              <a
+                href="https://www.startbayarea.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative overflow-hidden bg-white/5 border border-white/10 rounded-lg hover:border-brand-pink/50 transition-colors duration-300 cursor-pointer"
+              >
                 <div className="aspect-video relative overflow-hidden">
                   <img
-                    src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=2070&auto=format&fit=crop"
+                    src="/memberJourney/SF.png"
                     alt="San Francisco Bay Area"
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1.5 bg-brand-pink/90 text-white text-xs font-bold uppercase tracking-wider">
-                      International Trip
-                    </span>
-                  </div>
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-white mb-3">
@@ -662,34 +815,24 @@ export default function MemberJourneyPage() {
                   <p className="text-gray-300 text-sm leading-relaxed mb-4">
                     A selective international exchange program connecting outstanding entrepreneurial talent from Europe with the innovation ecosystem of the San Francisco Bay Area. The program brings together a curated group of 20 participants and enables direct interaction with founders, researchers, and investors at leading technology and innovation organizations.
                   </p>
-                  <a
-                    href="https://www.startbayarea.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-brand-pink font-semibold text-sm hover:gap-3 transition-all"
-                  >
+                  <span className="inline-flex items-center gap-2 text-brand-pink font-semibold text-sm group-hover:gap-3 transition-all">
                     Learn more
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
-                  </a>
+                  </span>
                 </div>
-              </div>
+              </a>
 
               {/* Research Partnership */}
-              <div className="relative overflow-hidden bg-white/5 border border-white/10">
+              <div className="relative overflow-hidden bg-white/5 border border-white/10 rounded-lg">
                 <div className="aspect-video relative overflow-hidden">
                   <img
-                    src="/cambridge-aerial.webp"
-                    alt="University of Cambridge"
+                    src="/memberJourney/cambridge-aerial.png"
+                    alt="University Research"
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1.5 bg-brand-pink/90 text-white text-xs font-bold uppercase tracking-wider">
-                      Research Partnership
-                    </span>
-                  </div>
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-white mb-3">
@@ -718,129 +861,34 @@ export default function MemberJourneyPage() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 lg:pb-20">
-
-          {/* Alumni Section */}
-          <div className="mb-20">
-            <div className="mb-12 mr-auto w-fit">
-              <p className="text-brand-pink font-bold text-sm uppercase tracking-widest mb-3">Words of Former Starties</p>
-              <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                WHAT OUR <span className="outline-text">ALUMNI</span> SAY
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {alumniTestimonials.map((alumni) => (
-                <div key={alumni.id} className="bg-[#080830] border border-white/10 overflow-hidden flex flex-col max-w-[400px] mx-auto w-full">
-                  {/* Photo */}
-                  <div className="bg-gray-200 aspect-square overflow-hidden">
-                    <img
-                      src={alumni.image}
-                      alt={alumni.name}
-                      className="w-full h-full object-cover object-top"
-                    />
-                  </div>
-
-                  {/* Quote & Info */}
-                  <div className="p-6 flex flex-col flex-1">
-                    <p className="text-white text-sm leading-relaxed mb-6 flex-1">
-                      &ldquo;{alumni.quote}&rdquo;
-                    </p>
-
-                    <div>
-                      <h4 className="text-white font-black text-base mb-1">{alumni.name}</h4>
-                      <div className="flex items-end justify-between">
-                        <p className="text-gray-400 text-sm whitespace-pre-line">{alumni.role}</p>
-                        <div className="flex items-center gap-3" style={{"flexDirection": "column"}}>
-                          {alumni.logos.map((logo, i) => (
-                            <a key={i} href={logo.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${logo.url}`}>
-                              <img src={logo.src} alt="" className="h-6 opacity-80 hover:opacity-100 transition-opacity" />
-                            </a>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* Member Stories Section */}
+          <TestimonialsSection
+            title={<>
+              <span className="outline-text">MEMBER </span> STORIES
+            </>}
+            description="Real stories from our members who built successful startups with START Munich"
+            items={alumniTestimonials.map(story => ({
+              id: story.id,
+              name: story.name,
+              role: story.role,
+              company: story.company,
+              image: story.image,
+              story: story.story,
+              logos: story.logos
+            }))}
+          />
 
           {/* CTA Section */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-[#1a1a3e] via-brand-dark-blue to-[#0d0d1f] border-2 border-brand-pink/50 shadow-2xl shadow-brand-pink/20">
-            {/* Decorative SVGs */}
-            <img src="/cta-left.svg" alt="" className="absolute left-0 top-1/2 -translate-y-1/2 h-full opacity-30 pointer-events-none" />
-            <img src="/cta-right.svg" alt="" className="absolute right-0 top-1/2 -translate-y-1/2 h-full opacity-30 pointer-events-none" />
+          <CTA
+            title="Ready to Join?"
+            description="Start your entrepreneurial journey with START Munich today. Apply to become a member and experience our vibrant community."
+            buttons={[
+              { label: "Apply Now", href: "https://www.startmunich.de/apply", external: true },
+              { label: "Learn More", href: "https://www.startmunich.de", variant: "secondary", external: true }
+            ]}
+          />
 
-            <div className="relative p-8 md:p-12">
-              <div className="flex flex-col items-center gap-8 text-center">
-                <div>
-                  <h3 className="text-3xl md:text-4xl font-black text-white mb-4">
-                    Ready to Join?
-                  </h3>
-                  <p className="text-lg text-gray-300 max-w-2xl">
-                    Start your entrepreneurial journey with START Munich today. Apply to become a member and experience our vibrant community.
-                  </p>
-                </div>
-
-                <div className="pt-4">
-                  <button className="px-8 py-3 bg-brand-pink hover:bg-brand-pink/90 text-white font-bold transition-all duration-300">
-                    Apply Now
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </main>
+        </main>
     </>
   )
 }
-
-{/* Global styles for animations */ }
-<style jsx global>{`
-  .fade-swap {
-    animation: fadeSwap 0.8s ease-in-out;
-  }
-  @keyframes fadeSwap {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  /* Timeline card entrance animation */
-  .timeline-card-animate {
-    animation: slideInFromLeft 0.6s ease-out forwards;
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  @keyframes slideInFromLeft {
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  /* Custom scrollbar styling for horizontal scroll */
-  .scrollbar-thin-horizontal::-webkit-scrollbar {
-    height: 8px;
-  }
-  .scrollbar-thin-horizontal::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-  }
-  .scrollbar-thin-horizontal::-webkit-scrollbar-thumb {
-    background: rgba(255, 0, 107, 0.5);
-    border-radius: 10px;
-    transition: background 0.3s;
-  }
-  .scrollbar-thin-horizontal::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 0, 107, 0.8);
-  }
-
-  /* Smooth scroll behavior */
-  .overflow-x-auto {
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-  }
-`}</style>
