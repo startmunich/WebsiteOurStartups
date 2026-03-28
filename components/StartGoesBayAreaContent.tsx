@@ -50,12 +50,6 @@ export default function StartGoesBayAreaContent() {
         }
     }, [])
 
-    const heroTopBadge = (
-        <div className="inline-flex items-center gap-2 bg-brand-pink/20 backdrop-blur-sm border border-brand-pink/40 text-brand-pink px-5 py-2 rounded-full text-sm font-medium transition-all duration-700">
-            <span>Global Exchange Track</span>
-        </div>
-    )
-
     const heroBackgroundAccents = (
         <>
             <div className="absolute top-20 right-[15%] w-[420px] h-[420px] bg-brand-pink/15 rounded-full blur-[110px] animate-blob" />
@@ -122,10 +116,8 @@ export default function StartGoesBayAreaContent() {
 
             <Hero
                 backgroundImage={HERO_BACKGROUND_BY_YEAR[activeYear]}
-                className="h-[760px] lg:h-screen min-h-[680px]"
                 overlayOpacity="bg-brand-dark-blue/80"
                 backgroundAccents={heroBackgroundAccents}
-                topBadge={heroTopBadge}
                 leftColumnClassName="max-w-3xl"
                 titleClassName="text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem]"
                 descriptionClassName="text-base sm:text-lg lg:text-xl text-gray-200 max-w-2xl"
