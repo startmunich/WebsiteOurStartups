@@ -152,7 +152,6 @@ const startEvents: StartEvent[] = [
       "/memberJourney/monthly/2.jpg",
       "/memberJourney/monthly/3.png",
       "/memberJourney/monthly/4.png",
-      "/memberJourney/monthly/1.JPG"
     ]
   },
   {
@@ -163,7 +162,9 @@ const startEvents: StartEvent[] = [
     frequency: "Weekly",
     icon: "💼",
     images: [
-      "/memberJourney/departmentwork/1.png"
+      "/memberJourney/departmentwork/2.jpg",
+      "/memberJourney/departmentwork/1.JPG"
+      
     ]
   },
   {
@@ -186,7 +187,6 @@ const startEvents: StartEvent[] = [
     icon: "🎓",
     images: [
       "/memberJourney/memberworkshop/1.jpg",
-      "/memberJourney/memberworkshop/2.png",
       "/memberJourney/memberworkshop/3.jpeg"
     ]
   },
@@ -200,7 +200,6 @@ const startEvents: StartEvent[] = [
     images: [
       "/memberJourney/startupVisit/1.png",
       "/memberJourney/startupVisit/2.png",
-      "/memberJourney/startupVisit/3.jpg"
     ]
   }
 ]
@@ -220,18 +219,6 @@ const memberStories: MemberStory[] = [
     ]
   },
   {
-    id: "story-2",
-    name: "Joshua Cornelius",
-    role: "Co-Founder",
-    company: "Freeletics | CDTM",
-    image: "/memberJourney/alumni/JoshuaCornelius.png",
-    story: "Before we founded Freeletics, START Munich - in addition to CDTM - gave my co-founder and me the ideal opportunity to make first contacts in the Munich startup scene.",
-    department: "Alumni",
-    logos: [
-      { src: "https://cdn.prod.website-files.com/65f98ea7c70b10b668ccbeb3/65f98ea7c70b10b668ccbeef_5eb3c929c8c4590004435152.png", url: "https://www.freeletics.com/" }
-    ]
-  },
-  {
     id: "story-3",
     name: "Elisabeth Goebel",
     role: "Early Operator",
@@ -241,6 +228,18 @@ const memberStories: MemberStory[] = [
     department: "People",
     logos: [
       { src: "https://cdn.prod.website-files.com/6902359088cc8683c4db0171/69249d98617b1b96682cca65_44a5d2ba9e6004a1281eed9068c62a95_zeitai-logo.png", url: "https://www.zeit.ai/" },
+    ]
+  },
+    {
+    id: "story-2",
+    name: "Joshua Cornelius",
+    role: "Co-Founder",
+    company: "Freeletics | CDTM",
+    image: "/memberJourney/alumni/JoshuaCornelius.png",
+    story: "Before we founded Freeletics, START Munich - in addition to CDTM - gave my co-founder and me the ideal opportunity to make first contacts in the Munich startup scene.",
+    department: "Alumni",
+    logos: [
+      { src: "https://cdn.prod.website-files.com/65f98ea7c70b10b668ccbeb3/65f98ea7c70b10b668ccbeef_5eb3c929c8c4590004435152.png", url: "https://www.freeletics.com/" }
     ]
   }
 ]

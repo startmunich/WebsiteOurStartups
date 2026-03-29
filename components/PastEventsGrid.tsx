@@ -107,27 +107,6 @@ export default function PastEventsGrid() {
         {currentEvents.map((eventWrapper) => {
           const event = eventWrapper.event
 
-          // Parse the date and handle different formats
-          let formattedDate = 'Date unavailable'
-
-          try {
-            const dateStr = event.start_at
-
-            if (dateStr) {
-              const eventDate = new Date(dateStr)
-
-              if (!isNaN(eventDate.getTime())) {
-                formattedDate = eventDate.toLocaleDateString('en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                  year: 'numeric'
-                })
-              }
-            }
-          } catch (err) {
-            console.error('Error parsing date:', err, event)
-          }
-
           return (
             <a
               key={eventWrapper.api_id}
@@ -145,16 +124,6 @@ export default function PastEventsGrid() {
                     className="absolute inset-0 w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#00002c]/60 via-[#00002c]/15 to-transparent"></div>
-
-                  {/* Date Badge */}
-                  <div className="absolute top-3 right-3 bg-[#00002c]/80 backdrop-blur-md border border-white/10 rounded-xl px-3 py-1.5 text-center">
-                    <div className="text-[#d0006f] text-xs font-black uppercase tracking-wider">
-                      {formattedDate.split(' ')[0]}
-                    </div>
-                    <div className="text-white text-lg font-black leading-tight">
-                      {formattedDate.split(' ')[1]?.replace(',', '')}
-                    </div>
-                  </div>
                 </div>
               )}
 
