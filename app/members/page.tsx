@@ -1020,7 +1020,7 @@ export default function MembersPage() {
                 </button>
 
                 {sortedBatches.filter(b => b.name === expandedBatch).map((batch) => (
-                  <div key={batch.name} className="space-y-0">
+                  <div key={batch.name} className="space-y-6">
                     <h3 className="text-2xl md:text-3xl font-black text-white text-left">
                       {batch.name}
                     </h3>

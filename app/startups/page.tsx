@@ -282,6 +282,7 @@ export default function StartupsPage() {
                     logoUrl={company.logoUrl}
                     summary={company.summary}
                     isMTZ={company.isMTZ}
+                    accentColor="bg-blue-300/20"
                     badge={{
                       text: "★",
                       color: "text-yellow-400",
@@ -398,6 +399,7 @@ export default function StartupsPage() {
                     logoUrl={company.logoUrl}
                     summary={company.summary}
                     isMTZ={company.isMTZ}
+                    accentColor="bg-blue-300/20"
                     badge={{
                       text: "YC",
                       color: "text-orange-400",
@@ -453,6 +455,7 @@ export default function StartupsPage() {
                     logoUrl={company.logoUrl}
                     summary={company.summary}
                     isMTZ={company.isMTZ}
+                    accentColor="bg-blue-300/20"
                     badge={{
                       text: "EWOR",
                       color: "text-blue-400",

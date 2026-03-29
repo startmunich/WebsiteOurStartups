@@ -20,6 +20,7 @@ interface StartupCardProps {
     color: string
     bgColor: string
   }
+  accentColor?: string
   showDetails?: boolean
 }
 
@@ -33,13 +34,14 @@ export default function StartupCard({
   founders = [],
   isMTZ,
   badge,
+  accentColor,
   showDetails = false
 }: StartupCardProps) {
   return (
     <Link
       href={`/startup-details/${id}`}
       onClick={() => sessionStorage.setItem('startups-scroll', String(window.scrollY))}
-      className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-lg overflow-hidden transition-all duration-300 cursor-pointer block flex flex-col h-full"
+      className="group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-lg overflow-hidden transition-all duration-300 cursor-pointer block flex flex-col h-full"
     >
       {/* Logo Section */}
       <div className="flex items-center justify-center bg-white p-8 h-48">
@@ -51,10 +53,10 @@ export default function StartupCard({
       </div>
 
       {/* Content Section */}
-      <div className="p-6 flex flex-col flex-grow">
-        <div className="mb-4">
-          <div className="flex items-center gap-2 mb-2">
-            <h3 className={`text-xl ${showDetails ? 'text-2xl' : ''} text-white leading-tight`}>
+      <div className={`${showDetails ? 'p-6' : 'px-5 py-4'} flex flex-col flex-grow`}>
+        <div className={`${showDetails ? 'mb-4' : 'mb-2'}`}>
+          <div className="flex items-center gap-2 mb-1">
+            <h3 className={`${showDetails ? 'text-2xl' : 'text-lg'} text-white leading-tight`}>
               {name}
             </h3>
             {isMTZ === true && (
@@ -84,7 +86,7 @@ export default function StartupCard({
           )}
         </div>
 
-        <div className="mb-4">
+        <div className={`${showDetails ? 'mb-4' : 'mb-2'}`}>
           <p className={`text-sm text-gray-400 leading-relaxed ${showDetails ? 'line-clamp-3' : ''}`}>
             {summary}
           </p>
@@ -145,6 +147,11 @@ export default function StartupCard({
           </div>
         )}
       </div>
+
+      {/* Bottom accent bar */}
+      {accentColor && (
+        <div className={`absolute bottom-0 left-0 w-full h-1 ${accentColor}`}></div>
+      )}
     </Link>
   )
 }

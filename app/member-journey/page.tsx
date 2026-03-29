@@ -304,16 +304,6 @@ export default function MemberJourneyPage() {
     }
   }
 
-  const handleNextImage = () => {
-    if (eventImages.length === 0) return
-    setEventImageIndex((prev) => (prev + 1) % eventImages.length)
-  }
-
-  const handlePrevImage = () => {
-    if (eventImages.length === 0) return
-    setEventImageIndex((prev) => (prev - 1 + eventImages.length) % eventImages.length)
-  }
-
   useEffect(() => {
     setLoading(false)
   }, [])
@@ -578,7 +568,7 @@ export default function MemberJourneyPage() {
             <div ref={eventsSectionRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch lg:h-[650px]">
               {/* Single large card with all events */}
               <div
-                className="bg-white/5 border border-white/10 p-8 overflow-y-auto"
+                className="bg-white/5 border border-white/10 p-8"
                 onMouseLeave={() => {
                   if (!lockedEventId && !isMoreLocked) {
                     setHoveredEventId(null)
@@ -646,96 +636,53 @@ export default function MemberJourneyPage() {
                         <div className="absolute inset-0 bg-brand-dark-blue/20"></div>
                       </div>
                     ))}
-                    {/* Center overlay text */}
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="bg-black/70 backdrop-blur-sm px-8 py-4 border-2 border-brand-pink">
                         <p className="text-2xl font-black text-white">AND MORE...</p>
                       </div>
                     </div>
                   </div>
-                ) : activeEventId && eventImages.length > 0 ? (
-                  /* Hovered event with manual navigation */
-                  <>
+                ) : (() => {
+                  const images = activeEventId && eventImages.length > 0
+                    ? eventImages
+                    : currentEventImages.length > 0
+                      ? currentEventImages
+                      : null
+                  if (!images) return null
+                  const idx = eventImageIndex % images.length
+                  return (
                     <div className="relative w-full h-full">
                       <img
-                        key={eventImages[eventImageIndex]?.src}
-                        src={eventImages[eventImageIndex]?.src}
-                        alt={eventImages[eventImageIndex]?.title}
+                        key={images[idx]?.src}
+                        src={images[idx]?.src}
+                        alt={images[idx]?.title}
                         className="w-full h-full object-cover fade-swap"
                       />
-
-                      {/* Title overlay */}
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-                        <p className="text-base font-bold text-white">
-                          {eventImages[eventImageIndex]?.title}
-                        </p>
+                        <p className="text-base font-bold text-white">{images[idx]?.title}</p>
                       </div>
-
-                      {/* Navigation controls overlay */}
                       <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 flex items-center justify-between px-4">
                         <button
-                          onClick={handlePrevImage}
+                          onClick={() => setEventImageIndex((prev) => (prev - 1 + images.length) % images.length)}
                           className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 hover:bg-brand-pink/80 border border-white/20 hover:border-brand-pink text-white transition-all duration-300 backdrop-blur-md hover:scale-110"
                           aria-label="Previous image"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                         </button>
                         <button
-                          onClick={handleNextImage}
+                          onClick={() => setEventImageIndex((prev) => (prev + 1) % images.length)}
                           className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 hover:bg-brand-pink/80 border border-white/20 hover:border-brand-pink text-white transition-all duration-300 backdrop-blur-md hover:scale-110"
                           aria-label="Next image"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                         </button>
                       </div>
-
-                      {/* Image counter */}
                       <div className="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white text-xs font-semibold">
-                        {eventImageIndex + 1} / {eventImages.length}
+                        {idx + 1} / {images.length}
                       </div>
                     </div>
-                  </>
-                ) : currentEventImages.length > 0 ? (
-                  /* Auto-rotating event display */
-                  <div className="relative w-full h-full">
-                    <img
-                      key={currentEventImages[eventImageIndex % currentEventImages.length]?.src}
-                      src={currentEventImages[eventImageIndex % currentEventImages.length]?.src}
-                      alt={currentEventImages[eventImageIndex % currentEventImages.length]?.title}
-                      className="w-full h-full object-cover fade-swap"
-                    />
-
-                    {/* Title overlay */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-                      <p className="text-base font-bold text-white">
-                        {currentEventImages[eventImageIndex % currentEventImages.length]?.title}
-                      </p>
-                    </div>
-
-                    {/* Navigation controls overlay */}
-                    <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 flex items-center justify-between px-4">
-                      <button
-                        onClick={() => setEventImageIndex((prev) => (prev - 1 + currentEventImages.length) % currentEventImages.length)}
-                        className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 hover:bg-brand-pink/80 border border-white/20 hover:border-brand-pink text-white transition-all duration-300 backdrop-blur-md hover:scale-110"
-                        aria-label="Previous image"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-                      </button>
-                      <button
-                        onClick={() => setEventImageIndex((prev) => (prev + 1) % currentEventImages.length)}
-                        className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 hover:bg-brand-pink/80 border border-white/20 hover:border-brand-pink text-white transition-all duration-300 backdrop-blur-md hover:scale-110"
-                        aria-label="Next image"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                      </button>
-                    </div>
-
-                    {/* Image counter */}
-                    <div className="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white text-xs font-semibold">
-                      {(eventImageIndex % currentEventImages.length) + 1} / {currentEventImages.length}
-                    </div>
-                  </div>
-                ) : null}
+                  )
+                })()}
               </div>
             </div>
           </div>
