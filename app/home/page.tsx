@@ -383,7 +383,7 @@ export default function HomePage() {
         )}
 
         {/* ═══════════════════════════ WHAT IS START? ═══════════════════════════ */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <section className="py-28 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
           <div className="max-w-7xl mx-auto">
             {/* Group Photo */}
             <div className="relative rounded-3xl overflow-hidden mb-16">
@@ -425,9 +425,9 @@ export default function HomePage() {
                 {/* Academic Excellence Card */}
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-pink/30 transition-all">
                   <div className="flex items-center justify-center gap-8 mb-3">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Logo_of_the_Technical_University_of_Munich.svg" alt="TUM" className="h-10 brightness-0 invert opacity-80" />
+                    <img src="/partners/Logo_of_the_Technical_University_of_Munich.svg" alt="TUM" className="h-10  opacity-80" />
                     <span className="text-white/30 text-2xl font-light">×</span>
-                    <img src="https://www.lmu.de/fileadmin/webtool/css/images/lmu-logo-text.svg" alt="LMU" className="h-8 brightness-0 invert opacity-80" />
+                    <img src="/home/LMU_Muenchen_Logo.svg" alt="LMU" className="h-10  opacity-80" />
                   </div>
                   <div className="text-gray-400 text-sm uppercase tracking-wider text-center">Academic Excellence</div>
                 </div>
@@ -456,11 +456,7 @@ export default function HomePage() {
         </section>
 
         {/* ═══════════════════════════ FACTS & STARTUPS ═══════════════════════════ */}
-        <section ref={factsView.ref} className="relative py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
-          {/* Abstract background elements */}
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-dark-blue via-[#0a0a2e] to-brand-dark-blue" />
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-pink/5 rounded-full blur-[150px]" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px]" />
+        <section ref={factsView.ref} className="relative py-28 px-4 sm:px-6 lg:px-8 overflow-hidden">
 
           <div className="relative max-w-7xl mx-auto">
             {/* Section header */}
@@ -557,8 +553,8 @@ export default function HomePage() {
 
             {/* Startup logos */}
             <div className="relative overflow-hidden">
-              <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#0a0a2e] to-transparent z-10" />
-              <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#0a0a2e] to-transparent z-10" />
+              <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-brand-dark-blue to-transparent z-10" />
+              <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-brand-dark-blue to-transparent z-10" />
               <div className="animate-scroll">
                 {[...featuredStartups, ...featuredStartups].map((startup, i) => (
                   <div key={`${startup.id}-${i}`} className="inline-flex items-center justify-center mx-6 flex-shrink-0">
@@ -791,12 +787,13 @@ export default function HomePage() {
 
               {/* Right side - Image */}
               <div className="relative">
-                <div className="rounded-3xl overflow-hidden border-2 border-white/10">
+                <div className="rounded-3xl overflow-hidden border-2 border-white/10 relative">
                   <img
-                    src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop"
+                    src="/home/good.png"
                     alt="START Munich Event"
-                    className="w-full h-[500px] lg:h-[600px] object-cover"
+                    className="w-full h-[500px] lg:h-[600px] object-cover object-right"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue/50 via-transparent to-transparent"></div>
                 </div>
                 {/* Decorative blob */}
                 <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-brand-pink/20 rounded-full blur-[60px]" />

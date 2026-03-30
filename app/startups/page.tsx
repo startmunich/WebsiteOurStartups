@@ -75,6 +75,15 @@ export default function StartupsPage() {
       const data = await fetchCompanies()
       setCompanies(data)
       setLoading(false)
+
+      // Restore scroll position after returning from startup detail
+      const savedScroll = sessionStorage.getItem('startups-scroll')
+      if (savedScroll) {
+        requestAnimationFrame(() => {
+          window.scrollTo(0, parseInt(savedScroll))
+          sessionStorage.removeItem('startups-scroll')
+        })
+      }
     }
     loadCompanies()
   }, [])
@@ -273,6 +282,7 @@ export default function StartupsPage() {
                     logoUrl={company.logoUrl}
                     summary={company.summary}
                     isMTZ={company.isMTZ}
+                    accentColor="bg-blue-300/20"
                     badge={{
                       text: "★",
                       color: "text-yellow-400",
@@ -389,6 +399,7 @@ export default function StartupsPage() {
                     logoUrl={company.logoUrl}
                     summary={company.summary}
                     isMTZ={company.isMTZ}
+                    accentColor="bg-blue-300/20"
                     badge={{
                       text: "YC",
                       color: "text-orange-400",
@@ -444,6 +455,7 @@ export default function StartupsPage() {
                     logoUrl={company.logoUrl}
                     summary={company.summary}
                     isMTZ={company.isMTZ}
+                    accentColor="bg-blue-300/20"
                     badge={{
                       text: "EWOR",
                       color: "text-blue-400",

@@ -149,7 +149,9 @@ const startEvents: StartEvent[] = [
     frequency: "Monthly",
     icon: "📅",
     images: [
-      "/memberJourney/monthly/2.jpg"
+      "/memberJourney/monthly/2.jpg",
+      "/memberJourney/monthly/3.png",
+      "/memberJourney/monthly/4.png",
     ]
   },
   {
@@ -160,7 +162,9 @@ const startEvents: StartEvent[] = [
     frequency: "Weekly",
     icon: "💼",
     images: [
-      "/memberJourney/departmentwork/1.png"
+      "/memberJourney/departmentwork/2.jpg",
+      "/memberJourney/departmentwork/1.JPG"
+      
     ]
   },
   {
@@ -183,7 +187,6 @@ const startEvents: StartEvent[] = [
     icon: "🎓",
     images: [
       "/memberJourney/memberworkshop/1.jpg",
-      "/memberJourney/memberworkshop/2.png",
       "/memberJourney/memberworkshop/3.jpeg"
     ]
   },
@@ -197,7 +200,6 @@ const startEvents: StartEvent[] = [
     images: [
       "/memberJourney/startupVisit/1.png",
       "/memberJourney/startupVisit/2.png",
-      "/memberJourney/startupVisit/3.jpg"
     ]
   }
 ]
@@ -217,18 +219,6 @@ const memberStories: MemberStory[] = [
     ]
   },
   {
-    id: "story-2",
-    name: "Joshua Cornelius",
-    role: "Co-Founder",
-    company: "Freeletics | CDTM",
-    image: "/memberJourney/alumni/JoshuaCornelius.png",
-    story: "Before we founded Freeletics, START Munich - in addition to CDTM - gave my co-founder and me the ideal opportunity to make first contacts in the Munich startup scene.",
-    department: "Alumni",
-    logos: [
-      { src: "https://cdn.prod.website-files.com/65f98ea7c70b10b668ccbeb3/65f98ea7c70b10b668ccbeef_5eb3c929c8c4590004435152.png", url: "https://www.freeletics.com/" }
-    ]
-  },
-  {
     id: "story-3",
     name: "Elisabeth Goebel",
     role: "Early Operator",
@@ -238,6 +228,18 @@ const memberStories: MemberStory[] = [
     department: "People",
     logos: [
       { src: "https://cdn.prod.website-files.com/6902359088cc8683c4db0171/69249d98617b1b96682cca65_44a5d2ba9e6004a1281eed9068c62a95_zeitai-logo.png", url: "https://www.zeit.ai/" },
+    ]
+  },
+    {
+    id: "story-2",
+    name: "Joshua Cornelius",
+    role: "Co-Founder",
+    company: "Freeletics | CDTM",
+    image: "/memberJourney/alumni/JoshuaCornelius.png",
+    story: "Before we founded Freeletics, START Munich - in addition to CDTM - gave my co-founder and me the ideal opportunity to make first contacts in the Munich startup scene.",
+    department: "Alumni",
+    logos: [
+      { src: "https://cdn.prod.website-files.com/65f98ea7c70b10b668ccbeb3/65f98ea7c70b10b668ccbeef_5eb3c929c8c4590004435152.png", url: "https://www.freeletics.com/" }
     ]
   }
 ]
@@ -249,9 +251,24 @@ export default function MemberJourneyPage() {
   const timelineSliderRef = useRef<HTMLDivElement>(null)
   const [scrollProgress, setScrollProgress] = useState(0)
   const [hoveredEventId, setHoveredEventId] = useState<string | null>(null)
+  const [lockedEventId, setLockedEventId] = useState<string | null>(null)
   const [isMoreHovered, setIsMoreHovered] = useState(false)
+  const [isMoreLocked, setIsMoreLocked] = useState(false)
   const autoRotateTimerRef = useRef<NodeJS.Timeout | null>(null)
   const eventImageRef = useRef<HTMLDivElement>(null)
+  const eventsSectionRef = useRef<HTMLDivElement>(null)
+
+  // Unlock selection when clicking outside the events section
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (eventsSectionRef.current && !eventsSectionRef.current.contains(e.target as Node)) {
+        setLockedEventId(null)
+        setIsMoreLocked(false)
+      }
+    }
+    document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [])
 
   // Animated counter for hero stats
   const semesterCount = useAnimatedNumber(2, loading, 500)
@@ -264,14 +281,17 @@ export default function MemberJourneyPage() {
     "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=800&auto=format&fit=crop"
   ]
 
-  const eventImages = hoveredEventId
+  const activeEventId = lockedEventId || hoveredEventId
+  const activeMore = isMoreLocked || isMoreHovered
+
+  const eventImages = activeEventId
     ? startEvents
-      .find((event) => event.id === hoveredEventId)
-      ?.images.map((img) => ({ src: img, title: startEvents.find((e) => e.id === hoveredEventId)!.title })) || []
+      .find((event) => event.id === activeEventId)
+      ?.images.map((img) => ({ src: img, title: startEvents.find((e) => e.id === activeEventId)!.title })) || []
     : []
 
-  // Get current event for auto-rotation (only if not showing "more")
-  const currentEvent = !hoveredEventId && !isMoreHovered && currentEventIndex < startEvents.length
+  // Get current event for auto-rotation (only if nothing is active)
+  const currentEvent = !activeEventId && !activeMore && currentEventIndex < startEvents.length
     ? startEvents[currentEventIndex]
     : null
   const currentEventImages = currentEvent
@@ -282,16 +302,6 @@ export default function MemberJourneyPage() {
     if (window.innerWidth < 1024 && eventImageRef.current) {
       eventImageRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
     }
-  }
-
-  const handleNextImage = () => {
-    if (eventImages.length === 0) return
-    setEventImageIndex((prev) => (prev + 1) % eventImages.length)
-  }
-
-  const handlePrevImage = () => {
-    if (eventImages.length === 0) return
-    setEventImageIndex((prev) => (prev - 1 + eventImages.length) % eventImages.length)
   }
 
   useEffect(() => {
@@ -317,8 +327,8 @@ export default function MemberJourneyPage() {
 
   // Auto-rotate events every 5 seconds
   useEffect(() => {
-    if (loading || hoveredEventId || isMoreHovered) {
-      // Clear timer if hovering
+    if (loading || activeEventId || activeMore) {
+      // Clear timer if locked or hovering
       if (autoRotateTimerRef.current) {
         clearInterval(autoRotateTimerRef.current)
         autoRotateTimerRef.current = null
@@ -335,28 +345,27 @@ export default function MemberJourneyPage() {
         clearInterval(autoRotateTimerRef.current)
       }
     }
-  }, [loading, hoveredEventId, isMoreHovered])
+  }, [loading, activeEventId, activeMore])
 
   // Reset image index when event changes
   useEffect(() => {
     setEventImageIndex(0)
-  }, [hoveredEventId, isMoreHovered, currentEventIndex])
+  }, [activeEventId, activeMore, currentEventIndex])
 
-  // When hovering ends, continue auto-rotation from the hovered item
+  // When hovering ends, continue auto-rotation from the active item
   useEffect(() => {
-    if (!hoveredEventId && !isMoreHovered) {
-      return // Don't reset - let auto-rotation continue from current position
+    if (!activeEventId && !activeMore) {
+      return
     }
-    // Set currentEventIndex to match the hovered item so auto-rotation continues from there
-    if (hoveredEventId) {
-      const index = startEvents.findIndex(e => e.id === hoveredEventId)
+    if (activeEventId) {
+      const index = startEvents.findIndex(e => e.id === activeEventId)
       if (index !== -1) {
         setCurrentEventIndex(index)
       }
-    } else if (isMoreHovered) {
+    } else if (activeMore) {
       setCurrentEventIndex(startEvents.length)
     }
-  }, [hoveredEventId, isMoreHovered])
+  }, [activeEventId, activeMore])
 
   if (loading) {
     return (
@@ -556,25 +565,27 @@ export default function MemberJourneyPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+            <div ref={eventsSectionRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch lg:h-[650px]">
               {/* Single large card with all events */}
               <div
                 className="bg-white/5 border border-white/10 p-8"
                 onMouseLeave={() => {
-                  setHoveredEventId(null)
-                  setIsMoreHovered(false)
+                  if (!lockedEventId && !isMoreLocked) {
+                    setHoveredEventId(null)
+                    setIsMoreHovered(false)
+                  }
                 }}
               >
                 <div className="space-y-2">
                   {startEvents.map((event, index) => {
-                    const isActive = hoveredEventId === event.id || (!hoveredEventId && !isMoreHovered && currentEventIndex === index)
+                    const isActive = activeEventId === event.id || (!activeEventId && !activeMore && currentEventIndex === index)
                     return (
                       <div
                         key={event.id}
                         className={`flex items-start gap-4 p-4 cursor-pointer transition-all duration-200 rounded-lg border-l-4 ${isActive ? 'border-l-brand-pink bg-brand-pink/10' : 'border-l-transparent hover:bg-white/5'}`}
-                        onMouseEnter={() => setHoveredEventId(event.id)}
-                        onMouseLeave={() => setHoveredEventId(null)}
-                        onClick={() => { setHoveredEventId(event.id); scrollToEventImage() }}
+                        onMouseEnter={() => { if (!lockedEventId && !isMoreLocked) setHoveredEventId(event.id) }}
+                        onMouseLeave={() => { if (!lockedEventId && !isMoreLocked) setHoveredEventId(null) }}
+                        onClick={() => { setLockedEventId(event.id); setIsMoreLocked(false); setIsMoreHovered(false); setHoveredEventId(null); scrollToEventImage() }}
                       >
                         <span className="text-4xl flex-shrink-0">{event.icon}</span>
                         <div className="flex-1">
@@ -589,19 +600,19 @@ export default function MemberJourneyPage() {
 
                   {/* "And a lot more..." */}
                   {(() => {
-                    const isMoreActive = isMoreHovered || (!hoveredEventId && !isMoreHovered && currentEventIndex === startEvents.length)
+                    const isMoreActive = activeMore || (!activeEventId && !activeMore && currentEventIndex === startEvents.length)
                     return (
                       <div
                         className={`flex items-start gap-4 p-4 cursor-pointer transition-all duration-200 rounded-lg border-l-4 ${isMoreActive ? 'border-l-brand-pink bg-brand-pink/10' : 'border-l-transparent hover:bg-white/5'}`}
-                        onMouseEnter={() => setIsMoreHovered(true)}
-                        onMouseLeave={() => setIsMoreHovered(false)}
-                        onClick={() => { setIsMoreHovered(true); scrollToEventImage() }}
+                        onMouseEnter={() => { if (!lockedEventId && !isMoreLocked) setIsMoreHovered(true) }}
+                        onMouseLeave={() => { if (!lockedEventId && !isMoreLocked) setIsMoreHovered(false) }}
+                        onClick={() => { setIsMoreLocked(true); setLockedEventId(null); setHoveredEventId(null); setIsMoreHovered(false); scrollToEventImage() }}
                       >
                         <span className="text-4xl flex-shrink-0">✨</span>
                         <div className="flex-1">
                           <h3 className="text-white font-bold text-lg mb-2">And a lot more...</h3>
                           <p className="text-gray-300 text-sm leading-relaxed">
-                            Discover many more exciting events and opportunities as part of the START Munich community.
+                            Discover many more exciting events and opportunities.
                           </p>
                         </div>
                       </div>
@@ -611,8 +622,8 @@ export default function MemberJourneyPage() {
               </div>
 
               {/* Rotating single image or grid */}
-              <div ref={eventImageRef} className="bg-white/5 border border-white/10 h-full min-h-[500px] relative overflow-hidden">
-                {isMoreHovered || (!hoveredEventId && !isMoreHovered && currentEventIndex === startEvents.length) ? (
+              <div ref={eventImageRef} className="bg-white/5 border border-white/10 relative overflow-hidden">
+                {activeMore || (!activeEventId && !activeMore && currentEventIndex === startEvents.length) ? (
                   /* Grid of 4 images for "And a lot more..." */
                   <div className="grid grid-cols-2 grid-rows-2 w-full h-full gap-0">
                     {moreImages.map((img, i) => (
@@ -625,96 +636,53 @@ export default function MemberJourneyPage() {
                         <div className="absolute inset-0 bg-brand-dark-blue/20"></div>
                       </div>
                     ))}
-                    {/* Center overlay text */}
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="bg-black/70 backdrop-blur-sm px-8 py-4 border-2 border-brand-pink">
                         <p className="text-2xl font-black text-white">AND MORE...</p>
                       </div>
                     </div>
                   </div>
-                ) : hoveredEventId && eventImages.length > 0 ? (
-                  /* Hovered event with manual navigation */
-                  <>
+                ) : (() => {
+                  const images = activeEventId && eventImages.length > 0
+                    ? eventImages
+                    : currentEventImages.length > 0
+                      ? currentEventImages
+                      : null
+                  if (!images) return null
+                  const idx = eventImageIndex % images.length
+                  return (
                     <div className="relative w-full h-full">
                       <img
-                        key={eventImages[eventImageIndex]?.src}
-                        src={eventImages[eventImageIndex]?.src}
-                        alt={eventImages[eventImageIndex]?.title}
+                        key={images[idx]?.src}
+                        src={images[idx]?.src}
+                        alt={images[idx]?.title}
                         className="w-full h-full object-cover fade-swap"
                       />
-
-                      {/* Title overlay */}
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-                        <p className="text-base font-bold text-white">
-                          {eventImages[eventImageIndex]?.title}
-                        </p>
+                        <p className="text-base font-bold text-white">{images[idx]?.title}</p>
                       </div>
-
-                      {/* Navigation controls overlay */}
                       <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 flex items-center justify-between px-4">
                         <button
-                          onClick={handlePrevImage}
+                          onClick={() => setEventImageIndex((prev) => (prev - 1 + images.length) % images.length)}
                           className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 hover:bg-brand-pink/80 border border-white/20 hover:border-brand-pink text-white transition-all duration-300 backdrop-blur-md hover:scale-110"
                           aria-label="Previous image"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                         </button>
                         <button
-                          onClick={handleNextImage}
+                          onClick={() => setEventImageIndex((prev) => (prev + 1) % images.length)}
                           className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 hover:bg-brand-pink/80 border border-white/20 hover:border-brand-pink text-white transition-all duration-300 backdrop-blur-md hover:scale-110"
                           aria-label="Next image"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                         </button>
                       </div>
-
-                      {/* Image counter */}
                       <div className="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white text-xs font-semibold">
-                        {eventImageIndex + 1} / {eventImages.length}
+                        {idx + 1} / {images.length}
                       </div>
                     </div>
-                  </>
-                ) : currentEventImages.length > 0 ? (
-                  /* Auto-rotating event display */
-                  <div className="relative w-full h-full">
-                    <img
-                      key={currentEventImages[eventImageIndex % currentEventImages.length]?.src}
-                      src={currentEventImages[eventImageIndex % currentEventImages.length]?.src}
-                      alt={currentEventImages[eventImageIndex % currentEventImages.length]?.title}
-                      className="w-full h-full object-cover fade-swap"
-                    />
-
-                    {/* Title overlay */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-                      <p className="text-base font-bold text-white">
-                        {currentEventImages[eventImageIndex % currentEventImages.length]?.title}
-                      </p>
-                    </div>
-
-                    {/* Navigation controls overlay */}
-                    <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 flex items-center justify-between px-4">
-                      <button
-                        onClick={() => setEventImageIndex((prev) => (prev - 1 + currentEventImages.length) % currentEventImages.length)}
-                        className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 hover:bg-brand-pink/80 border border-white/20 hover:border-brand-pink text-white transition-all duration-300 backdrop-blur-md hover:scale-110"
-                        aria-label="Previous image"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-                      </button>
-                      <button
-                        onClick={() => setEventImageIndex((prev) => (prev + 1) % currentEventImages.length)}
-                        className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 hover:bg-brand-pink/80 border border-white/20 hover:border-brand-pink text-white transition-all duration-300 backdrop-blur-md hover:scale-110"
-                        aria-label="Next image"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                      </button>
-                    </div>
-
-                    {/* Image counter */}
-                    <div className="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white text-xs font-semibold">
-                      {(eventImageIndex % currentEventImages.length) + 1} / {currentEventImages.length}
-                    </div>
-                  </div>
-                ) : null}
+                  )
+                })()}
               </div>
             </div>
           </div>
