@@ -85,7 +85,7 @@ export default function Navigation() {
                       </span>
                     </Link>
                     <Link
-                      href="/our-mission"
+                      href="/about-us"
                       onClick={() => setIsCommunityOpen(false)}
                       className="group block px-6 py-3.5 text-white text-base font-bold hover:bg-brand-pink transition-all duration-200"
                     >
@@ -93,7 +93,7 @@ export default function Navigation() {
                         <svg className="w-4 h-4 mr-3 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
-                        Our Mission
+                        About Us
                       </span>
                     </Link>
                     <Link
@@ -218,11 +218,11 @@ export default function Navigation() {
               {isMobileCommunityOpen && (
                 <div className="bg-white/5 space-y-1">
                   <Link
-                    href="/our-mission"
+                    href="/about-us"
                     className="block px-8 py-2 text-white text-sm hover:text-brand-pink transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    Our Mission
+                    About Us
                   </Link>
                   <Link
                     href="/member-journey"
