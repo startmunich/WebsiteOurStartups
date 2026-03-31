@@ -515,19 +515,21 @@ export default function MemberJourneyPage() {
 
             {/* Desktop: arc layout */}
             {(() => {
-              // Half-ellipse: center=(300,380), rx=220, ry=380
-              // Arc from (80,380) through (300,0) to (520,380)
-              const cx = 300, cy = 380, rx = 220, ry = 380
+              // Left-side half-circle "(" : center=(300,300), r=300
+              // Arc from (300,0) at top, curving LEFT through (0,300), to (300,600) at bottom
+              const cx = 300, cy = 300, r = 300
               const toRad = (deg: number) => (deg * Math.PI) / 180
-              // 5 dots evenly spread across the arc (150° → 30°)
-              const angles = [150, 115, 90, 65, 30]
+              // Standard-math angles (CCW from +x): 108°→top-left … 252°→bottom-left
+              const angles = [108, 144, 180, 216, 252]
+              // Per-dot label vertical nudge (positive = lower, negative = higher)
+              const labelYOffsets = [18, 6, 6, 6, -8]
               const dots = departments.map((dept, i) => {
                 const a = toRad(angles[i])
                 return {
                   dept,
-                  x: cx + rx * Math.cos(a),
-                  y: cy - ry * Math.sin(a),
-                  angle: angles[i],
+                  x: cx + r * Math.cos(a),
+                  y: cy - r * Math.sin(a),
+                  labelYOffset: labelYOffsets[i],
                 }
               })
               const activeDept = departments.find(d => d.id === activeDeptId)
@@ -535,93 +537,8 @@ export default function MemberJourneyPage() {
               return (
                 <>
                   {/* Desktop */}
-                  <div className="hidden lg:grid lg:grid-cols-[1fr_520px] gap-10 items-center">
-                    {/* Arc */}
-                    <div className="relative w-full">
-                      <svg
-                        viewBox="-80 -70 680 510"
-                        className="w-full"
-                        style={{ overflow: 'visible' }}
-                      >
-                        {/* Full dashed arc */}
-                        <path
-                          d={`M ${cx - rx},${cy} A ${rx},${ry} 0 0 1 ${cx + rx},${cy}`}
-                          fill="none"
-                          stroke="rgba(255,255,255,0.12)"
-                          strokeWidth="1.5"
-                          strokeDasharray="6 12"
-                        />
-
-                        {/* Highlighted arc up to active dot */}
-                        {activeDeptId && (() => {
-                          const idx = departments.findIndex(d => d.id === activeDeptId)
-                          const endAngle = toRad(angles[idx])
-                          const ex = cx + rx * Math.cos(endAngle)
-                          const ey = cy - ry * Math.sin(endAngle)
-                          // Arc from left edge (0, cy) to the active dot — always < 180° so large-arc=0
-                          return (
-                            <path
-                              d={`M ${cx - rx},${cy} A ${rx},${ry} 0 0 1 ${ex},${ey}`}
-                              fill="none"
-                              stroke="rgba(236,72,153,0.55)"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              className="transition-all duration-500"
-                            />
-                          )
-                        })()}
-
-                        {/* Dots + labels */}
-                        {dots.map(({ dept, x, y, angle }) => {
-                          const isActive = activeDeptId === dept.id
-                          // Label side: left of arc → anchor end, top → middle, right → start
-                          const labelAnchor = angle > 110 ? 'end' : angle < 70 ? 'start' : 'middle'
-                          const labelX = angle > 110 ? x - 28 : angle < 70 ? x + 28 : x
-                          const labelY = angle > 110 ? y + 6 : angle < 70 ? y + 6 : y - 26
-
-                          return (
-                            <g
-                              key={dept.id}
-                              onClick={() => setActiveDeptId(dept.id)}
-                              className="cursor-pointer"
-                              style={{ transition: 'all 0.3s' }}
-                            >
-                              {/* Glow ring */}
-                              {isActive && (
-                                <circle cx={x} cy={y} r="22" fill="rgba(236,72,153,0.15)" />
-                              )}
-                              {/* Dot */}
-                              <circle
-                                cx={x}
-                                cy={y}
-                                r={isActive ? 11 : 7}
-                                fill={isActive ? 'rgb(236,72,153)' : 'rgba(255,255,255,0.22)'}
-                                stroke={isActive ? 'rgba(236,72,153,0.6)' : 'rgba(255,255,255,0.25)'}
-                                strokeWidth="2"
-                              />
-                              {/* Inner dot when active */}
-                              {isActive && <circle cx={x} cy={y} r="4" fill="white" />}
-                              {/* Label */}
-                              <text
-                                x={labelX}
-                                y={labelY}
-                                textAnchor={labelAnchor}
-                                fontSize="20"
-                                fontWeight="800"
-                                letterSpacing="0.08em"
-                                fill={isActive ? 'rgb(236,72,153)' : 'rgba(255,255,255,0.5)'}
-                                fontFamily="inherit"
-                                style={{ transition: 'fill 0.3s', textTransform: 'uppercase' }}
-                              >
-                                {dept.name.toUpperCase()}
-                              </text>
-                            </g>
-                          )
-                        })}
-                      </svg>
-                    </div>
-
-                    {/* Detail panel */}
+                  <div className="hidden lg:grid lg:grid-cols-[1fr_380px] gap-10 items-center">
+                    {/* Detail panel — left */}
                     <div className="min-h-[320px]">
                       {activeDept && (
                         <div
@@ -647,6 +564,64 @@ export default function MemberJourneyPage() {
                           </div>
                         </div>
                       )}
+                    </div>
+
+                    {/* Arc — right */}
+                    <div className="relative w-full">
+                      <svg
+                        viewBox="-20 -20 400 640"
+                        className="w-full"
+                        style={{ overflow: 'visible' }}
+                      >
+                        {/* Always-pink arc: (300,0) CCW through (0,300) to (300,600) */}
+                        <path
+                          d={`M ${cx},${cy - r} A ${r},${r} 0 0 0 ${cx},${cy + r}`}
+                          fill="none"
+                          stroke="rgb(236,72,153)"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+
+                        {/* Dots + labels */}
+                        {dots.map(({ dept, x, y, labelYOffset }) => {
+                          const isActive = activeDeptId === dept.id
+                          return (
+                            <g
+                              key={dept.id}
+                              onClick={() => setActiveDeptId(dept.id)}
+                              className="cursor-pointer"
+                              style={{ transition: 'all 0.3s' }}
+                            >
+                              {isActive && (
+                                <circle cx={x} cy={y} r="22" fill="rgba(236,72,153,0.15)" />
+                              )}
+                              <circle
+                                cx={x}
+                                cy={y}
+                                r={isActive ? 11 : 7}
+                                fill={isActive ? 'rgb(236,72,153)' : 'rgba(255,255,255,0.22)'}
+                                stroke={isActive ? 'rgba(236,72,153,0.6)' : 'rgba(255,255,255,0.25)'}
+                                strokeWidth="2"
+                              />
+                              {isActive && <circle cx={x} cy={y} r="4" fill="white" />}
+                              {/* Label — to the right of dot, toward the opening */}
+                              <text
+                                x={x + 24}
+                                y={y + labelYOffset}
+                                textAnchor="start"
+                                fontSize="20"
+                                fontWeight="800"
+                                letterSpacing="0.08em"
+                                fill={isActive ? 'rgb(236,72,153)' : 'rgba(255,255,255,0.5)'}
+                                fontFamily="inherit"
+                                style={{ transition: 'fill 0.3s' }}
+                              >
+                                {dept.name.toUpperCase()}
+                              </text>
+                            </g>
+                          )
+                        })}
+                      </svg>
                     </div>
                   </div>
 
