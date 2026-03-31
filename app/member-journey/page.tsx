@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect, useRef, type CSSProperties } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Script from 'next/script'
+import { ScrollIndicator } from '@/components/EventComponents'
 import Hero from "@/components/Hero"
 import HeroCard from "@/components/HeroCard"
 import TestimonialsSection from '@/components/TestimonialsSection'
@@ -86,7 +87,7 @@ const timelineEvents: TimelineEvent[] = [
     image: placeholderImage,
     details: [
       "Join the Bay Area trip, 2 weeks, 20+ curated visits to top startups, VCs, and labs",
-      "Write your thesis with Cambridge through direct research collaboration",
+      "Research Stay @ Cambridge through direct research collaboration",
       "Become part of the START Network, 20+ chapters worldwide",
       "Find co-founders or start your own venture within a community of 70+ startups, including teams backed by Y Combinator"
     ]
@@ -148,9 +149,9 @@ const startEvents: StartEvent[] = [
     frequency: "Monthly",
     icon: "📅",
     images: [
-      "/monthly-event.jpg",
-      "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop"
+      "/memberJourney/monthly/2.jpg",
+      "/memberJourney/monthly/3.png",
+      "/memberJourney/monthly/4.png",
     ]
   },
   {
@@ -161,8 +162,9 @@ const startEvents: StartEvent[] = [
     frequency: "Weekly",
     icon: "💼",
     images: [
-      "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=800&auto=format&fit=crop"
+      "/memberJourney/departmentwork/2.jpg",
+      "/memberJourney/departmentwork/1.JPG"
+
     ]
   },
   {
@@ -173,7 +175,7 @@ const startEvents: StartEvent[] = [
     frequency: "Monthly",
     icon: "🔨",
     images: [
-      "/Builder_Weekend.jpg"
+      "/memberJourney/builderWeekend/1.jpg"
     ]
   },
   {
@@ -184,9 +186,8 @@ const startEvents: StartEvent[] = [
     frequency: "",
     icon: "🎓",
     images: [
-      "/member-workshops.png",
-      "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?q=80&w=800&auto=format&fit=crop"
+      "/memberJourney/memberworkshop/1.jpg",
+      "/memberJourney/memberworkshop/3.jpeg"
     ]
   },
   {
@@ -197,14 +198,13 @@ const startEvents: StartEvent[] = [
     frequency: "",
     icon: "🏢",
     images: [
-      "/member-startup-visit.jpg",
-      "https://images.unsplash.com/photo-1519074002996-a69e7ac46a42?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=800&auto=format&fit=crop"
+      "/memberJourney/startupVisit/1.png",
+      "/memberJourney/startupVisit/2.png",
     ]
   }
 ]
 
-const alumniTestimonials: MemberStory[] = [
+const memberStories: MemberStory[] = [
   {
     id: "story-1",
     name: "Felix Haas",
@@ -219,18 +219,6 @@ const alumniTestimonials: MemberStory[] = [
     ]
   },
   {
-    id: "story-2",
-    name: "Joshua Cornelius",
-    role: "Co-Founder",
-    company: "Freeletics | CDTM",
-    image: "/memberJourney/alumni/JoshuaCornelius.png",
-    story: "Before we founded Freeletics, START Munich - in addition to CDTM - gave my co-founder and me the ideal opportunity to make first contacts in the Munich startup scene.",
-    department: "Alumni",
-    logos: [
-      { src: "https://cdn.prod.website-files.com/65f98ea7c70b10b668ccbeb3/65f98ea7c70b10b668ccbeef_5eb3c929c8c4590004435152.png", url: "https://www.freeletics.com/" }
-    ]
-  },
-  {
     id: "story-3",
     name: "Elisabeth Goebel",
     role: "Early Operator",
@@ -241,6 +229,18 @@ const alumniTestimonials: MemberStory[] = [
     logos: [
       { src: "https://cdn.prod.website-files.com/6902359088cc8683c4db0171/69249d98617b1b96682cca65_44a5d2ba9e6004a1281eed9068c62a95_zeitai-logo.png", url: "https://www.zeit.ai/" },
     ]
+  },
+    {
+    id: "story-2",
+    name: "Joshua Cornelius",
+    role: "Co-Founder",
+    company: "Freeletics | CDTM",
+    image: "/memberJourney/alumni/JoshuaCornelius.png",
+    story: "Before we founded Freeletics, START Munich - in addition to CDTM - gave my co-founder and me the ideal opportunity to make first contacts in the Munich startup scene.",
+    department: "Alumni",
+    logos: [
+      { src: "https://cdn.prod.website-files.com/65f98ea7c70b10b668ccbeb3/65f98ea7c70b10b668ccbeef_5eb3c929c8c4590004435152.png", url: "https://www.freeletics.com/" }
+    ]
   }
 ]
 
@@ -249,34 +249,53 @@ export default function MemberJourneyPage() {
   const [eventImageIndex, setEventImageIndex] = useState(0)
   const [currentEventIndex, setCurrentEventIndex] = useState(0)
   const timelineSliderRef = useRef<HTMLDivElement>(null)
-
+  const [scrollProgress, setScrollProgress] = useState(0)
   const [hoveredEventId, setHoveredEventId] = useState<string | null>(null)
+  const [lockedEventId, setLockedEventId] = useState<string | null>(null)
   const [isMoreHovered, setIsMoreHovered] = useState(false)
+  const [isMoreLocked, setIsMoreLocked] = useState(false)
   const autoRotateTimerRef = useRef<NodeJS.Timeout | null>(null)
   const eventImageRef = useRef<HTMLDivElement>(null)
+  const eventsSectionRef = useRef<HTMLDivElement>(null)
+
+  // Unlock selection when clicking outside the events section
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (eventsSectionRef.current && !eventsSectionRef.current.contains(e.target as Node)) {
+        setLockedEventId(null)
+        setIsMoreLocked(false)
+      }
+    }
+    document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [])
 
   // Animated counter for hero stats
   const semesterCount = useAnimatedNumber(2, loading, 500)
 
+  // Images for "And a lot more..." section
   const moreImages = [
-    "/more-isar-unfiltered.jpg",
-    "/more-workshops.png",
-    "/more-dsc04524.jpg",
-    "/more-img4955.jpg"
+    "https://images.unsplash.com/photo-1528605105345-5344ea20e269?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=800&auto=format&fit=crop"
   ]
 
-  // Get current event for auto-rotation (only if not showing "more")
-  const currentEvent = !hoveredEventId && !isMoreHovered && currentEventIndex < startEvents.length
+  const activeEventId = lockedEventId || hoveredEventId
+  const activeMore = isMoreLocked || isMoreHovered
+
+  const eventImages = activeEventId
+    ? startEvents
+      .find((event) => event.id === activeEventId)
+      ?.images.map((img) => ({ src: img, title: startEvents.find((e) => e.id === activeEventId)!.title })) || []
+    : []
+
+  // Get current event for auto-rotation (only if nothing is active)
+  const currentEvent = !activeEventId && !activeMore && currentEventIndex < startEvents.length
     ? startEvents[currentEventIndex]
     : null
   const currentEventImages = currentEvent
     ? currentEvent.images.map((img) => ({ src: img, title: currentEvent.title }))
-    : []
-
-  // Derive images for hovered event
-  const hoveredEvent = hoveredEventId ? startEvents.find(e => e.id === hoveredEventId) : null
-  const eventImages = hoveredEvent
-    ? hoveredEvent.images.map(img => ({ src: img, title: hoveredEvent.title }))
     : []
 
   const scrollToEventImage = () => {
@@ -285,15 +304,30 @@ export default function MemberJourneyPage() {
     }
   }
 
-
   useEffect(() => {
     setLoading(false)
   }, [])
 
-  // Auto-rotate events every 3 seconds
   useEffect(() => {
-    if (loading || hoveredEventId || isMoreHovered) {
-      // Clear timer if hovering
+    const slider = timelineSliderRef.current
+    if (!slider || loading) return
+
+    const updateScroll = () => {
+      const maxScroll = slider.scrollWidth - slider.clientWidth
+      const progress = maxScroll > 0 ? (slider.scrollLeft / maxScroll) * 100 : 0
+      setScrollProgress(progress)
+    }
+
+    slider.addEventListener('scroll', updateScroll)
+    updateScroll()
+    setTimeout(updateScroll, 100)
+
+    return () => slider.removeEventListener('scroll', updateScroll)
+  }, [loading])
+
+  // Auto-rotate events every 5 seconds
+  useEffect(() => {
+    if (loading || activeEventId || activeMore) {
       if (autoRotateTimerRef.current) {
         clearInterval(autoRotateTimerRef.current)
         autoRotateTimerRef.current = null
@@ -306,30 +340,31 @@ export default function MemberJourneyPage() {
     }, 3000)
 
     return () => {
-      if (autoRotateTimerRef.current) clearInterval(autoRotateTimerRef.current)
+      if (autoRotateTimerRef.current) {
+        clearInterval(autoRotateTimerRef.current)
+      }
     }
-  }, [loading, hoveredEventId, isMoreHovered])
+  }, [loading, activeEventId, activeMore])
 
   // Reset image index when event changes
   useEffect(() => {
     setEventImageIndex(0)
-  }, [hoveredEventId, isMoreHovered, currentEventIndex])
+  }, [activeEventId, activeMore, currentEventIndex])
 
-  // When hovering ends, continue auto-rotation from the hovered item
+  // When hovering ends, continue auto-rotation from the active item
   useEffect(() => {
-    if (!hoveredEventId && !isMoreHovered) {
-      return // Don't reset - let auto-rotation continue from current position
+    if (!activeEventId && !activeMore) {
+      return
     }
-    // Set currentEventIndex to match the hovered item so auto-rotation continues from there
-    if (hoveredEventId) {
-      const index = startEvents.findIndex(e => e.id === hoveredEventId)
+    if (activeEventId) {
+      const index = startEvents.findIndex(e => e.id === activeEventId)
       if (index !== -1) {
         setCurrentEventIndex(index)
       }
-    } else if (isMoreHovered) {
+    } else if (activeMore) {
       setCurrentEventIndex(startEvents.length)
     }
-  }, [hoveredEventId, isMoreHovered])
+  }, [activeEventId, activeMore])
 
   if (loading) {
     return (
@@ -374,7 +409,6 @@ export default function MemberJourneyPage() {
           description="Become a member and spend two active semesters contributing to the community"
         >
           <div className="grid grid-cols-2 lg:flex lg:flex-col gap-4 lg:gap-6">
-            {/* Stat Card 1 - 2 Semesters */}
             <HeroCard>
               <div className="flex items-baseline justify-center gap-2 mb-3">
                 <span className="text-4xl lg:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-300 transition">
@@ -385,7 +419,6 @@ export default function MemberJourneyPage() {
               <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Semesters</p>
             </HeroCard>
 
-            {/* Stat Card 2 - Infinite Possibilities */}
             <HeroCard>
               <div className="flex items-baseline justify-center gap-2 mb-3">
                 <span className="text-4xl lg:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-300 transition">
@@ -397,15 +430,14 @@ export default function MemberJourneyPage() {
           </div>
         </Hero>
 
-        {/* Content Below Hero */}
-
-        {/* Member Journey Timeline Section */}
-        <div className="mb-20 w-full pt-8 lg:pt-20">
+        {/* ═══ MEMBER JOURNEY TIMELINE ═══ */}
+        <div className="mb-0 w-full pt-12 lg:pt-28">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-            <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-              YOUR <span className="outline-text">MEMBER JOURNEY</span>
+            <span className="text-brand-pink text-sm font-bold tracking-[0.2em] uppercase block mb-1">Your Path</span>
+            <h2 className="text-3xl md:text-4xl font-black text-white">
+              MEMBER <span className="outline-text">JOURNEY</span>
             </h2>
-            <p className="text-gray-400 text-lg mb-4">
+            <p className="text-gray-400 text-lg mt-2 max-w-xl">
               The 5 milestones of your first two semesters at START Munich
             </p>
           </div>
@@ -415,42 +447,39 @@ export default function MemberJourneyPage() {
               ref={timelineSliderRef}
               className="overflow-x-auto scrollbar-hide pb-12 cursor-grab active:cursor-grabbing"
             >
-              {/* Timeline Events */}
-              <div className="flex gap-6 min-w-max px-8 lg:px-20">
+              <div className="flex gap-5 min-w-max px-8 lg:px-20">
                 {timelineEvents.map((event, index) => (
                   <div
                     key={event.id}
-                    className="group relative timeline-card-animate w-[340px] flex-shrink-0"
-                    style={{
-                      animationDelay: `${index * 0.15}s`
-                    }}
+                    className="group relative timeline-card-animate w-[320px] flex-shrink-0"
+                    style={{ animationDelay: `${index * 0.15}s` }}
                   >
-                    {/* Event Card */}
-                    <div className="relative h-full bg-white/5 border border-white/20 overflow-hidden transition-all duration-300 hover:border-brand-pink/50">
-                      <div className="p-8 h-full flex flex-col">
-                        {/* Number with divider */}
+                    <div className="relative h-full bg-white/[0.06] backdrop-blur-sm rounded-3xl border border-white/10 overflow-hidden transition-all duration-500 hover:border-brand-pink/40 hover:bg-white/[0.09]">
+                      {/* Pink accent top bar */}
+                      <div className="h-px w-full bg-gradient-to-r from-transparent via-brand-pink/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                      <div className="p-8">
+                        {/* Step number + divider */}
                         <div className="flex items-center gap-4 mb-6">
-                          <span className="text-4xl font-black text-white tracking-tight">
+                          <span className="text-5xl font-black text-white/20 tracking-tight tabular-nums leading-none">
                             0{index + 1}
                           </span>
-                          <div className="h-[1px] flex-1 bg-white/20"></div>
+                          <div className="h-px flex-1 bg-gradient-to-r from-white/20 to-transparent" />
+                          <span className="text-2xl">{event.icon}</span>
                         </div>
 
-                        {/* Title with emoji */}
-                        <h3 className="text-lg font-black text-white mb-3">
-                          {event.title} <span className="ml-1">{event.icon}</span>
+                        <h3 className="text-xl font-black text-white mb-3 group-hover:text-brand-pink transition-colors duration-300">
+                          {event.title}
                         </h3>
 
-                        {/* Description */}
-                        <p className="text-sm text-gray-400 leading-relaxed mb-5">
+                        <p className="text-sm text-gray-400 leading-relaxed mb-6">
                           {event.description}
                         </p>
 
-                        {/* Details List */}
                         <div className="space-y-3">
                           {(event.details as string[]).map((detail, i) => (
                             <div key={i} className="flex items-start gap-3">
-                              <div className="w-1.5 h-1.5 bg-brand-pink rounded-full mt-1.5 flex-shrink-0"></div>
+                              <div className="w-1 h-1 bg-brand-pink rounded-full mt-[0.45rem] flex-shrink-0" />
                               <span className="text-sm text-gray-400 leading-relaxed">{detail}</span>
                             </div>
                           ))}
@@ -461,166 +490,99 @@ export default function MemberJourneyPage() {
                 ))}
               </div>
             </div>
+
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <ScrollIndicator sliderRef={timelineSliderRef} scrollProgress={scrollProgress} />
+            </div>
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 lg:pb-20">
+        {/* ═══ MAIN CONTENT ═══ */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-28 space-y-32">
 
-          {/* Departments Section */}
-          <div className="mb-10">
+          {/* ═══ DEPARTMENTS ═══ */}
+          <section>
             <div className="mb-12">
-              <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+              <span className="text-brand-pink text-sm font-bold tracking-[0.2em] uppercase block mb-1">Where You Fit</span>
+              <h2 className="text-3xl md:text-4xl font-black text-white">
                 OUR <span className="outline-text">DEPARTMENTS</span>
               </h2>
-              <p className="text-gray-400 text-lg">
+              <p className="text-gray-400 text-lg mt-2 max-w-xl">
                 Choose your department and contribute to our community
               </p>
             </div>
 
-            {/* Mindmap - Desktop only */}
-            <div className="hidden lg:block">
-              <div className="relative w-full" style={{ height: '900px', marginBottom: '-100px' }}>
-                {/* Connecting lines (SVG) - rendered first so boxes cover them */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none">
-                  <defs>
-                    <mask id="logo-mask">
-                      <rect width="100%" height="100%" fill="white" />
-                      <circle cx="50%" cy="40%" r="50" fill="black" />
-                    </mask>
-                  </defs>
-                  <g mask="url(#logo-mask)">
-                    {[
-                      { x2: '10%', y2: '62%' },
-                      { x2: '10%', y2: '12%' },
-                      { x2: '50%', y2: '20%' },
-                      { x2: '90%', y2: '12%' },
-                      { x2: '90%', y2: '62%' },
-                    ].map((line, i) => (
-                      <line
-                        key={i}
-                        x1="50%"
-                        y1="40%"
-                        x2={line.x2}
-                        y2={line.y2}
-                        stroke="rgba(208,0,111,0.3)"
-                        strokeWidth="3"
-                        className="mindmap-line"
-                        style={{ animationDelay: `${i * 0.3}s` }}
-                      />
-                    ))}
-                  </g>
-                </svg>
-
-                {/* Logo - center of U */}
-                <div className="absolute left-1/2 -translate-x-1/2 z-10" style={{ top: '30%' }}>
-                  <img src="/startlogo.svg" alt="START Munich" className="w-44 h-44" />
-                </div>
-
-                {/* Department Nodes - U shape around logo */}
-                {(() => {
-                  // People, Marketing, FinOps, Partnerships, Events
-                  // Top of U: Marketing (left), FinOps (center), Partnerships (right)
-                  // Bottom of U: People (left), Events (right)
-                  const positions: CSSProperties[] = [
-                    { top: '45%', left: '0' },
-                    { top: '5%', left: '10%' },
-                    { top: '-5%', left: '50%', transform: 'translateX(-50%)' },
-                    { top: '5%', right: '10%' },
-                    { top: '45%', right: '0' },
-                  ]
-                  return departments.map((dept, i) => (
-                    <div
-                      key={dept.id}
-                      className="absolute z-10 w-[280px]"
-                      style={positions[i]}
-                    >
-                      <div className="bg-[#080830] border border-white/10 p-5">
-                        <div className="flex items-center gap-3 mb-3">
-                          <span className="text-2xl">{dept.icon}</span>
-                          <h3 className="text-xl font-bold text-white">{dept.name}</h3>
-                        </div>
-                        <p className="text-sm text-gray-400 mb-3">{dept.description}</p>
-                        <div className="space-y-1.5">
-                          {dept.responsibilities.map((resp, j) => (
-                            <div key={j} className="flex items-center gap-2">
-                              <div className="w-1.5 h-1.5 min-w-[6px] min-h-[6px] bg-brand-pink rounded-full flex-shrink-0"></div>
-                              <span className="text-sm text-gray-400">{resp}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                })()}
-              </div>
-            </div>
-
-            {/* Mobile fallback - stacked cards */}
-            <div className="lg:hidden space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 items-stretch">
               {departments.map((dept) => (
-                <div
-                  key={dept.id}
-                  className="relative bg-white/5 border border-white/10 overflow-hidden"
-                >
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="text-2xl">{dept.icon}</span>
-                    <h3 className="text-xl font-bold text-white">{dept.name}</h3>
-                  </div>
-                  <p className="text-sm text-gray-400 mb-3">{dept.description}</p>
-                  <div className="space-y-1.5">
-                    {dept.responsibilities.map((resp, j) => (
-                      <div key={j} className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 min-w-[6px] min-h-[6px] bg-brand-pink rounded-full flex-shrink-0"></div>
-                        <span className="text-sm text-gray-400">{resp}</span>
+                <div key={dept.id} className="group h-full">
+                  <div className="relative h-full bg-white/[0.06] backdrop-blur-sm rounded-3xl border border-white/10 hover:border-brand-pink/30 hover:bg-white/[0.09] p-7 transition-all duration-500">
+                    <div>
+                      <div className="w-12 h-12 bg-brand-pink/15 rounded-2xl flex items-center justify-center mb-4">
+                        <span className="text-2xl">{dept.icon}</span>
                       </div>
-                    ))}
+                      <h3 className="text-lg font-black text-white mb-2 group-hover:text-brand-pink transition-colors">{dept.name}</h3>
+                      <p className="text-gray-400 text-xs leading-relaxed">{dept.description}</p>
+                    </div>
+                    <div className="pt-4 mt-4 border-t border-white/5">
+                      <p className="text-xs text-brand-pink font-bold tracking-[0.15em] uppercase mb-2">Responsibilities</p>
+                      {dept.responsibilities.map((resp, i) => (
+                        <div key={i} className="flex items-start gap-2 mt-2">
+                          <div className="w-1 h-1 bg-brand-pink rounded-full mt-1.5 flex-shrink-0" />
+                          <span className="text-xs text-gray-500 leading-relaxed">{resp}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
+          </section>
 
-        </div>
-
-        {/* Internal Events Section */}
-        <div className="w-full bg-white py-16 md:py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* ═══ INTERNAL EVENTS ═══ */}
+          <section>
             <div className="mb-12">
-              <h2 className="text-3xl md:text-4xl font-black text-brand-dark-blue mb-3">
-                INTERNAL <span className="outline-text-dark">EVENTS</span>
+              <span className="text-brand-pink text-sm font-bold tracking-[0.2em] uppercase block mb-1">Community Life</span>
+              <h2 className="text-3xl md:text-4xl font-black text-white">
+                INTERNAL <span className="outline-text">EVENTS</span>
               </h2>
-              <p className="text-gray-500 text-lg">
+              <p className="text-gray-400 text-lg mt-2 max-w-xl">
                 Regular events and activities for our member community
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-              {/* Single large card with all events */}
+            <div ref={eventsSectionRef} className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch lg:h-[620px]">
+              {/* Event list card */}
               <div
-                className="bg-gray-50 border border-gray-200 p-8"
+                className="bg-white/[0.06] backdrop-blur-sm rounded-3xl border border-white/10 p-8"
                 onMouseLeave={() => {
-                  setHoveredEventId(null)
-                  setIsMoreHovered(false)
+                  if (!lockedEventId && !isMoreLocked) {
+                    setHoveredEventId(null)
+                    setIsMoreHovered(false)
+                  }
                 }}
               >
-                <div className="space-y-2">
+                <div className="space-y-1">
                   {startEvents.map((event, index) => {
-                    const isActive = hoveredEventId === event.id || (!hoveredEventId && !isMoreHovered && currentEventIndex === index)
+                    const isActive = activeEventId === event.id || (!activeEventId && !activeMore && currentEventIndex === index)
                     return (
                       <div
                         key={event.id}
-                        className={`flex items-start gap-4 p-4 cursor-pointer transition-all duration-200 rounded-lg border-l-4 ${isActive ? 'border-l-brand-pink bg-brand-pink/10' : 'border-l-transparent hover:bg-gray-100'}`}
-                        role="button"
-                        tabIndex={0}
-                        onMouseEnter={() => setHoveredEventId(event.id)}
-                        onMouseLeave={() => setHoveredEventId(null)}
-                        onClick={() => { setHoveredEventId(event.id); scrollToEventImage() }}
-                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setHoveredEventId(event.id); scrollToEventImage() } }}
+                        className={`flex items-start gap-4 p-4 cursor-pointer transition-all duration-200 rounded-2xl ${isActive ? 'bg-brand-pink/10 border border-brand-pink/30' : 'border border-transparent hover:bg-white/5'}`}
+                        onMouseEnter={() => { if (!lockedEventId && !isMoreLocked) setHoveredEventId(event.id) }}
+                        onMouseLeave={() => { if (!lockedEventId && !isMoreLocked) setHoveredEventId(null) }}
+                        onClick={() => { setLockedEventId(event.id); setIsMoreLocked(false); setIsMoreHovered(false); setHoveredEventId(null); scrollToEventImage() }}
                       >
-                        <span className="text-4xl flex-shrink-0">{event.icon}</span>
-                        <div className="flex-1">
-                          <h3 className="text-brand-dark-blue font-bold text-lg mb-2">{event.title}</h3>
-                          <p className="text-gray-600 text-sm leading-relaxed">
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-200 ${isActive ? 'bg-brand-pink/20' : 'bg-white/5'}`}>
+                          <span className="text-xl">{event.icon}</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className={`font-bold text-base transition-colors duration-200 ${isActive ? 'text-white' : 'text-gray-200'}`}>{event.title}</h3>
+                            {event.frequency && (
+                              <span className="text-xs text-brand-pink/70 font-semibold bg-brand-pink/10 px-2 py-0.5 rounded-full flex-shrink-0">{event.frequency}</span>
+                            )}
+                          </div>
+                          <p className="text-gray-400 text-sm leading-relaxed">
                             {event.description}
                           </p>
                         </div>
@@ -628,24 +590,23 @@ export default function MemberJourneyPage() {
                     )
                   })}
 
-                  {/* "And a lot more..." */}
+                  {/* And a lot more */}
                   {(() => {
-                    const isMoreActive = isMoreHovered || (!hoveredEventId && !isMoreHovered && currentEventIndex === startEvents.length)
+                    const isMoreActive = activeMore || (!activeEventId && !activeMore && currentEventIndex === startEvents.length)
                     return (
                       <div
-                        className={`flex items-start gap-4 p-4 cursor-pointer transition-all duration-200 rounded-lg border-l-4 ${isMoreActive ? 'border-l-brand-pink bg-brand-pink/10' : 'border-l-transparent hover:bg-gray-100'}`}
-                        role="button"
-                        tabIndex={0}
-                        onMouseEnter={() => setIsMoreHovered(true)}
-                        onMouseLeave={() => setIsMoreHovered(false)}
-                        onClick={() => { setIsMoreHovered(true); scrollToEventImage() }}
-                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setIsMoreHovered(true); scrollToEventImage() } }}
+                        className={`flex items-start gap-4 p-4 cursor-pointer transition-all duration-200 rounded-2xl ${isMoreActive ? 'bg-brand-pink/10 border border-brand-pink/30' : 'border border-transparent hover:bg-white/5'}`}
+                        onMouseEnter={() => { if (!lockedEventId && !isMoreLocked) setIsMoreHovered(true) }}
+                        onMouseLeave={() => { if (!lockedEventId && !isMoreLocked) setIsMoreHovered(false) }}
+                        onClick={() => { setIsMoreLocked(true); setLockedEventId(null); setHoveredEventId(null); setIsMoreHovered(false); scrollToEventImage() }}
                       >
-                        <span className="text-4xl flex-shrink-0">✨</span>
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-200 ${isMoreActive ? 'bg-brand-pink/20' : 'bg-white/5'}`}>
+                          <span className="text-xl">✨</span>
+                        </div>
                         <div className="flex-1">
-                          <h3 className="text-brand-dark-blue font-bold text-lg mb-2">And a lot more...</h3>
-                          <p className="text-gray-600 text-sm leading-relaxed">
-                            Discover many more exciting events and opportunities as part of the START Munich community.
+                          <h3 className={`font-bold text-base mb-1 transition-colors duration-200 ${isMoreActive ? 'text-white' : 'text-gray-200'}`}>And a lot more...</h3>
+                          <p className="text-gray-400 text-sm leading-relaxed">
+                            Discover many more exciting events and opportunities.
                           </p>
                         </div>
                       </div>
@@ -654,109 +615,107 @@ export default function MemberJourneyPage() {
                 </div>
               </div>
 
-              {/* Rotating single image or grid */}
-              <div ref={eventImageRef} className="bg-gray-50 border border-gray-200 h-full min-h-[500px] relative overflow-hidden">
-                {isMoreHovered || (!hoveredEventId && !isMoreHovered && currentEventIndex === startEvents.length) ? (
-                  /* Grid of 4 images for "And a lot more..." */
+              {/* Image panel */}
+              <div ref={eventImageRef} className="bg-white/[0.06] rounded-3xl border border-white/10 relative overflow-hidden">
+                {activeMore || (!activeEventId && !activeMore && currentEventIndex === startEvents.length) ? (
                   <div className="grid grid-cols-2 grid-rows-2 w-full h-full gap-0">
                     {moreImages.map((img, i) => (
-                      <div key={i} className="relative overflow-hidden">
+                      <div key={i} className="relative w-full h-full overflow-hidden">
                         <img
                           src={img}
                           alt={`More activities ${i + 1}`}
-                          className="absolute inset-0 w-full h-full object-cover"
-                          onError={(e) => { (e.target as HTMLImageElement).src = '/internalevents.png' }}
+                          className="w-full h-full object-cover fade-swap"
                         />
-                        <div className="absolute inset-0 bg-brand-dark-blue/20"></div>
+                        <div className="absolute inset-0 bg-brand-dark-blue/20" />
                       </div>
                     ))}
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="bg-black/70 backdrop-blur-sm px-8 py-4 border-2 border-brand-pink">
+                      <div className="bg-black/70 backdrop-blur-md px-8 py-4 rounded-2xl border border-brand-pink/40">
                         <p className="text-2xl font-black text-white">AND MORE...</p>
                       </div>
                     </div>
                   </div>
-                ) : hoveredEventId && eventImages.length > 0 ? (
-                  /* Hovered event with manual navigation */
-                  <>
+                ) : (() => {
+                  const images = activeEventId && eventImages.length > 0
+                    ? eventImages
+                    : currentEventImages.length > 0
+                      ? currentEventImages
+                      : null
+                  if (!images) return null
+                  const idx = eventImageIndex % images.length
+                  return (
                     <div className="relative w-full h-full">
                       <img
-                        key={eventImages[eventImageIndex]?.src}
-                        src={eventImages[eventImageIndex]?.src}
-                        alt={eventImages[eventImageIndex]?.title}
+                        key={images[idx]?.src}
+                        src={images[idx]?.src}
+                        alt={images[idx]?.title}
                         className="w-full h-full object-cover fade-swap"
                       />
-
-                      {/* Title overlay */}
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-                        <p className="text-base font-bold text-white">
-                          {eventImages[eventImageIndex]?.title}
-                        </p>
+                        <p className="text-base font-bold text-white">{images[idx]?.title}</p>
                       </div>
-
+                      <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 flex items-center justify-between px-4">
+                        <button
+                          onClick={() => setEventImageIndex((prev) => (prev - 1 + images.length) % images.length)}
+                          className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 hover:bg-brand-pink/80 border border-white/20 hover:border-brand-pink text-white transition-all duration-300 backdrop-blur-md hover:scale-110"
+                          aria-label="Previous image"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                        </button>
+                        <button
+                          onClick={() => setEventImageIndex((prev) => (prev + 1) % images.length)}
+                          className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 hover:bg-brand-pink/80 border border-white/20 hover:border-brand-pink text-white transition-all duration-300 backdrop-blur-md hover:scale-110"
+                          aria-label="Next image"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                        </button>
+                      </div>
+                      <div className="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white text-xs font-semibold tabular-nums">
+                        {idx + 1} / {images.length}
+                      </div>
                     </div>
-                  </>
-                ) : currentEventImages.length > 0 ? (
-                  /* Auto-rotating event display */
-                  <div className="relative w-full h-full">
-                    <img
-                      key={currentEventImages[eventImageIndex % currentEventImages.length]?.src}
-                      src={currentEventImages[eventImageIndex % currentEventImages.length]?.src}
-                      alt={currentEventImages[eventImageIndex % currentEventImages.length]?.title}
-                      className="w-full h-full object-cover fade-swap"
-                      onError={(e) => { (e.target as HTMLImageElement).src = '/internalevents.png' }}
-                    />
-
-                    {/* Title overlay */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-                      <p className="text-base font-bold text-white">
-                        {currentEventImages[eventImageIndex % currentEventImages.length]?.title}
-                      </p>
-                    </div>
-
-                  </div>
-                ) : null}
+                  )
+                })()}
               </div>
             </div>
-          </div>
-        </div>
+          </section>
 
-        {/* Community Specials Section */}
-        <div className="w-full py-16 md:py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* ═══ COMMUNITY SPECIALS ═══ */}
+          <section>
             <div className="mb-12">
-              <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+              <span className="text-brand-pink text-sm font-bold tracking-[0.2em] uppercase block mb-1">Exclusive Access</span>
+              <h2 className="text-3xl md:text-4xl font-black text-white">
                 COMMUNITY <span className="outline-text">SPECIALS</span>
               </h2>
-              <p className="text-gray-400 text-lg">
+              <p className="text-gray-400 text-lg mt-2 max-w-xl">
                 Unique opportunities exclusively for START Munich members
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* START goes Bay Area */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Bay Area */}
               <a
                 href="https://www.startbayarea.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="relative overflow-hidden bg-white/5 border border-white/10 rounded-lg hover:border-brand-pink/50 transition-colors duration-300 cursor-pointer"
+                className="group relative overflow-hidden bg-white/[0.06] backdrop-blur-sm rounded-3xl border border-white/10 hover:border-brand-pink/40 transition-all duration-500 block"
               >
-                <div className="aspect-video relative overflow-hidden">
+                <div className="aspect-video relative overflow-hidden rounded-t-3xl">
                   <img
                     src="/memberJourney/SF.png"
                     alt="San Francisco Bay Area"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-white mb-3">
+                <div className="p-8">
+                  <h3 className="text-2xl font-black text-white mb-3 group-hover:text-brand-pink transition-colors">
                     START goes Bay Area
                   </h3>
-                  <p className="text-gray-300 text-sm leading-relaxed mb-4">
+                  <p className="text-gray-300 text-sm leading-relaxed mb-5">
                     A selective international exchange program connecting outstanding entrepreneurial talent from Europe with the innovation ecosystem of the San Francisco Bay Area. The program brings together a curated group of 20 participants and enables direct interaction with founders, researchers, and investors at leading technology and innovation organizations.
                   </p>
-                  <span className="inline-flex items-center gap-2 text-brand-pink font-semibold text-sm group-hover:gap-3 transition-all">
+                  <span className="inline-flex items-center gap-2 text-brand-pink font-bold text-sm group-hover:gap-3 transition-all">
                     Learn more
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -765,50 +724,49 @@ export default function MemberJourneyPage() {
                 </div>
               </a>
 
-              {/* Research Partnership */}
-              <div className="relative overflow-hidden bg-white/5 border border-white/10 rounded-lg">
-                <div className="aspect-video relative overflow-hidden">
+              {/* Cambridge */}
+              <div className="group relative overflow-hidden bg-white/[0.06] backdrop-blur-sm rounded-3xl border border-white/10 hover:border-brand-pink/30 transition-all duration-500">
+                <div className="aspect-video relative overflow-hidden rounded-t-3xl">
                   <img
                     src="/memberJourney/cambridge-aerial.png"
                     alt="University Research"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-white mb-3">
-                    Thesis with Cambridge & TUM
+                <div className="p-8">
+                  <h3 className="text-2xl font-black text-white mb-3">
+                    Research Stay @ Cambridge
                   </h3>
-                  <p className="text-gray-300 text-sm leading-relaxed mb-4">
-                    Write your thesis with our research partners at the University of Cambridge and Technical University of Munich. Gain access to world-class academic resources, mentorship from leading researchers, and the opportunity to contribute to cutting-edge entrepreneurship research.
+                  <p className="text-gray-300 text-sm leading-relaxed mb-5">
+                    Spend a research stay with our partners at the University of Cambridge and Technical University of Munich. Gain access to world-class academic resources, mentorship from leading researchers, and the opportunity to contribute to cutting-edge entrepreneurship research.
                   </p>
-                  <div className="flex items-center gap-4 text-gray-400 text-sm">
-                    <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex items-center gap-3">
+                    <span className="inline-flex items-center gap-1.5 text-xs text-gray-400 font-semibold bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                       </svg>
-                      <span>Cambridge</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      Cambridge
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 text-xs text-gray-400 font-semibold bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                       </svg>
-                      <span>TUM</span>
-                    </div>
+                      TUM
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </section>
 
-          {/* Member Stories Section */}
+          {/* Member Stories */}
           <TestimonialsSection
             title={<>
               <span className="outline-text">MEMBER </span> STORIES
             </>}
             description="Real stories from our members who built successful startups with START Munich"
-            items={alumniTestimonials.map(story => ({
+            items={memberStories.map(story => ({
               id: story.id,
               name: story.name,
               role: story.role,
@@ -819,17 +777,47 @@ export default function MemberJourneyPage() {
             }))}
           />
 
-          {/* CTA Section */}
+          {/* CTA */}
           <CTA
             title="Ready to Join?"
             description="Start your entrepreneurial journey with START Munich today. Apply to become a member and experience our vibrant community."
             buttons={[
-              { label: "Apply Now", href: "/join-start/2026" },
+              { label: "Apply Now", href: "https://www.startmunich.de/apply", external: true },
               { label: "Learn More", href: "https://www.startmunich.de", variant: "secondary", external: true }
             ]}
           />
 
-        </main>
+        </div>
+      </main>
+
+      <style jsx global>{`
+        .fade-swap {
+          animation: fadeSwap 0.8s ease-in-out;
+        }
+        @keyframes fadeSwap {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        .timeline-card-animate {
+          animation: slideInFromLeft 0.6s ease-out forwards;
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        @keyframes slideInFromLeft {
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        .overflow-x-auto {
+          scroll-behavior: smooth;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        .tabular-nums { font-variant-numeric: tabular-nums; }
+      `}</style>
     </>
   )
 }
