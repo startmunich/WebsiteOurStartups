@@ -246,6 +246,7 @@ const memberStories: MemberStory[] = [
 
 export default function MemberJourneyPage() {
   const [loading, setLoading] = useState(true)
+  const [activeDeptId, setActiveDeptId] = useState<string | null>(departments[0].id)
   const [eventImageIndex, setEventImageIndex] = useState(0)
   const [currentEventIndex, setCurrentEventIndex] = useState(0)
   const timelineSliderRef = useRef<HTMLDivElement>(null)
@@ -406,7 +407,7 @@ export default function MemberJourneyPage() {
               <span className="outline-text">JOURNEY</span>
             </>
           }
-          description="Become a member and spend two active semesters contributing to the community"
+          description="Become a member and spend at least two active semesters contributing to the community"
         >
           <div className="grid grid-cols-2 lg:flex lg:flex-col gap-4 lg:gap-6">
             <HeroCard>
@@ -512,30 +513,153 @@ export default function MemberJourneyPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 items-stretch">
-              {departments.map((dept) => (
-                <div key={dept.id} className="group h-full">
-                  <div className="relative h-full bg-white/[0.06] backdrop-blur-sm rounded-3xl border border-white/10 hover:border-brand-pink/30 hover:bg-white/[0.09] p-7 transition-all duration-500">
-                    <div>
-                      <div className="w-12 h-12 bg-brand-pink/15 rounded-2xl flex items-center justify-center mb-4">
-                        <span className="text-2xl">{dept.icon}</span>
-                      </div>
-                      <h3 className="text-lg font-black text-white mb-2 group-hover:text-brand-pink transition-colors">{dept.name}</h3>
-                      <p className="text-gray-400 text-xs leading-relaxed">{dept.description}</p>
-                    </div>
-                    <div className="pt-4 mt-4 border-t border-white/5">
-                      <p className="text-xs text-brand-pink font-bold tracking-[0.15em] uppercase mb-2">Responsibilities</p>
-                      {dept.responsibilities.map((resp, i) => (
-                        <div key={i} className="flex items-start gap-2 mt-2">
-                          <div className="w-1 h-1 bg-brand-pink rounded-full mt-1.5 flex-shrink-0" />
-                          <span className="text-xs text-gray-500 leading-relaxed">{resp}</span>
+            {/* Desktop: arc layout */}
+            {(() => {
+              // Left-side half-circle "(" : center=(300,300), r=300
+              // Arc from (300,0) at top, curving LEFT through (0,300), to (300,600) at bottom
+              const cx = 300, cy = 300, r = 300
+              const toRad = (deg: number) => (deg * Math.PI) / 180
+              // Standard-math angles (CCW from +x): 108°→top-left … 252°→bottom-left
+              const angles = [108, 144, 180, 216, 252]
+              // Per-dot label vertical nudge (positive = lower, negative = higher)
+              const labelYOffsets = [18, 6, 6, 6, -8]
+              const dots = departments.map((dept, i) => {
+                const a = toRad(angles[i])
+                return {
+                  dept,
+                  x: cx + r * Math.cos(a),
+                  y: cy - r * Math.sin(a),
+                  labelYOffset: labelYOffsets[i],
+                }
+              })
+              const activeDept = departments.find(d => d.id === activeDeptId)
+
+              return (
+                <>
+                  {/* Desktop */}
+                  <div className="hidden lg:grid lg:grid-cols-[1fr_380px] gap-10 items-center">
+                    {/* Detail panel — left */}
+                    <div className="min-h-[320px]">
+                      {activeDept && (
+                        <div
+                          key={activeDept.id}
+                          className="bg-white/[0.06] backdrop-blur-sm rounded-3xl border border-brand-pink/20 p-8 h-full"
+                          style={{ animation: 'fadeInPanel 0.3s ease-out' }}
+                        >
+                          <div className="w-14 h-14 bg-brand-pink/15 rounded-2xl flex items-center justify-center mb-5">
+                            <span className="text-3xl">{activeDept.icon}</span>
+                          </div>
+                          <h3 className="text-2xl font-black text-white mb-3">{activeDept.name.toUpperCase()}</h3>
+                          <p className="text-gray-300 text-sm leading-relaxed mb-6">{activeDept.description}</p>
+                          <div className="border-t border-white/10 pt-5">
+                            <p className="text-xs text-brand-pink font-bold tracking-[0.15em] uppercase mb-3">Responsibilities</p>
+                            <div className="space-y-3">
+                              {activeDept.responsibilities.map((resp, i) => (
+                                <div key={i} className="flex items-start gap-3">
+                                  <div className="w-1.5 h-1.5 bg-brand-pink rounded-full mt-1.5 flex-shrink-0" />
+                                  <span className="text-sm text-gray-400 leading-relaxed">{resp}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
                         </div>
-                      ))}
+                      )}
+                    </div>
+
+                    {/* Arc — right */}
+                    <div className="relative w-full">
+                      <svg
+                        viewBox="-20 -20 400 640"
+                        className="w-full"
+                        style={{ overflow: 'visible' }}
+                      >
+                        {/* Always-pink arc: (300,0) CCW through (0,300) to (300,600) */}
+                        <path
+                          d={`M ${cx},${cy - r} A ${r},${r} 0 0 0 ${cx},${cy + r}`}
+                          fill="none"
+                          stroke="rgb(236,72,153)"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+
+                        {/* Dots + labels */}
+                        {dots.map(({ dept, x, y, labelYOffset }) => {
+                          const isActive = activeDeptId === dept.id
+                          return (
+                            <g
+                              key={dept.id}
+                              onClick={() => setActiveDeptId(dept.id)}
+                              className="cursor-pointer"
+                              style={{ transition: 'all 0.3s' }}
+                            >
+                              {isActive && (
+                                <circle cx={x} cy={y} r="22" fill="rgba(236,72,153,0.15)" />
+                              )}
+                              <circle
+                                cx={x}
+                                cy={y}
+                                r={isActive ? 11 : 7}
+                                fill={isActive ? 'rgb(236,72,153)' : 'rgba(255,255,255,0.22)'}
+                                stroke={isActive ? 'rgba(236,72,153,0.6)' : 'rgba(255,255,255,0.25)'}
+                                strokeWidth="2"
+                              />
+                              {isActive && <circle cx={x} cy={y} r="4" fill="white" />}
+                              {/* Label — to the right of dot, toward the opening */}
+                              <text
+                                x={x + 24}
+                                y={y + labelYOffset}
+                                textAnchor="start"
+                                fontSize="20"
+                                fontWeight="800"
+                                letterSpacing="0.08em"
+                                fill={isActive ? 'rgb(236,72,153)' : 'rgba(255,255,255,0.5)'}
+                                fontFamily="inherit"
+                                style={{ transition: 'fill 0.3s' }}
+                              >
+                                {dept.name.toUpperCase()}
+                              </text>
+                            </g>
+                          )
+                        })}
+                      </svg>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+
+                  {/* Mobile: icon strip + card */}
+                  <div className="lg:hidden">
+                    <div className="flex justify-center gap-3 mb-6 flex-wrap">
+                      {departments.map((dept) => (
+                        <button
+                          key={dept.id}
+                          onClick={() => setActiveDeptId(dept.id)}
+                          className={`flex flex-col items-center gap-1.5 p-2 rounded-xl transition-all duration-200 ${activeDeptId === dept.id ? 'opacity-100' : 'opacity-45 hover:opacity-70'}`}
+                        >
+                          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border transition-all ${activeDeptId === dept.id ? 'bg-brand-pink/20 border-brand-pink/40' : 'bg-white/5 border-white/10'}`}>
+                            <span className="text-2xl">{dept.icon}</span>
+                          </div>
+                          <span className={`text-[10px] font-bold uppercase tracking-wider ${activeDeptId === dept.id ? 'text-brand-pink' : 'text-gray-500'}`}>{dept.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                    {activeDept && (
+                      <div key={activeDept.id} className="bg-white/[0.06] rounded-3xl border border-brand-pink/20 p-6" style={{ animation: 'fadeInPanel 0.3s ease-out' }}>
+                        <h3 className="text-xl font-black text-white mb-2">{activeDept.name.toUpperCase()}</h3>
+                        <p className="text-gray-400 text-sm leading-relaxed mb-4">{activeDept.description}</p>
+                        <div className="border-t border-white/10 pt-4">
+                          <p className="text-xs text-brand-pink font-bold tracking-[0.15em] uppercase mb-2">Responsibilities</p>
+                          {activeDept.responsibilities.map((resp, i) => (
+                            <div key={i} className="flex items-start gap-2 mt-2">
+                              <div className="w-1 h-1 bg-brand-pink rounded-full mt-1.5 flex-shrink-0" />
+                              <span className="text-xs text-gray-400 leading-relaxed">{resp}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )
+            })()}
           </section>
 
           {/* ═══ INTERNAL EVENTS ═══ */}
@@ -817,6 +941,11 @@ export default function MemberJourneyPage() {
         }
 
         .tabular-nums { font-variant-numeric: tabular-nums; }
+
+        @keyframes fadeInPanel {
+          from { opacity: 0; transform: translateY(8px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
       `}</style>
     </>
   )
