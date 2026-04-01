@@ -386,7 +386,7 @@ export default function MembersPage() {
 
         {/* ═══ HERO ═══ */}
         <Hero
-          backgroundImage="/ourMembers/hero.png"
+          backgroundImage="/ourNetwork/hero.png"
           title={
             <>
               START MUNICH
@@ -524,28 +524,28 @@ export default function MembersPage() {
                 </button>
 
                 {boards.filter(b => b.id === expandedBoard).map(board => (
-                  <div key={board.id} className="space-y-16">
+                  <div key={board.id} className="space-y-10">
                     {/* Executive Board */}
                     <div>
-                      <div className="flex items-center gap-3 mb-8">
+                      <div className="flex items-center gap-3 mb-6">
                         <div className="w-6 h-px bg-brand-pink" />
                         <span className="text-brand-pink text-xs font-bold tracking-[0.35em] uppercase">Executive Board</span>
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl">
+                      <div className="grid grid-cols-3 gap-4 max-w-2xl">
                         {board.executiveBoard.map((member, i) => (
                           <div key={i} className="group relative">
                             <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-white/5 border border-white/10 hover:border-brand-pink/30 transition-all duration-300">
                               {member.profileImage ? (
                                 <img src={member.profileImage} alt={member.name} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" />
                               ) : (
-                                <div className="w-full h-full flex items-center justify-center bg-white/5 text-white/20 text-4xl font-black">
+                                <div className="w-full h-full flex items-center justify-center text-white/20 text-3xl font-black">
                                   {member.name === 'N/A' ? 'N/A' : getInitials(member.name)}
                                 </div>
                               )}
-                              <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue via-brand-dark-blue/30 to-transparent" />
-                              <div className="absolute bottom-0 left-0 right-0 p-5">
-                                <p className="font-black uppercase text-white text-sm leading-tight tracking-wide">{member.name}</p>
-                                <p className="text-brand-pink text-xs font-semibold mt-1 uppercase tracking-widest">{member.role}</p>
+                              <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue via-brand-dark-blue/20 to-transparent" />
+                              <div className="absolute bottom-0 left-0 right-0 p-4">
+                                <p className="font-black uppercase text-white text-xs leading-tight tracking-wide">{member.name}</p>
+                                <p className="text-brand-pink text-[10px] font-semibold mt-1 uppercase tracking-widest">{member.role}</p>
                               </div>
                             </div>
                           </div>
@@ -555,28 +555,29 @@ export default function MembersPage() {
 
                     {/* Department Board */}
                     <div>
-                      <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-8 lg:p-10">
-                        <div className="flex items-center gap-3 mb-8">
-                          <div className="w-6 h-px bg-brand-pink" />
-                          <span className="text-brand-pink text-xs font-bold tracking-[0.35em] uppercase">Department Board</span>
-                        </div>
-                        <div className="flex flex-wrap justify-between gap-y-8 gap-x-4">
-                          {board.departmentBoard.map((member, i) => (
-                            <div key={i} className="group flex flex-col items-center text-center">
-                              <div className="w-28 h-36 lg:w-32 lg:h-44 rounded-xl overflow-hidden border-2 border-white/10 group-hover:border-brand-pink/50 transition-colors mb-3">
-                                {member.profileImage ? (
-                                  <img src={member.profileImage} alt={member.name} className="w-full h-full object-cover object-top" />
-                                ) : (
-                                  <div className="w-full h-full flex items-center justify-center bg-white/5 text-white/20 text-2xl font-black">
-                                    {member.name === 'N/A' ? 'N/A' : getInitials(member.name)}
-                                  </div>
-                                )}
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="w-6 h-px bg-brand-pink" />
+                        <span className="text-brand-pink text-xs font-bold tracking-[0.35em] uppercase">Department Board</span>
+                      </div>
+                      <div className="grid grid-cols-5 gap-4 max-w-6xl">
+                        {board.departmentBoard.map((member, i) => (
+                          <div key={i} className="group relative">
+                            <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-white/5 border border-white/10 hover:border-brand-pink/30 transition-all duration-300">
+                              {member.profileImage ? (
+                                <img src={member.profileImage} alt={member.name} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-white/20 text-3xl font-black">
+                                  {member.name === 'N/A' ? 'N/A' : getInitials(member.name)}
+                                </div>
+                              )}
+                              <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue via-brand-dark-blue/20 to-transparent" />
+                              <div className="absolute bottom-0 left-0 right-0 p-4">
+                                <p className="font-black uppercase text-white text-xs leading-tight tracking-wide">{member.name}</p>
+                                <p className="text-brand-pink text-[10px] font-semibold mt-1 uppercase tracking-widest">{member.role}</p>
                               </div>
-                              <p className="font-black uppercase text-white text-xs lg:text-sm tracking-wide leading-tight">{member.name}</p>
-                              <p className="text-gray-500 text-[11px] lg:text-xs mt-1 uppercase tracking-wider">{member.role}</p>
                             </div>
-                          ))}
-                        </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -687,12 +688,9 @@ export default function MembersPage() {
                 {sortedBatches.map((batch, i) => (
                   <div
                     key={batch.name}
-                    className={`space-y-4 transition-all duration-700 ${batchesView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                    className={`transition-all duration-700 ${batchesView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                     style={{ transitionDelay: `${150 + i * 80}ms` }}
                   >
-                    <div className="flex items-baseline justify-between">
-                      <h3 className="text-xl sm:text-2xl font-black text-white">{batch.name}</h3>
-                    </div>
                     <button
                       onClick={() => setExpandedBatch(batch.name)}
                       className="w-full group relative rounded-3xl overflow-hidden border border-white/10 hover:border-brand-pink/30 transition-all duration-300"
@@ -703,9 +701,10 @@ export default function MembersPage() {
                           alt={batch.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue/50 via-transparent to-transparent" />
-                        <div className="absolute bottom-5 left-5">
-                          <span className="text-white/60 text-xs font-bold uppercase tracking-widest">Click to explore</span>
+                        <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue/70 via-transparent to-transparent" />
+                        <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between">
+                          <h3 className="text-xl sm:text-2xl font-black text-white">{batch.name}</h3>
+                          <span className="text-white/50 text-xs font-bold uppercase tracking-widest">Explore →</span>
                         </div>
                       </div>
                     </button>
