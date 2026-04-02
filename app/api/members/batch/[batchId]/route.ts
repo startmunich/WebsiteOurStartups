@@ -25,7 +25,7 @@ interface Member {
   gender?: string
 }
 
-export const revalidate = process.env.NODE_ENV === 'development' ? 0 : 3600
+export const revalidate = 3600
 
 export async function GET(
   request: Request,
@@ -75,7 +75,7 @@ export async function GET(
           'Authorization': `Bearer ${API_KEY}`,
           'Content-Type': 'application/json',
         },
-        next: { revalidate: process.env.NODE_ENV === 'development' ? 0 : 3600 },
+        next: { revalidate: 3600 },
       }
     )
 

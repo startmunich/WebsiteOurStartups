@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-export const revalidate = process.env.NODE_ENV === 'development' ? 0 : 3600
+export const revalidate = 3600
 
 export async function GET() {
   const lumaApiKey = process.env.LUMA_API_KEY
@@ -32,7 +32,7 @@ export async function GET() {
           'accept': 'application/json',
           'x-luma-api-key': lumaApiKey,
         },
-        next: { revalidate: process.env.NODE_ENV === 'development' ? 0 : 3600 },
+        next: { revalidate: 3600 },
       }
     )
 

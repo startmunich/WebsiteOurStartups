@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { cn } from "@/lib/utils"
 
 interface HeroProps {
@@ -26,10 +27,12 @@ export default function Hero({
             <div className={cn("relative w-full overflow-hidden", className)}>
                 {/* Background Image + Overlay */}
                 <div className="absolute inset-0 h-full">
-                    <img
+                    <Image
                         src={backgroundImage}
                         alt="Hero Background"
-                        className="w-full h-full object-cover"
+                        fill
+                        priority
+                        className="object-cover"
                         style={{ objectPosition: imagePosition }}
                     />
                     <div className={cn("absolute inset-0 h-full", overlayOpacity)}></div>
