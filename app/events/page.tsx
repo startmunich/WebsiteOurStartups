@@ -48,7 +48,7 @@ const recurringEvents: RecurringEvent[] = [
   },
   {
     id: "legal-hack",
-    name: "START Legal Hack",
+    name: "Munich Hacking Legal",
     description: "A unique hackathon focused on building legal tech solutions that address real challenges in the legal industry, combining technology with regulatory expertise.",
     month: "March",
     frequency: "Once per year",

@@ -31,8 +31,12 @@ interface Startup {
 const heroImages = [
   "/home/heroBackground/sprint.jpg",
   "/home/heroBackground/isar.jpg",
-  "/home/heroBackground/rtsh.jpeg",
   "/home/heroBackground/legal.jpg",
+  "/home/heroBackground/background2.jpg",
+  "/home/heroBackground/background.jpg",
+  "/home/heroBackground/background1.jpeg",
+  "/home/heroBackground/rtsh.jpeg",
+  "/home/heroBackground/background4.png",
 ]
 
 // ── Fetch Partners ──────────────────────────────────────────────────────────────

@@ -653,7 +653,11 @@ export default function MembersPage() {
                         </div>
                       ) : (
                         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                          {batchMembers.map(member => (
+                          {[...batchMembers].sort((a, b) => {
+                            const aHasImage = a.profileImage ? 0 : 1
+                            const bHasImage = b.profileImage ? 0 : 1
+                            return aHasImage - bHasImage
+                          }).map(member => (
                             <a
                               key={member.id}
                               href={member.linkedinUrl || '#'}

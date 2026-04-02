@@ -133,10 +133,6 @@ export default function StartupsPage() {
 
       return matchesCategory && matchesYear && matchesProgram && matchesSearch
     })
-    .sort((a, b) => {
-      // Sort alphabetically by name
-      return a.name.localeCompare(b.name)
-    })
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredCompanies.length / itemsPerPage)
