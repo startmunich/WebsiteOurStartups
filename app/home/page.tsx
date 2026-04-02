@@ -220,18 +220,18 @@ export default function HomePage() {
         </section>
 
         {/* ═══════════════════════════ BACKED BY BRANDS ═══════════════════════════ */}
-        <section className="py-16 overflow-hidden">
-          <p className="text-center text-gray-500 text-sm tracking-[0.2em] uppercase mb-10">Backed by brands like:</p>
+        <Link href="/partners" className="block py-16 overflow-hidden group cursor-pointer">
+          <p className="text-center text-gray-500 text-sm tracking-[0.2em] uppercase mb-10 group-hover:text-brand-pink transition-colors">Backed by brands like:</p>
           <div className="relative">
             <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-brand-dark-blue to-transparent z-10" />
             <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-brand-dark-blue to-transparent z-10" />
             <div className="animate-scroll">
               {[...brandPartners, ...brandPartners].map((partner, i) => (
-                <div key={`${partner.id}-${i}`} className="inline-flex items-center justify-center mx-12 h-12">
+                <div key={`${partner.id}-${i}`} className="inline-flex items-center justify-center mx-12 w-32 h-12">
                   <img
                     src={partner.logoUrl}
                     alt={partner.name}
-                    className="h-8 sm:h-10 object-contain bg-white rounded p-1"
+                    className="w-full h-10 object-contain bg-white rounded p-1"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement
                       target.style.display = 'none'
@@ -242,7 +242,7 @@ export default function HomePage() {
               ))}
             </div>
           </div>
-        </section>
+        </Link>
 
         {/* ═══════════════════════════ MISSION & VISION — SPLIT DESIGN ═══════════════════════════ */}
         
