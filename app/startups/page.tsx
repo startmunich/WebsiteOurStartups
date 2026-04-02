@@ -133,10 +133,6 @@ export default function StartupsPage() {
 
       return matchesCategory && matchesYear && matchesProgram && matchesSearch
     })
-    .sort((a, b) => {
-      // Sort alphabetically by name
-      return a.name.localeCompare(b.name)
-    })
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredCompanies.length / itemsPerPage)
@@ -318,7 +314,7 @@ export default function StartupsPage() {
 
                   <div className="space-y-4">
                     <p className="text-gray-300 leading-relaxed">
-                      Startups with the <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-[#d0006f] text-white rounded mx-1">MTZ</span> label are located at our location partner, the <strong className="text-white">MTZ (MünchenTechnologieZentrum)</strong>, one of Munich's leading innovation hubs. START Munich is also located at the MTZ, fostering a vibrant community of entrepreneurs and innovators.
+                      Startups with the <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-[#d0006f] text-white rounded mx-1">MTZ</span> label are located at our location partner, the <strong className="text-white">MTZ (Münchner Technologiezentrum)</strong>, one of Munich's leading innovation hubs. START Munich is also located at the MTZ, fostering a vibrant community of entrepreneurs and innovators.
                     </p>
 
                     <div className="flex flex-col gap-2 text-sm text-gray-400">
