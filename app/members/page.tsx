@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from "react"
+import Image from "next/image"
 import Script from "next/script"
 import Hero from "@/components/Hero"
 import HeroCard from "@/components/HeroCard"
@@ -537,7 +538,7 @@ export default function MembersPage() {
                           <div key={i} className="group relative">
                             <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-white/5 border border-white/10 hover:border-brand-pink/30 transition-all duration-300">
                               {member.profileImage ? (
-                                <img src={member.profileImage} alt={member.name} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" />
+                                <Image src={member.profileImage} alt={member.name} fill className="object-cover object-top group-hover:scale-105 transition-transform duration-500" />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center text-white/20 text-3xl font-black">
                                   {member.name === 'N/A' ? 'N/A' : getInitials(member.name)}
@@ -565,7 +566,7 @@ export default function MembersPage() {
                           <div key={i} className="group relative">
                             <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-white/5 border border-white/10 hover:border-brand-pink/30 transition-all duration-300">
                               {member.profileImage ? (
-                                <img src={member.profileImage} alt={member.name} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" />
+                                <Image src={member.profileImage} alt={member.name} fill className="object-cover object-top group-hover:scale-105 transition-transform duration-500" />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center text-white/20 text-3xl font-black">
                                   {member.name === 'N/A' ? 'N/A' : getInitials(member.name)}
@@ -594,7 +595,7 @@ export default function MembersPage() {
                     style={{ transitionDelay: `${i * 100}ms` }}
                   >
                     <div className="relative overflow-hidden h-52">
-                      <img src={board.imageUrl} alt={board.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <Image src={board.imageUrl} alt={board.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue via-brand-dark-blue/50 to-transparent" />
                       <div className="absolute bottom-0 left-0 right-0 p-6">
                         <h3 className="text-xl font-black text-white uppercase tracking-tight">{board.name}</h3>
@@ -642,7 +643,7 @@ export default function MembersPage() {
                       className="w-full relative rounded-3xl overflow-hidden border border-white/10 cursor-pointer hover:border-brand-pink/30 transition-all duration-300"
                     >
                       <div className="relative w-full h-[70vh] overflow-hidden bg-white/5">
-                        <img src={batch.groupImageUrl} alt={batch.name} className="w-full h-full object-cover" />
+                        <Image src={batch.groupImageUrl} alt={batch.name} fill className="object-cover" />
                         <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue/40 via-transparent to-transparent" />
                       </div>
                     </div>
@@ -668,7 +669,7 @@ export default function MembersPage() {
                             >
                               <div className="relative w-full h-full">
                                 {member.profileImage ? (
-                                  <img src={member.profileImage} alt={member.name} className="w-full h-full object-cover" />
+                                  <Image src={member.profileImage} alt={member.name} fill className="object-cover" />
                                 ) : (
                                   <div className="w-full h-full flex items-center justify-center text-white/20 text-3xl font-black">
                                     {getInitials(member.name)}

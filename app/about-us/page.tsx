@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { useInView, useAnimatedNumber } from '@/lib/hooks'
 import Hero from '@/components/Hero'
 import HeroCard from '@/components/HeroCard'
@@ -138,15 +139,15 @@ export default function AboutUsPage() {
           <div className={`flex flex-col gap-6 transition-all duration-700 delay-200 ${partnersView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             {missionPartners.map((partner, i) => (
               <div key={i} className="group bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden hover:border-brand-pink/30 hover:bg-white/[0.05] transition-all duration-300 flex flex-col md:flex-row">
-                <div className={`md:w-72 lg:w-80 flex-shrink-0 overflow-hidden ${partner.image2 ? 'h-48 md:h-auto' : 'h-48'}`}>
+                <div className={`md:w-72 lg:w-80 flex-shrink-0 overflow-hidden relative ${partner.image2 ? 'h-48 md:h-auto' : 'h-48'}`}>
                   {partner.image2 ? (
                     <div className="flex h-full">
-                      <img src={partner.image} alt={partner.name} className="w-1/2 h-full object-contain bg-white p-3 group-hover:scale-105 transition-transform duration-500" />
+                      <Image src={partner.image} alt={partner.name} width={200} height={150} className="w-1/2 h-full object-contain bg-white p-3 group-hover:scale-105 transition-transform duration-500" />
                       <div className="w-1 bg-brand-dark-blue flex-shrink-0" />
-                      <img src={partner.image2} alt={partner.name} className="w-1/2 h-full object-contain bg-white p-3 group-hover:scale-105 transition-transform duration-500" />
+                      <Image src={partner.image2} alt={partner.name} width={200} height={150} className="w-1/2 h-full object-contain bg-white p-3 group-hover:scale-105 transition-transform duration-500" />
                     </div>
                   ) : (
-                    <img src={partner.image} alt={partner.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <Image src={partner.image} alt={partner.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                   )}
                 </div>
                 <div className="p-8 lg:p-10 flex flex-col justify-center gap-4">
@@ -154,16 +155,16 @@ export default function AboutUsPage() {
                     {partner.image2 ? (
                       <>
                         <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 group-hover:border-brand-pink/30 flex items-center justify-center transition-colors flex-shrink-0">
-                          <img src={partner.image} alt="CDTM" className="w-7 h-7 object-contain" />
+                          <Image src={partner.image} alt="CDTM" width={28} height={28} className="object-contain" />
                         </div>
                         <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 group-hover:border-brand-pink/30 flex items-center justify-center transition-colors flex-shrink-0">
-                          <img src={partner.image2} alt="Manage and More" className="w-7 h-7 object-contain" />
+                          <Image src={partner.image2} alt="Manage and More" width={28} height={28} className="object-contain" />
                         </div>
                       </>
                     ) : (
                       <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 group-hover:border-brand-pink/30 flex items-center justify-center transition-colors flex-shrink-0">
                         {partner.logo
-                          ? <img src={partner.logo} alt={partner.name} className="w-7 h-7 object-contain" />
+                          ? <Image src={partner.logo} alt={partner.name} width={28} height={28} className="object-contain" />
                           : <span className="text-white/30 text-xs font-bold uppercase">{partner.name.charAt(0)}</span>
                         }
                       </div>
@@ -206,8 +207,8 @@ export default function AboutUsPage() {
                   className={`flex flex-col items-center text-center group transition-all duration-500 ${execView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
                   style={{ transitionDelay: `${200 + i * 100}ms` }}
                 >
-                  <div className="w-38 h-50 lg:w-48 lg:h-[15rem] rounded-xl overflow-hidden border-2 border-white/10 pointer-events-none select-none mb-3">
-                    <img src={member.photo} alt={member.name} className="w-full h-full object-cover object-top" draggable={false} />
+                  <div className="relative w-38 h-50 lg:w-48 lg:h-[15rem] rounded-xl overflow-hidden border-2 border-white/10 pointer-events-none select-none mb-3">
+                    <Image src={member.photo} alt={member.name} fill className="object-cover object-top" draggable={false} />
                   </div>
                   <p className="font-black uppercase text-white text-xs lg:text-sm tracking-wide leading-tight">{member.name}</p>
                   <p className="text-brand-pink text-[11px] lg:text-xs font-semibold mt-1 uppercase tracking-widest">{member.role}</p>
@@ -234,8 +235,8 @@ export default function AboutUsPage() {
                   className={`flex flex-col items-center text-center group transition-all duration-500 ${deptView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
                   style={{ transitionDelay: `${200 + i * 100}ms` }}
                 >
-                  <div className="w-36 h-48 lg:w-44 lg:h-56 rounded-xl overflow-hidden border-2 border-white/10 pointer-events-none select-none mb-3">
-                    <img src={member.photo} alt={member.name} className="w-full h-full object-cover object-top" draggable={false} />
+                  <div className="relative w-36 h-48 lg:w-44 lg:h-56 rounded-xl overflow-hidden border-2 border-white/10 pointer-events-none select-none mb-3">
+                    <Image src={member.photo} alt={member.name} fill className="object-cover object-top" draggable={false} />
                   </div>
                   <p className="font-black uppercase text-white text-xs lg:text-sm tracking-wide leading-tight">{member.name}</p>
                   <p className="text-gray-500 text-[11px] lg:text-xs mt-1 uppercase tracking-wider">{member.role}</p>
@@ -265,7 +266,7 @@ export default function AboutUsPage() {
                 className={`group text-left transition-all duration-300 ${selectedAdvisor === i ? 'scale-[0.97]' : ''}`}
               >
                 <div className={`relative aspect-[3/4] rounded-xl overflow-hidden border-2 transition-colors duration-300 ${selectedAdvisor === i ? 'border-brand-pink' : 'border-white/10 hover:border-white/30'}`}>
-                  <img src={member.photo} alt={member.name} className="w-full h-full object-cover object-top" />
+                  <Image src={member.photo} alt={member.name} fill className="object-cover object-top" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#05112a]/80 via-transparent to-transparent" />
                 </div>
                 <p className={`font-bold uppercase text-xs tracking-wide leading-tight mt-2 transition-colors ${selectedAdvisor === i ? 'text-brand-pink' : 'text-white'}`}>{member.name}</p>
@@ -278,8 +279,8 @@ export default function AboutUsPage() {
           <div className={`overflow-hidden transition-all duration-500 ease-in-out ${selectedAdvisor !== null ? 'max-h-[300px] opacity-100 mt-6' : 'max-h-0 opacity-0 mt-0'}`}>
             {selectedAdvisor !== null && (
               <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-6 lg:p-8 flex items-start gap-6">
-                <div className="hidden sm:block flex-shrink-0 w-20 h-24 rounded-xl overflow-hidden border-2 border-brand-pink">
-                  <img src={advisoryBoard[selectedAdvisor].photo} alt={advisoryBoard[selectedAdvisor].name} className="w-full h-full object-cover object-top" />
+                <div className="hidden sm:block relative flex-shrink-0 w-20 h-24 rounded-xl overflow-hidden border-2 border-brand-pink">
+                  <Image src={advisoryBoard[selectedAdvisor].photo} alt={advisoryBoard[selectedAdvisor].name} fill className="object-cover object-top" />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between gap-4">

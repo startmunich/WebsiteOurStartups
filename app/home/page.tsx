@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import Script from 'next/script'
 import { useAnimatedNumber, useInView } from '@/lib/hooks'
@@ -189,7 +190,7 @@ export default function HomePage() {
               className="absolute inset-0 transition-opacity duration-[2000ms] ease-in-out"
               style={{ opacity: heroIdx === i ? 1 : 0 }}
             >
-              <img src={src} alt="" className="w-full h-full object-cover scale-[1.05]" />
+              <Image src={src} alt="" fill priority={i === 0} className="object-cover scale-[1.05]" />
             </div>
           ))}
           {/* Gradient overlay */}
@@ -434,9 +435,9 @@ export default function HomePage() {
                 {/* Academic Excellence Card */}
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-pink/30 transition-all">
                   <div className="flex items-center justify-center gap-8 mb-3">
-                    <img src="/partners/Logo_of_the_Technical_University_of_Munich.svg" alt="TUM" className="h-10  opacity-80" />
+                    <Image src="/partners/Logo_of_the_Technical_University_of_Munich.svg" alt="TUM" width={120} height={40} className="h-10 w-auto opacity-80" unoptimized />
                     <span className="text-white/30 text-2xl font-light">×</span>
-                    <img src="/home/LMU_Muenchen_Logo.svg" alt="LMU" className="h-10  opacity-80" />
+                    <Image src="/home/LMU_Muenchen_Logo.svg" alt="LMU" width={120} height={40} className="h-10 w-auto opacity-80" unoptimized />
                   </div>
                   <div className="text-gray-400 text-sm uppercase tracking-wider text-center">Academic Excellence</div>
                 </div>
