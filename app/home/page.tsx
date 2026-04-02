@@ -205,8 +205,8 @@ export default function HomePage() {
             <div className="max-w-2xl">
 <h1 className={`text-7xl sm:text-8xl lg:text-9xl font-black tracking-tight leading-[0.9] mb-8 transition-all duration-1000 delay-200 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 <span className="text-white drop-shadow-lg">DARE.</span><br />
-                <span className="text-brand-pink drop-shadow-lg">BUILD.</span><br />
-                <span className="outline-text drop-shadow-lg">BELONG.</span>
+                <span className="outline-text drop-shadow-lg">BUILD.</span><br />
+                <span className="text-white drop-shadow-lg">BELONG.</span>
               </h1>
 
               <p className={`text-lg sm:text-xl text-gray-200 max-w-lg mb-10 leading-relaxed transition-all duration-1000 delay-400 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -470,7 +470,7 @@ export default function HomePage() {
           <div className="relative max-w-7xl mx-auto">
             {/* Section header */}
             <div className={`mb-10 transition-all duration-700 ${factsView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              <span className="text-brand-pink text-sm font-bold tracking-[0.3em] uppercase">By the Numbers</span>
+              <span className="text-brand-pink text-sm font-bold tracking-[0.3em] uppercase">Our Startups</span>
               <h2 className="text-5xl sm:text-6xl font-black text-white mt-3">THE FACTS</h2>
             </div>
 
@@ -550,11 +550,11 @@ export default function HomePage() {
             </div>
 
             {/* Divider with line */}
-            <div className="flex items-center gap-6 mb-16">
+            {/* <div className="flex items-center gap-6 mb-16">
               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
               <span className="text-brand-pink text-sm font-bold tracking-[0.2em] uppercase">Our Startups</span>
               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-            </div>
+            </div> */}
 
             {/* Startup logos */}
             <div className="relative overflow-hidden">
@@ -582,7 +582,7 @@ export default function HomePage() {
 
             <div className="text-center mt-10">
               <Link href="/startups" className="group inline-flex items-center gap-2 text-white/70 hover:text-brand-pink font-medium transition-colors">
-                View all startups <span className="group-hover:translate-x-1 transition-transform">→</span>
+                View all our startups <span className="group-hover:translate-x-1 transition-transform">→</span>
               </Link>
             </div>
           </div>
