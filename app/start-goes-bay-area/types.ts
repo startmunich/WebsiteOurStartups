@@ -55,6 +55,12 @@ export interface BayAreaHighlightVisit {
     websiteUrl?: string
 }
 
+export interface BayAreaCompanyLogo {
+    name: string
+    logoPath: string
+    websiteUrl?: string
+}
+
 export interface BayAreaYearContent {
     id: BayAreaYearId
     label: string

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import CTA from '@/components/CTA'
 import BayAreaYearTabs from './BayAreaYearTabs'
+import BayAreaCompanyLogoCarousel from './BayAreaCompanyLogoCarousel'
 import Hero from '@/components/Hero'
 import HeroCard from '@/components/HeroCard'
 import {
@@ -47,6 +48,8 @@ export default function StartGoesBayAreaContent() {
 
     const heroBackgroundAccents = (
         <>
+            <div className="absolute inset-0 bg-gradient-to-r from-brand-dark-blue/90 via-brand-dark-blue/70 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue via-transparent to-transparent" />
             <div className="absolute top-20 right-[15%] w-[420px] h-[420px] bg-brand-pink/15 rounded-full blur-[110px] animate-blob" />
             <div className="absolute bottom-12 left-[5%] w-[340px] h-[340px] bg-brand-pink/10 rounded-full blur-[90px] animate-blob animation-delay-2000" />
             <div className="absolute top-[38%] right-[6%] w-[260px] h-[260px] bg-blue-500/10 rounded-full blur-[70px] animate-blob animation-delay-4000" />
@@ -111,7 +114,7 @@ export default function StartGoesBayAreaContent() {
 
             <Hero
                 backgroundImage={HERO_BACKGROUND_BY_YEAR[activeYear]}
-                overlayOpacity="bg-brand-dark-blue/80"
+                overlayOpacity="bg-brand-dark-blue/45"
                 backgroundAccents={heroBackgroundAccents}
                 leftColumnClassName="max-w-3xl"
                 titleClassName="text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem]"
@@ -140,6 +143,8 @@ export default function StartGoesBayAreaContent() {
                     ))}
                 </div>
             </Hero>
+
+            <BayAreaCompanyLogoCarousel />
 
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
                 <div className="mb-10">

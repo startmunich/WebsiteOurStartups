@@ -1,7 +1,9 @@
 import type {
+    BayAreaCompanyLogo,
     BayAreaHeroStat,
     BayAreaOverviewItem,
     BayAreaYearContent,
+    BayAreaVisit,
 } from '@/app/start-goes-bay-area/types'
 
 export const bayAreaHeroHighlights: BayAreaHeroStat[] = [
@@ -853,3 +855,71 @@ export const bayAreaYearContent: BayAreaYearContent[] = [
         teamMembers: [],
     },
 ]
+
+const normalizeCompanyKey = (name: string) =>
+    name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '')
+        .trim()
+
+const collectYearCompanyLogos = (year: BayAreaYearContent): BayAreaCompanyLogo[] => {
+    const highlightLogos: BayAreaCompanyLogo[] = year.highlightVisits
+        .filter((visit) => Boolean(visit.logoPath) && visit.logoPath !== '/startlogo.svg')
+        .map((visit) => ({
+            name: visit.name,
+            logoPath: visit.logoPath!,
+            websiteUrl: visit.websiteUrl,
+        }))
+
+    const detailedVisitLogos: BayAreaCompanyLogo[] = year.detailedDays
+        .flatMap((day) => day.visits)
+        .filter(
+            (visit): visit is BayAreaVisit & { logoPath: string } =>
+                visit.visitType === 'company' && Boolean(visit.logoPath)
+        )
+        .map((visit) => ({
+            name: visit.name,
+            logoPath: visit.logoPath,
+            websiteUrl: visit.websiteUrl,
+        }))
+
+    const hostLogos: BayAreaCompanyLogo[] = year.hosts
+        .filter((host): host is { name: string; logoPath: string } => Boolean(host.logoPath))
+        .map((host) => ({
+            name: host.name,
+            logoPath: host.logoPath,
+        }))
+
+    return [...highlightLogos, ...detailedVisitLogos, ...hostLogos]
+}
+
+export const bayAreaVisitCompanyLogos: BayAreaCompanyLogo[] = (() => {
+    const uniqueLogosByCompany = new Map<string, BayAreaCompanyLogo>()
+
+    for (const year of bayAreaYearContent) {
+        if (year.isPreview) {
+            continue
+        }
+
+        const yearLogos = collectYearCompanyLogos(year)
+        for (const logo of yearLogos) {
+            const key = normalizeCompanyKey(logo.name)
+            const existing = uniqueLogosByCompany.get(key)
+
+            if (!existing) {
+                uniqueLogosByCompany.set(key, logo)
+                continue
+            }
+
+            // Keep whichever entry has a website URL when duplicates exist across years.
+            if (!existing.websiteUrl && logo.websiteUrl) {
+                uniqueLogosByCompany.set(key, {
+                    ...existing,
+                    websiteUrl: logo.websiteUrl,
+                })
+            }
+        }
+    }
+
+    return Array.from(uniqueLogosByCompany.values()).sort((a, b) => a.name.localeCompare(b.name))
+})()
