@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import CTA from '@/components/CTA'
 import BayAreaYearTabs from './BayAreaYearTabs'
 import Hero from '@/components/Hero'
@@ -22,11 +22,6 @@ export default function StartGoesBayAreaContent() {
     const [activeYear, setActiveYear] = useState<BayAreaYearId>('2026')
     const [showStickyYearSelector, setShowStickyYearSelector] = useState(false)
     const yearSelectorRef = useRef<HTMLDivElement | null>(null)
-
-    const activeYearMeta = useMemo(
-        () => bayAreaYearContent.find((year) => year.id === activeYear) ?? bayAreaYearContent[0],
-        [activeYear]
-    )
 
     useEffect(() => {
         const target = yearSelectorRef.current
@@ -170,12 +165,6 @@ export default function StartGoesBayAreaContent() {
             </section>
 
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-                <div className="mb-10">
-                    <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                        {activeYearMeta.label} <span className="outline-text">OVERVIEW</span>
-                    </h2>
-                </div>
-
                 <BayAreaYearTabs activeYear={activeYear} />
             </section>
 
