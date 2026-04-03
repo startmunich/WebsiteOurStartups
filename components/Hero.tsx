@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { cn } from "@/lib/utils"
 
 interface HeroProps {
@@ -17,6 +18,7 @@ interface HeroProps {
     rightColumnClassName?: string
     overlayOpacity?: string
     hideChildrenOnMobile?: boolean
+    imagePosition?: string
 }
 
 export default function Hero({
@@ -35,17 +37,21 @@ export default function Hero({
     leftColumnClassName,
     rightColumnClassName,
     overlayOpacity = "bg-brand-dark-blue/70",
-    hideChildrenOnMobile = false
+    hideChildrenOnMobile = false,
+    imagePosition = "center 45%"
 }: HeroProps) {
     return (
         <>
             <div className={cn("relative w-full overflow-hidden", className)}>
                 {/* Background Image + Overlay */}
                 <div className="absolute inset-0 h-full">
-                    <img
+                    <Image
                         src={backgroundImage}
                         alt="Hero Background"
-                        className="w-full h-full object-cover"
+                        fill
+                        priority
+                        className="object-cover"
+                        style={{ objectPosition: imagePosition }}
                     />
                     <div className={cn("absolute inset-0 h-full", overlayOpacity)}></div>
                 </div>

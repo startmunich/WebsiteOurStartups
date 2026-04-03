@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import Script from 'next/script'
 import { useAnimatedNumber, useInView } from '@/lib/hooks'
@@ -29,9 +30,14 @@ interface Startup {
 // ── Images ──────────────────────────────────────────────────────────────────────
 
 const heroImages = [
-  "https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=2070&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2070&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop",
+  "/home/heroBackground/sprint.jpg",
+  "/home/heroBackground/isar.jpg",
+  "/home/heroBackground/legal.jpg",
+  "/home/heroBackground/background2.jpg",
+  "/home/heroBackground/background.jpg",
+  "/home/heroBackground/background1.jpeg",
+  "/home/heroBackground/rtsh.jpeg",
+  "/home/heroBackground/background4.png",
 ]
 
 // ── Fetch Partners ──────────────────────────────────────────────────────────────
@@ -99,6 +105,7 @@ export default function HomePage() {
   const [turningIdx, setTurningIdx] = useState(0)
   const [brandPartners, setBrandPartners] = useState<Partner[]>([])
   const [featuredStartups, setFeaturedStartups] = useState<Startup[]>([])
+  const [newsIndex, setNewsIndex] = useState(0)
   const factsView = useInView(0.25)
   const missionView = useInView(0.15)
   // const specialView = useInView(0.1)
@@ -153,6 +160,9 @@ export default function HomePage() {
     useAnimatedNumber(facts[2].value, !factsView.visible, 1800),
     useAnimatedNumber(facts[3].value, !factsView.visible, 1800),
   ]
+  const animatedCapital = useAnimatedNumber(3, !factsView.visible, 1800)
+  const animatedStartups70 = useAnimatedNumber(70, !factsView.visible, 1800)
+  const animatedUnicorn = useAnimatedNumber(1, !factsView.visible, 1200)
 
   return (
     <>
@@ -180,7 +190,7 @@ export default function HomePage() {
               className="absolute inset-0 transition-opacity duration-[2000ms] ease-in-out"
               style={{ opacity: heroIdx === i ? 1 : 0 }}
             >
-              <img src={src} alt="" className="w-full h-full object-cover scale-[1.05]" />
+              <Image src={src} alt="" fill priority={i === 0} className="object-cover scale-[1.05]" />
             </div>
           ))}
           {/* Gradient overlay */}
@@ -196,8 +206,8 @@ export default function HomePage() {
             <div className="max-w-2xl">
 <h1 className={`text-7xl sm:text-8xl lg:text-9xl font-black tracking-tight leading-[0.9] mb-8 transition-all duration-1000 delay-200 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 <span className="text-white drop-shadow-lg">DARE.</span><br />
-                <span className="text-brand-pink drop-shadow-lg">BUILD.</span><br />
-                <span className="outline-text drop-shadow-lg">BELONG.</span>
+                <span className="outline-text drop-shadow-lg">BUILD.</span><br />
+                <span className="text-white drop-shadow-lg">BELONG.</span>
               </h1>
 
               <p className={`text-lg sm:text-xl text-gray-200 max-w-lg mb-10 leading-relaxed transition-all duration-1000 delay-400 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -216,18 +226,18 @@ export default function HomePage() {
         </section>
 
         {/* ═══════════════════════════ BACKED BY BRANDS ═══════════════════════════ */}
-        <section className="py-16 overflow-hidden">
-          <p className="text-center text-gray-500 text-sm tracking-[0.2em] uppercase mb-10">Backed by brands like:</p>
+        <Link href="/partners" className="block py-16 overflow-hidden group cursor-pointer">
+          <p className="text-center text-gray-500 text-sm tracking-[0.2em] uppercase mb-10 group-hover:text-brand-pink transition-colors">Backed by brands like:</p>
           <div className="relative">
             <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-brand-dark-blue to-transparent z-10" />
             <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-brand-dark-blue to-transparent z-10" />
-            <div className="animate-scroll opacity-60">
+            <div className="animate-scroll">
               {[...brandPartners, ...brandPartners].map((partner, i) => (
-                <div key={`${partner.id}-${i}`} className="inline-flex items-center justify-center mx-12 h-12">
+                <div key={`${partner.id}-${i}`} className="inline-flex items-center justify-center mx-12 w-32 h-12">
                   <img
                     src={partner.logoUrl}
                     alt={partner.name}
-                    className="h-8 sm:h-10 object-contain brightness-0 invert"
+                    className="w-full h-10 object-contain bg-white rounded p-1"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement
                       target.style.display = 'none'
@@ -238,7 +248,7 @@ export default function HomePage() {
               ))}
             </div>
           </div>
-        </section>
+        </Link>
 
         {/* ═══════════════════════════ MISSION & VISION — SPLIT DESIGN ═══════════════════════════ */}
         
@@ -383,12 +393,12 @@ export default function HomePage() {
         )}
 
         {/* ═══════════════════════════ WHAT IS START? ═══════════════════════════ */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <section className="py-28 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
           <div className="max-w-7xl mx-auto">
             {/* Group Photo */}
             <div className="relative rounded-3xl overflow-hidden mb-16">
               <img
-                src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=2000&auto=format&fit=crop"
+                src="/home/Landing_Team_1.jpeg"
                 alt="START Munich Community"
                 className="w-full h-[300px] sm:h-[400px] lg:h-[500px] object-cover"
               />
@@ -400,10 +410,10 @@ export default function HomePage() {
               {/* Left - Text Content */}
               <div>
                 <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">
-                  What is <span className="text-brand-pink">START Munich</span>?
+                  What is <span className="outline-text">START Munich</span>?
                 </h2>
                 <p className="text-gray-300 text-lg leading-relaxed mb-4">
-                  With over 300 active members, START Munich empowers the next generation of entrepreneurs. Founded in 2015, our mission is to create{' '}
+                  With over 70 active members and 500+ alumni, START Munich empowers the next generation of entrepreneurs. Founded in 2003, our mission is to create{' '}
                   <span className="text-brand-pink font-semibold">a community of students who dare to build, innovate, and lead</span>, fostering both groundbreaking ventures and meaningful connections across industries.
                 </p>
                 <p className="text-gray-300 leading-relaxed mb-6">
@@ -411,8 +421,8 @@ export default function HomePage() {
                 </p>
 
                 <div className="flex flex-wrap gap-4 mt-8">
-                  <Link href="/members" className="px-8 py-3 bg-brand-pink text-white font-bold rounded-xl hover:shadow-[0_0_30px_rgba(208,0,111,0.4)] transition-all">
-                    Meet our Members
+                  <Link href="/about-us" className="px-8 py-3 bg-brand-pink text-white font-bold rounded-xl hover:shadow-[0_0_30px_rgba(208,0,111,0.4)] transition-all">
+                    About Us
                   </Link>
                   <Link href="/events" className="px-8 py-3 bg-brand-pink text-white font-bold rounded-xl hover:shadow-[0_0_30px_rgba(208,0,111,0.4)] transition-all">
                     See our Events
@@ -425,29 +435,29 @@ export default function HomePage() {
                 {/* Academic Excellence Card */}
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-pink/30 transition-all">
                   <div className="flex items-center justify-center gap-8 mb-3">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Logo_of_the_Technical_University_of_Munich.svg" alt="TUM" className="h-10 brightness-0 invert opacity-80" />
+                    <Image src="/partners/Logo_of_the_Technical_University_of_Munich.svg" alt="TUM" width={120} height={40} className="h-10 w-auto opacity-80" unoptimized />
                     <span className="text-white/30 text-2xl font-light">×</span>
-                    <img src="https://www.lmu.de/fileadmin/webtool/css/images/lmu-logo-text.svg" alt="LMU" className="h-8 brightness-0 invert opacity-80" />
+                    <Image src="/home/LMU_Muenchen_Logo.svg" alt="LMU" width={120} height={40} className="h-10 w-auto opacity-80" unoptimized />
                   </div>
                   <div className="text-gray-400 text-sm uppercase tracking-wider text-center">Academic Excellence</div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-6">
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-pink/30 transition-all">
-                  <div className="text-4xl sm:text-5xl font-black text-white mb-2">300<span className="text-brand-pink">+</span></div>
+                  <div className="text-4xl sm:text-5xl font-black text-white mb-2">70<span className="text-brand-pink">+</span></div>
                   <div className="text-gray-400 text-sm uppercase tracking-wider">Active Members</div>
                 </div>
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-pink/30 transition-all">
-                  <div className="text-4xl sm:text-5xl font-black text-white mb-2">2015</div>
+                  <div className="text-4xl sm:text-5xl font-black text-white mb-2">2003</div>
                   <div className="text-gray-400 text-sm uppercase tracking-wider">Founding Year</div>
                 </div>
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-pink/30 transition-all">
-                  <div className="text-4xl sm:text-5xl font-black text-white mb-2">10<span className="text-brand-pink">+</span></div>
-                  <div className="text-gray-400 text-sm uppercase tracking-wider">Events / Year</div>
+                  <div className="text-4xl sm:text-5xl font-black text-white mb-2">500<span className="text-brand-pink">+</span></div>
+                  <div className="text-gray-400 text-sm uppercase tracking-wider">Alumni</div>
                 </div>
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-pink/30 transition-all">
-                  <div className="text-4xl sm:text-5xl font-black text-white mb-2">800<span className="text-brand-pink">+</span></div>
-                  <div className="text-gray-400 text-sm uppercase tracking-wider">Attendees</div>
+                  <div className="text-4xl sm:text-5xl font-black text-white mb-2">65<span className="text-brand-pink">%</span></div>
+                  <div className="text-gray-400 text-sm uppercase tracking-wider">STEM</div>
                 </div>
                 </div>
               </div>
@@ -456,16 +466,12 @@ export default function HomePage() {
         </section>
 
         {/* ═══════════════════════════ FACTS & STARTUPS ═══════════════════════════ */}
-        <section ref={factsView.ref} className="relative py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
-          {/* Abstract background elements */}
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-dark-blue via-[#0a0a2e] to-brand-dark-blue" />
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-pink/5 rounded-full blur-[150px]" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px]" />
+        <section ref={factsView.ref} className="relative py-28 px-4 sm:px-6 lg:px-8 overflow-hidden">
 
           <div className="relative max-w-7xl mx-auto">
             {/* Section header */}
             <div className={`mb-10 transition-all duration-700 ${factsView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              <span className="text-brand-pink text-sm font-bold tracking-[0.3em] uppercase">By the Numbers</span>
+              <span className="text-brand-pink text-sm font-bold tracking-[0.3em] uppercase">Our Startups</span>
               <h2 className="text-5xl sm:text-6xl font-black text-white mt-3">THE FACTS</h2>
             </div>
 
@@ -482,9 +488,8 @@ export default function HomePage() {
                     <div className="text-gray-400 text-sm font-medium uppercase tracking-[0.2em] mb-4">Capital Raised</div>
                     <div className="flex items-baseline gap-2">
                       <span className="text-7xl sm:text-8xl lg:text-[120px] font-black text-white leading-none tabular-nums">
-                        €{Math.round(animatedValues[2])}
+                        €{Math.round(animatedCapital)}<span className="text-brand-pink">B+</span>
                       </span>
-                      <span className="text-4xl sm:text-5xl lg:text-6xl font-black text-brand-pink">M+</span>
                     </div>
                     <p className="text-gray-400 mt-6 max-w-sm">Raised by our alumni founders and community startups.</p>
                   </div>
@@ -500,7 +505,7 @@ export default function HomePage() {
                       <div>
                         <div className="text-gray-500 text-xs font-medium uppercase tracking-[0.2em] mb-2">Startups</div>
                         <div className="text-5xl sm:text-6xl font-black text-white tabular-nums">
-                          70<span className="text-brand-pink">+</span>
+                          {Math.round(animatedStartups70)}<span className="text-brand-pink">+</span>
                         </div>
                       </div>
                       <div className="w-14 h-14 rounded-xl bg-brand-pink/10 flex items-center justify-center">
@@ -514,24 +519,8 @@ export default function HomePage() {
 
                 {/* Two side-by-side stats */}
                 <div className="flex gap-6">
-                  {/* Diversity */}
-                  <div className={`flex-1 transition-all duration-700 delay-300 ${factsView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                    <div className="relative bg-white/5 border border-white/10 rounded-[1.5rem] p-6 h-full hover:border-brand-pink/30 hover:bg-white/[0.07] transition-all duration-300">
-                      <div className="text-gray-500 text-xs font-medium uppercase tracking-[0.2em] mb-2">MINT</div>
-                      <div className="text-4xl sm:text-5xl font-black text-white tabular-nums">
-                        {Math.round(animatedValues[1])}<span className="text-brand-pink">%</span>
-                      </div>
-                      <div className="mt-3 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-brand-pink to-brand-pink/60 rounded-full transition-all duration-1000"
-                          style={{ width: factsView.visible ? `${animatedValues[1]}%` : '0%' }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
                   {/* YC & Top Programs */}
-                  <div className={`flex-1 transition-all duration-700 delay-400 ${factsView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                  <div className={`flex-1 transition-all duration-700 delay-300 ${factsView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                     <div className="relative bg-white/5 border border-white/10 rounded-[1.5rem] p-6 h-full hover:border-brand-pink/30 hover:bg-white/[0.07] transition-all duration-300">
                       <div className="text-gray-500 text-xs font-medium uppercase tracking-[0.2em] mb-2">YC & other programs</div>
                       <div className="text-4xl sm:text-5xl font-black text-white tabular-nums">
@@ -544,29 +533,42 @@ export default function HomePage() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Unicorn */}
+                  <div className={`flex-1 transition-all duration-700 delay-400 ${factsView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                    <div className="relative bg-white/5 border border-white/10 rounded-[1.5rem] p-6 h-full hover:border-brand-pink/30 hover:bg-white/[0.07] transition-all duration-300">
+                      <div className="text-gray-500 text-xs font-medium uppercase tracking-[0.2em] mb-2">Unicorn</div>
+                      <div className="text-4xl sm:text-5xl font-black text-white tabular-nums">
+                        {Math.round(animatedUnicorn)}
+                      </div>
+                      <div className="mt-2 flex gap-1">
+                        <div className="h-1.5 w-full rounded-full bg-brand-pink" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Divider with line */}
-            <div className="flex items-center gap-6 mb-16">
+            {/* <div className="flex items-center gap-6 mb-16">
               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
               <span className="text-brand-pink text-sm font-bold tracking-[0.2em] uppercase">Our Startups</span>
               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-            </div>
+            </div> */}
 
             {/* Startup logos */}
             <div className="relative overflow-hidden">
-              <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#0a0a2e] to-transparent z-10" />
-              <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#0a0a2e] to-transparent z-10" />
-              <div className="animate-scroll">
+              <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-brand-dark-blue to-transparent z-10" />
+              <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-brand-dark-blue to-transparent z-10" />
+              <div className="animate-scroll-nonstop">
                 {[...featuredStartups, ...featuredStartups].map((startup, i) => (
                   <div key={`${startup.id}-${i}`} className="inline-flex items-center justify-center mx-6 flex-shrink-0">
-                    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 w-36 h-20 flex items-center justify-center hover:bg-white/10 hover:border-brand-pink/30 transition-all duration-300">
+                    <div className="bg-white rounded-xl p-4 w-36 h-20 flex items-center justify-center hover:border-brand-pink/30 transition-all duration-300">
                       <img
                         src={startup.logoUrl}
                         alt={startup.name}
-                        className="max-h-10 max-w-[100px] object-contain brightness-0 invert opacity-70 hover:opacity-100 transition-opacity"
+                        className="max-h-10 max-w-[100px] object-contain"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement
                           target.style.display = 'none'
@@ -581,7 +583,7 @@ export default function HomePage() {
 
             <div className="text-center mt-10">
               <Link href="/startups" className="group inline-flex items-center gap-2 text-white/70 hover:text-brand-pink font-medium transition-colors">
-                View all startups <span className="group-hover:translate-x-1 transition-transform">→</span>
+                View all our startups <span className="group-hover:translate-x-1 transition-transform">→</span>
               </Link>
             </div>
           </div>
@@ -590,90 +592,108 @@ export default function HomePage() {
         {/* ═══════════════════════════ LATEST NEWS ═══════════════════════════ */}
         <section className="py-28 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
           <div className="max-w-7xl mx-auto">
-            {/* Header with social links */}
-            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-12">
-              <div>
-                <span className="text-brand-pink text-sm font-bold tracking-[0.3em] uppercase">Stay Updated</span>
-                <h2 className="text-5xl sm:text-6xl font-black text-white mt-3">LATEST NEWS</h2>
+            {/* Header with social links on left + navigation arrows on right */}
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-12">
+              <div className="flex items-center gap-6">
+                <div>
+                  <span className="text-brand-pink text-sm font-bold tracking-[0.3em] uppercase">Stay Updated</span>
+                  <h2 className="text-5xl sm:text-6xl font-black text-white mt-3">LATEST NEWS</h2>
+                </div>
+                <div className="flex items-center gap-4 self-end mb-1">
+                  <Link href="https://www.linkedin.com/company/start-munich/" target="_blank" className="group flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-full hover:border-brand-pink/50 hover:bg-brand-pink/10 transition-all duration-300">
+                    <svg className="w-4 h-4 text-white group-hover:text-brand-pink transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    <span className="text-white text-sm font-medium group-hover:text-brand-pink transition-colors">LinkedIn</span>
+                  </Link>
+                  <Link href="https://www.instagram.com/start.munich/" target="_blank" className="group flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-full hover:border-brand-pink/50 hover:bg-brand-pink/10 transition-all duration-300">
+                    <svg className="w-4 h-4 text-white group-hover:text-brand-pink transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    <span className="text-white text-sm font-medium group-hover:text-brand-pink transition-colors">Instagram</span>
+                  </Link>
+                </div>
               </div>
-              <div className="flex items-center gap-4">
-                <Link href="https://www.linkedin.com/company/start-munich/" target="_blank" className="group flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-full hover:border-brand-pink/50 hover:bg-brand-pink/10 transition-all duration-300">
-                  <svg className="w-4 h-4 text-white group-hover:text-brand-pink transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                  <span className="text-white text-sm font-medium group-hover:text-brand-pink transition-colors">LinkedIn</span>
-                </Link>
-                <Link href="https://www.instagram.com/start.munich/" target="_blank" className="group flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-full hover:border-brand-pink/50 hover:bg-brand-pink/10 transition-all duration-300">
-                  <svg className="w-4 h-4 text-white group-hover:text-brand-pink transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                  <span className="text-white text-sm font-medium group-hover:text-brand-pink transition-colors">Instagram</span>
-                </Link>
+
+              {/* Page counter + navigation arrows */}
+              <div className="flex items-center gap-3 flex-shrink-0">
+                <span className="text-sm text-gray-500 tabular-nums">
+                  {String(Math.floor(newsIndex / 3) + 1).padStart(2, '0')} / {String(Math.ceil(4 / 3)).padStart(2, '0')}
+                </span>
+                <button
+                  onClick={() => setNewsIndex(Math.max(0, newsIndex - 3))}
+                  disabled={newsIndex === 0}
+                  className="w-12 h-12 rounded-full border-2 border-white/20 hover:border-brand-pink hover:bg-brand-pink text-white flex items-center justify-center transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => setNewsIndex(Math.min(1, newsIndex + 3))}
+                  disabled={newsIndex + 3 >= 4}
+                  className="w-12 h-12 rounded-full bg-brand-pink hover:bg-brand-pink/80 text-white flex items-center justify-center transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
               </div>
             </div>
 
-            {/* News Cards - Custom Design */}
+            {/* News Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Card 1 - START Labs */}
-              <Link href="https://www.linkedin.com/feed/update/urn:li:share:7440016138719272960" target="_blank" className="group relative">
-                <div className="relative rounded-2xl overflow-hidden aspect-[4/5]">
-                  <img
-                    src="https://media.licdn.com/dms/image/v2/D5622AQEh2lg_lhQjww/feedshare-shrink_1280/B56Z0A_QNzI0AU-/0/1773838075010?e=1775692800&v=beta&t=idyNOcgAy--nvZREVm78rmAppAX0uJFuOWEjrUVjIfg"
-                    alt="START Labs MedTech Edition"
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <div className="text-white/60 text-xs uppercase tracking-wider mb-2">Upcoming Event</div>
-                    <div className="text-white font-bold text-xl mb-1">START Labs: MedTech Edition</div>
-                    <p className="text-white/70 text-sm">Something is coming. Block your calendar.</p>
+              {[
+                {
+                  href: "https://www.linkedin.com/posts/startmunich_munichhackinglegal2026-lastday-applynow-activity-7443899749373661184-tqwt",
+                  img: "https://media.licdn.com/dms/image/v2/D4E22AQESvkyVu0PRPA/feedshare-shrink_2048_1536/B4EZ0cfsf4J0Ag-/0/1774299564314?e=2147483647&v=beta&t=i-WTYHK8gEwKZ8p-h-m91ibVlmnHImCFdoKl-bSa6MY",
+                  alt: "Munich Hacking Legal",
+                  label: "Event",
+                  title: "Munich Hacking Legal",
+                  desc: "Apply now for Munich Hacking Legal 2026!",
+                },
+                {
+                  href: "https://www.linkedin.com/feed/update/urn:li:share:7440016138719272960",
+                  img: "https://media.licdn.com/dms/image/v2/D5622AQEh2lg_lhQjww/feedshare-shrink_1280/B56Z0A_QNzI0AU-/0/1773838075010?e=1775692800&v=beta&t=idyNOcgAy--nvZREVm78rmAppAX0uJFuOWEjrUVjIfg",
+                  alt: "START Labs MedTech Edition",
+                  label: "Upcoming Event",
+                  title: "START Labs: MedTech Edition",
+                  desc: "Something is coming. Block your calendar.",
+                },
+                {
+                  href: "https://www.linkedin.com/feed/update/urn:li:share:7435353728989229056",
+                  img: "https://media.licdn.com/dms/image/v2/D4D22AQGajz8OPW6FFw/feedshare-shrink_1280/B4DZy.u0TJHIAc-/0/1772726470218?e=1775692800&v=beta&t=eNeBZE_T126RQMQfvEIfT926mx6D_VxTvIOeZ18p1_0",
+                  alt: "START Goes Bay Area",
+                  label: "START Goes",
+                  title: "BAY AREA",
+                  desc: "Our STARTies explore the San Francisco startup ecosystem.",
+                  titleClass: "text-white font-black text-2xl mb-2",
+                },
+                {
+                  href: "https://www.linkedin.com/feed/update/urn:li:share:7435603494218166272",
+                  img: "https://media.licdn.com/dms/image/v2/D4E22AQHk1X_AF4bZ4Q/feedshare-shrink_2048_1536/B4EZzCR.lKJEAk-/0/1772786019035?e=1775692800&v=beta&t=u5vZe8YnuTVmKWbQdOIHbEa626sXld9zhbR71XaQxZk",
+                  alt: "Lio raises €30M",
+                  title: "Lio raises €30M",
+                  desc: "Huge congratulations to START Munich alumni!",
+                },
+              ].slice(newsIndex, newsIndex + 3).map((card) => (
+                <Link key={card.href} href={card.href} target="_blank" className="group relative">
+                  <div className="relative rounded-2xl overflow-hidden aspect-[4/5]">
+                    <img
+                      src={card.img}
+                      alt={card.alt}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                    <div className="absolute bottom-6 left-6 right-6">
+                      {card.label && <div className="text-white/60 text-xs uppercase tracking-wider mb-2">{card.label}</div>}
+                      <div className={card.titleClass || "text-white font-bold text-xl mb-1"}>{card.title}</div>
+                      <p className="text-white/70 text-sm">{card.desc}</p>
+                    </div>
+                    <div className="absolute top-6 right-6 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </div>
                   </div>
-                  <div className="absolute top-6 right-6 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </div>
-                </div>
-              </Link>
-
-              {/* Card 2 - Bay Area */}
-              <Link href="https://www.linkedin.com/feed/update/urn:li:share:7435353728989229056" target="_blank" className="group relative">
-                <div className="relative rounded-2xl overflow-hidden aspect-[4/5]">
-                  <img
-                    src="https://media.licdn.com/dms/image/v2/D4D22AQGajz8OPW6FFw/feedshare-shrink_1280/B4DZy.u0TJHIAc-/0/1772726470218?e=1775692800&v=beta&t=eNeBZE_T126RQMQfvEIfT926mx6D_VxTvIOeZ18p1_0"
-                    alt="START Goes Bay Area"
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <div className="text-white/60 text-xs uppercase tracking-wider mb-2">START Goes</div>
-                    <div className="text-white font-black text-2xl mb-2">BAY AREA</div>
-                    <p className="text-white/70 text-sm">Our STARTies explore the San Francisco startup ecosystem.</p>
-                  </div>
-                  <div className="absolute top-6 right-6 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </div>
-                </div>
-              </Link>
-
-              {/* Card 3 - Lio Funding */}
-              <Link href="https://www.linkedin.com/feed/update/urn:li:share:7435603494218166272" target="_blank" className="group relative">
-                <div className="relative rounded-2xl overflow-hidden aspect-[4/5]">
-                  <img
-                    src="https://media.licdn.com/dms/image/v2/D4E22AQHk1X_AF4bZ4Q/feedshare-shrink_2048_1536/B4EZzCR.lKJEAk-/0/1772786019035?e=1775692800&v=beta&t=u5vZe8YnuTVmKWbQdOIHbEa626sXld9zhbR71XaQxZk"
-                    alt="Lio raises €30M"
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <div className="text-white font-bold text-xl mb-1">Lio raises €30M</div>
-                    <p className="text-white/60 text-sm">Huge congratulations to START Munich alumni! 🎉</p>
-                  </div>
-                  <div className="absolute top-6 right-6 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </div>
-                </div>
-              </Link>
+                </Link>
+              ))}
             </div>
           </div>
         </section>
@@ -683,7 +703,7 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto">
             {/* Section header */}
             <div className="mb-16">
-              <span className="text-brand-pink text-sm font-bold tracking-[0.3em] uppercase">Worldwide Connected</span>
+              <span className="text-brand-pink text-sm font-bold tracking-[0.3em] uppercase">Global Community</span>
               <h2 className="text-5xl sm:text-6xl font-black text-white mt-3">START NETWORK</h2>
             </div>
 
@@ -713,11 +733,11 @@ export default function HomePage() {
                 {/* Stats */}
                 <div className="flex gap-16 relative z-10">
                   <div>
-                    <div className="text-6xl font-black text-white">16</div>
+                    <div className="text-6xl font-black text-white">22</div>
                     <div className="text-gray-400 text-sm">Cities</div>
                   </div>
                   <div>
-                    <div className="text-6xl font-black text-white">11</div>
+                    <div className="text-6xl font-black text-white">17</div>
                     <div className="text-gray-400 text-sm">Countries</div>
                   </div>
                   <div>
@@ -740,6 +760,7 @@ export default function HomePage() {
                     <div
                       key={`${city}-${i}`}
                       className={`text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.2] ${
+                        city === 'MUNICH' ? 'text-brand-pink' :
                         i % 5 === 0 ? 'bg-gradient-to-r from-gray-400 to-gray-200 bg-clip-text text-transparent' :
                         i % 5 === 1 ? 'bg-gradient-to-r from-gray-500 to-gray-300 bg-clip-text text-transparent' :
                         i % 5 === 2 ? 'text-white' :
@@ -764,11 +785,11 @@ export default function HomePage() {
               <div>
                 <span className="text-brand-pink text-sm font-bold tracking-[0.3em] uppercase">About START Munich</span>
                 <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mt-4 mb-8 leading-tight">
-                  Driven by passion. <span className="text-brand-pink">Built by students.</span>
+                  Driven by passion. <span className="outline-text">Built by students.</span>
                 </h2>
 
                 <p className="text-gray-300 text-lg leading-relaxed mb-6">
-                  START Munich is the largest student-run entrepreneurship initiative at TU Munich, empowering the next generation of founders through education, networking, and hands-on experience.
+                  START Munich is the largest student-run entrepreneurship initiative in Munich, empowering the next generation of founders through education, networking, and hands-on experience.
                 </p>
                 <p className="text-gray-400 leading-relaxed mb-8">
                   We believe in the power of student-driven innovation and provide a platform where bold ideas can become reality.
@@ -791,12 +812,13 @@ export default function HomePage() {
 
               {/* Right side - Image */}
               <div className="relative">
-                <div className="rounded-3xl overflow-hidden border-2 border-white/10">
+                <div className="rounded-3xl overflow-hidden border-2 border-white/10 relative">
                   <img
-                    src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop"
+                    src="/home/good.png"
                     alt="START Munich Event"
-                    className="w-full h-[500px] lg:h-[600px] object-cover"
+                    className="w-full h-[500px] lg:h-[600px] object-cover object-right"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue/50 via-transparent to-transparent"></div>
                 </div>
                 {/* Decorative blob */}
                 <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-brand-pink/20 rounded-full blur-[60px]" />

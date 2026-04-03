@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, use } from "react"
 import Link from "next/link"
-import { notFound } from "next/navigation"
+import { notFound, useRouter } from "next/navigation"
 import type { Company } from "@/lib/types"
 
 // Fetch companies from API
@@ -17,7 +17,9 @@ async function fetchCompanies(): Promise<Company[]> {
   }
 }
 
-export default function StartupDetailsPage({ params }: { params: { id: string } }) {
+export default function StartupDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params)
+  const router = useRouter()
   const [company, setCompany] = useState<Company | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -25,7 +27,7 @@ export default function StartupDetailsPage({ params }: { params: { id: string } 
     const loadCompany = async () => {
       setLoading(true)
       const companies = await fetchCompanies()
-      const foundCompany = companies.find(c => c.id.toString() === params.id)
+      const foundCompany = companies.find(c => c.id.toString() === id)
       
       if (!foundCompany) {
         notFound()
@@ -36,7 +38,7 @@ export default function StartupDetailsPage({ params }: { params: { id: string } 
       setLoading(false)
     }
     loadCompany()
-  }, [params.id])
+  }, [id])
 
   if (loading) {
     return (
@@ -59,7 +61,7 @@ export default function StartupDetailsPage({ params }: { params: { id: string } 
         <div className="bg-[#00002c] border border-white/20 rounded-2xl max-w-4xl mx-auto relative">
           {/* Close Button */}
           <button
-            onClick={() => window.close()}
+            onClick={() => router.back()}
             className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full transition-all"
           >
             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

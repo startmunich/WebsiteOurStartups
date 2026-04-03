@@ -25,11 +25,13 @@ interface Member {
   gender?: string
 }
 
+export const revalidate = 3600
+
 export async function GET(
   request: Request,
-  { params }: { params: { batchId: string } }
+  { params }: { params: Promise<{ batchId: string }> }
 ) {
-  const { batchId } = params
+  const { batchId } = await params
 
   const resolveApiBatch = (batchId: string): string => {
     const normalized = batchId.trim().toLowerCase()
@@ -73,7 +75,7 @@ export async function GET(
           'Authorization': `Bearer ${API_KEY}`,
           'Content-Type': 'application/json',
         },
-        cache: 'no-store',
+        next: { revalidate: 3600 },
       }
     )
 

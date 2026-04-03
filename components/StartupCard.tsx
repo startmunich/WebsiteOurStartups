@@ -20,6 +20,7 @@ interface StartupCardProps {
     color: string
     bgColor: string
   }
+  accentColor?: string
   showDetails?: boolean
 }
 
@@ -33,12 +34,14 @@ export default function StartupCard({
   founders = [],
   isMTZ,
   badge,
+  accentColor,
   showDetails = false
 }: StartupCardProps) {
   return (
     <Link
       href={`/startup-details/${id}`}
-      className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-lg overflow-hidden transition-all duration-300 cursor-pointer block flex flex-col h-full"
+      onClick={() => sessionStorage.setItem('startups-scroll', String(window.scrollY))}
+      className="group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer block flex flex-col h-full"
     >
       {/* Logo Section */}
       <div className="flex items-center justify-center bg-white p-8 h-48">
@@ -50,10 +53,10 @@ export default function StartupCard({
       </div>
 
       {/* Content Section */}
-      <div className="p-6 flex flex-col flex-grow">
-        <div className="mb-4">
-          <div className="flex items-center gap-2 mb-2">
-            <h3 className={`text-xl ${showDetails ? 'text-2xl' : ''} text-white leading-tight`}>
+      <div className={`${showDetails ? 'p-6' : 'px-5 py-4'} flex flex-col flex-grow`}>
+        <div className={`${showDetails ? 'mb-4' : 'mb-2'}`}>
+          <div className="flex items-center gap-2 mb-1">
+            <h3 className={`${showDetails ? 'text-2xl' : 'text-lg'} text-white leading-tight`}>
               {name}
             </h3>
             {isMTZ === true && (
@@ -68,10 +71,10 @@ export default function StartupCard({
             )}
           </div>
 
-          {/* Category Tags */}
-          {category && category.length > 0 && showDetails && (
+          {/* Category Tags + Founded */}
+          {showDetails && (category && category.length > 0 || foundingYear) && (
             <div className="flex flex-wrap gap-2 mb-3">
-              {category.slice(0, 2).map((cat, idx) => (
+              {category && category.slice(0, 2).map((cat, idx) => (
                 <span
                   key={idx}
                   className="inline-flex items-center px-2 py-1 text-xs font-medium bg-white/10 text-gray-300 rounded"
@@ -79,22 +82,20 @@ export default function StartupCard({
                   {cat}
                 </span>
               ))}
+              {foundingYear && (
+                <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-white/10 text-gray-300 rounded">
+                  Founded {foundingYear}
+                </span>
+              )}
             </div>
           )}
         </div>
 
-        <div className="mb-4">
+        <div className={`${showDetails ? 'mb-4' : 'mb-2'}`}>
           <p className={`text-sm text-gray-400 leading-relaxed ${showDetails ? 'line-clamp-3' : ''}`}>
             {summary}
           </p>
         </div>
-
-        {/* Metadata */}
-        {showDetails && foundingYear && (
-          <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-500 mb-4">
-            <span>Founded {foundingYear}</span>
-          </div>
-        )}
 
         {/* Founders Section */}
         {founders.length > 0 && showDetails && (
@@ -144,6 +145,11 @@ export default function StartupCard({
           </div>
         )}
       </div>
+
+      {/* Bottom accent bar */}
+      {accentColor && (
+        <div className={`absolute bottom-0 left-0 w-full h-1 ${accentColor}`}></div>
+      )}
     </Link>
   )
 }

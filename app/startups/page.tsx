@@ -75,6 +75,15 @@ export default function StartupsPage() {
       const data = await fetchCompanies()
       setCompanies(data)
       setLoading(false)
+
+      // Restore scroll position after returning from startup detail
+      const savedScroll = sessionStorage.getItem('startups-scroll')
+      if (savedScroll) {
+        requestAnimationFrame(() => {
+          window.scrollTo(0, parseInt(savedScroll))
+          sessionStorage.removeItem('startups-scroll')
+        })
+      }
     }
     loadCompanies()
   }, [])
@@ -123,10 +132,6 @@ export default function StartupsPage() {
         company.founders.some(founder => founder.name.toLowerCase().includes(searchQuery.toLowerCase()))
 
       return matchesCategory && matchesYear && matchesProgram && matchesSearch
-    })
-    .sort((a, b) => {
-      // Sort alphabetically by name
-      return a.name.localeCompare(b.name)
     })
 
   // Pagination calculations
@@ -189,7 +194,7 @@ export default function StartupsPage() {
       <main className="min-h-screen bg-[#00002c] overflow-x-hidden">
         {/* Hero Section with Full-Width Image */}
         <Hero
-          backgroundImage="/hero-image.jpg"
+          backgroundImage="/ourStartups/hero.jpg"
           title={
             <>
               START MUNICH
@@ -273,6 +278,7 @@ export default function StartupsPage() {
                     logoUrl={company.logoUrl}
                     summary={company.summary}
                     isMTZ={company.isMTZ}
+                    accentColor="bg-blue-300/20"
                     badge={{
                       text: "★",
                       color: "text-yellow-400",
@@ -308,7 +314,7 @@ export default function StartupsPage() {
 
                   <div className="space-y-4">
                     <p className="text-gray-300 leading-relaxed">
-                      Startups with the <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-[#d0006f] text-white rounded mx-1">MTZ</span> label are located at our location partner, the <strong className="text-white">MTZ (MünchenTechnologieZentrum)</strong>, one of Munich's leading innovation hubs. START Munich is also located at the MTZ, fostering a vibrant community of entrepreneurs and innovators.
+                      Startups with the <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-[#d0006f] text-white rounded mx-1">MTZ</span> label are located at our location partner, the <strong className="text-white">MTZ (Münchner Technologiezentrum)</strong>, one of Munich's leading innovation hubs. START Munich is also located at the MTZ, fostering a vibrant community of entrepreneurs and innovators.
                     </p>
 
                     <div className="flex flex-col gap-2 text-sm text-gray-400">
@@ -389,6 +395,7 @@ export default function StartupsPage() {
                     logoUrl={company.logoUrl}
                     summary={company.summary}
                     isMTZ={company.isMTZ}
+                    accentColor="bg-blue-300/20"
                     badge={{
                       text: "YC",
                       color: "text-orange-400",
@@ -444,6 +451,7 @@ export default function StartupsPage() {
                     logoUrl={company.logoUrl}
                     summary={company.summary}
                     isMTZ={company.isMTZ}
+                    accentColor="bg-blue-300/20"
                     badge={{
                       text: "EWOR",
                       color: "text-blue-400",
@@ -650,7 +658,7 @@ export default function StartupsPage() {
             description={<>Join START Munich and get the support, network, and resources you need to turn your idea into reality. Our community has helped launch {companies.length}+ startups — yours could be next.</>}
             buttons={[
               { label: "Discover the Member Journey", href: "/member-journey" },
-              { label: "Apply Now", href: "https://www.startmunich.de/apply", variant: "secondary", external: true }
+              { label: "Apply Now", href: "/join-start/2026", variant: "secondary" }
             ]}
           />
         </div>
