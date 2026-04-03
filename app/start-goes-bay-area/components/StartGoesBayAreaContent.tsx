@@ -137,7 +137,7 @@ export default function StartGoesBayAreaContent() {
                     {bayAreaHeroHighlights.map((stat) => (
                         <HeroCard
                             key={stat.label}
-                            className="bg-white/5 backdrop-blur-md border-white/10 rounded-3xl p-5 sm:p-6 hover:border-brand-pink/40 hover:shadow-[0_0_30px_rgba(208,0,111,0.15)]"
+                            className="transition-all duration-300 hover:border-brand-pink/30 hover:bg-white/[0.09]"
                         >
                             <p className="text-4xl font-black text-white mb-2">{stat.value}</p>
                             <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">{stat.label}</p>
@@ -158,7 +158,10 @@ export default function StartGoesBayAreaContent() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {bayAreaOverviewItems.map((item) => (
-                        <article key={item.title} className="bg-white/5 border border-white/10 p-6">
+                        <article
+                            key={item.title}
+                            className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-pink/30 hover:bg-white/[0.07] transition-all duration-300"
+                        >
                             <h3 className="text-lg font-bold text-white mb-3">{item.title}</h3>
                             <p className="text-sm text-gray-300 leading-relaxed">{item.description}</p>
                         </article>

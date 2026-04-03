@@ -78,11 +78,14 @@ export default function BayAreaYearTabs({ activeYear }: BayAreaYearTabsProps) {
     return (
         <div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-                <div className="md:col-span-3 bg-white/5 border border-white/10 p-6">
+                <div className="md:col-span-3 bg-white/5 border border-white/10 rounded-[2rem] p-6">
                     <h3 className="text-xl font-black text-white mb-4">Year Highlights</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         {activeContent.highlightVisits.map((highlight) => (
-                            <article key={`${activeContent.id}-${highlight.name}`} className="border border-white/10 bg-[#011152]/30">
+                            <article
+                                key={`${activeContent.id}-${highlight.name}`}
+                                className="border border-white/10 bg-white/5 rounded-[1.5rem] overflow-hidden hover:border-brand-pink/30 hover:bg-white/[0.07] transition-all duration-300"
+                            >
                                 {highlight.websiteUrl ? (
                                     <a
                                         href={highlight.websiteUrl}
@@ -119,14 +122,14 @@ export default function BayAreaYearTabs({ activeYear }: BayAreaYearTabsProps) {
                 </div>
 
                 {activeContent.heroStats.map((stat) => (
-                    <div key={stat.label} className="bg-white/5 border border-white/10 p-5">
+                    <div key={stat.label} className="bg-white/5 border border-white/10 rounded-[1.5rem] p-5 hover:border-brand-pink/30 hover:bg-white/[0.07] transition-all duration-300">
                         <p className="text-3xl font-black text-white mb-2">{stat.value}</p>
                         <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">{stat.label}</p>
                     </div>
                 ))}
             </div>
 
-            <div className="bg-white/5 border border-white/10 p-6 md:p-8 mb-8">
+            <div className="bg-white/5 border border-white/10 rounded-[2rem] p-6 md:p-8 mb-8 hover:border-brand-pink/20 transition-all duration-300">
                 <h3 className="text-2xl font-black text-white mb-2">Trip Timeline</h3>
                 <p className="text-sm text-gray-400 mb-8">{activeContent.timelineIntro}</p>
 
@@ -146,7 +149,7 @@ export default function BayAreaYearTabs({ activeYear }: BayAreaYearTabsProps) {
                                         {group.days.map((day) => (
                                             <article
                                                 key={`${activeContent.id}-${group.weekGroup}-${day.date}`}
-                                                className="w-[320px] sm:w-[360px] border border-white/10 bg-[#011152]/30 p-5"
+                                                className="w-[320px] sm:w-[360px] border border-white/10 bg-white/5 rounded-[1.5rem] p-5 hover:border-brand-pink/30 hover:bg-white/[0.07] transition-all duration-300"
                                             >
                                                 <p className="text-xs font-bold uppercase tracking-wider text-brand-pink mb-1">{formatDayWithWeekday(day.date)}</p>
                                                 <h4 className="text-lg font-bold text-white mb-1">{day.heading}</h4>
@@ -207,7 +210,7 @@ export default function BayAreaYearTabs({ activeYear }: BayAreaYearTabsProps) {
                         ))}
                     </div>
                 ) : (
-                    <div className="border border-white/10 bg-[#011152]/30 p-5">
+                    <div className="border border-white/10 bg-white/5 rounded-[1.5rem] p-5 hover:border-brand-pink/30 hover:bg-white/[0.07] transition-all duration-300">
                         <p className="text-sm text-gray-200 leading-relaxed">
                             {activeContent.detailedVisitsPreviewText ?? 'Detailed schedule coming soon.'}
                         </p>
@@ -216,7 +219,7 @@ export default function BayAreaYearTabs({ activeYear }: BayAreaYearTabsProps) {
             </div>
 
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mt-8">
-                <div className="bg-white/5 border border-white/10 p-6 md:p-8">
+                <div className="bg-white/5 border border-white/10 rounded-[2rem] p-6 md:p-8">
                     <h3 className="text-2xl font-black text-white mb-2">Hosts & Partners</h3>
                     <p className="text-sm text-gray-400 mb-6">{activeContent.hostsIntro}</p>
 
@@ -224,7 +227,7 @@ export default function BayAreaYearTabs({ activeYear }: BayAreaYearTabsProps) {
                         {activeContent.hosts.map((host) => (
                             <div
                                 key={`${activeContent.id}-${host.name}`}
-                                className="h-20 bg-white/5 border border-white/10 flex flex-col items-center justify-center text-center px-3 gap-2"
+                                className="h-20 bg-white/5 border border-white/10 rounded-[1.5rem] flex flex-col items-center justify-center text-center px-3 gap-2 hover:border-brand-pink/30 hover:bg-white/[0.07] transition-all duration-300"
                             >
                                 {host.logoPath && (
                                     <img
@@ -239,7 +242,7 @@ export default function BayAreaYearTabs({ activeYear }: BayAreaYearTabsProps) {
                     </div>
                 </div>
 
-                <div className="bg-white/5 border border-white/10 p-6 md:p-8">
+                <div className="bg-white/5 border border-white/10 rounded-[2rem] p-6 md:p-8">
                     <h3 className="text-2xl font-black text-white mb-2">Orga Team</h3>
                     <p className="text-sm text-gray-400 mb-6">{activeContent.teamIntro}</p>
 
@@ -272,7 +275,7 @@ export default function BayAreaYearTabs({ activeYear }: BayAreaYearTabsProps) {
                             })}
                         </div>
                     ) : (
-                        <div className="border border-white/10 bg-[#011152]/30 p-5">
+                        <div className="border border-white/10 bg-white/5 rounded-[1.5rem] p-5 hover:border-brand-pink/30 hover:bg-white/[0.07] transition-all duration-300">
                             <p className="text-sm text-gray-200">Team announcement coming soon.</p>
                         </div>
                     )}

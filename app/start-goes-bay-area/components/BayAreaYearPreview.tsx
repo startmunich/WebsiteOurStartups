@@ -5,7 +5,7 @@ interface BayAreaYearPreviewProps {
 export default function BayAreaYearPreview({ yearLabel }: BayAreaYearPreviewProps) {
     return (
         <section className="min-h-[420px] flex items-center justify-center">
-            <div className="w-full max-w-4xl border border-white/15 bg-white/5 p-10 md:p-14 text-center">
+            <div className="w-full max-w-4xl border border-white/15 bg-white/5 rounded-3xl p-8 md:p-12 text-center">
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-pink mb-5">Preview</p>
                 <h3 className="text-3xl md:text-5xl font-black text-white leading-tight mb-4">
                     START goes Bay Area {yearLabel}
