@@ -17,7 +17,7 @@ export default function Hero({
     title,
     description,
     children,
-    className = "h-[650px]", // Before it was "h-[600px]"
+    className = "h-[320px] sm:h-[420px] lg:h-[650px]",
     overlayOpacity = "bg-brand-dark-blue/70",
     hideChildrenOnMobile = false,
     imagePosition = "center 45%"
@@ -32,6 +32,7 @@ export default function Hero({
                         alt="Hero Background"
                         fill
                         priority
+                        sizes="100vw"
                         className="object-cover"
                         style={{ objectPosition: imagePosition }}
                     />
