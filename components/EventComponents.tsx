@@ -37,7 +37,7 @@ export const EventCard = ({
       onClick={onClick}
       className={`
         flex-shrink-0
-        ${isFlagship ? 'w-[85%] sm:w-[340px]' : 'w-[65%] sm:w-[240px]'}
+        ${isFlagship ? 'w-[78vw] sm:w-[340px]' : 'w-[58vw] sm:w-[240px]'}
         group relative
         ${isFlagship ? 'bg-gradient-to-br from-[#d0006f]/10 via-white/5 to-[#d0006f]/5' : 'bg-white/5'}
         rounded-[1.75rem] overflow-hidden transition-all duration-500

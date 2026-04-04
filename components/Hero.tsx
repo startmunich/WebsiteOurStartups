@@ -17,29 +17,30 @@ export default function Hero({
     title,
     description,
     children,
-    className = "h-[650px]", // Before it was "h-[600px]"
+    className = "min-h-[70vh]",
     overlayOpacity = "bg-brand-dark-blue/70",
     hideChildrenOnMobile = false,
     imagePosition = "center 45%"
 }: HeroProps) {
     return (
         <>
-            <div className={cn("relative w-full overflow-hidden", className)}>
+            <div className={cn("relative w-full overflow-hidden flex flex-col", className)}>
                 {/* Background Image + Overlay */}
-                <div className="absolute inset-0 h-full">
+                <div className="absolute inset-0">
                     <Image
                         src={backgroundImage}
                         alt="Hero Background"
                         fill
                         priority
+                        sizes="100vw"
                         className="object-cover"
                         style={{ objectPosition: imagePosition }}
                     />
-                    <div className={cn("absolute inset-0 h-full", overlayOpacity)}></div>
+                    <div className={cn("absolute inset-0", overlayOpacity)}></div>
                 </div>
 
                 {/* Content Overlay */}
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 h-full flex items-center">
+                <div className="relative flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 flex items-center">
                     <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 w-full">
                         {/* Left Side - Text */}
                         <div className="flex-1 max-w-2xl text-left">
@@ -63,7 +64,7 @@ export default function Hero({
 
             {/* Mobile - Cards below hero */}
             {children && !hideChildrenOnMobile && (
-                <div className="lg:hidden mt-5">
+                <div className="lg:hidden mt-1">
                     <div className="max-w-7xl mx-auto px-4 py-6">
                         {children}
                     </div>
