@@ -156,7 +156,7 @@ export default function Navigation() {
                 onClick={() => setIsPartnerOpen(!isPartnerOpen)}
                 className="text-white font-bold text-base hover:text-brand-pink transition-colors uppercase tracking-wide flex items-center space-x-1"
               >
-                <span>PARTNER</span>
+                <span>PARTNERS</span>
                 <svg
                   className={`w-4 h-4 transition-transform ${isPartnerOpen ? 'rotate-180' : ''}`}
                   fill="none"
