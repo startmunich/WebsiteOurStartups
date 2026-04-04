@@ -31,6 +31,7 @@ export const EventCard = ({
 
   return (
     <div
+      data-event-id={event.id}
       onMouseEnter={() => setHoveredEvent(event.id)}
       onMouseLeave={() => setHoveredEvent(null)}
       onClick={onClick}

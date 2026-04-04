@@ -157,21 +157,15 @@ export default function EventsPage() {
     const slider = sliderRef.current
     if (!slider) return
 
-    const eventIndex = recurringEvents.findIndex(e => e.id === eventId)
-    if (eventIndex === -1) return
+    const card = slider.querySelector(`[data-event-id="${eventId}"]`) as HTMLElement | null
+    if (!card) return
 
-    const cards = slider.children
-    if (eventIndex >= cards.length) return
-
-    const card = cards[eventIndex] as HTMLElement
     const cardLeft = card.offsetLeft
     const cardWidth = card.offsetWidth
     const sliderWidth = slider.offsetWidth
 
-    const scrollPosition = cardLeft - (sliderWidth / 2) + (cardWidth / 2)
-
     slider.scrollTo({
-      left: scrollPosition,
+      left: cardLeft - (sliderWidth / 2) + (cardWidth / 2),
       behavior: 'smooth'
     })
   }
@@ -324,7 +318,7 @@ export default function EventsPage() {
                   <div className="flex flex-wrap items-center gap-3 mb-5">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#9c27b0]/25 border border-[#9c27b0]/50 text-[#ce93d8] text-xs font-bold uppercase tracking-widest">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#ce93d8] animate-pulse"></span>
-                      Featured Event
+                      Upcoming Event
                     </span>
                     <span className="px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-white/60 text-xs font-bold uppercase tracking-widest">
                       Hackathon
