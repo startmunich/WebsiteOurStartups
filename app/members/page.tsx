@@ -533,7 +533,7 @@ export default function MembersPage() {
                         <div className="w-6 h-px bg-brand-pink" />
                         <span className="text-brand-pink text-xs font-bold tracking-[0.35em] uppercase">Executive Board</span>
                       </div>
-                      <div className="grid grid-cols-3 gap-4 max-w-2xl">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
                         {board.executiveBoard.map((member, i) => (
                           <div key={i} className="group relative">
                             <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-white/5 border border-white/10 hover:border-brand-pink/30 transition-all duration-300">
@@ -545,7 +545,7 @@ export default function MembersPage() {
                                 </div>
                               )}
                               <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue via-brand-dark-blue/20 to-transparent" />
-                              <div className="absolute bottom-0 left-0 right-0 p-4">
+                              <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4">
                                 <p className="font-black uppercase text-white text-xs leading-tight tracking-wide">{member.name}</p>
                                 <p className="text-brand-pink text-[10px] font-semibold mt-1 uppercase tracking-widest">{member.role}</p>
                               </div>
@@ -561,7 +561,7 @@ export default function MembersPage() {
                         <div className="w-6 h-px bg-brand-pink" />
                         <span className="text-brand-pink text-xs font-bold tracking-[0.35em] uppercase">Department Board</span>
                       </div>
-                      <div className="grid grid-cols-5 gap-4 max-w-6xl">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
                         {board.departmentBoard.map((member, i) => (
                           <div key={i} className="group relative">
                             <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-white/5 border border-white/10 hover:border-brand-pink/30 transition-all duration-300">
@@ -573,7 +573,7 @@ export default function MembersPage() {
                                 </div>
                               )}
                               <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue via-brand-dark-blue/20 to-transparent" />
-                              <div className="absolute bottom-0 left-0 right-0 p-4">
+                              <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4">
                                 <p className="font-black uppercase text-white text-xs leading-tight tracking-wide">{member.name}</p>
                                 <p className="text-brand-pink text-[10px] font-semibold mt-1 uppercase tracking-widest">{member.role}</p>
                               </div>
