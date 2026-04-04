@@ -63,7 +63,7 @@ const recurringEvents: RecurringEvent[] = [
     month: "May",
     frequency: "Once per year",
     icon: "code",
-    image: "/events/eventCards/summit.JPG",
+    image: "/events/eventCards/labs.JPG",
     category: "Incubator"
   },
   {
@@ -102,6 +102,7 @@ export default function EventsPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const sliderRef = useRef<HTMLDivElement>(null)
+  const sliderSectionRef = useRef<HTMLDivElement>(null)
   const dragState = useRef({ isDragging: false, startX: 0, scrollLeft: 0 })
   const [scrollProgress, setScrollProgress] = useState(0)
   const [hoveredEvent, setHoveredEvent] = useState<string | null>(null)
@@ -173,6 +174,11 @@ export default function EventsPage() {
       left: scrollPosition,
       behavior: 'smooth'
     })
+  }
+
+  const scrollToEventMobile = (eventId: string) => {
+    scrollToEvent(eventId)
+    sliderSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   const handleTimelineMarkerHover = (eventId: string) => {
@@ -519,7 +525,7 @@ export default function EventsPage() {
                   <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/[0.04]">
                     <div className="w-14 flex-shrink-0 text-gray-400 text-sm font-bold">Jan</div>
                     <button
-                      onClick={() => scrollToEvent('pitch-network')}
+                      onClick={() => scrollToEventMobile('pitch-network')}
                       className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                     >
                       <div className="w-3 h-3 bg-[#ff1744] rounded-full flex-shrink-0"></div>
@@ -530,7 +536,7 @@ export default function EventsPage() {
                   <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/[0.04]">
                     <div className="w-14 flex-shrink-0 text-gray-400 text-sm font-bold">Mar</div>
                     <button
-                      onClick={() => scrollToEvent('legal-hack')}
+                      onClick={() => scrollToEventMobile('legal-hack')}
                       className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                     >
                       <div className="w-3 h-3 bg-[#9c27b0] rounded-full flex-shrink-0"></div>
@@ -541,7 +547,7 @@ export default function EventsPage() {
                   <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/[0.04]">
                     <div className="w-14 flex-shrink-0 text-gray-400 text-sm font-bold">Apr</div>
                     <button
-                      onClick={() => scrollToEvent('info-event')}
+                      onClick={() => scrollToEventMobile('info-event')}
                       className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                     >
                       <div className="w-3 h-3 bg-[#4a90e2] rounded-full flex-shrink-0"></div>
@@ -553,14 +559,14 @@ export default function EventsPage() {
                     <div className="w-14 flex-shrink-0 text-gray-400 text-sm font-bold">May</div>
                     <div className="flex flex-col gap-2">
                       <button
-                        onClick={() => scrollToEvent('start-labs')}
+                        onClick={() => scrollToEventMobile('start-labs')}
                         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                       >
                         <div className="w-3 h-3 bg-[#ff9800] rounded-full flex-shrink-0"></div>
                         <span className="text-sm text-white">START Labs</span>
                       </button>
                       <button
-                        onClick={() => scrollToEvent('fail-tales')}
+                        onClick={() => scrollToEventMobile('fail-tales')}
                         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                       >
                         <div className="w-3 h-3 bg-[#4a90e2] rounded-full flex-shrink-0"></div>
@@ -572,7 +578,7 @@ export default function EventsPage() {
                   <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/[0.04]">
                     <div className="w-14 flex-shrink-0 text-gray-400 text-sm font-bold">Jun</div>
                     <button
-                      onClick={() => scrollToEvent('pitch-network')}
+                      onClick={() => scrollToEventMobile('pitch-network')}
                       className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                     >
                       <div className="w-3 h-3 bg-[#ff1744] rounded-full flex-shrink-0"></div>
@@ -584,21 +590,21 @@ export default function EventsPage() {
                     <div className="w-14 flex-shrink-0 text-gray-400 text-sm font-bold">Oct</div>
                     <div className="flex flex-col gap-2">
                       <button
-                        onClick={() => scrollToEvent('info-event')}
+                        onClick={() => scrollToEventMobile('info-event')}
                         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                       >
                         <div className="w-3 h-3 bg-[#4a90e2] rounded-full flex-shrink-0"></div>
                         <span className="text-sm text-white">Info Event</span>
                       </button>
                       <button
-                        onClick={() => scrollToEvent('fail-tales')}
+                        onClick={() => scrollToEventMobile('fail-tales')}
                         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                       >
                         <div className="w-3 h-3 bg-[#4a90e2] rounded-full flex-shrink-0"></div>
                         <span className="text-sm text-white">Fail Tales</span>
                       </button>
                       <button
-                        onClick={() => scrollToEvent('rtss')}
+                        onClick={() => scrollToEventMobile('rtss')}
                         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                       >
                         <div className="w-3 h-3 bg-[#ff1744] rounded-full flex-shrink-0"></div>
@@ -610,7 +616,7 @@ export default function EventsPage() {
                   <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/[0.04]">
                     <div className="w-14 flex-shrink-0 text-gray-400 text-sm font-bold">Nov</div>
                     <button
-                      onClick={() => scrollToEvent('rtsh')}
+                      onClick={() => scrollToEventMobile('rtsh')}
                       className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                     >
                       <div className="w-3 h-3 bg-[#9c27b0] rounded-full flex-shrink-0"></div>
@@ -645,7 +651,7 @@ export default function EventsPage() {
         </div>
 
         {/* Events Slider */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24 mt-8">
+        <div ref={sliderSectionRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24 mt-8">
           <div className="relative">
             <div
               ref={sliderRef}
