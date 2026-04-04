@@ -125,16 +125,22 @@ export default function HomeClient({ initialPartners, initialStartups }: HomeCli
 
         {/* ═══════════════════════════ HERO — FULLSCREEN CROSSFADE ═══════════════════════════ */}
         <section className="relative w-full overflow-hidden h-[calc(100vh-5rem)] flex items-center">
-          {/* Crossfading backgrounds */}
-          {heroImages.map((src, i) => (
-            <div
-              key={src}
-              className="absolute inset-0 transition-opacity duration-[2000ms] ease-in-out"
-              style={{ opacity: heroIdx === i ? 1 : 0 }}
-            >
-              <Image src={src} alt="" fill priority={i === 0} className="object-cover scale-[1.05]" />
-            </div>
-          ))}
+          {/* Crossfading backgrounds — only render prev/current/next to avoid loading all 8 at once */}
+          {heroImages.map((src, i) => {
+            const isCurrent = heroIdx === i
+            const isNext = (heroIdx + 1) % heroImages.length === i
+            const isPrev = (heroIdx - 1 + heroImages.length) % heroImages.length === i
+            if (!isCurrent && !isNext && !isPrev) return null
+            return (
+              <div
+                key={src}
+                className="absolute inset-0 transition-opacity duration-[2000ms] ease-in-out"
+                style={{ opacity: isCurrent ? 1 : 0 }}
+              >
+                <Image src={src} alt="" fill priority={i === 0} className="object-cover scale-[1.05]" />
+              </div>
+            )
+          })}
           {/* Gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-brand-dark-blue/90 via-brand-dark-blue/70 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue via-transparent to-transparent" />
@@ -196,11 +202,14 @@ export default function HomeClient({ initialPartners, initialStartups }: HomeCli
         <section className="py-28 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
           <div className="max-w-7xl mx-auto">
             {/* Group Photo */}
-            <div className="relative rounded-3xl overflow-hidden mb-16">
-              <img
+            <div className="relative rounded-3xl overflow-hidden mb-16 h-[300px] sm:h-[400px] lg:h-[500px]">
+              <Image
                 src="/home/Landing_Team_1.jpeg"
                 alt="START Munich Community"
-                className="w-full h-[300px] sm:h-[400px] lg:h-[500px] object-cover"
+                fill
+                loading="lazy"
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1280px"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue/60 via-transparent to-transparent" />
             </div>
@@ -361,6 +370,7 @@ export default function HomeClient({ initialPartners, initialStartups }: HomeCli
                       <img
                         src={startup.logoUrl}
                         alt={startup.name}
+                        loading="lazy"
                         className="max-h-10 max-w-[100px] object-contain"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement
@@ -469,7 +479,7 @@ export default function HomeClient({ initialPartners, initialStartups }: HomeCli
               const renderCard = (card: typeof allCards[0]) => (
                 <Link key={card.href} href={card.href} target="_blank" className="group relative">
                   <div className="relative rounded-2xl overflow-hidden aspect-[4/5]">
-                    <img src={card.img} alt={card.alt} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <img src={card.img} alt={card.alt} loading="lazy" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                     <div className="absolute bottom-6 left-6 right-6">
                       {card.label && <div className="text-white/60 text-xs uppercase tracking-wider mb-2">{card.label}</div>}
@@ -619,11 +629,14 @@ export default function HomeClient({ initialPartners, initialStartups }: HomeCli
 
               {/* Right side - Image */}
               <div className="relative">
-                <div className="rounded-3xl overflow-hidden border-2 border-white/10 relative">
-                  <img
+                <div className="rounded-3xl overflow-hidden border-2 border-white/10 relative h-[500px] lg:h-[600px]">
+                  <Image
                     src="/home/good.png"
                     alt="START Munich Event"
-                    className="w-full h-[500px] lg:h-[600px] object-cover object-right"
+                    fill
+                    loading="lazy"
+                    className="object-cover object-right"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue/50 via-transparent to-transparent"></div>
                 </div>
