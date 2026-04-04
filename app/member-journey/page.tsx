@@ -301,7 +301,9 @@ export default function MemberJourneyPage() {
 
   const scrollToEventImage = () => {
     if (window.innerWidth < 1024 && eventImageRef.current) {
-      eventImageRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      const yOffset = -80
+      const y = eventImageRef.current.getBoundingClientRect().top + window.scrollY + yOffset
+      window.scrollTo({ top: y, behavior: 'smooth' })
     }
   }
 
@@ -677,7 +679,7 @@ export default function MemberJourneyPage() {
             <div ref={eventsSectionRef} className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch lg:h-[620px]">
               {/* Event list card */}
               <div
-                className="bg-white/[0.06] backdrop-blur-sm rounded-3xl border border-white/10 p-8"
+                className="bg-white/[0.06] backdrop-blur-sm rounded-3xl border border-white/10 p-8 order-2 lg:order-1"
                 onMouseLeave={() => {
                   if (!lockedEventId && !isMoreLocked) {
                     setHoveredEventId(null)
@@ -740,7 +742,7 @@ export default function MemberJourneyPage() {
               </div>
 
               {/* Image panel */}
-              <div ref={eventImageRef} className="bg-white/[0.06] rounded-3xl border border-white/10 relative overflow-hidden">
+              <div ref={eventImageRef} className="bg-white/[0.06] rounded-3xl border border-white/10 relative overflow-hidden order-1 lg:order-2 h-72 lg:h-auto">
                 {activeMore || (!activeEventId && !activeMore && currentEventIndex === startEvents.length) ? (
                   <div className="grid grid-cols-2 grid-rows-2 w-full h-full gap-0">
                     {moreImages.map((img, i) => (

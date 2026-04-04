@@ -106,6 +106,7 @@ export default function HomePage() {
   const [brandPartners, setBrandPartners] = useState<Partner[]>([])
   const [featuredStartups, setFeaturedStartups] = useState<Startup[]>([])
   const [newsIndex, setNewsIndex] = useState(0)
+  const [showAllNews, setShowAllNews] = useState(false)
   const factsView = useInView(0.25)
   const missionView = useInView(0.15)
   // const specialView = useInView(0.1)
@@ -599,7 +600,7 @@ export default function HomePage() {
                   <span className="text-brand-pink text-sm font-bold tracking-[0.3em] uppercase">Stay Updated</span>
                   <h2 className="text-5xl sm:text-6xl font-black text-white mt-3">LATEST NEWS</h2>
                 </div>
-                <div className="flex items-center gap-4 self-end mb-1">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 sm:self-end sm:mb-1">
                   <Link href="https://www.linkedin.com/company/start-munich/" target="_blank" className="group flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-full hover:border-brand-pink/50 hover:bg-brand-pink/10 transition-all duration-300">
                     <svg className="w-4 h-4 text-white group-hover:text-brand-pink transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                     <span className="text-white text-sm font-medium group-hover:text-brand-pink transition-colors">LinkedIn</span>
@@ -611,8 +612,8 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Page counter + navigation arrows */}
-              <div className="flex items-center gap-3 flex-shrink-0">
+              {/* Page counter + navigation arrows — hidden on mobile */}
+              <div className="hidden md:flex items-center gap-3 flex-shrink-0">
                 <span className="text-sm text-gray-500 tabular-nums">
                   {String(Math.floor(newsIndex / 3) + 1).padStart(2, '0')} / {String(Math.ceil(4 / 3)).padStart(2, '0')}
                 </span>
@@ -638,8 +639,8 @@ export default function HomePage() {
             </div>
 
             {/* News Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
+            {(() => {
+              const allCards = [
                 {
                   href: "https://www.linkedin.com/posts/startmunich_munichhackinglegal2026-lastday-applynow-activity-7443899749373661184-tqwt",
                   img: "https://media.licdn.com/dms/image/v2/D4E22AQESvkyVu0PRPA/feedshare-shrink_2048_1536/B4EZ0cfsf4J0Ag-/0/1774299564314?e=2147483647&v=beta&t=i-WTYHK8gEwKZ8p-h-m91ibVlmnHImCFdoKl-bSa6MY",
@@ -672,14 +673,11 @@ export default function HomePage() {
                   title: "Lio raises €30M",
                   desc: "Huge congratulations to START Munich alumni!",
                 },
-              ].slice(newsIndex, newsIndex + 3).map((card) => (
+              ]
+              const renderCard = (card: typeof allCards[0]) => (
                 <Link key={card.href} href={card.href} target="_blank" className="group relative">
                   <div className="relative rounded-2xl overflow-hidden aspect-[4/5]">
-                    <img
-                      src={card.img}
-                      alt={card.alt}
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+                    <img src={card.img} alt={card.alt} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                     <div className="absolute bottom-6 left-6 right-6">
                       {card.label && <div className="text-white/60 text-xs uppercase tracking-wider mb-2">{card.label}</div>}
@@ -693,8 +691,28 @@ export default function HomePage() {
                     </div>
                   </div>
                 </Link>
-              ))}
-            </div>
+              )
+              return (
+                <>
+                  {/* Desktop: paginated 3-column grid */}
+                  <div className="hidden md:grid md:grid-cols-3 gap-6">
+                    {allCards.slice(newsIndex, newsIndex + 3).map(renderCard)}
+                  </div>
+                  {/* Mobile: stacked with show more */}
+                  <div className="flex flex-col gap-6 md:hidden">
+                    {(showAllNews ? allCards : allCards.slice(0, 3)).map(renderCard)}
+                    {!showAllNews && (
+                      <button
+                        onClick={() => setShowAllNews(true)}
+                        className="w-full py-4 border border-white/20 rounded-2xl text-white/70 font-medium hover:border-brand-pink/50 hover:text-white transition-all duration-300"
+                      >
+                        Show more
+                      </button>
+                    )}
+                  </div>
+                </>
+              )
+            })()}
           </div>
         </section>
 
@@ -702,7 +720,7 @@ export default function HomePage() {
         <section className="py-28 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
           <div className="max-w-7xl mx-auto">
             {/* Section header */}
-            <div className="mb-16">
+            <div className="mb-10">
               <span className="text-brand-pink text-sm font-bold tracking-[0.3em] uppercase">Global Community</span>
               <h2 className="text-5xl sm:text-6xl font-black text-white mt-3">START NETWORK</h2>
             </div>
@@ -731,17 +749,17 @@ export default function HomePage() {
                 </div>
 
                 {/* Stats */}
-                <div className="flex gap-16 relative z-10">
+                <div className="flex gap-8 sm:gap-16 relative z-10">
                   <div>
-                    <div className="text-6xl font-black text-white">22</div>
+                    <div className="text-5xl sm:text-6xl font-black text-white">22</div>
                     <div className="text-gray-400 text-sm">Cities</div>
                   </div>
                   <div>
-                    <div className="text-6xl font-black text-white">17</div>
+                    <div className="text-5xl sm:text-6xl font-black text-white">17</div>
                     <div className="text-gray-400 text-sm">Countries</div>
                   </div>
                   <div>
-                    <div className="text-6xl font-black text-white">+500</div>
+                    <div className="text-5xl sm:text-6xl font-black text-white">+500</div>
                     <div className="text-gray-400 text-sm">Members</div>
                   </div>
                 </div>
@@ -749,7 +767,6 @@ export default function HomePage() {
 
               {/* Right side - City names rolling */}
               <div className="relative h-[400px] overflow-hidden">
-                <span className="text-brand-pink text-sm font-bold tracking-[0.3em] uppercase absolute top-0 right-0 z-10">Global Community</span>
 
                 {/* Fade overlays */}
                 <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-brand-dark-blue to-transparent z-10" />

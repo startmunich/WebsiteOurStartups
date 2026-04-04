@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 interface Founder {
   name: string
@@ -37,11 +37,17 @@ export default function StartupCard({
   accentColor,
   showDetails = false
 }: StartupCardProps) {
+  const router = useRouter()
+
+  const handleCardClick = () => {
+    sessionStorage.setItem('startups-scroll', String(window.scrollY))
+    router.push(`/startup-details/${id}`)
+  }
+
   return (
-    <Link
-      href={`/startup-details/${id}`}
-      onClick={() => sessionStorage.setItem('startups-scroll', String(window.scrollY))}
-      className="group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer block flex flex-col h-full"
+    <div
+      onClick={handleCardClick}
+      className="group relative bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer flex flex-col h-full"
     >
       {/* Logo Section */}
       <div className="flex items-center justify-center bg-white p-8 h-48">
@@ -150,6 +156,6 @@ export default function StartupCard({
       {accentColor && (
         <div className={`absolute bottom-0 left-0 w-full h-1 ${accentColor}`}></div>
       )}
-    </Link>
+    </div>
   )
 }

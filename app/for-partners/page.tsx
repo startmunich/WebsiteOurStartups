@@ -374,7 +374,7 @@ export default function ForPartnersPage() {
         </Hero>
 
         {/* Partner Overview - Logos - Full Width */}
-        <section className="py-16 lg:py-20 overflow-hidden">
+        <section className="pt-16 pb-6 lg:py-20 overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-4">
               <div>
@@ -388,7 +388,7 @@ export default function ForPartnersPage() {
               </div>
               <a
                 href="/partners"
-                className="px-6 py-2.5 border-2 border-brand-pink text-brand-pink hover:bg-brand-pink hover:text-white font-bold rounded-full transition-all duration-300 whitespace-nowrap text-center"
+                className="hidden md:inline-flex px-6 py-2.5 border-2 border-brand-pink text-brand-pink hover:bg-brand-pink hover:text-white font-bold rounded-full transition-all duration-300 whitespace-nowrap text-center"
               >
                 View All Partners →
               </a>
@@ -418,6 +418,11 @@ export default function ForPartnersPage() {
             </div>
           </div>
         </section>
+        <div className="md:hidden text-center mb-16">
+          <a href="/partners" className="group inline-flex items-center gap-2 text-white/70 hover:text-brand-pink font-medium transition-colors">
+            View all our partners <span className="group-hover:translate-x-1 transition-transform">→</span>
+          </a>
+        </div>
 
         {/* Content Below Hero */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-20 space-y-32">
@@ -699,14 +704,14 @@ export default function ForPartnersPage() {
 
           {/* FAQ Section - Split layout inspired by reference */}
           <section>
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-16">
               {/* Left Column - Header */}
               <div className="lg:col-span-2">
                 <p className="text-brand-pink text-sm font-bold tracking-[0.2em] uppercase mb-3">Have Questions?</p>
                 <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
                   FREQUENTLY ASKED <span className="outline-text">QUESTIONS</span>
                 </h2>
-                <p className="text-gray-400 text-lg mb-8">
+                <p className="text-gray-400 text-lg mb-4 lg:mb-8">
                   Everything you need to know about partnering with START
                 </p>
               </div>

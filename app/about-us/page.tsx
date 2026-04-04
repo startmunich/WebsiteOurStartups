@@ -179,7 +179,7 @@ export default function AboutUsPage() {
                   </div>
                   <p className="text-gray-400 text-sm leading-relaxed">
                     {'descriptionParts' in partner
-                      ? partner.descriptionParts.map((part, i) => (
+                      ? partner.descriptionParts?.map((part, i) => (
                           <span key={i} className={part.pink ? 'text-brand-pink' : undefined}>{part.text}</span>
                         ))
                       : partner.description}
@@ -212,14 +212,14 @@ export default function AboutUsPage() {
             </div>
 
             {/* Right: portrait cards */}
-            <div className={`flex flex-wrap mr-9 justify-center lg:justify-between gap-y-8 transition-all duration-700 delay-200 ${execView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className={`flex flex-wrap lg:mr-9 justify-center lg:justify-between gap-x-8 gap-y-8 transition-all duration-700 delay-200 ${execView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               {executiveBoard.map((member, i) => (
                 <div
                   key={member.name}
                   className={`flex flex-col items-center text-center group transition-all duration-500 ${execView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
                   style={{ transitionDelay: `${200 + i * 100}ms` }}
                 >
-                  <div className="relative w-38 h-50 lg:w-48 lg:h-[15rem] rounded-xl overflow-hidden border-2 border-white/10 pointer-events-none select-none mb-3">
+                  <div className="relative w-36 h-48 lg:w-48 lg:h-[15rem] rounded-xl overflow-hidden border-2 border-white/10 pointer-events-none select-none mb-3">
                     <Image src={member.photo} alt={member.name} fill className="object-cover object-top" draggable={false} />
                   </div>
                   <p className="font-black uppercase text-white text-xs lg:text-sm tracking-wide leading-tight">{member.name}</p>
