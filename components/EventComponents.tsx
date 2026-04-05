@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 
 // Event Card Component
 export interface EventCardProps {
@@ -217,16 +217,49 @@ export interface ScrollIndicatorProps {
   scrollProgress: number
 }
 
-export const ScrollIndicator = ({ sliderRef, scrollProgress }: ScrollIndicatorProps) => (
-  <div className="relative h-1.5 bg-white/[0.06] rounded-full mt-8 overflow-hidden">
+export const ScrollIndicator = ({ sliderRef, scrollProgress }: ScrollIndicatorProps) => {
+  const trackRef = useRef<HTMLDivElement>(null)
+  const isDragging = useRef(false)
+
+  const getScrollRatio = (clientX: number) => {
+    if (!trackRef.current || !sliderRef.current) return 0
+    const rect = trackRef.current.getBoundingClientRect()
+    return Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
+  }
+
+  const scrollToRatio = (ratio: number) => {
+    if (!sliderRef.current) return
+    const maxScroll = sliderRef.current.scrollWidth - sliderRef.current.clientWidth
+    sliderRef.current.scrollLeft = ratio * maxScroll
+  }
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    isDragging.current = true
+    scrollToRatio(getScrollRatio(e.clientX))
+    const onMove = (ev: MouseEvent) => { if (isDragging.current) scrollToRatio(getScrollRatio(ev.clientX)) }
+    const onUp = () => { isDragging.current = false; window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp) }
+    window.addEventListener('mousemove', onMove)
+    window.addEventListener('mouseup', onUp)
+  }
+
+  const thumbWidth = sliderRef.current ? (sliderRef.current.clientWidth / sliderRef.current.scrollWidth) * 100 : 30
+  const thumbLeft = sliderRef.current ? scrollProgress * (1 - sliderRef.current.clientWidth / sliderRef.current.scrollWidth) : 0
+
+  return (
     <div
-      className="absolute h-full rounded-full transition-all duration-200"
-      style={{
-        background: 'linear-gradient(to right, #d0006f, rgb(236, 72, 153), #d0006f)',
-        opacity: 0.5,
-        width: `${sliderRef.current ? (sliderRef.current.clientWidth / sliderRef.current.scrollWidth) * 100 : 30}%`,
-        left: `${sliderRef.current ? scrollProgress * (1 - sliderRef.current.clientWidth / sliderRef.current.scrollWidth) : 0}%`
-      }}
-    />
-  </div>
-)
+      ref={trackRef}
+      className="relative h-1.5 bg-white/[0.06] rounded-full mt-8 overflow-hidden cursor-pointer"
+      onMouseDown={handleMouseDown}
+    >
+      <div
+        className="absolute h-full rounded-full transition-all duration-200 pointer-events-none"
+        style={{
+          background: 'linear-gradient(to right, #d0006f, rgb(236, 72, 153), #d0006f)',
+          opacity: 0.5,
+          width: `${thumbWidth}%`,
+          left: `${thumbLeft}%`
+        }}
+      />
+    </div>
+  )
+}

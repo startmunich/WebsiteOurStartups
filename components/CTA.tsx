@@ -1,12 +1,12 @@
 "use client"
 
 import { ReactNode } from 'react'
+import Link from 'next/link'
 
 interface CTAButton {
   label: string
   href: string
   variant?: 'primary' | 'secondary'
-  external?: boolean
 }
 
 interface CTAProps {
@@ -31,15 +31,13 @@ export default function CTA({
     const secondaryClasses = "border border-[#d0006f] text-[#d0006f] hover:bg-[#d0006f]/10"
 
     return (
-      <a
+      <Link
         key={index}
         href={button.href}
-        target={button.external ? "_blank" : undefined}
-        rel={button.external ? "noopener noreferrer" : undefined}
         className={`${baseClasses} ${isPrimary ? primaryClasses : secondaryClasses}`}
       >
         {button.label}
-      </a>
+      </Link>
     )
   }
 
