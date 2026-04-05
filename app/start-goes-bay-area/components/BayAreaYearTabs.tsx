@@ -401,7 +401,7 @@ export default function BayAreaYearTabs({ activeYear }: BayAreaYearTabsProps) {
                                     <section
                                         key={`${activeContent.id}-${group.weekGroup}`}
                                         ref={(element) => {
-                                            weekSectionRefs.current[group.weekGroup] = element
+                                            weekSectionRefs.current[group.weekGroup] = element as HTMLDivElement | null
                                         }}
                                         className="flex shrink-0"
                                     >
