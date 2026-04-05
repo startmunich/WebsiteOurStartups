@@ -103,20 +103,6 @@ export default function Navigation() {
                       </span>
                     </Link>
                     <Link
-                      href="/member-network"
-                      onClick={() => setIsCommunityOpen(false)}
-                      className="group block px-6 py-3.5 text-white text-base font-bold hover:bg-brand-pink transition-all duration-200"
-                    >
-                      <span className="flex items-center">
-                        <svg className="w-4 h-4 mr-3 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                        Member Network
-                      </span>
-                    </Link>
-
-
-                    <Link
                       href="/members"
                       onClick={() => setIsCommunityOpen(false)}
                       className="group block px-6 py-3.5 text-white text-base font-bold hover:bg-brand-pink transition-all duration-200"
@@ -170,7 +156,7 @@ export default function Navigation() {
                 onClick={() => setIsPartnerOpen(!isPartnerOpen)}
                 className="text-white font-bold text-base hover:text-brand-pink transition-colors uppercase tracking-wide flex items-center space-x-1"
               >
-                <span>PARTNER</span>
+                <span>PARTNERS</span>
                 <svg
                   className={`w-4 h-4 transition-transform ${isPartnerOpen ? 'rotate-180' : ''}`}
                   fill="none"
@@ -252,139 +238,164 @@ export default function Navigation() {
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu - Full Screen Overlay */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden py-4 space-y-2 border-t border-white/10">
-            <Link
-              href="/home"
-              className="block px-4 py-3 text-white font-bold text-sm hover:bg-white/5 hover:text-brand-pink transition-colors uppercase"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              HOME
-            </Link>
-
-            {/* Mobile Community Dropdown */}
-            <div>
-              <button
-                onClick={() => setIsMobileCommunityOpen(!isMobileCommunityOpen)}
-                className="w-full flex items-center justify-between px-4 py-3 text-white font-bold text-sm hover:bg-white/5 hover:text-brand-pink transition-colors uppercase"
-              >
-                <span>COMMUNITY</span>
-                <svg
-                  className={`w-4 h-4 transition-transform ${isMobileCommunityOpen ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-
-              {isMobileCommunityOpen && (
-                <div className="bg-white/5 space-y-1">
-                  <Link
-                    href="/about-us"
-                    className="block px-8 py-2 text-white text-sm hover:text-brand-pink transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    About Us
-                  </Link>
-                  <Link
-                    href="/member-journey"
-                    className="block px-8 py-2 text-white text-sm hover:text-brand-pink transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Member Journey
-                  </Link>
-                  <Link
-                    href="/member-network"
-                    className="block px-8 py-2 text-white text-sm hover:text-brand-pink transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Member Network
-                  </Link>
-                  <Link
-                    href="/members"
-                    className="block px-8 py-2 text-white text-sm hover:text-brand-pink transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Our Members
-                  </Link>
-                </div>
-              )}
-            </div>
-
-            <Link
-              href="/startups"
-              className="block px-4 py-3 text-white font-bold text-sm hover:bg-white/5 hover:text-brand-pink transition-colors uppercase"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              OUR STARTUPS
-            </Link>
-
-            <Link
-              href="/events"
-              className="block px-4 py-3 text-white font-bold text-sm hover:bg-white/5 hover:text-brand-pink transition-colors uppercase"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              EVENTS
-            </Link>
-
-            {/* Mobile Partner Dropdown */}
-            <div>
-              <button
-                onClick={() => setIsMobilePartnerOpen(!isMobilePartnerOpen)}
-                className="w-full flex items-center justify-between px-4 py-3 text-white font-bold text-sm hover:bg-white/5 hover:text-brand-pink transition-colors uppercase"
-              >
-                <span>PARTNER</span>
-                <svg
-                  className={`w-4 h-4 transition-transform ${isMobilePartnerOpen ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-
-              {isMobilePartnerOpen && (
-                <div className="bg-white/5 space-y-1">
-                  <Link
-                    href="/for-partners"
-                    className="block px-8 py-2 text-white text-sm hover:text-brand-pink transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    For Partners
-                  </Link>
-                  <Link
-                    href="/partners"
-                    className="block px-8 py-2 text-white text-sm hover:text-brand-pink transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Our Partners
-                  </Link>
-                </div>
-              )}
-            </div>
-
-            {/* Apply Now / All Jobs Split Button - Mobile */}
-            <div className="flex mx-4 mt-4 rounded overflow-hidden gap-[2px] bg-brand-dark-blue">
-              <Link
-                href="/apply"
-                className="flex-1 text-center bg-white text-brand-dark-blue px-6 py-3 font-black text-sm hover:bg-brand-pink hover:text-white transition-all duration-300 uppercase"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                APPLY NOW
+          <div className="lg:hidden fixed inset-0 z-50 bg-brand-dark-blue flex flex-col overflow-y-auto">
+            {/* Header row with logo and close button */}
+            <div className="flex items-center justify-between px-10 h-20 shrink-0">
+              <Link href="/home" className="flex items-center hover:opacity-80 transition-opacity" onClick={() => setIsMobileMenuOpen(false)}>
+                <Image
+                  src="/startlogo.svg"
+                  alt="START Munich"
+                  width={120}
+                  height={54}
+                  className="h-12 w-auto"
+                />
               </Link>
-              <a
-                href="https://jobs.startmunich.de/jobs"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 text-center bg-white text-brand-dark-blue px-6 py-3 font-black text-sm hover:bg-brand-pink hover:text-white transition-all duration-300 uppercase"
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-white p-2"
+                aria-label="Close menu"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Menu items */}
+            <div className="flex flex-col px-10 py-6 space-y-1 border-t border-white/10 grow">
+              <Link
+                href="/home"
+                className="block py-4 text-white font-bold text-lg hover:text-brand-pink transition-colors uppercase tracking-wide border-b border-white/10"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                JOBS
-              </a>
+                HOME
+              </Link>
+
+              {/* Mobile Community Dropdown */}
+              <div className="border-b border-white/10">
+                <button
+                  onClick={() => setIsMobileCommunityOpen(!isMobileCommunityOpen)}
+                  className="w-full flex items-center justify-between py-4 text-white font-bold text-lg hover:text-brand-pink transition-colors uppercase tracking-wide"
+                >
+                  <span>COMMUNITY</span>
+                  <svg
+                    className={`w-5 h-5 transition-transform ${isMobileCommunityOpen ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {isMobileCommunityOpen && (
+                  <div className="pb-3 space-y-1">
+                    <Link
+                      href="/about-us"
+                      className="block pl-4 py-2.5 text-white/80 text-base font-semibold hover:text-brand-pink transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      About Us
+                    </Link>
+                    <Link
+                      href="/member-journey"
+                      className="block pl-4 py-2.5 text-white/80 text-base font-semibold hover:text-brand-pink transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Member Journey
+                    </Link>
+                    <Link
+                      href="/members"
+                      className="block pl-4 py-2.5 text-white/80 text-base font-semibold hover:text-brand-pink transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Our Members
+                    </Link>
+                    <Link
+                      href="/jobs"
+                      className="block pl-4 py-2.5 text-white/80 text-base font-semibold hover:text-brand-pink transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Our Jobs
+                    </Link>
+                  </div>
+                )}
+              </div>
+
+              <Link
+                href="/startups"
+                className="block py-4 text-white font-bold text-lg hover:text-brand-pink transition-colors uppercase tracking-wide border-b border-white/10"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                OUR STARTUPS
+              </Link>
+
+              <Link
+                href="/events"
+                className="block py-4 text-white font-bold text-lg hover:text-brand-pink transition-colors uppercase tracking-wide border-b border-white/10"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                EVENTS
+              </Link>
+
+              {/* Mobile Partner Dropdown */}
+              <div className="border-b border-white/10">
+                <button
+                  onClick={() => setIsMobilePartnerOpen(!isMobilePartnerOpen)}
+                  className="w-full flex items-center justify-between py-4 text-white font-bold text-lg hover:text-brand-pink transition-colors uppercase tracking-wide"
+                >
+                  <span>PARTNER</span>
+                  <svg
+                    className={`w-5 h-5 transition-transform ${isMobilePartnerOpen ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {isMobilePartnerOpen && (
+                  <div className="pb-3 space-y-1">
+                    <Link
+                      href="/for-partners"
+                      className="block pl-4 py-2.5 text-white/80 text-base font-semibold hover:text-brand-pink transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      For Partners
+                    </Link>
+                    <Link
+                      href="/partners"
+                      className="block pl-4 py-2.5 text-white/80 text-base font-semibold hover:text-brand-pink transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Our Partners
+                    </Link>
+                  </div>
+                )}
+              </div>
+
+              {/* Apply Now / All Jobs Split Button - Mobile */}
+              <div className="pt-10 flex rounded overflow-hidden gap-[2px] bg-brand-dark-blue">
+                <Link
+                  href="/apply"
+                  className="flex-1 text-center bg-white text-brand-dark-blue px-6 py-4 font-black text-base hover:bg-brand-pink hover:text-white transition-all duration-300 uppercase"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  APPLY NOW
+                </Link>
+                <a
+                  href="https://jobs.startmunich.de/jobs"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 text-center bg-white text-brand-dark-blue px-6 py-4 font-black text-base hover:bg-brand-pink hover:text-white transition-all duration-300 uppercase"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  JOBS
+                </a>
+              </div>
             </div>
           </div>
         )}

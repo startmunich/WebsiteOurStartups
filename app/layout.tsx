@@ -1,7 +1,12 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import "./globals.css"
 import Navigation from "@/components/Navigation"
 import Footer from "@/components/Footer"
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+}
 
 export const metadata: Metadata = {
   title: {
@@ -69,7 +74,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="flex flex-col min-h-screen">
+      <body className="flex flex-col min-h-screen bg-brand-dark-blue">
         <Navigation />
         <main className="flex-grow">
           {children}

@@ -42,18 +42,19 @@ export default function Hero({
 }: HeroProps) {
     return (
         <>
-            <div className={cn("relative w-full overflow-hidden", className)}>
+            <div className={cn("relative w-full overflow-hidden flex flex-col", className)}>
                 {/* Background Image + Overlay */}
-                <div className="absolute inset-0 h-full">
+                <div className="absolute inset-0">
                     <Image
                         src={backgroundImage}
                         alt="Hero Background"
                         fill
                         priority
+                        sizes="100vw"
                         className="object-cover"
                         style={{ objectPosition: imagePosition }}
                     />
-                    <div className={cn("absolute inset-0 h-full", overlayOpacity)}></div>
+                    <div className={cn("absolute inset-0", overlayOpacity)}></div>
                 </div>
 
                 {backgroundAccents ? <div className="absolute inset-0 h-full pointer-events-none">{backgroundAccents}</div> : null}
@@ -92,7 +93,7 @@ export default function Hero({
 
             {/* Mobile - Cards below hero */}
             {children && !hideChildrenOnMobile && (
-                <div className="lg:hidden mt-5">
+                <div className="lg:hidden mt-1">
                     <div className="max-w-7xl mx-auto px-4 py-6">
                         {children}
                     </div>

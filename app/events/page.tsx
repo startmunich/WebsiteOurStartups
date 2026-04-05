@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import Script from "next/script"
 import { useRouter } from "next/navigation"
@@ -63,7 +63,7 @@ const recurringEvents: RecurringEvent[] = [
     month: "May",
     frequency: "Once per year",
     icon: "code",
-    image: "/events/eventCards/summit.JPG",
+    image: "/events/eventCards/labs.JPG",
     category: "Incubator"
   },
   {
@@ -102,6 +102,7 @@ export default function EventsPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const sliderRef = useRef<HTMLDivElement>(null)
+  const sliderSectionRef = useRef<HTMLDivElement>(null)
   const dragState = useRef({ isDragging: false, startX: 0, scrollLeft: 0 })
   const [scrollProgress, setScrollProgress] = useState(0)
   const [hoveredEvent, setHoveredEvent] = useState<string | null>(null)
@@ -156,23 +157,22 @@ export default function EventsPage() {
     const slider = sliderRef.current
     if (!slider) return
 
-    const eventIndex = recurringEvents.findIndex(e => e.id === eventId)
-    if (eventIndex === -1) return
+    const card = slider.querySelector(`[data-event-id="${eventId}"]`) as HTMLElement | null
+    if (!card) return
 
-    const cards = slider.children
-    if (eventIndex >= cards.length) return
-
-    const card = cards[eventIndex] as HTMLElement
     const cardLeft = card.offsetLeft
     const cardWidth = card.offsetWidth
     const sliderWidth = slider.offsetWidth
 
-    const scrollPosition = cardLeft - (sliderWidth / 2) + (cardWidth / 2)
-
     slider.scrollTo({
-      left: scrollPosition,
+      left: cardLeft - (sliderWidth / 2) + (cardWidth / 2),
       behavior: 'smooth'
     })
+  }
+
+  const scrollToEventMobile = (eventId: string) => {
+    scrollToEvent(eventId)
+    sliderSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   const handleTimelineMarkerHover = (eventId: string) => {
@@ -297,6 +297,66 @@ export default function EventsPage() {
 
         {/* Content Below Hero */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 lg:pt-20">
+
+          {/* Featured Event Spotlight */}
+          <div className="mb-24">
+            <div className="relative overflow-hidden rounded-[1.75rem] border border-[#9c27b0]/30 shadow-2xl shadow-[#9c27b0]/10">
+              {/* Background image */}
+              <div className="absolute inset-0">
+                <img
+                  src="/events/eventCards/legal.jpg"
+                  alt="Munich Hacking Legal"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#00002c]/95 via-[#00002c]/75 to-[#00002c]/30" />
+              </div>
+
+              {/* Content */}
+              <div className="relative p-8 md:p-14 flex flex-col lg:flex-row items-start lg:items-center gap-8">
+                <div className="flex-1">
+                  {/* Badges */}
+                  <div className="flex flex-wrap items-center gap-3 mb-5">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#9c27b0]/25 border border-[#9c27b0]/50 text-[#ce93d8] text-xs font-bold uppercase tracking-widest">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#ce93d8] animate-pulse"></span>
+                      Upcoming Event
+                    </span>
+                    <span className="px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-white/60 text-xs font-bold uppercase tracking-widest">
+                      Hackathon
+                    </span>
+                  </div>
+
+                  <h2 className="text-3xl md:text-5xl font-black text-white mb-4 leading-tight">
+                    Munich<br />
+                    <span className="text-[#ce93d8]">Hacking Legal</span>
+                  </h2>
+
+                  <p className="text-gray-300 text-base md:text-lg leading-relaxed max-w-xl mb-6">
+                    A unique hackathon focused on building legal tech solutions that address real challenges in the legal industry, combining technology with regulatory expertise.
+                  </p>
+
+                  <div className="flex flex-wrap items-center gap-4">
+                    <a
+                      href="https://www.hacking-legal.org/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group inline-flex items-center gap-2.5 px-7 py-3.5 bg-[#9c27b0] hover:bg-[#ab47bc] text-white font-bold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#9c27b0]/40"
+                    >
+                      <span>Learn More</span>
+                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </a>
+                    <div className="flex items-center gap-2 text-white/50 text-sm">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <span>This April</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Upcoming Events Calendar Section */}
           <div className="mb-24">
@@ -519,7 +579,7 @@ export default function EventsPage() {
                   <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/[0.04]">
                     <div className="w-14 flex-shrink-0 text-gray-400 text-sm font-bold">Jan</div>
                     <button
-                      onClick={() => scrollToEvent('pitch-network')}
+                      onClick={() => scrollToEventMobile('pitch-network')}
                       className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                     >
                       <div className="w-3 h-3 bg-[#ff1744] rounded-full flex-shrink-0"></div>
@@ -530,7 +590,7 @@ export default function EventsPage() {
                   <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/[0.04]">
                     <div className="w-14 flex-shrink-0 text-gray-400 text-sm font-bold">Mar</div>
                     <button
-                      onClick={() => scrollToEvent('legal-hack')}
+                      onClick={() => scrollToEventMobile('legal-hack')}
                       className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                     >
                       <div className="w-3 h-3 bg-[#9c27b0] rounded-full flex-shrink-0"></div>
@@ -541,7 +601,7 @@ export default function EventsPage() {
                   <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/[0.04]">
                     <div className="w-14 flex-shrink-0 text-gray-400 text-sm font-bold">Apr</div>
                     <button
-                      onClick={() => scrollToEvent('info-event')}
+                      onClick={() => scrollToEventMobile('info-event')}
                       className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                     >
                       <div className="w-3 h-3 bg-[#4a90e2] rounded-full flex-shrink-0"></div>
@@ -553,14 +613,14 @@ export default function EventsPage() {
                     <div className="w-14 flex-shrink-0 text-gray-400 text-sm font-bold">May</div>
                     <div className="flex flex-col gap-2">
                       <button
-                        onClick={() => scrollToEvent('start-labs')}
+                        onClick={() => scrollToEventMobile('start-labs')}
                         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                       >
                         <div className="w-3 h-3 bg-[#ff9800] rounded-full flex-shrink-0"></div>
                         <span className="text-sm text-white">START Labs</span>
                       </button>
                       <button
-                        onClick={() => scrollToEvent('fail-tales')}
+                        onClick={() => scrollToEventMobile('fail-tales')}
                         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                       >
                         <div className="w-3 h-3 bg-[#4a90e2] rounded-full flex-shrink-0"></div>
@@ -572,7 +632,7 @@ export default function EventsPage() {
                   <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/[0.04]">
                     <div className="w-14 flex-shrink-0 text-gray-400 text-sm font-bold">Jun</div>
                     <button
-                      onClick={() => scrollToEvent('pitch-network')}
+                      onClick={() => scrollToEventMobile('pitch-network')}
                       className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                     >
                       <div className="w-3 h-3 bg-[#ff1744] rounded-full flex-shrink-0"></div>
@@ -584,21 +644,21 @@ export default function EventsPage() {
                     <div className="w-14 flex-shrink-0 text-gray-400 text-sm font-bold">Oct</div>
                     <div className="flex flex-col gap-2">
                       <button
-                        onClick={() => scrollToEvent('info-event')}
+                        onClick={() => scrollToEventMobile('info-event')}
                         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                       >
                         <div className="w-3 h-3 bg-[#4a90e2] rounded-full flex-shrink-0"></div>
                         <span className="text-sm text-white">Info Event</span>
                       </button>
                       <button
-                        onClick={() => scrollToEvent('fail-tales')}
+                        onClick={() => scrollToEventMobile('fail-tales')}
                         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                       >
                         <div className="w-3 h-3 bg-[#4a90e2] rounded-full flex-shrink-0"></div>
                         <span className="text-sm text-white">Fail Tales</span>
                       </button>
                       <button
-                        onClick={() => scrollToEvent('rtss')}
+                        onClick={() => scrollToEventMobile('rtss')}
                         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                       >
                         <div className="w-3 h-3 bg-[#ff1744] rounded-full flex-shrink-0"></div>
@@ -610,7 +670,7 @@ export default function EventsPage() {
                   <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/[0.04]">
                     <div className="w-14 flex-shrink-0 text-gray-400 text-sm font-bold">Nov</div>
                     <button
-                      onClick={() => scrollToEvent('rtsh')}
+                      onClick={() => scrollToEventMobile('rtsh')}
                       className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                     >
                       <div className="w-3 h-3 bg-[#9c27b0] rounded-full flex-shrink-0"></div>
@@ -645,7 +705,7 @@ export default function EventsPage() {
         </div>
 
         {/* Events Slider */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24 mt-8">
+        <div ref={sliderSectionRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24 mt-8">
           <div className="relative">
             <div
               ref={sliderRef}
@@ -656,28 +716,54 @@ export default function EventsPage() {
               className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth py-4 px-1 cursor-grab active:cursor-grabbing"
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
-              {recurringEvents.map((event, index) => {
-                const isFlagship = event.id === 'rtss' || event.id === 'rtsh' || event.id === 'legal-hack'
-                return (
-                  <EventCard
-                    key={event.id}
-                    event={event}
-                    index={index}
-                    hoveredEvent={hoveredEvent}
-                    setHoveredEvent={setHoveredEvent}
-                    isFlagship={isFlagship}
-                    onClick={() => {
-                      if (event.id === 'legal-hack') {
-                        window.open('https://www.hacking-legal.org/', '_blank')
-                      } else if (event.id === 'rtsh') {
-                        window.open('https://hack.startmunich.de/events/rtsh', '_blank')
-                      } else if (event.id === 'rtss') {
-                        window.open('https://www.startmunich.de/events/rtss', '_blank')
+              {/* Main Events Group */}
+              <div className="flex flex-col gap-3 flex-shrink-0 self-stretch">
+                <span className="text-xs font-bold uppercase tracking-[0.2em] text-white/40 px-1">Main Events</span>
+                <div className="flex gap-6 flex-1">
+                  {recurringEvents.filter(e => ['rtss', 'rtsh', 'legal-hack', 'start-labs'].includes(e.id)).map((event, index) => (
+                    <EventCard
+                      key={event.id}
+                      event={event}
+                      index={index}
+                      hoveredEvent={hoveredEvent}
+                      setHoveredEvent={setHoveredEvent}
+                      isFlagship={true}
+                      className="h-full"
+                      onClick={
+                        event.id === 'legal-hack' ? () => window.open('https://www.hacking-legal.org/', '_blank')
+                        : event.id === 'rtsh' ? () => window.open('https://hack.startmunich.de/events/rtsh', '_blank')
+                        : event.id === 'rtss' ? () => window.open('https://www.startmunich.de/events/rtss', '_blank')
+                        : event.id === 'start-labs' ? () => window.open('https://www.startmunich.de', '_blank')
+                        : undefined
                       }
-                    }}
-                  />
-                )
-              })}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div className="flex-shrink-0 flex flex-col justify-end pb-4 self-stretch">
+                <div className="w-px flex-1 bg-white/10 rounded-full mt-7"></div>
+              </div>
+
+              {/* Side Events Group */}
+              <div className="flex flex-col gap-3 flex-shrink-0 self-stretch">
+                <span className="text-xs font-bold uppercase tracking-[0.2em] text-white/40 px-1">Side Events</span>
+                <div className="flex gap-6 flex-1">
+                  {recurringEvents.filter(e => !['rtss', 'rtsh', 'legal-hack', 'start-labs'].includes(e.id)).map((event, index) => (
+                    <EventCard
+                      key={event.id}
+                      event={event}
+                      index={index}
+                      hoveredEvent={hoveredEvent}
+                      setHoveredEvent={setHoveredEvent}
+                      isFlagship={false}
+                      className="h-full"
+                      onClick={undefined}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
 
             <ScrollIndicator sliderRef={sliderRef} scrollProgress={scrollProgress} />
