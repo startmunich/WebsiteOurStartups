@@ -7,17 +7,17 @@ import Hero from '@/components/Hero'
 import HeroCard from '@/components/HeroCard'
 
 const executiveBoard = [
-  { name: "Ali Serag El Din", role: "President", photo: "/aboutUs/Board/Ali-opt.png" },
-  { name: "Defne Aytuna", role: "Vice President", photo: "/aboutUs/Board/Defne-opt.png" },
-  { name: "Simon Burmer", role: "CFO", photo: "/aboutUs/Board/Simon-opt.png" },
+  { name: "Ali Serag El Din", role: "President", photo: "/aboutUs/Board/Ali-opt.png", linkedinUrl: "https://www.linkedin.com/in/ali-serag-el-din/" },
+  { name: "Defne Aytuna", role: "Vice President", photo: "/aboutUs/Board/Defne-opt.png", linkedinUrl: "https://www.linkedin.com/in/defne-aytuna/" },
+  { name: "Simon Burmer", role: "CFO", photo: "/aboutUs/Board/Simon-opt.png", linkedinUrl: "https://www.linkedin.com/in/simon-burmer/" },
 ]
 
 const departmentBoard = [
-  { name: "Mohammed Thabit", role: "MD Events", photo: "/aboutUs/Board/Mohammed-opt.png" },
-  { name: "Piotr Nobis", role: "MD Marketing", photo: "/aboutUs/Board/Piotr-opt.png" },
-  { name: "Anna Heletych", role: "MD People", photo: "/aboutUs/Board/Anna-opt.png" },
-  { name: "Niklas Simakov", role: "MD Finance & Operations", photo: "/aboutUs/Board/Niklas-opt.png" },
-  { name: "Marius Heumader", role: "MD Partnerships", photo: "/aboutUs/Board/Marius-opt.png" },
+  { name: "Mohammed Thabit", role: "MD Events", photo: "/aboutUs/Board/Mohammed-opt.png", linkedinUrl: "https://www.linkedin.com/in/mohammed-thabit/" },
+  { name: "Piotr Nobis", role: "MD Marketing", photo: "/aboutUs/Board/Piotr-opt.png", linkedinUrl: "https://www.linkedin.com/in/piotr-nobis/" },
+  { name: "Anna Heletych", role: "MD People", photo: "/aboutUs/Board/Anna-opt.png", linkedinUrl: "https://www.linkedin.com/in/anna-heletych/" },
+  { name: "Niklas Simakov", role: "MD Finance & Operations", photo: "/aboutUs/Board/Niklas-opt.png", linkedinUrl: "https://www.linkedin.com/in/niklas-simakov/" },
+  { name: "Marius Heumader", role: "MD Partnerships", photo: "/aboutUs/Board/Marius-opt.png", linkedinUrl: "https://www.linkedin.com/in/marius-heumader/" },
 ]
 
 const advisoryBoard = [
@@ -214,17 +214,20 @@ export default function AboutUsPage() {
             {/* Right: portrait cards */}
             <div className={`grid grid-cols-2 sm:grid-cols-3 justify-items-center gap-x-8 gap-y-8 transition-all duration-700 delay-200 ${execView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               {executiveBoard.map((member, i) => (
-                <div
+                <a
                   key={member.name}
+                  href={member.linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={`flex flex-col items-center text-center group transition-all duration-500 ${execView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
                   style={{ transitionDelay: `${200 + i * 100}ms` }}
                 >
-                  <div className="relative w-36 h-48 sm:w-48 sm:h-[15rem] rounded-xl overflow-hidden border-2 border-white/10 pointer-events-none select-none mb-3">
+                  <div className="relative w-36 h-48 sm:w-48 sm:h-[15rem] rounded-xl overflow-hidden border-2 border-white/10 group-hover:border-brand-pink/50 transition-colors select-none mb-3">
                     <Image src={member.photo} alt={member.name} fill sizes="(max-width: 640px) 144px, 192px" className="object-cover object-top" draggable={false} />
                   </div>
-                  <p className="font-black uppercase text-white text-xs lg:text-sm tracking-wide leading-tight">{member.name}</p>
-                  <p className="text-brand-pink text-[11px] lg:text-xs font-semibold mt-1 uppercase tracking-widest">{member.role}</p>
-                </div>
+                  <p className="font-black uppercase text-white text-xs lg:text-sm tracking-wide leading-tight group-hover:text-brand-pink transition-colors">{member.name}</p>
+                  <p className="text-gray-500 text-[11px] lg:text-xs font-semibold mt-1 uppercase tracking-widest">{member.role}</p>
+                </a>
               ))}
             </div>
           </div>
@@ -237,22 +240,25 @@ export default function AboutUsPage() {
           <div className={`bg-white/[0.03] border border-white/10 rounded-[2rem] p-8 lg:p-10 transition-all duration-700 ${deptView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="flex items-center gap-3 mb-8">
               <div className="w-6 h-px bg-brand-pink" />
-              <span className="text-brand-pink text-xs font-bold tracking-[0.35em] uppercase">Department Board</span>
+              <span className="text-brand-pink text-xs font-bold tracking-[0.35em] uppercase">The Department Board</span>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 justify-items-center gap-y-8 gap-x-4">
               {departmentBoard.map((member, i) => (
-                <div
+                <a
                   key={member.name}
+                  href={member.linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={`flex flex-col items-center text-center group transition-all duration-500 ${deptView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
                   style={{ transitionDelay: `${200 + i * 100}ms` }}
                 >
-                  <div className="relative w-36 h-48 sm:w-44 sm:h-56 rounded-xl overflow-hidden border-2 border-white/10 pointer-events-none select-none mb-3">
+                  <div className="relative w-36 h-48 sm:w-44 sm:h-56 rounded-xl overflow-hidden border-2 border-white/10 group-hover:border-brand-pink/50 transition-colors select-none mb-3">
                     <Image src={member.photo} alt={member.name} fill sizes="(max-width: 640px) 144px, 176px" className="object-cover object-top" draggable={false} />
                   </div>
-                  <p className="font-black uppercase text-white text-xs lg:text-sm tracking-wide leading-tight">{member.name}</p>
+                  <p className="font-black uppercase text-white text-xs lg:text-sm tracking-wide leading-tight group-hover:text-brand-pink transition-colors">{member.name}</p>
                   <p className="text-gray-500 text-[11px] lg:text-xs mt-1 uppercase tracking-wider">{member.role}</p>
-                </div>
+                </a>
               ))}
             </div>
           </div>

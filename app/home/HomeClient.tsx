@@ -159,7 +159,7 @@ export default function HomeClient({ initialPartners, initialStartups }: HomeCli
               </h1>
 
               <p className={`text-lg sm:text-xl text-gray-200 max-w-lg mb-10 leading-relaxed transition-all duration-1000 delay-400 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-                START Munich is the largest student-run startup community in Munich.
+                START Munich is the largest student-run entrepreneurship community in Munich.
                 We empower the next generation of founders to dare, build, and belong.
               </p>
 
@@ -222,11 +222,11 @@ export default function HomeClient({ initialPartners, initialStartups }: HomeCli
                   What is <span className="outline-text">START Munich</span>?
                 </h2>
                 <p className="text-gray-300 text-lg leading-relaxed mb-4">
-                  With over 70 active members and 500+ alumni, START Munich empowers the next generation of entrepreneurs. Founded in 2003, our mission is to create{' '}
-                  <span className="text-brand-pink font-semibold">a community of students who dare to build, innovate, and lead</span>. Fostering both groundbreaking ventures and meaningful connections across industries.
+                  With over 70 active members and 500+ alumni, START Munich is one of Germany’s leading student-run entrepreneurship initiatives. Founded in 2003, our mission is to build  
+                  <span className="text-brand-pink font-semibold"> a community of students who dare to build, innovate, and lead.</span>
                 </p>
                 <p className="text-gray-300 text-lg leading-relaxed mb-6">
-                  Together with our talented members, we launch ambitious startups, connect founders with industry partners and investors, host flagship events like pitch nights and founder talks, and run hands-on programs that bridge academic knowledge with entrepreneurial success.
+                  At START Munich, <span className="text-brand-pink font-semibold">  aspiring and active entrepreneurs come together </span> to connect, collaborate, and grow. Together with our talented members, we host events such as pitch nights and founder talks, connect with industry partners and investors, or run hands-on programs that bridge academia with entrepreneurship.
                 </p>
 
                 <div className="flex flex-wrap gap-4 mt-8">
