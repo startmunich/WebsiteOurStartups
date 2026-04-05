@@ -32,12 +32,12 @@ const advisoryBoard = [
 
 const missionPartners = [
   { name: "MTZ", description: "The Münchner Technologiezentrum provides office space, business coaching, and networking for young tech companies near Olympic Park — helping startups grow from first idea to market.", logo: "https://mtz.de/wp-content/uploads/2021/10/White-1.svg", image: "/aboutUs/missionPartner/mtz-opt.jpg" },
-  { name: "Munich Startup", description: "Munich's official startup portal connecting founders with resources, investors, and the local ecosystem — mapping the city's innovation landscape and amplifying its startup scene.", logo: "https://www.munich-startup.de/wp-content/themes/munichstartup/dist/images/munich-startup-logo-w.svg", image: "/aboutUs/missionPartner/MunichStartup-opt.png" },
+  { name: "Munich Startup", description: "Munich's official startup portal connecting founders with resources, investors, and the local ecosystem — mapping the city's innovation landscape and amplifying its startup scene.", logo: "https://www.munich-startup.de/wp-content/themes/munichstartup/dist/images/munich-startup-logo-w.svg", image: "/aboutUs/missionPartner/MunichStartup.png" },
   { name: "CDTM and Manage & More", descriptionParts: [
     { text: "CDTM and Manage & More share our mission in empowering the next generation of founders in Munich. " },
     { text: "START Munich and CDTM / M&M are not complementary. We are a community that encourages learning by doing, while they are educational programs that provide structured curriculum. ", pink: true },
     { text: "Many of our best members also join CDTM or M&M, handling the intensive time commitment coming from being part of both." },
-  ], image: "/aboutUs/missionPartner/CDTM-opt.png", image2: "/aboutUs/missionPartner/mandm-opt.jpeg" },
+  ], image: "/aboutUs/missionPartner/CDTM.png", image2: "/aboutUs/missionPartner/mandm.jpeg" },
 ]
 
 const showAdvisoryBoard = process.env.NEXT_PUBLIC_SHOW_ADVISORY_BOARD === 'true'
@@ -212,15 +212,15 @@ export default function AboutUsPage() {
             </div>
 
             {/* Right: portrait cards */}
-            <div className={`grid grid-cols-2 lg:flex lg:flex-wrap lg:mr-9 justify-center lg:justify-between gap-x-8 gap-y-8 transition-all duration-700 delay-200 ${execView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className={`grid grid-cols-2 sm:grid-cols-3 justify-items-center gap-x-8 gap-y-8 transition-all duration-700 delay-200 ${execView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               {executiveBoard.map((member, i) => (
                 <div
                   key={member.name}
                   className={`flex flex-col items-center text-center group transition-all duration-500 ${execView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
                   style={{ transitionDelay: `${200 + i * 100}ms` }}
                 >
-                  <div className="relative w-36 h-48 lg:w-48 lg:h-[15rem] rounded-xl overflow-hidden border-2 border-white/10 pointer-events-none select-none mb-3">
-                    <Image src={member.photo} alt={member.name} fill sizes="(max-width: 1024px) 144px, 192px" className="object-cover object-top" draggable={false} />
+                  <div className="relative w-36 h-48 sm:w-48 sm:h-[15rem] rounded-xl overflow-hidden border-2 border-white/10 pointer-events-none select-none mb-3">
+                    <Image src={member.photo} alt={member.name} fill sizes="(max-width: 640px) 144px, 192px" className="object-cover object-top" draggable={false} />
                   </div>
                   <p className="font-black uppercase text-white text-xs lg:text-sm tracking-wide leading-tight">{member.name}</p>
                   <p className="text-brand-pink text-[11px] lg:text-xs font-semibold mt-1 uppercase tracking-widest">{member.role}</p>
@@ -240,15 +240,15 @@ export default function AboutUsPage() {
               <span className="text-brand-pink text-xs font-bold tracking-[0.35em] uppercase">Department Board</span>
             </div>
 
-            <div className="grid grid-cols-2 lg:flex lg:flex-wrap lg:justify-between gap-y-8 gap-x-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 justify-items-center gap-y-8 gap-x-4">
               {departmentBoard.map((member, i) => (
                 <div
                   key={member.name}
                   className={`flex flex-col items-center text-center group transition-all duration-500 ${deptView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
                   style={{ transitionDelay: `${200 + i * 100}ms` }}
                 >
-                  <div className="relative w-36 h-48 lg:w-44 lg:h-56 rounded-xl overflow-hidden border-2 border-white/10 pointer-events-none select-none mb-3">
-                    <Image src={member.photo} alt={member.name} fill sizes="(max-width: 1024px) 144px, 192px" className="object-cover object-top" draggable={false} />
+                  <div className="relative w-36 h-48 sm:w-44 sm:h-56 rounded-xl overflow-hidden border-2 border-white/10 pointer-events-none select-none mb-3">
+                    <Image src={member.photo} alt={member.name} fill sizes="(max-width: 640px) 144px, 176px" className="object-cover object-top" draggable={false} />
                   </div>
                   <p className="font-black uppercase text-white text-xs lg:text-sm tracking-wide leading-tight">{member.name}</p>
                   <p className="text-gray-500 text-[11px] lg:text-xs mt-1 uppercase tracking-wider">{member.role}</p>
