@@ -8,11 +8,6 @@ export default function Home() {
         <h1 className="text-4xl font-bold mb-8">Pages</h1>
         <ul className="space-y-4 mb-12">
           <li>
-            <Link href="/admin" className="text-blue-600 hover:underline text-lg">
-              Admin - Manage Startups
-            </Link>
-          </li>
-          <li>
             <Link href="/events" className="text-blue-600 hover:underline text-lg">
               Events
             </Link>

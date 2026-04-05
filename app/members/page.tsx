@@ -298,8 +298,8 @@ export default function MembersPage() {
   const allBatches = Array.from(new Set([...members.map(m => m.batch), ...defaultBatches]))
     .filter(Boolean).sort().reverse()
 
-  const malePercentage = 61
-  const femalePercentage = 39
+  const malePercentage = 59
+  const femalePercentage = 41
 
   const topStudies = [
     { study: 'Computer Science', percentage: 40 },
