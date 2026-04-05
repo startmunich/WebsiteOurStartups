@@ -162,7 +162,7 @@ const startEvents: StartEvent[] = [
     frequency: "Weekly",
     icon: "💼",
     images: [
-      "/memberJourney/departmentwork/2.jpg",
+      "/memberJourney/departmentwork/2.JPG",
       "/memberJourney/departmentwork/1.JPG"
 
     ]
@@ -250,6 +250,9 @@ export default function MemberJourneyPage() {
   const [eventImageIndex, setEventImageIndex] = useState(0)
   const [currentEventIndex, setCurrentEventIndex] = useState(0)
   const timelineSliderRef = useRef<HTMLDivElement>(null)
+  const isDraggingTimeline = useRef(false)
+  const dragStartX = useRef(0)
+  const dragStartScrollLeft = useRef(0)
   const [scrollProgress, setScrollProgress] = useState(0)
   const [hoveredEventId, setHoveredEventId] = useState<string | null>(null)
   const [lockedEventId, setLockedEventId] = useState<string | null>(null)
@@ -449,6 +452,19 @@ export default function MemberJourneyPage() {
             <div
               ref={timelineSliderRef}
               className="overflow-x-auto scrollbar-hide pb-1 cursor-grab active:cursor-grabbing max-w-7xl mx-auto"
+              onMouseDown={(e) => {
+                isDraggingTimeline.current = true
+                dragStartX.current = e.pageX - (timelineSliderRef.current?.offsetLeft ?? 0)
+                dragStartScrollLeft.current = timelineSliderRef.current?.scrollLeft ?? 0
+              }}
+              onMouseMove={(e) => {
+                if (!isDraggingTimeline.current || !timelineSliderRef.current) return
+                e.preventDefault()
+                const x = e.pageX - (timelineSliderRef.current.offsetLeft ?? 0)
+                timelineSliderRef.current.scrollLeft = dragStartScrollLeft.current - (x - dragStartX.current)
+              }}
+              onMouseUp={() => { isDraggingTimeline.current = false }}
+              onMouseLeave={() => { isDraggingTimeline.current = false }}
             >
               <div className="flex gap-5 min-w-max px-8 lg:px-20">
                 {timelineEvents.map((event, index) => (
@@ -908,8 +924,8 @@ export default function MemberJourneyPage() {
             title="Ready to Join?"
             description="Start your entrepreneurial journey with START Munich today. Apply to become a member and experience our vibrant community."
             buttons={[
-              { label: "Apply Now", href: "https://www.startmunich.de/apply", external: true },
-              { label: "Learn More", href: "https://www.startmunich.de", variant: "secondary", external: true }
+              { label: "Apply Now", href: "/apply" },
+              { label: "Learn More", href: "/about", variant: "secondary" }
             ]}
           />
 
