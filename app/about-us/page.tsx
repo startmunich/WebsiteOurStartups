@@ -7,9 +7,9 @@ import Hero from '@/components/Hero'
 import HeroCard from '@/components/HeroCard'
 
 const executiveBoard = [
-  { name: "Simon Burmer", role: "CFO", photo: "/aboutUs/Board/Simon-opt.png" },
   { name: "Ali Serag El Din", role: "President", photo: "/aboutUs/Board/Ali-opt.png" },
   { name: "Defne Aytuna", role: "Vice President", photo: "/aboutUs/Board/Defne-opt.png" },
+  { name: "Simon Burmer", role: "CFO", photo: "/aboutUs/Board/Simon-opt.png" },
 ]
 
 const departmentBoard = [
@@ -45,7 +45,7 @@ const showAdvisoryBoard = process.env.NEXT_PUBLIC_SHOW_ADVISORY_BOARD === 'true'
 export default function AboutUsPage() {
   const [selectedAdvisor, setSelectedAdvisor] = useState<number | null>(0)
   const animatedYears = useAnimatedNumber(20)
-  const animatedMembers = useAnimatedNumber(300)
+  const animatedMembers = useAnimatedNumber(600)
   const missionView = useInView(0.1)
   const partnersView = useInView(0.1)
   const execView = useInView(0.1)

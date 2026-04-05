@@ -101,7 +101,7 @@ export default function MembersPage() {
   const batchesView = useInView(0.1)
 
   const animatedActiveMembers = useAnimatedNumber(70, false, 1000)
-  const animatedAlumniCount = useAnimatedNumber(800, false, 1000)
+  const animatedAlumniCount = useAnimatedNumber(500, false, 1000)
 
   const getInitials = (name: string) => {
     const words = name.trim().split(/\s+/)
@@ -302,10 +302,10 @@ export default function MembersPage() {
   const femalePercentage = 39
 
   const topStudies = [
-    { study: 'Business Administration', percentage: 35 },
-    { study: 'Computer Science', percentage: 35 },
-    { study: 'Engineering', percentage: 15 },
-    { study: 'Others', percentage: 15 },
+    { study: 'Computer Science', percentage: 40 },
+    { study: 'Business Administration', percentage: 30 },
+    { study: 'Engineering', percentage: 16 },
+    { study: 'Others', percentage: 14 },
   ]
 
   const topUniversities = [
