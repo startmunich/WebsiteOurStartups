@@ -49,7 +49,7 @@ interface MemberStory {
   logos?: { src: string; url?: string }[]
 }
 
-const placeholderImage = "/internalevents.png"
+const placeholderImage = "/internalevents-opt.png"
 
 const timelineEvents: TimelineEvent[] = [
   {
@@ -149,9 +149,9 @@ const startEvents: StartEvent[] = [
     frequency: "Monthly",
     icon: "📅",
     images: [
-      "/memberJourney/monthly/2.jpg",
-      "/memberJourney/monthly/3.png",
-      "/memberJourney/monthly/4.png",
+      "/memberJourney/monthly/2-opt.jpg",
+      "/memberJourney/monthly/3-opt.png",
+      "/memberJourney/monthly/4-opt.png",
     ]
   },
   {
@@ -162,8 +162,8 @@ const startEvents: StartEvent[] = [
     frequency: "Weekly",
     icon: "💼",
     images: [
-      "/memberJourney/departmentwork/2.jpg",
-      "/memberJourney/departmentwork/1.JPG"
+      "/memberJourney/departmentwork/2-opt.jpg",
+      "/memberJourney/departmentwork/1-opt.jpg"
 
     ]
   },
@@ -175,7 +175,7 @@ const startEvents: StartEvent[] = [
     frequency: "Monthly",
     icon: "🔨",
     images: [
-      "/memberJourney/builderWeekend/1.jpg"
+      "/memberJourney/builderWeekend/1-opt.jpg"
     ]
   },
   {
@@ -186,8 +186,8 @@ const startEvents: StartEvent[] = [
     frequency: "",
     icon: "🎓",
     images: [
-      "/memberJourney/memberworkshop/1.jpg",
-      "/memberJourney/memberworkshop/3.jpeg"
+      "/memberJourney/memberworkshop/1-opt.jpg",
+      "/memberJourney/memberworkshop/3-opt.jpeg"
     ]
   },
   {
@@ -198,8 +198,8 @@ const startEvents: StartEvent[] = [
     frequency: "",
     icon: "🏢",
     images: [
-      "/memberJourney/startupVisit/1.png",
-      "/memberJourney/startupVisit/2.png",
+      "/memberJourney/startupVisit/1-opt.png",
+      "/memberJourney/startupVisit/2-opt.png",
     ]
   }
 ]
@@ -210,7 +210,7 @@ const memberStories: MemberStory[] = [
     name: "Felix Haas",
     role: "Founder & Investor",
     company: "IDNow | Bits & Pretzels",
-    image: "/memberJourney/alumni/FelixHaas.png",
+    image: "/memberJourney/alumni/FelixHaas-opt.png",
     story: "At START Munich, I laid the foundation for my current network. From this starting point, I built several companies, invested in more than 80 start-ups and helped set up Bits & Pretzels.",
     department: "Alumni",
     logos: [
@@ -223,11 +223,11 @@ const memberStories: MemberStory[] = [
     name: "Elisabeth Goebel",
     role: "Early Operator",
     company: "ZeitAI | CDTM",
-    image: "/memberJourney/alumni/Elisa.png",
+    image: "/memberJourney/alumni/Elisa-opt.png",
     story: "START is where things actually happen. I co-founded ISAR Unfiltered, met people who think and move the way I do, and built a network that directly led me to where I am today: Early Operator at a YC-backed AI startup.",
     department: "People",
     logos: [
-      { src: "https://cdn.prod.website-files.com/6902359088cc8683c4db0171/69249d98617b1b96682cca65_44a5d2ba9e6004a1281eed9068c62a95_zeitai-logo.png", url: "https://www.zeit.ai/" },
+      { src: "https://cdn.prod.website-files.com/6902359088cc8683c4db0171/69249d98617b1b96682cca65_44a5d2ba9e6004a1281eed9068c62a95_zeitai-logo-opt.png", url: "https://www.zeit.ai/" },
     ]
   },
     {
@@ -235,11 +235,11 @@ const memberStories: MemberStory[] = [
     name: "Joshua Cornelius",
     role: "Co-Founder",
     company: "Freeletics | CDTM",
-    image: "/memberJourney/alumni/JoshuaCornelius.png",
+    image: "/memberJourney/alumni/JoshuaCornelius-opt.png",
     story: "Before we founded Freeletics, START Munich - in addition to CDTM - gave my co-founder and me the ideal opportunity to make first contacts in the Munich startup scene.",
     department: "Alumni",
     logos: [
-      { src: "https://cdn.prod.website-files.com/65f98ea7c70b10b668ccbeb3/65f98ea7c70b10b668ccbeef_5eb3c929c8c4590004435152.png", url: "https://www.freeletics.com/" }
+      { src: "https://cdn.prod.website-files.com/65f98ea7c70b10b668ccbeb3/65f98ea7c70b10b668ccbeef_5eb3c929c8c4590004435152-opt.png", url: "https://www.freeletics.com/" }
     ]
   }
 ]
@@ -250,6 +250,9 @@ export default function MemberJourneyPage() {
   const [eventImageIndex, setEventImageIndex] = useState(0)
   const [currentEventIndex, setCurrentEventIndex] = useState(0)
   const timelineSliderRef = useRef<HTMLDivElement>(null)
+  const isDraggingTimeline = useRef(false)
+  const dragStartX = useRef(0)
+  const dragStartScrollLeft = useRef(0)
   const [scrollProgress, setScrollProgress] = useState(0)
   const [hoveredEventId, setHoveredEventId] = useState<string | null>(null)
   const [lockedEventId, setLockedEventId] = useState<string | null>(null)
@@ -401,7 +404,7 @@ export default function MemberJourneyPage() {
       <main className="min-h-screen bg-brand-dark-blue">
         {/* Hero Section */}
         <Hero
-          backgroundImage="/memberJourney/hero.png"
+          backgroundImage="/memberJourney/hero-opt.png"
           title={
             <>
               YOUR START MUNICH
@@ -449,6 +452,19 @@ export default function MemberJourneyPage() {
             <div
               ref={timelineSliderRef}
               className="overflow-x-auto scrollbar-hide pb-1 cursor-grab active:cursor-grabbing max-w-7xl mx-auto"
+              onMouseDown={(e) => {
+                isDraggingTimeline.current = true
+                dragStartX.current = e.pageX - (timelineSliderRef.current?.offsetLeft ?? 0)
+                dragStartScrollLeft.current = timelineSliderRef.current?.scrollLeft ?? 0
+              }}
+              onMouseMove={(e) => {
+                if (!isDraggingTimeline.current || !timelineSliderRef.current) return
+                e.preventDefault()
+                const x = e.pageX - (timelineSliderRef.current.offsetLeft ?? 0)
+                timelineSliderRef.current.scrollLeft = dragStartScrollLeft.current - (x - dragStartX.current)
+              }}
+              onMouseUp={() => { isDraggingTimeline.current = false }}
+              onMouseLeave={() => { isDraggingTimeline.current = false }}
             >
               <div className="flex gap-5 min-w-max px-8 lg:px-20">
                 {timelineEvents.map((event, index) => (
@@ -828,7 +844,7 @@ export default function MemberJourneyPage() {
               >
                 <div className="aspect-video relative overflow-hidden rounded-t-3xl">
                   <img
-                    src="/memberJourney/SF.png"
+                    src="/memberJourney/SF-opt.png"
                     alt="San Francisco Bay Area"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
@@ -854,7 +870,7 @@ export default function MemberJourneyPage() {
               <div className="group relative overflow-hidden bg-white/[0.06] backdrop-blur-sm rounded-3xl border border-white/10 hover:border-brand-pink/30 transition-all duration-500">
                 <div className="aspect-video relative overflow-hidden rounded-t-3xl">
                   <img
-                    src="/memberJourney/cambridge-aerial.png"
+                    src="/memberJourney/cambridge-aerial-opt.png"
                     alt="University Research"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
@@ -908,8 +924,8 @@ export default function MemberJourneyPage() {
             title="Ready to Join?"
             description="Start your entrepreneurial journey with START Munich today. Apply to become a member and experience our vibrant community."
             buttons={[
-              { label: "Apply Now", href: "https://www.startmunich.de/apply", external: true },
-              { label: "Learn More", href: "https://www.startmunich.de", variant: "secondary", external: true }
+              { label: "Apply Now", href: "/apply" },
+              { label: "Learn More", href: "/about", variant: "secondary" }
             ]}
           />
 
