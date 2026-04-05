@@ -147,7 +147,7 @@ export default async function ForPartnersPage() {
       <main className="min-h-screen bg-brand-dark-blue">
         {/* Hero Section */}
         <Hero
-          backgroundImage="/partners/hero.JPG"
+          backgroundImage="/partners/hero-opt.jpg"
           hideChildrenOnMobile
           title={
             <>
