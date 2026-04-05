@@ -83,16 +83,16 @@ export default function MembersPage() {
     {
       id: '24-25', name: 'Board 24-25', year: '2024-2025', imageUrl: '',
       executiveBoard: [
-        { name: 'SIMON BURMER', role: 'CFO', imageUrl: '/ourMembers/hero-opt.png' },
-        { name: 'ALI SERAG EL DIN', role: 'President', imageUrl: '/ourMembers/hero-opt.png' },
-        { name: 'DEFNE AYTUNA', role: 'Vice President', imageUrl: '/ourMembers/hero-opt.png' },
+        { name: 'SIMON BURMER', role: 'CFO', imageUrl: '/ourMembers/hero-opt.png', linkedinUrl: 'https://www.linkedin.com/in/simon-burmer/' },
+        { name: 'ALI SERAG EL DIN', role: 'President', imageUrl: '/ourMembers/hero-opt.png', linkedinUrl: 'https://www.linkedin.com/in/ali-serag-el-din/' },
+        { name: 'DEFNE AYTUNA', role: 'Vice President', imageUrl: '/ourMembers/hero-opt.png', linkedinUrl: 'https://www.linkedin.com/in/defne-aytuna/' },
       ],
       departmentBoard: [
-        { name: 'MOHAMMED THABIT', role: 'MD Events', imageUrl: '/ourMembers/hero-opt.png' },
-        { name: 'PIOTR NOBIS', role: 'MD Marketing', imageUrl: '/ourMembers/hero-opt.png' },
-        { name: 'ANNA HELETYCH', role: 'MD People', imageUrl: '/ourMembers/hero-opt.png' },
-        { name: 'NIKLAS SIMAKOV', role: 'MD Finance & Operations', imageUrl: '/ourMembers/hero-opt.png' },
-        { name: 'MARIUS HEUMADER', role: 'MD Partnerships', imageUrl: '/ourMembers/hero-opt.png' },
+        { name: 'MOHAMMED THABIT', role: 'MD Events', imageUrl: '/ourMembers/hero-opt.png', linkedinUrl: 'https://www.linkedin.com/in/mohammed-thabit/' },
+        { name: 'PIOTR NOBIS', role: 'MD Marketing', imageUrl: '/ourMembers/hero-opt.png', linkedinUrl: 'https://www.linkedin.com/in/piotr-nobis/' },
+        { name: 'ANNA HELETYCH', role: 'MD People', imageUrl: '/ourMembers/hero-opt.png', linkedinUrl: 'https://www.linkedin.com/in/anna-heletych/' },
+        { name: 'NIKLAS SIMAKOV', role: 'MD Finance & Operations', imageUrl: '/ourMembers/hero-opt.png', linkedinUrl: 'https://www.linkedin.com/in/niklas-simakov/' },
+        { name: 'MARIUS HEUMADER', role: 'MD Partnerships', imageUrl: '/ourMembers/hero-opt.png', linkedinUrl: 'https://www.linkedin.com/in/marius-heumader/' },
       ],
     },
   ])
@@ -258,13 +258,13 @@ export default function MembersPage() {
             const match = matchByRole(member.role)
             const fallback = getFallbackImageByRole(member.role)
             const hasMatch = !!match
-            return { ...member, name: match?.name || (hasMatch ? member.name : 'N/A'), profileImage: match?.profileImage || member.profileImage || '', imageUrl: match?.profileImage || member.profileImage || member.imageUrl || fallback, _hasMatch: hasMatch }
+            return { ...member, name: match?.name || (hasMatch ? member.name : 'N/A'), profileImage: match?.profileImage || member.profileImage || '', imageUrl: match?.profileImage || member.profileImage || member.imageUrl || fallback, linkedinUrl: match?.linkedinUrl || member.linkedinUrl, _hasMatch: hasMatch }
           }),
           departmentBoard: boardItem.departmentBoard.map(member => {
             const match = matchByRole(member.role)
             const fallback = getFallbackImageByRole(member.role)
             const hasMatch = !!match
-            return { ...member, name: match?.name || (hasMatch ? member.name : 'N/A'), profileImage: match?.profileImage || member.profileImage || '', imageUrl: match?.profileImage || member.profileImage || member.imageUrl || fallback, _hasMatch: hasMatch }
+            return { ...member, name: match?.name || (hasMatch ? member.name : 'N/A'), profileImage: match?.profileImage || member.profileImage || '', imageUrl: match?.profileImage || member.profileImage || member.imageUrl || fallback, linkedinUrl: match?.linkedinUrl || member.linkedinUrl, _hasMatch: hasMatch }
           }),
         }
       }))
