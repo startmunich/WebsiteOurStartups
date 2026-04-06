@@ -69,12 +69,12 @@ const timelineEvents: TimelineEvent[] = [
       "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800&auto=format&fit=crop"
     ],
-    details: ["Develop your own idea from concept to MVP in just 4 weeks", "Two workshops per week to learn foundations of building a startup", "Get to know key players within Munich startup ecosystem", "Hut weekend in Austria"]
+    details: ["Develop your own idea from concept to MVP in just 4 weeks", "Two workshops per week to learn foundations of building a startup", "Get to know key players within Munich startup ecosystem", "Spend an unforgettable weekend with our community in Austria", "Final pitch in front of a jury, compete to win START Summit tickets"]
   },
   {
     id: "department-selection",
     title: "Department Selection",
-    description: "Develop yourself and shape the future of START.",
+    description: "Develop yourself and shape the future of START. START is completely student-run. What happens here depends on what you do.",
     icon: "🎯",
     image: "",
     details: ["Choose one of five departments", "Work on real projects with visible impact inside and outside START", "Learn useful startup skills in practice", "Grow fast by taking ownership", "Initiate new formats"]
@@ -113,21 +113,21 @@ const departments: Department[] = [
   {
     id: "marketing",
     name: "Marketing",
-    description: "Learn strategy and how to highlight START's people, events, and achievements to reach millions and push the ecosystem forward.",
+    description: "Learn strategy and how to highlight our people, events, and achievements to reach millions and push the ecosystem forward. Build a trusted brand.",
     icon: "📢",
     responsibilities: ["Create content, posts, and campaigns for LinkedIn and Instagram.", "Shoot and edit photos and videos from events.", "Build and maintain START's brand and image."]
   },
   {
     id: "finops",
     name: "FinOps",
-    description: "Learn how to design and build custom tools and automate workflows to expand START's output and influence.",
+    description: "Learn how to design and build custom tools and automate workflows to increase START's output and influence.",
     icon: "💰",
     responsibilities: ["Build internal tools like Members Platform or Financial Dashboard.", "Improve our core systems like Slack, n8n and Notion.", "Handle contract management, ensuring compliance."]
   },
   {
     id: "partnerships",
     name: "Partnerships",
-    description: "Learn how to secure partners, close deals, and bring in the resources that multiply START's impact across the ecosystem.",
+    description: "Learn how to secure partners, close deals. Run persistent outreach campaigns, handle rejection, and keep going.",
     icon: "🤝",
     responsibilities: ["Run persistent outreach, handle rejection, and keep going.", "Build and manage relationships that create long-term value.", "Close deals that fund START's projects."]
   },
@@ -855,7 +855,7 @@ export default function MemberJourneyPage() {
                     START goes Bay Area
                   </h3>
                   <p className="text-gray-300 text-sm leading-relaxed mb-5">
-                    A selective international exchange program connecting outstanding entrepreneurial talent from Europe with the innovation ecosystem of the San Francisco Bay Area. The program brings together a curated group of 20 participants and enables direct interaction with founders, researchers, and investors at leading technology and innovation organizations.
+                    Once a year, 20 selected STARTies go on a two-week trip to the San Francisco Bay Area to experience one of the world's most vibrant startup ecosystems firsthand. Through curated visits with partner companies, research labs, and VC firms, participants strengthen our ties with international founders, researchers, and investors.
                   </p>
                   <span className="inline-flex items-center gap-2 text-brand-pink font-bold text-sm group-hover:gap-3 transition-all">
                     Learn more
@@ -881,7 +881,7 @@ export default function MemberJourneyPage() {
                     Research Stay @ Cambridge
                   </h3>
                   <p className="text-gray-300 text-sm leading-relaxed mb-5">
-                    Spend a research stay with our partners at the University of Cambridge and Technical University of Munich. Gain access to world-class academic resources, mentorship from leading researchers, and the opportunity to contribute to cutting-edge entrepreneurship research.
+                    Spend a research stay with our partners at the University of Cambridge and Technical University of Munich. Gain access to world-class academic resources, mentorship from leading researchers, and the opportunity to contribute to cutting-edge research.
                   </p>
                   <div className="flex items-center gap-3">
                     <span className="inline-flex items-center gap-1.5 text-xs text-gray-400 font-semibold bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
