@@ -105,6 +105,17 @@ export default function HomeClient({ initialPartners, initialStartups }: HomeCli
 
       <main className="min-h-screen bg-brand-dark-blue text-white overflow-x-hidden">
 
+        {/* ═══════════════════════════ APPLICATION BANNER ═══════════════════════════ */}
+        <div className="bg-brand-pink overflow-hidden py-1.5">
+          <div className="animate-scroll-slow whitespace-nowrap">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <span key={i} className="text-white text-xs sm:text-sm tracking-wide mx-8">
+                Summer Applications are Open from 10 of April to 24 of April
+              </span>
+            ))}
+          </div>
+        </div>
+
         {/* ═══════════════════════════ HERO — FULLSCREEN CROSSFADE ═══════════════════════════ */}
         <section className="relative w-full overflow-hidden h-[calc(100vh-5rem)] flex items-center">
           {/* Crossfading backgrounds — only render prev/current/next to avoid loading all 8 at once */}
