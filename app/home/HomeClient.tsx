@@ -385,7 +385,7 @@ export default function HomeClient({ initialPartners, initialStartups }: HomeCli
             </div>
 
             <div className="text-center mt-10">
-              <Link href="/startups" className="group inline-flex items-center gap-2 text-white/70 hover:text-brand-pink font-medium transition-colors">
+              <Link href="/startups" className="text-black group inline-flex items-center gap-2 text-white/70 hover:text-brand-pink font-medium transition-colors">
                 View all our startups <span className="group-hover:translate-x-1 transition-transform">→</span>
               </Link>
             </div>
