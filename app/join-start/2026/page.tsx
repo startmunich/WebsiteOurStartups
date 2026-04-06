@@ -1,13 +1,335 @@
-import Hero from '@/components/Hero'
+'use client'
+
+import { useState, useEffect } from 'react'
+import Image from 'next/image'
+
+const TARGET_DATE = new Date('2026-04-26T23:59:59').getTime()
+
+function pad(n: number) {
+  return String(n).padStart(2, '0')
+}
 
 export default function JoinStart2026Page() {
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  })
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    const update = () => {
+      const diff = Math.max(0, TARGET_DATE - Date.now())
+      setTimeLeft({
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((diff / (1000 * 60)) % 60),
+        seconds: Math.floor((diff / 1000) % 60),
+      })
+    }
+    update()
+    const interval = setInterval(update, 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const units = [
+    { value: timeLeft.days, label: 'Days' },
+    { value: timeLeft.hours, label: 'Hours' },
+    { value: timeLeft.minutes, label: 'Minutes' },
+    { value: timeLeft.seconds, label: 'Seconds' },
+  ]
+
   return (
-    <main className="min-h-screen bg-brand-dark-blue text-white">
-      <Hero
-        backgroundImage="/memberJourney/hero-opt.png"
-        title={<>JOIN <span className="outline-text">START MUNICH</span></>}
-        description="Applications for 2026 will open soon. Stay tuned."
-      />
+    <main className="bg-brand-dark-blue">
+      {/* Hero section */}
+      <section className="relative min-h-screen overflow-hidden">
+        {/* Background image — blurry & black-and-white */}
+        <Image
+          src="/join-start-2026-bg.png"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover grayscale blur-sm scale-105"
+        />
+        <div className="absolute inset-0 bg-brand-dark-blue/60" />
+
+        {/* Page content */}
+        <div className="relative z-10 flex min-h-screen flex-col">
+          {/* Centered countdown section */}
+          <div className="flex flex-1 flex-col items-center justify-center px-6">
+          <p className="text-sm tracking-[0.3em] text-white/80 uppercase md:text-lg">
+            Want to join Start?
+          </p>
+          <p className="mt-2 text-xl font-bold tracking-wide text-white uppercase md:text-3xl">
+            Applications close in
+          </p>
+
+          {/* Countdown */}
+          <div
+            className="mt-10 flex items-start gap-2 md:gap-4"
+            style={{ opacity: mounted ? 1 : 0, transition: 'opacity 0.4s ease' }}
+          >
+            {units.map((unit, i) => (
+              <div key={unit.label} className="flex items-start gap-2 md:gap-4">
+                <div className="flex flex-col items-center">
+                  <span className="text-5xl font-black tabular-nums text-[#d0006f] md:text-7xl lg:text-8xl">
+                    {pad(unit.value)}
+                  </span>
+                  <span className="mt-1 text-[10px] tracking-[0.2em] text-white/50 uppercase md:text-xs">
+                    {unit.label}
+                  </span>
+                </div>
+                {i < units.length - 1 && (
+                  <span className="text-5xl font-black text-[#d0006f] md:text-7xl lg:text-8xl">
+                    :
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom section */}
+        <div className="flex flex-col gap-10 px-8 pb-24 md:flex-row md:items-end md:justify-between md:px-16 lg:px-24">
+          {/* Left — big title */}
+          <h1 className="text-6xl font-black leading-[0.9] text-white md:text-8xl lg:text-9xl">
+            JOIN
+            <br />
+            START
+            <br />
+            MUNICH
+          </h1>
+
+          {/* Right — CTA section */}
+          <div className="max-w-md pb-12 md:text-right">
+            <h2 className="text-lg font-bold uppercase tracking-wide text-white">
+              Where Visionaries and Innovators Thrive
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-white/70">
+              Become part of Germany&apos;s leading student-run entrepreneurship
+              initiative. At START Munich, you&apos;ll gain hands-on experience,
+              connect with top-tier founders and investors, and build the next
+              big thing.
+            </p>
+            <a
+              href="https://tally.so/r/join-start-munich"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-block rounded-full bg-[#d0006f] px-8 py-3 text-sm font-bold text-white transition hover:bg-[#d0006f]/80"
+            >
+              Apply now
+            </a>
+          </div>
+
+         
+        </div>
+        </div>
+      </section>
+
+      {/* YouTube video section */}
+      <section id="video" className="scroll-mt-8 px-8 py-20 md:px-16 lg:px-24">
+    
+        <div className="relative w-full overflow-hidden rounded-xl" style={{ paddingBottom: '56.25%' }}>
+          <iframe
+            src="https://www.youtube.com/embed/T63USk9W_IY"
+            title="START Munich Application Video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="absolute inset-0 h-full w-full"
+          />
+        </div>
+      </section>
+
+      {/* What Makes START Unique */}
+      <section className="px-8 py-20 md:px-16 lg:px-24">
+        <h2 className="text-4xl font-black uppercase text-brand-pink md:text-5xl lg:text-6xl">
+          What Makes Start Unique
+        </h2>
+        <p className="mt-4 text-base text-white md:text-lg">
+          START Munich is more than a student initiative, it&apos;s a launchpad
+          for future entrepreneurs. Here&apos;s why you should be part of it:
+        </p>
+
+        {/* Row 1 */}
+        <div className="mt-12 grid grid-cols-1 gap-12 md:grid-cols-2">
+          {/* Values Over Grades */}
+          <div className="flex flex-col items-center text-center">
+            <div className="relative aspect-[2/1] w-full overflow-hidden rounded-lg">
+              <Image
+                src="/join-start/volleyball.png"
+                alt="Values Over Grades"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+              />
+            </div>
+            <h3 className="mt-6 text-xl font-black uppercase text-white md:text-2xl">
+              Values Over Grades
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-white/70 md:text-base">
+              No one here cares about your GPA. What matters is the courage to
+              share an idea and the drive to make it real. That&apos;s how
+              programmers end up brainstorming with psychologists, and musicians
+              sketch out business models. Different worlds, same fire.
+            </p>
+          </div>
+
+          {/* No Playbook */}
+          <div className="flex flex-col items-center text-center">
+            <div className="relative aspect-[2/1] w-full overflow-hidden rounded-lg">
+              <Image
+                src="/memberJourney/SF-opt.png"
+                alt="No Playbook"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+              />
+            </div>
+            <h3 className="mt-6 text-xl font-black uppercase text-white md:text-2xl">
+              No Playbook
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-white/70 md:text-base">
+              The Bay Area trip, START Labs, the Hacking Legal hackathon were
+              never assigned. They started as ideas someone cared enough to make
+              real. No hierarchy. No bureaucracy. Just people taking the leap of
+              faith and building things that matter.
+            </p>
+          </div>
+        </div>
+
+        {/* Row 2 */}
+        <div className="mt-12 grid grid-cols-1 gap-12 md:grid-cols-2">
+          {/* Failure Celebrated */}
+          <div className="flex flex-col items-center text-center">
+            <div className="relative aspect-[2/1] w-full overflow-hidden rounded-lg">
+              <Image
+                src="/events/eventCards/fail-opt.jpg"
+                alt="Failure Celebrated"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+              />
+            </div>
+            <h3 className="mt-6 text-xl font-black uppercase text-white md:text-2xl">
+              Failure Celebrated
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-white/70 md:text-base">
+              At events like Founder Fail Tales, screw-ups don&apos;t get
+              buried. We hand failures the mic, laugh at them together, and
+              learn out loud. Because if you never fail, you never dared to
+              build.
+            </p>
+          </div>
+
+          {/* A Living Global Network */}
+          <div className="flex flex-col items-center text-center">
+            <div className="relative aspect-[2/1] w-full overflow-hidden rounded-lg">
+              <Image
+                src="/join-start/start-summit.jpeg"
+                alt="A Living Global Network"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+              />
+            </div>
+            <h3 className="mt-6 text-xl font-black uppercase text-white md:text-2xl">
+              A Living Global Network
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-white/70 md:text-base">
+              START doesn&apos;t end when you leave Munich. It stays with you
+              through new ventures, new cities, new chapters. You&apos;ll find
+              co-founders, investors, and friends across the world. It&apos;s
+              more than a network. It&apos;s a family you keep building with.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Jumpstart Into Entrepreneurship */}
+      <section className="px-8 py-20 md:px-16 lg:px-24">
+        <div className="relative aspect-[4/1] px-12 w-full overflow-hidden rounded-lg">
+          <Image
+            src="/join-start/jumpstart.png"
+            alt="Jumpstart Into Entrepreneurship"
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+        </div>
+        <h3 className="mt-8 text-center text-xl font-black uppercase text-white md:text-2xl lg:text-3xl">
+          Jumpstart Into Entrepreneurship
+        </h3>
+        <p className="mx-auto mt-4 max-w-4xl text-center text-sm leading-relaxed text-white/70 md:text-base">
+          At START, your first step is the Sprint. In just 30 days, you turn a
+          raw idea into an MVP and pitch it to a jury. After that, you dive into
+          the departments, the heart of START, where you keep building, drive
+          projects, and shape the community. Some go on to launch startups,
+          everyone learns by doing.
+        </p>
+      </section>
+
+      {/* Info Sessions */}
+      <section className="px-8 py-20 md:px-16 lg:px-24">
+        <h2 className="text-3xl font-black text-brand-pink md:text-4xl lg:text-5xl">
+          Got Questions? Let&apos;s Talk.
+        </h2>
+        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-white/70 md:text-base">
+          Curious about START Munich or unsure about the application process?
+          Join one of our upcoming info sessions — online or in person — and get
+          all your questions answered. Meet the team, learn what we&apos;re all
+          about, and find out how you can become part of our entrepreneurial
+          community.
+        </p>
+
+        {/* Event list */}
+        <div className="mt-12 flex flex-col gap-6">
+          {[
+            { title: 'YC Event', desc: 'START Munich', date: 'Wednesday, 15th April 2026', time: null },
+            { title: 'Running Club (Sunset Run)', desc: 'START & Friends', date: 'Thursday, 16th April 2026', time: '19:00' },
+            { title: 'Female Entrepreneurship Summit', desc: 'START Munich', date: 'Saturday, 18th April 2026', time: null },
+            { title: 'Founder Fail Tales', desc: 'Vol. 5', date: 'Tuesday, 21st April 2026', time: null },
+            { title: 'Why Start? Info Session', desc: 'Real people. Real journeys. Real reasons to START.', date: 'Thursday, 23rd April 2026', time: null },
+            { title: 'Student Initiative Showcase', desc: 'START Munich', date: 'Thursday, 24th April 2026', time: null },
+            { title: 'Online Info Event', desc: 'You are temporarily not in Munich? We got you.', date: 'Friday, 24th April 2026', time: null },
+            { title: 'Running Club (Coffee Run)', desc: 'START & Friends', date: 'Saturday, 25th April 2026', time: '11:00' },
+          ].map((event) => (
+            <div
+              key={event.title}
+              className="flex flex-col overflow-hidden rounded-lg bg-brand-dark-blue md:flex-row md:items-stretch"
+              style={{ border: '1px solid rgba(255,255,255,0.08)' }}
+            >
+              {/* Left — text */}
+              <div className="flex flex-1 flex-col px-8 py-8">
+                <h3 className="text-xl font-black uppercase text-brand-pink md:text-2xl">
+                  {event.title}
+                </h3>
+                <p className="mt-1 text-md text-white/50">{event.desc}</p>
+                <p className="mt-2 text-sm font-bold text-white md:text-base">
+                  {event.date}
+                  {event.time && <><br />{event.time}</>}
+                </p>
+                <span className="mt-5 inline-block w-fit cursor-not-allowed rounded-sm bg-white/20 px-6 py-2.5 text-sm font-bold uppercase tracking-wide text-white/40">
+                  Registration opens soon
+                </span>
+              </div>
+
+              {/* Right — image */}
+              <div className="relative hidden aspect-[3/2] md:block md:w-2/5">
+                <Image
+                  src="/home/heroBackground/isar-opt.jpg"
+                  alt={event.title}
+                  fill
+                  sizes="40vw"
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
     </main>
   )
 }
