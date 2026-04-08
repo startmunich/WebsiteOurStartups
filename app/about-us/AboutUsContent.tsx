@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useInView, useAnimatedNumber } from '@/lib/hooks'
 import Hero from '@/components/Hero'
@@ -64,6 +64,41 @@ const missionPartners = [
     { text: "Some of our members also join CDTM or M&M, but handling the intensive time commitment for both is challenging." },
   ], image: "/aboutUs/missionPartner/CDTM.png", image2: "/aboutUs/missionPartner/mandm.jpeg" },
 ]
+
+type AdvisoryMember = typeof advisoryBoard[number]
+
+function AdvisorDetail({ member, onClose }: { member: AdvisoryMember, onClose: () => void }) {
+  const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setVisible(true))
+    return () => cancelAnimationFrame(id)
+  }, [])
+
+  const t = () =>
+    `transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`
+
+  return (
+    <div className={`bg-white/[0.03] border border-white/10 rounded-2xl p-6 lg:p-8 flex items-start gap-6 transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+      <div className={`hidden sm:block relative flex-shrink-0 w-20 h-24 rounded-xl overflow-hidden border-2 border-brand-pink ${t()}`} style={{ transitionDelay: '0ms' }}>
+        <Image src={member.photo} alt={member.name} fill sizes="80px" className="object-cover object-top" />
+      </div>
+      <div className="flex-1">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <h3 className={`text-xl lg:text-2xl font-black text-white uppercase tracking-tight ${t()}`} style={{ transitionDelay: '100ms' }}>{member.name}</h3>
+            <p className={`text-brand-pink text-sm font-semibold mt-1 ${t()}`} style={{ transitionDelay: '200ms' }}>{member.role}</p>
+          </div>
+          <button onClick={onClose} className="text-white/30 hover:text-white transition-colors flex-shrink-0">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <p className={`text-gray-400 text-sm lg:text-base leading-relaxed mt-4 ${t()}`} style={{ transitionDelay: '300ms' }}>{member.bio}</p>
+      </div>
+    </div>
+  )
+}
 
 const showAdvisoryBoard = true
 
@@ -318,12 +353,13 @@ export default function AboutUsPage() {
           </div>
 
           {/* thumbnail grid */}
-          <div className={`grid grid-cols-3 sm:grid-cols-5 gap-3 lg:gap-4 transition-all duration-700 delay-200 ${advView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 lg:gap-4">
             {advisoryBoard.map((member, i) => (
               <button
                 key={i}
                 onClick={() => member.bio ? setSelectedAdvisor(selectedAdvisor === i ? null : i) : undefined}
-                className={`group text-left transition-all duration-300 ${!member.bio ? 'cursor-default' : ''} ${selectedAdvisor === i ? 'scale-[0.97]' : ''}`}
+                className={`group text-left transition-all duration-700 ${advView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} ${!member.bio ? 'cursor-default' : ''} ${selectedAdvisor === i ? 'scale-[0.97]' : ''}`}
+                style={{ transitionDelay: `${200 + i * 100}ms` }}
               >
                 <div className={`relative aspect-[3/4] rounded-xl overflow-hidden border-2 transition-colors duration-300 ${selectedAdvisor === i ? 'border-brand-pink' : 'border-white/10 hover:border-white/30'}`}>
                   <Image src={member.photo} alt={member.name} fill sizes="(max-width: 768px) 33vw, 15vw" className="object-cover" style={{ objectPosition: 'objectPosition' in member ? member.objectPosition : 'top' }} />
@@ -338,25 +374,7 @@ export default function AboutUsPage() {
           {/* Expandable detail panel */}
           <div className={`overflow-hidden transition-all duration-500 ease-in-out ${selectedAdvisor !== null ? 'max-h-[400px] opacity-100 mt-6' : 'max-h-0 opacity-0 mt-0'}`}>
             {selectedAdvisor !== null && advisoryBoard[selectedAdvisor].bio && (
-              <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-6 lg:p-8 flex items-start gap-6">
-                <div className="hidden sm:block relative flex-shrink-0 w-20 h-24 rounded-xl overflow-hidden border-2 border-brand-pink">
-                  <Image src={advisoryBoard[selectedAdvisor].photo} alt={advisoryBoard[selectedAdvisor].name} fill sizes="80px" className="object-cover object-top" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between gap-4">
-                    <div>
-                      <h3 className="text-xl lg:text-2xl font-black text-white uppercase tracking-tight">{advisoryBoard[selectedAdvisor].name}</h3>
-                      <p className="text-brand-pink text-sm font-semibold mt-1">{advisoryBoard[selectedAdvisor].role}</p>
-                    </div>
-                    <button onClick={() => setSelectedAdvisor(null)} className="text-white/30 hover:text-white transition-colors flex-shrink-0">
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                  <p className="text-gray-400 text-sm lg:text-base leading-relaxed mt-4">{advisoryBoard[selectedAdvisor].bio}</p>
-                </div>
-              </div>
+              <AdvisorDetail key={selectedAdvisor} member={advisoryBoard[selectedAdvisor]} onClose={() => setSelectedAdvisor(null)} />
             )}
           </div>
         </div>
