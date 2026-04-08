@@ -1,8 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
+import Hero from '@/components/Hero'
 
+const LAUNCH_DATE = new Date('2026-04-10T00:00:00+02:00').getTime()
 const TARGET_DATE = new Date('2026-04-26T23:59:59+02:00').getTime()
 
 function pad(n: number) {
@@ -30,9 +33,14 @@ export default function JoinStart2026Page() {
     seconds: 0,
   })
   const [mounted, setMounted] = useState(false)
+  const [isLive, setIsLive] = useState(false)
+
+  const searchParams = useSearchParams()
+  const isBeta = searchParams.get('beta') === 'true'
 
   useEffect(() => {
     setMounted(true)
+    setIsLive(isBeta || Date.now() >= LAUNCH_DATE)
     const update = () => {
       const diff = Math.max(0, TARGET_DATE - Date.now())
       setTimeLeft({
@@ -53,6 +61,20 @@ export default function JoinStart2026Page() {
     { value: timeLeft.minutes, label: 'Minutes' },
     { value: timeLeft.seconds, label: 'Seconds' },
   ]
+
+  if (!mounted) return null
+
+  if (!isLive) {
+    return (
+      <main className="min-h-screen bg-brand-dark-blue text-white">
+        <Hero
+          backgroundImage="/memberJourney/hero-opt.png"
+          title={<>JOIN <span className="outline-text">START MUNICH</span></>}
+          description="Applications for 2026 will open soon. Stay tuned."
+        />
+      </main>
+    )
+  }
 
   return (
     <div className="bg-brand-dark-blue">

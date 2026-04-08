@@ -155,12 +155,14 @@ export default function HomeClient({ initialPartners, initialStartups }: HomeCli
                 START Munich is the largest student-run entrepreneurship community in Munich.
                 We empower the next generation of founders to dare, build, and belong.
               </p>
-              <Link
-                href="/join-start/2026"
-                className={`inline-flex items-center justify-center px-8 py-3 bg-brand-pink text-white font-bold rounded-xl hover:shadow-[0_0_30px_rgba(208,0,111,0.4)] transition-all duration-1000 delay-500 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-              >
-                Apply Now
-              </Link>
+              {Date.now() >= new Date('2026-04-10T00:00:00+02:00').getTime() && (
+                <Link
+                  href="/join-start/2026"
+                  className={`inline-flex items-center justify-center px-8 py-3 bg-brand-pink text-white font-bold rounded-xl hover:shadow-[0_0_30px_rgba(208,0,111,0.4)] transition-all duration-1000 delay-500 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                >
+                  Apply Now
+                </Link>
+              )}
 
             </div>
 
