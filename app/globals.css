@@ -139,6 +139,12 @@
     width: max-content;
   }
 
+  .animate-scroll-slow {
+    display: inline-flex;
+    animation: scroll 60s linear infinite;
+    width: max-content;
+  }
+
   .animate-scroll-reverse {
     display: inline-flex;
     animation: scroll-reverse 30s linear infinite;

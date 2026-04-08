@@ -13,25 +13,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Script from 'next/script'
 import { useAnimatedNumber, useInView } from '@/lib/hooks'
-
-// ── Types ───────────────────────────────────────────────────────────────────────
-
-export interface Partner {
-  id: string
-  name: string
-  category: string
-  logoUrl: string
-  featured?: boolean
-}
-
-export interface Startup {
-  id: string
-  name: string
-  logoUrl: string
-  isSpotlight?: boolean
-  isYCombinator?: boolean
-  isEWOR?: boolean
-}
+import type { Partner, Startup } from '@/lib/types'
 
 // ── Images ──────────────────────────────────────────────────────────────────────
 
@@ -103,7 +85,7 @@ export default function HomeClient({ initialPartners, initialStartups }: HomeCli
     useAnimatedNumber(facts[3].value, !factsView.visible, 1800),
   ]
   const animatedCapital = useAnimatedNumber(3, !factsView.visible, 1800)
-  const animatedStartups70 = useAnimatedNumber(70, !factsView.visible, 1800)
+  const animatedStartups70 = useAnimatedNumber(100, !factsView.visible, 1800)
   const animatedUnicorn = useAnimatedNumber(1, !factsView.visible, 1200)
 
   return (
@@ -122,6 +104,17 @@ export default function HomeClient({ initialPartners, initialStartups }: HomeCli
       </Script>
 
       <main className="min-h-screen bg-brand-dark-blue text-white overflow-x-hidden">
+
+        {/* ═══════════════════════════ APPLICATION BANNER ═══════════════════════════ */}
+        <div className="bg-brand-pink overflow-hidden py-1.5">
+          <div className="animate-scroll-slow whitespace-nowrap">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <span key={i} className="text-white text-xs sm:text-sm tracking-wide mx-8">
+                Summer Applications are Open from 10 of April to 24 of April
+              </span>
+            ))}
+          </div>
+        </div>
 
         {/* ═══════════════════════════ HERO — FULLSCREEN CROSSFADE ═══════════════════════════ */}
         <section className="relative w-full overflow-hidden h-[calc(100vh-5rem)] flex items-center">
@@ -250,7 +243,7 @@ export default function HomeClient({ initialPartners, initialStartups }: HomeCli
                 {/* Academic Excellence Card */}
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-pink/30 transition-all">
                   <div className="flex items-center justify-center gap-8 mb-3">
-                    <Image src="/partners/Logo_of_the_Technical_University_of_Munich.svg" alt="TUM" width={120} height={40} className="h-10 w-auto opacity-80" unoptimized />
+                    <Image src="/forPartners/Logo_of_the_Technical_University_of_Munich.svg" alt="TUM" width={120} height={40} className="h-10 w-auto opacity-80" unoptimized />
                     <span className="text-white/30 text-2xl font-light">×</span>
                     <Image src="/home/LMU_Muenchen_Logo.svg" alt="LMU" width={120} height={40} className="h-10 w-auto opacity-80" unoptimized />
                   </div>
