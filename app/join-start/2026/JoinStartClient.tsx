@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Hero from '@/components/Hero'
 import HeroCard from '@/components/HeroCard'
 import UpcomingEventTile from '@/components/UpcomingEventTile'
+import { ScrollIndicator } from '@/components/EventComponents'
 
 const TARGET_DATE = new Date('2026-04-26T23:59:59+02:00').getTime()
 
@@ -97,6 +98,8 @@ export default function JoinStartClient({ isLive }: JoinStartClientProps) {
     seconds: 0,
   })
   const [mounted, setMounted] = useState(false)
+  const eventsSliderRef = useRef<HTMLDivElement>(null)
+  const dragState = useRef({ isDragging: false, startX: 0, scrollLeft: 0 })
 
   useEffect(() => {
     setMounted(true)
@@ -113,6 +116,27 @@ export default function JoinStartClient({ isLive }: JoinStartClientProps) {
     const interval = setInterval(update, 1000)
     return () => clearInterval(interval)
   }, [])
+
+  const handleDrag = {
+    start: (e: React.MouseEvent) => {
+      const slider = eventsSliderRef.current
+      if (!slider) return
+      dragState.current = {
+        isDragging: true,
+        startX: e.pageX - slider.offsetLeft,
+        scrollLeft: slider.scrollLeft,
+      }
+    },
+    move: (e: React.MouseEvent) => {
+      if (!dragState.current.isDragging || !eventsSliderRef.current) return
+      e.preventDefault()
+      const x = e.pageX - eventsSliderRef.current.offsetLeft
+      eventsSliderRef.current.scrollLeft = dragState.current.scrollLeft - (x - dragState.current.startX) * 2
+    },
+    end: () => {
+      dragState.current.isDragging = false
+    },
+  }
 
   const units = [
     { value: timeLeft.days, label: 'Days' },
@@ -225,20 +249,31 @@ export default function JoinStartClient({ isLive }: JoinStartClientProps) {
           </p>
         </div>
 
-        <div className="max-w-7xl mx-auto mt-12 flex gap-6 overflow-x-auto px-4 pb-4 scrollbar-hide sm:px-6 lg:px-8" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-          {applyEvents.map((event, index) => (
-            <UpcomingEventTile
-              key={event.id}
-              title={event.name}
-              date={event.month}
-              imageUrl={event.image}
-              description={event.description}
-              className="flex h-[35.5rem] w-[86vw] max-w-[320px] flex-none flex-col self-stretch sm:w-[300px] lg:w-[320px]"
-              ctaHref={event.ctaHref}
-              ctaLabel={event.ctaLabel}
-              ctaDisabledLabel="Registration opens soon"
-            />
-          ))}
+        <div className="max-w-7xl mx-auto mt-12 px-4 sm:px-6 lg:px-8">
+          <div
+            ref={eventsSliderRef}
+            onMouseDown={handleDrag.start}
+            onMouseUp={handleDrag.end}
+            onMouseMove={handleDrag.move}
+            onMouseLeave={handleDrag.end}
+            className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide select-none cursor-grab active:cursor-grabbing"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {applyEvents.map((event, index) => (
+              <UpcomingEventTile
+                key={event.id}
+                title={event.name}
+                date={event.month}
+                imageUrl={event.image}
+                description={event.description}
+                className="flex h-[35.5rem] w-[86vw] max-w-[320px] flex-none flex-col self-stretch sm:w-[300px] lg:w-[320px]"
+                ctaHref={event.ctaHref}
+                ctaLabel={event.ctaLabel}
+                ctaDisabledLabel="Registration opens soon"
+              />
+            ))}
+          </div>
+          <ScrollIndicator sliderRef={eventsSliderRef} />
         </div>
       </section>
 
