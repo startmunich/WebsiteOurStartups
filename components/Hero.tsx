@@ -4,12 +4,15 @@ import { cn } from "@/lib/utils"
 interface HeroProps {
     backgroundImage: string
     title: React.ReactNode
-    description: string
+    description: React.ReactNode
     children?: React.ReactNode
     className?: string
     overlayOpacity?: string
     hideChildrenOnMobile?: boolean
     imagePosition?: string
+    titleClassName?: string
+    descriptionClassName?: string
+    childrenWrapperClassName?: string
 }
 
 export default function Hero({
@@ -20,7 +23,10 @@ export default function Hero({
     className = "min-h-[70vh]",
     overlayOpacity = "bg-brand-dark-blue/70",
     hideChildrenOnMobile = false,
-    imagePosition = "center 45%"
+    imagePosition = "center 45%",
+    titleClassName,
+    descriptionClassName,
+    childrenWrapperClassName
 }: HeroProps) {
     return (
         <>
@@ -46,17 +52,17 @@ export default function Hero({
                     <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 w-full">
                         {/* Left Side - Text */}
                         <div className="flex-1 max-w-2xl text-left">
-                            <h1 className="text-6xl sm:text-6xl lg:text-8xl font-black text-white mb-4 sm:mb-6 animate-[flyInFromTop_0.6s_ease-out]">
+                            <h1 className={cn("text-6xl sm:text-6xl lg:text-8xl font-black text-white mb-4 sm:mb-6 animate-[flyInFromTop_0.6s_ease-out]", titleClassName)}>
                                 {title}
                             </h1>
-                            <p className="text-lg sm:text-xl text-gray-300 leading-relaxed">
+                            <div className={cn("text-lg sm:text-xl text-gray-300 leading-relaxed", descriptionClassName)}>
                                 {description}
-                            </p>
+                            </div>
                         </div>
 
                         {/* Right Side - Desktop only */}
                         {children && (
-                            <div className="hidden lg:flex flex-col gap-6 min-w-[280px] mt-6 lg:mt-11 ml-auto">
+                            <div className={cn("hidden lg:flex flex-col gap-6 min-w-[280px] mt-6 lg:mt-11 ml-auto", childrenWrapperClassName)}>
                                 {children}
                             </div>
                         )}
