@@ -141,7 +141,7 @@ export default function JoinStartClient({ isLive }: JoinStartClientProps) {
     <div className="bg-brand-dark-blue">
       <Hero
         backgroundImage="/join-start-2026-bg.png"
-        className="min-h-[calc(100vh-5rem)]"
+        className="min-h-[calc(100vh-14rem)] lg:min-h-[calc(100vh-5rem)]"
         overlayOpacity="bg-gradient-to-r from-brand-dark-blue/95 via-brand-dark-blue/80 to-brand-dark-blue/70"
         imagePosition="center center"
         title={

@@ -72,8 +72,8 @@ export default function Hero({
 
             {/* Mobile - Cards below hero */}
             {children && !hideChildrenOnMobile && (
-                <div className="lg:hidden mt-1">
-                    <div className="max-w-7xl mx-auto px-4 py-6">
+                <div className="lg:hidden -mt-1">
+                    <div className="max-w-7xl mx-auto px-4 pt-2 pb-6">
                         {children}
                     </div>
                 </div>
