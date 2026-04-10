@@ -139,79 +139,68 @@ export default function JoinStartClient({ isLive }: JoinStartClientProps) {
 
   return (
     <div className="bg-brand-dark-blue">
-      {/* Hero section */}
-      <section className="relative min-h-[calc(100vh-5rem)] overflow-hidden">
-        <Image
-          src="/join-start-2026-bg.png"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover scale-105"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-dark-blue/95 via-brand-dark-blue/80 to-brand-dark-blue/70" />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue via-brand-dark-blue/30 to-transparent" />
-        <div className="absolute top-24 right-[12%] h-72 w-72 rounded-full bg-sky-400/10 blur-[120px]" />
-        <div className="absolute bottom-16 left-[8%] h-80 w-80 rounded-full bg-brand-pink/10 blur-[120px]" />
-
-        <div className="relative z-10 flex min-h-[calc(100vh-5rem)] items-center">
-          <div className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 md:py-16 lg:px-8">
-            <div className="grid grid-cols-1 gap-10 xl:grid-cols-[minmax(0,1fr)_440px] xl:items-center xl:gap-14">
-            <div className="max-w-2xl">
-              <h1 className="text-5xl font-black leading-[0.9] text-white sm:text-6xl md:text-8xl lg:text-[8.5rem]">
-                JOIN
-                <br />
-                <span className="outline-text">START</span>
-                <br />
-                MUNICH
-              </h1>
-              <p className="mt-8 max-w-xl text-base leading-relaxed text-gray-200 sm:text-lg">
-                Become part of Germany&apos;s leading student-run entrepreneurship
-                initiative. At START Munich, you&apos;ll gain hands-on experience,
-                connect with top-tier founders and investors, and build with one
-                of Munich&apos;s most ambitious student communities.
-              </p>
-            </div>
-
-            <HeroCard className="w-full border-sky-300/20 bg-sky-500/10 shadow-[0_20px_60px_rgba(8,47,73,0.35)] xl:ml-auto xl:max-w-[440px]">
-              <p className="text-center text-xs font-bold uppercase tracking-[0.35em] text-white/75 sm:text-sm">
-                Applications close in
-              </p>
+      <Hero
+        backgroundImage="/join-start-2026-bg.png"
+        className="min-h-[calc(100vh-5rem)]"
+        overlayOpacity="bg-gradient-to-r from-brand-dark-blue/95 via-brand-dark-blue/80 to-brand-dark-blue/70"
+        imagePosition="center center"
+        title={
+          <>
+            JOIN
+            <br />
+            <span className="outline-text">START</span>
+            <br />
+            MUNICH
+          </>
+        }
+        titleClassName="mb-4 text-6xl leading-[0.94] tracking-tight sm:mb-6 sm:text-6xl lg:text-8xl"
+        descriptionClassName="max-w-xl text-base text-gray-200 sm:text-lg"
+        description={
+          <>
+            Become part of Germany&apos;s leading student-run entrepreneurship
+            initiative. At START Munich, you&apos;ll gain hands-on experience,
+            connect with top-tier founders and investors, and build with one of
+            Munich&apos;s most ambitious student communities.
+          </>
+        }
+        childrenWrapperClassName="lg:mt-0 xl:max-w-[440px]"
+      >
+        <HeroCard className="w-full border-sky-300/20 bg-sky-500/10 shadow-[0_20px_60px_rgba(8,47,73,0.35)]">
+          <p className="text-center text-xs font-bold uppercase tracking-[0.35em] text-white/75 sm:text-sm">
+            Applications close in
+          </p>
+          <div
+            className="mt-6 grid grid-cols-4 gap-2 sm:gap-4 xl:gap-3"
+            style={{ opacity: mounted ? 1 : 0, transition: 'opacity 0.4s ease' }}
+          >
+            {units.map((unit) => (
               <div
-                className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 xl:gap-3"
-                style={{ opacity: mounted ? 1 : 0, transition: 'opacity 0.4s ease' }}
+                key={unit.label}
+                className="rounded-xl border border-white/10 bg-brand-dark-blue/40 px-2 py-3 text-center sm:rounded-2xl sm:px-4 sm:py-5 xl:px-3"
               >
-                {units.map((unit) => (
-                  <div
-                    key={unit.label}
-                    className="rounded-2xl border border-white/10 bg-brand-dark-blue/40 px-3 py-4 text-center sm:px-4 sm:py-5 xl:px-3"
-                  >
-                    <span className="block text-[2.65rem] font-black tabular-nums text-white sm:text-[3rem] xl:text-[2.4rem]">
-                      {pad(unit.value)}
-                    </span>
-                    <span className="mt-2 block text-[10px] uppercase tracking-[0.06em] text-white/55 sm:text-[11px] xl:text-[10px]">
-                      {unit.label}
-                    </span>
-                  </div>
-                ))}
+                <span className="block text-[1.9rem] font-black tabular-nums text-white sm:text-[3rem] xl:text-[2.4rem]">
+                  {pad(unit.value)}
+                </span>
+                <span className="mt-1 block text-[8px] uppercase tracking-[0.02em] text-white/55 sm:mt-2 sm:text-[11px] xl:text-[10px]">
+                  {unit.label}
+                </span>
               </div>
-              <p className="mt-6 text-center text-sm leading-relaxed text-white/70">
-                Don&apos;t miss your chance to join the next generation of builders,
-                operators, and founders at START Munich.
-              </p>
-              <a
-                href="https://tally.so/r/eqL4yQ"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-brand-pink px-8 py-3 font-bold text-white transition-all duration-300 hover:shadow-[0_0_30px_rgba(208,0,111,0.4)]"
-              >
-                Start Application
-              </a>
-            </HeroCard>
-            </div>
+            ))}
           </div>
-        </div>
-      </section>
+          <p className="mt-6 text-center text-sm leading-relaxed text-white/70">
+            Don&apos;t miss your chance to join START Munich. Applications only
+            open once per semester.
+          </p>
+          <a
+            href="https://tally.so/r/eqL4yQ"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-brand-pink px-8 py-3 font-bold text-white transition-all duration-300 hover:shadow-[0_0_30px_rgba(208,0,111,0.4)]"
+          >
+            Start Application
+          </a>
+        </HeroCard>
+      </Hero>
 
       {/* YouTube video section */}
       <section id="video" className="scroll-mt-8 py-12 md:py-20">
