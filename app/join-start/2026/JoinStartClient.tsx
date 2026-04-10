@@ -163,25 +163,25 @@ export default function JoinStartClient({ isLive }: JoinStartClientProps) {
             Munich&apos;s most ambitious student communities.
           </>
         }
-        childrenWrapperClassName="lg:mt-0 xl:max-w-[440px]"
+        childrenWrapperClassName="lg:mt-0 lg:max-w-[380px] xl:max-w-[440px]"
       >
         <HeroCard className="w-full border-sky-300/20 bg-sky-500/10 shadow-[0_20px_60px_rgba(8,47,73,0.35)]">
           <p className="text-center text-xs font-bold uppercase tracking-[0.35em] text-white/75 sm:text-sm">
             Applications close in
           </p>
           <div
-            className="mt-6 grid grid-cols-4 gap-2 sm:gap-4 xl:gap-3"
+            className="mt-6 grid grid-cols-4 gap-2 sm:gap-4 lg:gap-2 xl:gap-3"
             style={{ opacity: mounted ? 1 : 0, transition: 'opacity 0.4s ease' }}
           >
             {units.map((unit) => (
               <div
                 key={unit.label}
-                className="rounded-xl border border-white/10 bg-brand-dark-blue/40 px-2 py-3 text-center sm:rounded-2xl sm:px-4 sm:py-5 xl:px-3"
+                className="rounded-xl border border-white/10 bg-brand-dark-blue/40 px-2 py-3 text-center sm:rounded-2xl sm:px-4 sm:py-5 lg:px-2 lg:py-3 xl:px-3"
               >
-                <span className="block text-[1.9rem] font-black tabular-nums text-white sm:text-[3rem] xl:text-[2.4rem]">
+                <span className="block text-[1.9rem] font-black tabular-nums text-white sm:text-[3rem] lg:text-[2.2rem] xl:text-[2.4rem]">
                   {pad(unit.value)}
                 </span>
-                <span className="mt-1 block text-[8px] uppercase tracking-[0.02em] text-white/55 sm:mt-2 sm:text-[11px] xl:text-[10px]">
+                <span className="mt-1 block text-[8px] uppercase tracking-[0.02em] text-white/55 sm:mt-2 sm:text-[11px] lg:mt-1 lg:text-[9px] xl:text-[10px]">
                   {unit.label}
                 </span>
               </div>

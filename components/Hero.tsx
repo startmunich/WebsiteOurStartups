@@ -49,9 +49,9 @@ export default function Hero({
 
                 {/* Content Overlay */}
                 <div className="relative flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 flex items-center">
-                    <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 w-full">
+                    <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-8 lg:gap-12 w-full">
                         {/* Left Side - Text */}
-                        <div className="flex-1 max-w-2xl text-left">
+                        <div className="flex-1 max-w-full lg:max-w-3xl text-left">
                             <h1 className={cn("text-6xl sm:text-6xl lg:text-8xl font-black text-white mb-4 sm:mb-6 animate-[flyInFromTop_0.6s_ease-out]", titleClassName)}>
                                 {title}
                             </h1>
