@@ -142,7 +142,7 @@ export default function JoinStartClient() {
                 rel="noopener noreferrer"
                 className="mt-6 inline-flex items-center justify-center rounded-xl bg-brand-pink px-8 py-3 font-bold text-white transition-all duration-1000 hover:shadow-[0_0_30px_rgba(208,0,111,0.4)]"
               >
-                Apply Now
+                Start Application
               </a>
             </div>
           </div>
@@ -365,6 +365,16 @@ export default function JoinStartClient() {
           projects, and shape the community. Some go on to launch startups,
           everyone learns by doing.
         </p>
+        <div className="mt-8 flex justify-center">
+          <a
+            href="https://tally.so/r/eqL4yQ"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center rounded-xl bg-brand-pink px-10 py-4 text-lg font-bold text-white transition-all duration-1000 hover:shadow-[0_0_30px_rgba(208,0,111,0.4)]"
+          >
+            Start Application Now
+          </a>
+        </div>
         </div>
       </section>
 

@@ -113,7 +113,7 @@ const departments: Department[] = [
   {
     id: "marketing",
     name: "Marketing",
-    description: "Learn strategy and how to highlight our people, events, and achievements to reach millions and push the ecosystem forward. Build a trusted brand.",
+    description: "Learn how to highlight our people, events, and achievements to reach millions and build a trusted brand.",
     icon: "📢",
     responsibilities: ["Create content, posts, and campaigns for LinkedIn and Instagram.", "Shoot and edit photos and videos from events.", "Build and maintain START's brand and image."]
   },
@@ -127,9 +127,9 @@ const departments: Department[] = [
   {
     id: "partnerships",
     name: "Partnerships",
-    description: "Learn how to secure partners, close deals. Run persistent outreach campaigns, handle rejection, and keep going.",
+    description: "Learn how to secure partners, close deals, and bring in the resources that multiply START's impact across the ecosystem.",
     icon: "🤝",
-    responsibilities: ["Run persistent outreach, handle rejection, and keep going.", "Build and manage relationships that create long-term value.", "Close deals that fund START's projects."]
+    responsibilities: ["Run outreach campaigns and handle rejection.", "Build and manage relationships that create long-term value.", "Close deals that fund START's projects."]
   },
   {
     id: "events",
