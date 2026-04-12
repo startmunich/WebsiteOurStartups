@@ -343,7 +343,7 @@ export default function StartupsPage() {
                     scrolling="no"
                     marginHeight={0}
                     marginWidth={0}
-                    src="https://www.openstreetmap.org/export/embed.html?bbox=11.5397%2C48.1925%2C11.5497%2C48.1975&layer=mapnik&marker=48.1950%2C11.5447"
+                    src="https://www.openstreetmap.org/?mlat=48.17460&mlon=11.53286#map=16/48.17460/11.53286"
                     style={{ border: 0 }}
                   ></iframe>
                 </div>
