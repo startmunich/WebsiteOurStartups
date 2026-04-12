@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { useInView, useAnimatedNumber } from '@/lib/hooks'
 import Hero from '@/components/Hero'
@@ -104,6 +104,7 @@ const showAdvisoryBoard = true
 
 export default function AboutUsPage() {
   const [selectedAdvisor, setSelectedAdvisor] = useState<number | null>(0)
+  const advisorDetailRef = useRef<HTMLDivElement>(null)
   const animatedYears = useAnimatedNumber(20)
   const animatedMembers = useAnimatedNumber(600)
   const missionView = useInView(0.1)
@@ -330,35 +331,28 @@ export default function AboutUsPage() {
       <section className="pt-4 pb-28 px-4 sm:px-6 lg:px-8" ref={advView.ref}>
         <div className="max-w-7xl mx-auto">
           <div className={`mb-10 transition-all duration-700 ${advView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center justify-end gap-3 mb-4">
+              <span className="text-brand-pink text-sm font-bold tracking-[0.35em] uppercase">Meet our Experts</span>
               <div className="w-6 h-px bg-brand-pink" />
-              <span className="text-brand-pink text-sm font-bold tracking-[0.35em] uppercase">Advisory Board</span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-              {[
-                { icon: "M13 10V3L4 14h7v7l9-11h-7z", text: "Support and enable our long-term vision" },
-                { icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z", text: "Connect us with key ecosystem players" },
-                { icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z", text: "Advise us on strategic decisions" },
-              ].map(({ icon, text }) => (
-                <div key={text} className="flex items-center gap-3 bg-white/[0.03] border border-white/10 rounded-xl px-5 py-4">
-                  <div className="w-8 h-8 rounded-lg bg-brand-pink/10 border border-brand-pink/20 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-brand-pink" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d={icon} />
-                    </svg>
-                  </div>
-                  <span className="text-gray-300 text-sm">{text}</span>
-                </div>
-              ))}
-            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white text-right uppercase tracking-tight">The Advisory Board</h2>
+            <p className="text-gray-400 text-sm sm:text-base text-right mt-3 max-w-2xl ml-auto">Our advisory board supports our long-term vision, connects us with key ecosystem players, and advises us on strategic decisions.</p>
           </div>
 
           {/* thumbnail grid */}
-          <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 lg:gap-4 items-start">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 lg:gap-4 items-start justify-items-center">
             {advisoryBoard.map((member, i) => (
               <button
                 key={i}
-                onClick={() => member.bio ? setSelectedAdvisor(selectedAdvisor === i ? null : i) : undefined}
-                className={`group text-left w-full transition-all duration-700 ${advView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} ${!member.bio ? 'cursor-default' : ''} ${selectedAdvisor === i ? 'scale-[0.97]' : ''}`}
+                onClick={() => {
+                  if (!member.bio) return
+                  const next = selectedAdvisor === i ? null : i
+                  setSelectedAdvisor(next)
+                  if (next !== null) {
+                    setTimeout(() => advisorDetailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100)
+                  }
+                }}
+                className={`group text-left w-full max-w-[144px] sm:max-w-none transition-all duration-700 ${advView.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} ${!member.bio ? 'cursor-default' : ''} ${selectedAdvisor === i ? 'scale-[0.97]' : ''}`}
                 style={{}}
               >
                 <div className={`relative aspect-[3/4] rounded-xl overflow-hidden border-2 transition-colors duration-300 ${selectedAdvisor === i ? 'border-brand-pink' : 'border-white/10 hover:border-white/30'}`}>
@@ -372,7 +366,7 @@ export default function AboutUsPage() {
           </div>
 
           {/* Expandable detail panel */}
-          <div className={`overflow-hidden transition-all duration-500 ease-in-out ${selectedAdvisor !== null ? 'max-h-[800px] opacity-100 mt-6' : 'max-h-0 opacity-0 mt-0'}`}>
+          <div ref={advisorDetailRef} className={`overflow-hidden transition-all duration-500 ease-in-out ${selectedAdvisor !== null ? 'max-h-[800px] opacity-100 mt-6' : 'max-h-0 opacity-0 mt-0'}`}>
             {selectedAdvisor !== null && advisoryBoard[selectedAdvisor].bio && (
               <AdvisorDetail key={selectedAdvisor} member={advisoryBoard[selectedAdvisor]} onClose={() => setSelectedAdvisor(null)} />
             )}
