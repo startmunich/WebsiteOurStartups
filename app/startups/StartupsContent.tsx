@@ -336,21 +336,17 @@ export default function StartupsPage() {
 
                 {/* Right Side - Map */}
                 <div className="w-full lg:w-80 h-52 lg:h-64 rounded-xl overflow-hidden border-2 border-[#d0006f]/40 shadow-lg">
-                  <iframe
-                    width="100%"
-                    height="100%"
-                    frameBorder="0"
-                    scrolling="no"
-                    marginHeight={0}
-                    marginWidth={0}
-                    src="https://www.openstreetmap.org/?mlat=48.17460&mlon=11.53286#map=16/48.17460/11.53286"
-                    style={{ border: 0 }}
-                  ></iframe>
+                  <iframe 
+                  width="100%" 
+                  height="100%" 
+                  src="https://www.openstreetmap.org/export/embed.html?bbox=11.530690491199495%2C48.17274171704395%2C11.53356581926346%2C48.17436585858368&amp;layer=mapnik&amp;marker=48.173553794244306%2C11.532128155231476" 
+                  >
+                    </iframe>
                 </div>
               </div>
             </div>
           </div>
-
+          
           {/* Y Combinator Section */}
           {yCombinatorStartups.length > 0 && (
             <div className="mb-16">
