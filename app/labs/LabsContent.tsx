@@ -1357,13 +1357,13 @@ function CriteriaSection() {
                         color: 'var(--labs-text-body)',
                      }}
                   >
-                     // No MedTech experience needed. No connections required.
-                     Just the right mindset.
+                     No MedTech experience needed. No connections required. Just
+                     the right mindset.
                   </div>
                </div>
 
                {/* Role pills */}
-               <div className='flex flex-wrap items-center justify-center gap-3 mb-10'>
+               {/* <div className='flex flex-wrap items-center justify-center gap-3 mb-10'>
                   {['Builders', 'Engineers', 'Designers', 'Sellers', 'Clinicians'].map((role) => (
                      <div
                         key={role}
@@ -1378,14 +1378,12 @@ function CriteriaSection() {
                         {role}
                      </div>
                   ))}
-               </div>
+               </div> */}
 
                {/* Criteria Grid */}
                <div className='grid grid-cols-1 md:grid-cols-2 gap-8 mb-8'>
                   {/* Apply If */}
-                  <div
-                     className='labs-reveal group relative overflow-hidden transition-all duration-300'
-                  >
+                  <div className='labs-reveal group relative overflow-hidden transition-all duration-300'>
                      {/* Top accent bar - green */}
                      <div
                         className='absolute top-0 left-0 right-0 h-[2px]'
@@ -1396,7 +1394,11 @@ function CriteriaSection() {
                         <div className='mb-10'>
                            <div
                               className='font-mono uppercase tracking-[0.2em] mb-3'
-                              style={{ fontSize: '10px', color: '#10b981', letterSpacing: '0.2em' }}
+                              style={{
+                                 fontSize: '10px',
+                                 color: '#10b981',
+                                 letterSpacing: '0.2em',
+                              }}
                            >
                               Apply if
                            </div>
@@ -1422,7 +1424,8 @@ function CriteriaSection() {
                                     lineHeight: '1.6',
                                  }}
                               >
-                                 You don't quit when things get tough. You get obsessed.
+                                 You don't quit when things get tough. You get
+                                 obsessed.
                               </div>
                            </div>
 
@@ -1445,7 +1448,8 @@ function CriteriaSection() {
                                     lineHeight: '1.6',
                                  }}
                               >
-                                 You see broken systems and think "I can fix this."
+                                 You see broken systems and think "I can fix
+                                 this."
                               </div>
                            </div>
 
@@ -1468,7 +1472,8 @@ function CriteriaSection() {
                                     lineHeight: '1.6',
                                  }}
                               >
-                                 Genuine, can't-sleep-at-night passion for building things that matter.
+                                 Genuine, can't-sleep-at-night passion for
+                                 building things that matter.
                               </div>
                            </div>
                         </div>
@@ -1490,7 +1495,11 @@ function CriteriaSection() {
                         <div className='mb-10'>
                            <div
                               className='font-mono uppercase tracking-[0.2em] mb-3'
-                              style={{ fontSize: '10px', color: '#ef4444', letterSpacing: '0.2em' }}
+                              style={{
+                                 fontSize: '10px',
+                                 color: '#ef4444',
+                                 letterSpacing: '0.2em',
+                              }}
                            >
                               Don't apply if
                            </div>
@@ -1562,7 +1571,8 @@ function CriteriaSection() {
                                     lineHeight: '1.6',
                                  }}
                               >
-                                 Build something you actually care about, or don't apply.
+                                 Build something you actually care about, or
+                                 don't apply.
                               </div>
                            </div>
                         </div>
@@ -1571,8 +1581,8 @@ function CriteriaSection() {
                </div>
 
                {/* Edge Cases + Visual */}
-               <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                  <div
+               {/* <div className='grid grid-cols-1 md:grid-cols-2 gap-6'> */}
+               {/* <div
                      className='labs-reveal group border-l-2 pl-8 labs-card p-8 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--labs-accent)]'
                      style={{ borderColor: 'var(--labs-border)' }}
                   >
@@ -1595,10 +1605,10 @@ function CriteriaSection() {
                            Apply anyway. →
                         </a>
                      </div>
-                  </div>
+                  </div> */}
 
-                  {/* Visual proof image */}
-                  <div
+               {/* Visual proof image */}
+               {/* <div
                      className='labs-reveal group relative aspect-[16/10] overflow-hidden border'
                      style={{
                         borderColor: 'var(--labs-border)',
@@ -1616,8 +1626,8 @@ function CriteriaSection() {
                            // GovTech 2025
                         </Label>
                      </div>
-                  </div>
-               </div>
+                  </div> */}
+               {/* </div> */}
             </div>
          </div>
       </section>
@@ -2248,9 +2258,17 @@ function FAQSection() {
 // Footer
 function LabsFooter() {
    return (
-      <footer className='py-6 relative overflow-hidden'>
+      <footer className='py-4 text-xs relative overflow-hidden bg-transparent'>
          <div className='max-w-[1400px] mx-auto px-6 md:px-12 text-center relative z-10'>
-            <Label>// START Labs © 2026 · MedTech Edition</Label>
+            <p
+               className='font-mono leading-relaxed'
+               style={{
+                  fontSize: '12px',
+                  color: 'var(--labs-text-body)',
+               }}
+            >
+               // START Labs © 2026 · MedTech Edition
+            </p>
          </div>
       </footer>
    );
@@ -2315,8 +2333,8 @@ export default function LabsContent() {
             <CriteriaSection />
             {/* <ProofSection /> */}
             {/* <HowToApplySection /> */}
-            <ApplySection />
             <FAQSection />
+            <ApplySection />
             <LabsFooter />
          </main>
       </>
