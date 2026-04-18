@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useEffect, useRef } from "react"
+import posthog from "posthog-js"
 import Link from "next/link"
 import Script from "next/script"
 import { useRouter } from "next/navigation"
@@ -321,6 +322,7 @@ export default function EventsPage() {
                       href="https://www.hacking-legal.org/"
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => posthog.capture('event_card_clicked', { event_id: 'legal-hack', event_name: 'Munich Hacking Legal', location: 'featured_spotlight' })}
                       className="group inline-flex items-center gap-2.5 px-7 py-3.5 bg-[#e35733] hover:bg-[#c24520] text-white font-bold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#e35733]/40"
                     >
                       <span>Learn More</span>
@@ -708,10 +710,10 @@ export default function EventsPage() {
                       isFlagship={true}
                       className="h-full"
                       onClick={
-                        event.id === 'legal-hack' ? () => window.open('https://www.hacking-legal.org/', '_blank')
-                        : event.id === 'rtsh' ? () => window.open('https://hack.startmunich.de/events/rtsh', '_blank')
-                        : event.id === 'rtss' ? () => window.open('https://summit.startmunich.de/events/rtss', '_blank')
-                        : event.id === 'start-labs' ? () => window.open('https://www.startmunich.de', '_blank')
+                        event.id === 'legal-hack' ? () => { posthog.capture('event_card_clicked', { event_id: event.id, event_name: event.name }); window.open('https://www.hacking-legal.org/', '_blank') }
+                        : event.id === 'rtsh' ? () => { posthog.capture('event_card_clicked', { event_id: event.id, event_name: event.name }); window.open('https://hack.startmunich.de/events/rtsh', '_blank') }
+                        : event.id === 'rtss' ? () => { posthog.capture('event_card_clicked', { event_id: event.id, event_name: event.name }); window.open('https://summit.startmunich.de/events/rtss', '_blank') }
+                        : event.id === 'start-labs' ? () => { posthog.capture('event_card_clicked', { event_id: event.id, event_name: event.name }); window.open('https://www.startmunich.de', '_blank') }
                         : undefined
                       }
                     />
