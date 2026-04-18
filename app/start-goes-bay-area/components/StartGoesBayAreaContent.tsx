@@ -7,7 +7,6 @@ import BayAreaCompanyLogoCarousel from './BayAreaCompanyLogoCarousel'
 import Hero from '@/components/Hero'
 import HeroCard from '@/components/HeroCard'
 import {
-    bayAreaHeroHighlights,
     bayAreaOverviewItems,
     bayAreaYearContent,
 } from '@/lib/startGoesBayAreaData'
@@ -22,42 +21,28 @@ const HERO_BACKGROUND_BY_YEAR: Record<BayAreaYearId, string> = {
 export default function StartGoesBayAreaContent() {
     const [activeYear, setActiveYear] = useState<BayAreaYearId>('2026')
     const [showStickyYearSelector, setShowStickyYearSelector] = useState(false)
-    const yearSelectorRef = useRef<HTMLDivElement | null>(null)
+    const heroSectionRef = useRef<HTMLDivElement | null>(null)
 
     useEffect(() => {
-        const target = yearSelectorRef.current
+        const target = heroSectionRef.current
 
         if (!target) return
 
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                setShowStickyYearSelector(!entry.isIntersecting)
-            },
-            {
-                threshold: 0,
-                rootMargin: '-80px 0px 0px 0px',
-            }
-        )
+        const updateStickySelectorVisibility = () => {
+            const heroBottom = target.getBoundingClientRect().bottom
+            setShowStickyYearSelector(heroBottom <= 0)
+        }
 
-        observer.observe(target)
+        updateStickySelectorVisibility()
+        window.addEventListener('scroll', updateStickySelectorVisibility, { passive: true })
 
         return () => {
-            observer.disconnect()
+            window.removeEventListener('scroll', updateStickySelectorVisibility)
         }
     }, [])
 
-    const heroBackgroundAccents = (
-        <>
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-dark-blue/90 via-brand-dark-blue/70 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue via-transparent to-transparent" />
-            <div className="absolute top-20 right-[15%] w-[420px] h-[420px] bg-brand-pink/15 rounded-full blur-[110px] animate-blob" />
-            <div className="absolute bottom-12 left-[5%] w-[340px] h-[340px] bg-brand-pink/10 rounded-full blur-[90px] animate-blob animation-delay-2000" />
-            <div className="absolute top-[38%] right-[6%] w-[260px] h-[260px] bg-blue-500/10 rounded-full blur-[70px] animate-blob animation-delay-4000" />
-        </>
-    )
-
-    const renderYearSelectorButtons = (variant: 'hero' | 'sticky' = 'hero') => (
-        <div className={variant === 'sticky' ? 'flex flex-wrap items-center justify-center gap-2 sm:gap-3' : 'flex flex-wrap gap-2'}>
+    const renderYearSelectorButtons = () => (
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             {bayAreaYearContent.map((year) => {
                 const isActive = year.id === activeYear
 
@@ -66,7 +51,7 @@ export default function StartGoesBayAreaContent() {
                         key={year.id}
                         type="button"
                         onClick={() => setActiveYear(year.id)}
-                        className={`border rounded-full font-bold uppercase tracking-wide transition-colors backdrop-blur-sm ${variant === 'sticky' ? 'px-5 py-2.5 text-sm sm:px-6 sm:text-base' : 'px-4 py-2 text-xs sm:text-sm'} ${isActive
+                        className={`border rounded-full font-bold uppercase tracking-wide transition-colors backdrop-blur-sm px-5 py-2.5 text-sm sm:px-6 sm:text-base ${isActive
                             ? 'bg-brand-pink text-white border-brand-pink'
                             : 'bg-white/10 text-gray-100 border-white/25 hover:bg-white/20'
                             }`}
@@ -79,52 +64,54 @@ export default function StartGoesBayAreaContent() {
         </div>
     )
 
-    const heroYearSelectorSentinel = <div ref={yearSelectorRef} aria-hidden="true" className="h-px w-px" />
-
     const stickyYearSelector = (
         <div
             className={`fixed left-1/2 top-24 z-40 -translate-x-1/2 px-4 transition-all duration-300 ${showStickyYearSelector ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'
                 }`}
             aria-hidden={!showStickyYearSelector}
         >
-            {renderYearSelectorButtons('sticky')}
+            {renderYearSelectorButtons()}
         </div>
     )
 
     return (
         <main className="min-h-screen bg-brand-dark-blue">
             {stickyYearSelector}
-
-            <Hero
-                backgroundImage={HERO_BACKGROUND_BY_YEAR[activeYear]}
-                overlayOpacity="bg-brand-dark-blue/45"
-                backgroundAccents={heroBackgroundAccents}
-                leftColumnClassName="max-w-3xl"
-                titleClassName="text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem]"
-                descriptionClassName="text-base sm:text-lg lg:text-xl text-gray-200 max-w-2xl"
-                rightColumnClassName="gap-5 min-w-[300px]"
-                title={
-                    <>
-                        START GOES
-                        <br />
-                        <span className="outline-text">BAY AREA</span>
-                    </>
-                }
-                description="A selective international exchange program by START Munich connecting entrepreneurial talent from Europe with the San Francisco Bay Area innovation ecosystem."
-                leftSlot={heroYearSelectorSentinel}
-            >
-                <div className="flex flex-col gap-6">
-                    {bayAreaHeroHighlights.map((stat) => (
-                        <HeroCard
-                            key={stat.label}
-                            className="transition-all duration-300 hover:border-brand-pink/30 hover:bg-white/[0.09]"
-                        >
-                            <p className="text-4xl font-black text-white mb-2">{stat.value}</p>
-                            <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">{stat.label}</p>
+            <div ref={heroSectionRef}>
+                <Hero
+                    backgroundImage={HERO_BACKGROUND_BY_YEAR[activeYear]}
+                    title={
+                        <>
+                            START GOES
+                            <br />
+                            <span className="outline-text">BAY AREA</span>
+                        </>
+                    }
+                    description="A selective international exchange program by START Munich connecting entrepreneurial talent from Europe with the San Francisco Bay Area innovation ecosystem."
+                >
+                    <div className="grid grid-cols-2 lg:flex lg:flex-col gap-4 lg:gap-6">
+                        <HeroCard>
+                            <div className="flex items-baseline justify-center gap-2 mb-3">
+                                <span className="text-4xl lg:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-300 transition">
+                                    20
+                                </span>
+                                <span className="text-xl lg:text-3xl font-bold text-[#d0006f]">+</span>
+                            </div>
+                            <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Startup Visits</p>
                         </HeroCard>
-                    ))}
-                </div>
-            </Hero>
+
+                        <HeroCard>
+                            <div className="flex items-baseline justify-center gap-2 mb-3">
+                                <span className="text-4xl lg:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-300 transition">
+                                    20
+                                </span>
+                                <span className="text-xl lg:text-3xl font-bold text-[#d0006f]">+</span>
+                            </div>
+                            <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Participants</p>
+                        </HeroCard>
+                    </div>
+                </Hero>
+            </div>
 
             <BayAreaCompanyLogoCarousel />
 
