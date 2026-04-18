@@ -14,29 +14,29 @@ const HERO_BACKGROUND = '/bayarea/years/2026.png'
 const OVERVIEW_PILLARS = [
     {
         title: 'Who It Is For',
-        subtitle: 'Student builders ready to level up fast.',
+        subtitle: 'START Members ready to level up fast.',
         points: [
-            'Entrepreneurial students with strong drive',
-            'People who learn by doing and shipping',
-            'Applicants who want to build global ambition',
+            'Entrepreneurial students interested in the SF startup culture',
+            'People who learn by doing and search for inspiration',
+            'STARTies who want to build a global network and mindset',
         ],
     },
     {
         title: 'What You Will Do',
         subtitle: 'Two intense weeks in the Bay Area.',
         points: [
-            'Visit startups, VCs, and operator teams',
-            'Join candid sessions with founders and experts',
-            'Work in teams on an internal moonshot sprint',
+            'Visit startups, VCs, and Silicon Valley legends',
+            'See the SF ecosystem in action on side events and night outs',
+            'Get to know San Francisco and its unique culture',
         ],
     },
     {
         title: 'What You Take Home',
         subtitle: 'Clarity, network, and execution momentum.',
         points: [
-            'A sharper founder and product mindset',
-            'Direct connections across the ecosystem',
-            'Concrete ideas to execute after the program',
+            'An understanding of how the Bay Area ecosystem works',
+            'New connections across the ecosystem',
+            'Concrete inspirations to motivate you back home',
         ],
     },
 ] as const
@@ -154,7 +154,7 @@ export default function StartGoesBayAreaContent() {
                     <span className="text-brand-pink text-sm font-bold tracking-[0.3em] uppercase">Program</span>
                     <h3 className="text-4xl sm:text-5xl font-black text-white mt-3">OVERVIEW</h3>
                     <p className="text-gray-400 text-lg">
-                        Two intense weeks to learn from top founders and investors, then apply it to your own ideas.
+                        Two intense weeks in the Bay Area to learn from top founders and investors, then apply it to your own ideas.
                     </p>
                 </div>
 
