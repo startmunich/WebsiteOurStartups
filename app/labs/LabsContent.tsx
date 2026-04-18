@@ -265,13 +265,13 @@ function HeroSection() {
 function OrganizedBySection() {
    return (
       <section
-         className='py-12 relative overflow-hidden'
+         className='py-8 relative overflow-hidden'
          style={{
             background: 'var(--labs-bg)',
          }}
       >
          {/* Gradient blobs */}
-         <div className='absolute inset-0 pointer-events-none z-[1]'>
+         {/* <div className='absolute inset-0 pointer-events-none z-[1]'>
             <div
                className='absolute top-0 right-1/4 w-96 h-96 rounded-full blur-[100px]'
                style={{
@@ -279,7 +279,7 @@ function OrganizedBySection() {
                      'radial-gradient(circle, rgba(139,92,246,0.4) 0%, transparent 70%)',
                }}
             ></div>
-         </div>
+         </div> */}
 
          <div className='max-w-[1400px] mx-auto px-6 md:px-12 relative z-10'>
             <div className='flex flex-col items-center gap-6'>
@@ -318,106 +318,6 @@ function OrganizedBySection() {
 }
 
 // What is START Labs Section
-function WhatIsStartLabsSection() {
-   return (
-      <section
-         className='labs-reveal relative py-32 overflow-hidden'
-         style={{ background: '#ffffff' }}
-      >
-         {/* Noise texture */}
-         <NoiseTexture noiseOpacity={0.15} className='opacity-30' />
-
-         {/* Gradient blobs */}
-         <div className='absolute inset-0 pointer-events-none z-[1]'>
-            <div
-               className='absolute top-1/3 right-1/4 w-[500px] h-[500px] rounded-full blur-[120px]'
-               style={{
-                  background:
-                     'radial-gradient(circle, rgba(45,212,191,0.25) 0%, transparent 70%)',
-               }}
-            ></div>
-            <div
-               className='absolute bottom-1/3 left-1/4 w-[500px] h-[500px] rounded-full blur-[120px]'
-               style={{
-                  background:
-                     'radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%)',
-               }}
-            ></div>
-         </div>
-
-         <div className='max-w-[1400px] mx-auto px-6 md:px-12 relative z-10'>
-            <div className='max-w-5xl mx-auto'>
-               {/* Section Header */}
-               <div className='text-center mb-20'>
-                  <span
-                     className='font-mono uppercase tracking-[0.15em]'
-                     style={{ fontSize: '16px', color: 'var(--labs-accent)' }}
-                  >
-                     // What is START Labs
-                  </span>
-               </div>
-
-               {/* Headline */}
-               <h2
-                  className='labs-heading text-[clamp(32px,5vw,56px)] leading-[1.1] mb-12 text-center'
-                  style={{ color: '#000000' }}
-               >
-                  The only no-program program.
-               </h2>
-
-               {/* Body content */}
-               <div className='max-w-3xl mx-auto space-y-6'>
-                  <p
-                     className='font-mono leading-relaxed'
-                     style={{ fontSize: '13px', color: '#555555' }}
-                  >
-                     START Labs is an 8-week program that connects ambitious
-                     builders with organizations that have real, unsolved
-                     problems.
-                  </p>
-
-                  <p
-                     className='font-mono leading-relaxed'
-                     style={{ fontSize: '13px', color: '#555555' }}
-                  >
-                     No classrooms. No sticky notes. No pretend startups.
-                  </p>
-
-                  <p
-                     className='font-mono leading-relaxed'
-                     style={{ fontSize: '13px', color: '#555555' }}
-                  >
-                     From day one, you're a founder — working directly with a
-                     challenge partner to build an actual solution. You're not
-                     starting from zero. You're starting from one. The problem
-                     is already scoped. The partner is already there. You just
-                     have to build.
-                  </p>
-
-                  <p
-                     className='font-mono leading-relaxed'
-                     style={{ fontSize: '13px', color: '#555555' }}
-                  >
-                     Each batch focuses on a single vertical. Challenge partners
-                     bring the problems. Student teams build the solutions. If
-                     both sides see value, they keep going — as a startup, a
-                     pilot, or something else entirely. That part is up to you.
-                  </p>
-
-                  <p
-                     className='font-mono leading-relaxed font-semibold'
-                     style={{ fontSize: '13px', color: '#000000' }}
-                  >
-                     We don't simulate entrepreneurship. We just remove
-                     everything standing between you and it.
-                  </p>
-               </div>
-            </div>
-         </div>
-      </section>
-   );
-}
-
 // Problem Section
 function ProblemSection() {
    return (
@@ -577,7 +477,7 @@ function ProblemSection() {
                </div>
 
                {/* Closing line */}
-               <div className='text-center'>
+               {/* <div className='text-center'>
                   <div
                      className='labs-heading mb-4 leading-[1.3]'
                      style={{
@@ -591,7 +491,7 @@ function ProblemSection() {
                         We fix that.
                      </span>
                   </div>
-               </div>
+               </div> */}
             </div>
          </div>
       </section>
@@ -1164,37 +1064,15 @@ function ProofCalloutSection() {
       <section
          className='labs-reveal relative py-20 overflow-hidden'
          style={{
-            background: '#f5f5f5',
-            borderColor: 'rgba(0,0,0,0.1)',
+            background: 'var(--labs-bg)',
          }}
       >
-         {/* Noise texture */}
-         <NoiseTexture noiseOpacity={0.15} className='opacity-30' />
-
-         {/* Gradient blobs */}
-         <div className='absolute inset-0 pointer-events-none z-[1]'>
-            <div
-               className='absolute top-1/2 left-1/4 w-[400px] h-[400px] rounded-full blur-[100px]'
-               style={{
-                  background:
-                     'radial-gradient(circle, rgba(34,197,94,0.35) 0%, transparent 70%)',
-               }}
-            ></div>
-            <div
-               className='absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full blur-[100px]'
-               style={{
-                  background:
-                     'radial-gradient(circle, rgba(45,212,191,0.3) 0%, transparent 70%)',
-               }}
-            ></div>
-         </div>
-
          <div className='max-w-[1400px] mx-auto px-6 md:px-12 relative z-10'>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-12 items-center'>
                {/* Left: Image */}
                <div
                   className='labs-reveal relative aspect-[16/10] overflow-hidden border group'
-                  style={{ borderColor: 'rgba(0,0,0,0.15)' }}
+                  style={{ borderColor: 'var(--labs-border)' }}
                >
                   <img
                      src='/labs/images/award.png'
@@ -1224,7 +1102,7 @@ function ProofCalloutSection() {
                <div className='space-y-8'>
                   <div>
                      <div className='mb-3'>
-                        <Label style={{ color: '#555555' }}>
+                        <Label style={{ color: 'var(--labs-text-meta)' }}>
                            // Proof of concept
                         </Label>
                      </div>
@@ -1232,14 +1110,17 @@ function ProofCalloutSection() {
                         className='labs-heading mb-4'
                         style={{
                            fontSize: 'var(--labs-size-heading-md)',
-                           color: '#000000',
+                           color: 'var(--labs-text-primary)',
                         }}
                      >
                         We've done this before.
                      </h3>
                      <p
                         className='leading-relaxed font-mono'
-                        style={{ fontSize: '12px', color: '#555555' }}
+                        style={{
+                           fontSize: '12px',
+                           color: 'var(--labs-text-body)',
+                        }}
                      >
                         GovTech Edition 2025 produced 3 working startups in 8
                         weeks. Real problems from municipalities. Real solutions
@@ -1250,61 +1131,58 @@ function ProofCalloutSection() {
 
                   <div className='grid grid-cols-3 gap-6'>
                      <div
-                        className='labs-reveal group p-6 text-center transition-all duration-300 hover:-translate-y-1 border bg-white'
+                        className='labs-reveal group p-6 text-center transition-all duration-300 hover:-translate-y-1 border labs-card'
                         style={{
                            transitionDelay: '0ms',
-                           borderColor: 'rgba(0,0,0,0.1)',
                         }}
                      >
                         <div
                            className='labs-heading text-5xl mb-2 transition-colors duration-300 group-hover:text-[var(--labs-accent)]'
-                           style={{ color: '#000000' }}
+                           style={{ color: 'var(--labs-text-primary)' }}
                         >
                            3
                         </div>
                         <div
                            className='font-mono text-[10px] uppercase tracking-[0.15em]'
-                           style={{ color: '#888888' }}
+                           style={{ color: 'var(--labs-text-body)' }}
                         >
                            Startups
                         </div>
                      </div>
                      <div
-                        className='labs-reveal group p-6 text-center transition-all duration-300 hover:-translate-y-1 border bg-white'
+                        className='labs-reveal group p-6 text-center transition-all duration-300 hover:-translate-y-1 border labs-card'
                         style={{
                            transitionDelay: '100ms',
-                           borderColor: 'rgba(0,0,0,0.1)',
                         }}
                      >
                         <div
                            className='labs-heading text-5xl mb-2 transition-colors duration-300 group-hover:text-[var(--labs-accent)]'
-                           style={{ color: '#000000' }}
+                           style={{ color: 'var(--labs-text-primary)' }}
                         >
                            8
                         </div>
                         <div
                            className='font-mono text-[10px] uppercase tracking-[0.15em]'
-                           style={{ color: '#888888' }}
+                           style={{ color: 'var(--labs-text-body)' }}
                         >
                            Weeks
                         </div>
                      </div>
                      <div
-                        className='labs-reveal group p-6 text-center transition-all duration-300 hover:-translate-y-1 border bg-white'
+                        className='labs-reveal group p-6 text-center transition-all duration-300 hover:-translate-y-1 border labs-card'
                         style={{
                            transitionDelay: '200ms',
-                           borderColor: 'rgba(0,0,0,0.1)',
                         }}
                      >
                         <div
                            className='labs-heading text-5xl mb-2 transition-colors duration-300 group-hover:text-[var(--labs-accent)]'
-                           style={{ color: '#000000' }}
+                           style={{ color: 'var(--labs-text-primary)' }}
                         >
                            1
                         </div>
                         <div
                            className='font-mono text-[10px] uppercase tracking-[0.15em]'
-                           style={{ color: '#888888' }}
+                           style={{ color: 'var(--labs-text-body)' }}
                         >
                            Award
                         </div>
@@ -2325,7 +2203,6 @@ export default function LabsContent() {
             <LabsNavigation />
             <HeroSection />
             <OrganizedBySection />
-            <WhatIsStartLabsSection />
             <ProblemSection />
             <HowItWorksSection />
             {/* <TheExperienceSection /> */}
