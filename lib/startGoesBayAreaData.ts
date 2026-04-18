@@ -32,7 +32,7 @@ export const bayAreaYearContent: BayAreaYearContent[] = [
         highlightVisits: [
             { name: 'a16z', context: 'San Francisco', logoPath: '/bayarea/logos/a16z.svg', websiteUrl: 'https://a16z.com/' },
             { name: 'Etched', context: 'South San Francisco', logoPath: '/bayarea/logos/etched.svg', websiteUrl: 'https://www.etched.com/' },
-            { name: 'LinkedIn Co-founder', context: 'Redwood City', logoPath: '/startlogo.svg', websiteUrl: 'https://www.linkedin.com/in/reidhoffman/' },
+            { name: 'LinkedIn Co-founder', context: 'Redwood City', logoPath: '/bayarea/logos/linkedin.svg', websiteUrl: 'https://www.linkedin.com/in/reidhoffman/' },
         ],
         heroStats: [
             { label: 'Year', value: 'Year 1' },
@@ -117,9 +117,19 @@ export const bayAreaYearContent: BayAreaYearContent[] = [
                     {
                         visitType: 'company',
                         time: 'Day session',
-                        name: 'Pendulum & Dave Hersh Session',
+                        name: 'Pendulum',
                         location: 'San Francisco',
-                        description: 'Startup session with Pendulum and Dave Hersh on growth and execution.',
+                        description: 'Startup session with Pendulum on growth and execution.',
+                        websiteUrl: 'https://pendulumlife.com/',
+                        logoPath: '/bayarea/logos/pendulum.svg',
+                    },
+                    {
+                        visitType: 'person',
+                        time: 'Day session',
+                        name: 'Dave Hersh Session',
+                        location: 'San Francisco',
+                        description: 'Founder/operator session with Dave Hersh on growth and execution.',
+                        websiteUrl: 'https://www.davehersh.com',
                     },
                 ],
             },
@@ -153,7 +163,8 @@ export const bayAreaYearContent: BayAreaYearContent[] = [
                         name: 'Amprion',
                         location: 'San Francisco',
                         description: 'Session with industry operators on execution in infrastructure-focused domains.',
-                        websiteUrl: 'https://www.amprion.net/',
+                        websiteUrl: 'https://www.ampriondx.com',
+                        logoPath: '/bayarea/logos/amprion.svg',
                     },
                 ],
             },
@@ -218,6 +229,7 @@ export const bayAreaYearContent: BayAreaYearContent[] = [
                         location: 'San Francisco',
                         description: 'Company session focused on product development at the intersection of software and life sciences.',
                         websiteUrl: 'https://www.benchling.com/',
+                        logoPath: '/bayarea/logos/benchling.svg',
                     },
                     {
                         visitType: 'company',
@@ -226,6 +238,7 @@ export const bayAreaYearContent: BayAreaYearContent[] = [
                         location: 'San Francisco',
                         description: 'Startup exchange on data products and founder execution.',
                         websiteUrl: 'https://www.prifina.com/',
+                        logoPath: '/bayarea/logos/prifina.svg',
                     },
                     {
                         visitType: 'community',
@@ -259,6 +272,8 @@ export const bayAreaYearContent: BayAreaYearContent[] = [
                         name: 'Pheast',
                         location: 'San Francisco',
                         description: 'Startup operator session with practical product and execution insights.',
+                        websiteUrl: 'https://www.pheast.com/company',
+                        logoPath: '/bayarea/logos/pheast.svg',
                     },
                 ],
             },
@@ -288,10 +303,11 @@ export const bayAreaYearContent: BayAreaYearContent[] = [
                     {
                         visitType: 'company',
                         time: 'Afternoon session',
-                        name: 'AccessOwl',
+                        name: 'Access Owl',
                         location: 'Redwood City',
                         description: 'Startup exchange focused on execution and operator learnings.',
                         websiteUrl: 'https://www.accessowl.com/',
+                        logoPath: '/bayarea/logos/access-owl.svg',
                     },
                     {
                         visitType: 'company',
@@ -299,6 +315,8 @@ export const bayAreaYearContent: BayAreaYearContent[] = [
                         name: 'Soff',
                         location: 'Redwood City',
                         description: 'Session with startup builders on product, growth, and team dynamics.',
+                        websiteUrl: 'https://soff.ai',
+                        logoPath: '/bayarea/logos/soff.svg',
                     },
                 ],
             },
@@ -315,6 +333,8 @@ export const bayAreaYearContent: BayAreaYearContent[] = [
                         location: 'San Francisco',
                         description: 'Deep-tech session on frontier company building in advanced hardware and infrastructure.',
                         websiteUrl: 'https://www.psiquantum.com/',
+                        logoPath: '/bayarea/logos/psi-quantum.svg',
+                        logoTheme: 'dark',
                     },
                     {
                         visitType: 'company',
@@ -323,6 +343,7 @@ export const bayAreaYearContent: BayAreaYearContent[] = [
                         location: 'San Francisco',
                         description: 'Legal ecosystem session on startup financing, company formation, and growth-stage structuring.',
                         websiteUrl: 'https://www.orrick.com/',
+                        logoPath: '/bayarea/logos/orrick.svg',
                     },
                 ],
             },
@@ -334,6 +355,15 @@ export const bayAreaYearContent: BayAreaYearContent[] = [
             { name: 'Uncork Capital', websiteUrl: 'https://uncork.vc/', logoPath: '/bayarea/logos/uncork-capital.svg', logoTheme: 'dark' },
             { name: 'a16z', websiteUrl: 'https://a16z.com/', logoPath: '/bayarea/logos/a16z.svg' },
             { name: 'Start2 Group', websiteUrl: 'https://www.start2.group/', logoPath: '/bayarea/logos/start2-group.svg' },
+            { name: 'Pendulum', websiteUrl: 'https://pendulumlife.com/', logoPath: '/bayarea/logos/pendulum.svg' },
+            { name: 'Amprion', websiteUrl: 'https://www.ampriondx.com', logoPath: '/bayarea/logos/amprion.svg' },
+            { name: 'Benchling', websiteUrl: 'https://www.benchling.com/', logoPath: '/bayarea/logos/benchling.svg' },
+            { name: 'Prifina', websiteUrl: 'https://www.prifina.com/', logoPath: '/bayarea/logos/prifina.svg' },
+            { name: 'Pheast', websiteUrl: 'https://www.pheast.com/company', logoPath: '/bayarea/logos/pheast.svg' },
+            { name: 'Access Owl', websiteUrl: 'https://www.accessowl.com/', logoPath: '/bayarea/logos/access-owl.svg' },
+            { name: 'Soff', websiteUrl: 'https://soff.ai', logoPath: '/bayarea/logos/soff.svg' },
+            { name: 'Psi Quantum', websiteUrl: 'https://www.psiquantum.com/', logoPath: '/bayarea/logos/psi-quantum.svg', logoTheme: 'dark' },
+            { name: 'Orrick', websiteUrl: 'https://www.orrick.com/', logoPath: '/bayarea/logos/orrick.svg' },
             { name: 'Etched', websiteUrl: 'https://www.etched.com/', logoPath: '/bayarea/logos/etched.svg' },
             { name: 'UC Berkeley', websiteUrl: 'https://www.berkeley.edu/', logoPath: '/bayarea/logos/uc_berkley.svg' },
         ],
@@ -858,11 +888,18 @@ export const bayAreaYearContent: BayAreaYearContent[] = [
     },
 ]
 
-const normalizeCompanyKey = (name: string) =>
-    name
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '')
-        .trim()
+for (const year of bayAreaYearContent) {
+    if (year.isPreview) {
+        continue
+    }
+
+    const visitsStat = year.heroStats.find((stat) => stat.label === 'Visits')
+    if (visitsStat) {
+        visitsStat.value = String(year.hosts.length)
+    }
+}
+
+const normalizeLogoPathKey = (logoPath: string) => logoPath.toLowerCase().trim()
 
 const collectYearCompanyLogos = (year: BayAreaYearContent): BayAreaCompanyLogo[] => {
     const highlightLogos: BayAreaCompanyLogo[] = year.highlightVisits
@@ -909,7 +946,7 @@ export const bayAreaVisitCompanyLogos: BayAreaCompanyLogo[] = (() => {
 
         const yearLogos = collectYearCompanyLogos(year)
         for (const logo of yearLogos) {
-            const key = normalizeCompanyKey(logo.name)
+            const key = normalizeLogoPathKey(logo.logoPath)
             const existing = uniqueLogosByCompany.get(key)
 
             if (!existing) {
@@ -917,10 +954,13 @@ export const bayAreaVisitCompanyLogos: BayAreaCompanyLogo[] = (() => {
                 continue
             }
 
+            const shouldPreferNewName = existing.name.toLowerCase().includes('visit') && !logo.name.toLowerCase().includes('visit')
+
             // Keep whichever entry has richer metadata when duplicates exist across years.
-            if ((!existing.websiteUrl && logo.websiteUrl) || (!existing.logoTheme && logo.logoTheme)) {
+            if (shouldPreferNewName || (!existing.websiteUrl && logo.websiteUrl) || (!existing.logoTheme && logo.logoTheme)) {
                 uniqueLogosByCompany.set(key, {
                     ...existing,
+                    name: shouldPreferNewName ? logo.name : existing.name,
                     websiteUrl: existing.websiteUrl ?? logo.websiteUrl,
                     logoTheme: existing.logoTheme ?? logo.logoTheme,
                 })
