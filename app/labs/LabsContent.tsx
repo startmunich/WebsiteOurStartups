@@ -283,7 +283,7 @@ function OrganizedBySection() {
 
          <div className='max-w-[1400px] mx-auto px-6 md:px-12 relative z-10'>
             <div className='flex flex-col items-center gap-6'>
-               <Label>// Organized by</Label>
+               <Label>// This edition is organized by</Label>
                <div className='flex items-center gap-6'>
                   <a
                      href='https://www.startmunich.de/'
@@ -516,6 +516,7 @@ function JourneyTimelineSection() {
             'Form your founding team',
             'Set your 8-week goals',
          ],
+         image: '/labs/images/partner.jpg',
       },
       {
          week: 'Week 02',
@@ -530,6 +531,7 @@ function JourneyTimelineSection() {
             'Ask anything about MedTech',
             'Refine your approach',
          ],
+         image: '/labs/images/dino.png',
       },
       {
          week: 'Week 04',
@@ -544,6 +546,7 @@ function JourneyTimelineSection() {
             'Decide: pivot or persevere',
             'Adjust your roadmap',
          ],
+         image: '/labs/images/labsbanner.JPG',
       },
       {
          week: 'Week 06',
@@ -558,6 +561,7 @@ function JourneyTimelineSection() {
             'Get tactical advice',
             'Fine-tune your MVP',
          ],
+         image: '/labs/images/rocket.png',
       },
       {
          week: 'Week 08',
@@ -572,6 +576,7 @@ function JourneyTimelineSection() {
             'Real stakes, no safety net',
             'Launch or iterate',
          ],
+         image: '/labs/images/demoday.jpg',
          isLast: true,
       },
    ];
@@ -590,27 +595,13 @@ function JourneyTimelineSection() {
          {/* Noise texture */}
          <NoiseTexture noiseOpacity={0.25} />
 
-         {/* Animated background gradient blobs */}
+         {/* Subtle gradient blob for visual interest */}
          <div className='absolute inset-0 pointer-events-none z-[1]'>
             <div
-               className='absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-[120px] animate-blob'
+               className='absolute top-1/3 right-1/4 w-[600px] h-[600px] rounded-full blur-[140px] opacity-40'
                style={{
                   background:
-                     'radial-gradient(circle, rgba(45,212,191,0.3) 0%, transparent 70%)',
-               }}
-            ></div>
-            <div
-               className='absolute top-1/2 right-1/4 w-96 h-96 rounded-full blur-[120px] animate-blob animation-delay-2000'
-               style={{
-                  background:
-                     'radial-gradient(circle, rgba(168,85,247,0.3) 0%, transparent 70%)',
-               }}
-            ></div>
-            <div
-               className='absolute bottom-1/4 left-1/3 w-96 h-96 rounded-full blur-[120px] animate-blob animation-delay-4000'
-               style={{
-                  background:
-                     'radial-gradient(circle, rgba(251,146,60,0.25) 0%, transparent 70%)',
+                     'radial-gradient(circle, rgba(45,212,191,0.15) 0%, transparent 70%)',
                }}
             ></div>
          </div>
@@ -618,7 +609,7 @@ function JourneyTimelineSection() {
          <div className='max-w-[1400px] mx-auto px-6 md:px-12 relative z-10'>
             <div className='max-w-5xl mx-auto'>
                {/* Section Header */}
-               <div className='text-center mb-12'>
+               <div className='text-center mb-16'>
                   <span
                      className='font-mono uppercase tracking-[0.15em]'
                      style={{ fontSize: '16px', color: 'var(--labs-accent)' }}
@@ -629,30 +620,29 @@ function JourneyTimelineSection() {
 
                {/* Main Heading */}
                <h2
-                  className='labs-heading text-center mb-20'
+                  className='labs-heading text-[clamp(32px,5vw,56px)] leading-[1.1] mb-16 text-center'
                   style={{
-                     fontSize: 'clamp(40px, 6vw, 80px)',
-                     lineHeight: '1',
                      color: 'var(--labs-text-primary)',
                   }}
                >
-                  YOUR ROADMAP TO LAUNCH
+                  Your Roadmap to Launch
                </h2>
 
-               {/* Timeline - Horizontal with nodes */}
-               <div className='relative mb-20'>
+            {/* Timeline */}
+            <div className='relative'>
                   {/* Timeline line */}
-                  <div className='relative h-[2px] bg-white/10 mb-24'>
-                     {/* Solid accent line */}
+                  <div className='relative h-[2px] mb-20 rounded-full'>
+                     {/* Accent line with subtle gradient */}
                      <div
-                        className='absolute inset-0 h-full'
+                        className='absolute inset-0 h-full rounded-full'
                         style={{
-                           background: 'var(--labs-accent)',
+                           background:
+                              'linear-gradient(90deg, rgba(45,212,191,0.3) 0%, rgba(45,212,191,0.6) 50%, rgba(45,212,191,0.3) 100%)',
                         }}
                      ></div>
 
                      {/* Timeline nodes */}
-                     <div className='absolute inset-0 flex justify-between px-0'>
+                     <div className='absolute inset-0 flex justify-between'>
                         {timelineItems.map((item, index) => {
                            const isExpanded = expandedWeek === index;
 
@@ -660,30 +650,45 @@ function JourneyTimelineSection() {
                               <button
                                  key={index}
                                  onClick={() =>
-                                    setExpandedWeek(
-                                       isExpanded ? null : index,
-                                    )
+                                    setExpandedWeek(isExpanded ? null : index)
                                  }
-                                 className='group relative flex flex-col items-center'
+                                 className='group relative'
                               >
-                                 {/* Week label above */}
-                                 <div
-                                    className='absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap text-center'
-                                 >
+                                 {/* Week number above */}
+                                 <div className='absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-center'>
                                     <div
-                                       className={`font-mono font-semibold transition-colors duration-300 mb-1 ${
+                                       className={`font-mono font-medium transition-colors duration-200 ${
                                           isExpanded
                                              ? 'text-[var(--labs-accent)]'
-                                             : 'text-[var(--labs-text-body)] group-hover:text-[var(--labs-text-primary)]'
+                                             : 'text-[var(--labs-text-body)]'
                                        }`}
                                        style={{
-                                          fontSize: '14px',
+                                          fontSize: '13px',
                                        }}
                                     >
                                        {item.week}
                                     </div>
+                                 </div>
+
+                                 {/* Node dot */}
+                                 <div
+                                    className={`w-3 h-3 rounded-full transition-all duration-300 cursor-pointer ${
+                                       isExpanded
+                                          ? 'scale-[1.5] shadow-[0_0_20px_rgba(45,212,191,0.4)]'
+                                          : 'group-hover:scale-125'
+                                    }`}
+                                    style={{
+                                       background: isExpanded
+                                          ? 'var(--labs-accent)'
+                                          : 'rgba(255,255,255,0.4)',
+                                       transform: 'translateY(-50%)',
+                                    }}
+                                 ></div>
+
+                                 {/* Tag label below */}
+                                 <div className='absolute top-4 left-1/2 -translate-x-1/2 whitespace-nowrap text-center'>
                                     <div
-                                       className='font-mono text-[10px] uppercase tracking-wider'
+                                       className='font-mono text-[9px] uppercase tracking-[0.1em]'
                                        style={{
                                           color: 'var(--labs-text-meta)',
                                        }}
@@ -691,29 +696,30 @@ function JourneyTimelineSection() {
                                        {item.tag}
                                     </div>
                                  </div>
-
-                                 {/* Node dot */}
-                                 <div
-                                    className={`w-3 h-3 rounded-full transition-all duration-300 cursor-pointer relative ${
-                                       isExpanded
-                                          ? 'scale-[2]'
-                                          : 'group-hover:scale-150'
-                                    }`}
-                                    style={{
-                                       background: isExpanded
-                                          ? 'var(--labs-accent)'
-                                          : 'rgba(255,255,255,0.4)',
-                                       marginTop: '-6px',
-                                    }}
-                                 ></div>
                               </button>
                            );
                         })}
                      </div>
                   </div>
 
-                  {/* Expanded card details */}
-                  <div className='min-h-[300px]'>
+                  {/* Content area with fixed height */}
+                  <div className='min-h-[420px] relative'>
+                     {/* Click prompt when nothing expanded */}
+                     {expandedWeek === null && (
+                        <div className='absolute inset-0 flex items-center justify-center'>
+                           <p
+                              className='font-mono'
+                              style={{
+                                 fontSize: '12px',
+                                 color: 'var(--labs-text-meta)',
+                              }}
+                           >
+                              Click any week to see details
+                           </p>
+                        </div>
+                     )}
+
+                     {/* Expanded card details */}
                      {timelineItems.map((item, index) => {
                         const isExpanded = expandedWeek === index;
 
@@ -728,30 +734,47 @@ function JourneyTimelineSection() {
                            >
                               {isExpanded && (
                                  <div
-                                    className='p-12 bg-white/5 backdrop-blur-sm border-2 border-t-4 transition-all duration-500'
+                                    className='p-10 bg-white/[0.02] border border-l-2 transition-all duration-300'
                                     style={{
-                                       borderTopColor:
-                                          'var(--labs-accent)',
-                                       borderColor: 'rgba(255,255,255,0.1)',
+                                       borderLeftColor: 'var(--labs-accent)',
+                                       borderColor: 'rgba(255,255,255,0.05)',
                                     }}
                                  >
-                                    <div className='grid md:grid-cols-2 gap-12'>
-                                       {/* Left: Title and description */}
-                                       <div>
-                                          <div className='mb-4'>
-                                             <Label
+                                    <div className='grid md:grid-cols-3 gap-8'>
+                                       {/* Left: Image */}
+                                       <div className='md:col-span-1'>
+                                          <div
+                                             className='aspect-[4/3] overflow-hidden border'
+                                             style={{
+                                                borderColor:
+                                                   'rgba(255,255,255,0.1)',
+                                             }}
+                                          >
+                                             <img
+                                                src={item.image}
+                                                alt={item.title}
+                                                className='w-full h-full object-cover opacity-70 hover:opacity-90 hover:scale-105 transition-all duration-500'
+                                             />
+                                          </div>
+                                       </div>
+
+                                       {/* Middle: Title and description */}
+                                       <div className='md:col-span-1'>
+                                          <div className='mb-3'>
+                                             <span
+                                                className='font-mono text-[10px] uppercase tracking-[0.15em]'
                                                 style={{
                                                    color: 'var(--labs-accent)',
                                                 }}
                                              >
                                                 {item.week} · {item.tag}
-                                             </Label>
+                                             </span>
                                           </div>
                                           <h3
-                                             className='font-black uppercase mb-4'
+                                             className='font-bold uppercase mb-3'
                                              style={{
                                                 fontSize:
-                                                   'clamp(24px, 3vw, 32px)',
+                                                   'clamp(20px, 2.5vw, 24px)',
                                                 color: 'var(--labs-text-primary)',
                                              }}
                                           >
@@ -760,7 +783,7 @@ function JourneyTimelineSection() {
                                           <p
                                              className='font-mono leading-relaxed'
                                              style={{
-                                                fontSize: '14px',
+                                                fontSize: '13px',
                                                 color: 'var(--labs-text-body)',
                                              }}
                                           >
@@ -769,37 +792,36 @@ function JourneyTimelineSection() {
                                        </div>
 
                                        {/* Right: What happens */}
-                                       <div>
+                                       <div className='md:col-span-1'>
                                           <div
-                                             className='font-mono text-xs uppercase tracking-wider mb-4'
+                                             className='font-mono text-[10px] uppercase tracking-[0.15em] mb-3'
                                              style={{
                                                 color: 'var(--labs-text-meta)',
                                              }}
                                           >
-                                             What happens:
+                                             What happens
                                           </div>
-                                          <div className='space-y-3'>
-                                             {item.details.map(
-                                                (detail, i) => (
-                                                   <div
-                                                      key={i}
-                                                      className='flex items-start gap-3 font-mono'
+                                          <div className='space-y-2'>
+                                             {item.details.map((detail, i) => (
+                                                <div
+                                                   key={i}
+                                                   className='flex items-start gap-2 font-mono'
+                                                   style={{
+                                                      fontSize: '12px',
+                                                      color: 'var(--labs-text-body)',
+                                                   }}
+                                                >
+                                                   <span
+                                                      className='mt-[2px]'
                                                       style={{
-                                                         fontSize: '13px',
-                                                         color: 'var(--labs-text-body)',
+                                                         color: 'var(--labs-accent)',
                                                       }}
                                                    >
-                                                      <span
-                                                         style={{
-                                                            color: 'var(--labs-accent)',
-                                                         }}
-                                                      >
-                                                         →
-                                                      </span>
-                                                      <span>{detail}</span>
-                                                   </div>
-                                                ),
-                                             )}
+                                                      •
+                                                   </span>
+                                                   <span>{detail}</span>
+                                                </div>
+                                             ))}
                                           </div>
                                        </div>
                                     </div>
@@ -809,21 +831,6 @@ function JourneyTimelineSection() {
                         );
                      })}
                   </div>
-
-                  {/* Click prompt when nothing expanded */}
-                  {expandedWeek === null && (
-                     <div className='text-center'>
-                        <p
-                           className='font-mono animate-pulse'
-                           style={{
-                              fontSize: '12px',
-                              color: 'var(--labs-text-meta)',
-                           }}
-                        >
-                           Click any week to see details →
-                        </p>
-                     </div>
-                  )}
                </div>
             </div>
          </div>
@@ -858,26 +865,19 @@ function WhyItWorksSection() {
       <section
          className='labs-reveal relative py-32 overflow-hidden'
          style={{
-            background: '#ffffff',
+            background: '#fafafa',
          }}
       >
          {/* Noise texture */}
          <NoiseTexture noiseOpacity={0.15} className='opacity-30' />
 
-         {/* Gradient blobs */}
+         {/* Subtle gradient blob for visual interest */}
          <div className='absolute inset-0 pointer-events-none z-[1]'>
             <div
-               className='absolute top-1/3 left-1/4 w-[500px] h-[500px] rounded-full blur-[120px]'
+               className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full blur-[140px] opacity-30'
                style={{
                   background:
-                     'radial-gradient(circle, rgba(45,212,191,0.25) 0%, transparent 70%)',
-               }}
-            ></div>
-            <div
-               className='absolute bottom-1/3 right-1/4 w-[500px] h-[500px] rounded-full blur-[120px]'
-               style={{
-                  background:
-                     'radial-gradient(circle, rgba(168,85,247,0.2) 0%, transparent 70%)',
+                     'radial-gradient(circle, rgba(45,212,191,0.08) 0%, transparent 70%)',
                }}
             ></div>
          </div>
@@ -885,7 +885,7 @@ function WhyItWorksSection() {
          <div className='max-w-[1400px] mx-auto px-6 md:px-12 relative z-10'>
             <div className='max-w-5xl mx-auto'>
                {/* Section Header */}
-               <div className='text-center mb-12'>
+               <div className='text-center mb-16'>
                   <span
                      className='font-mono uppercase tracking-[0.15em]'
                      style={{ fontSize: '16px', color: 'var(--labs-accent)' }}
@@ -896,38 +896,38 @@ function WhyItWorksSection() {
 
                {/* Main Heading */}
                <h2
-                  className='labs-heading text-center mb-20'
+                  className='labs-heading text-[clamp(32px,5vw,56px)] leading-[1.1] mb-16 text-center'
                   style={{
-                     fontSize: 'clamp(36px, 5vw, 64px)',
-                     lineHeight: '1.1',
                      color: '#000000',
                   }}
                >
-                  3 THINGS THAT MAKE THIS REAL
+                  3 Things That Make This Real
                </h2>
 
                {/* 3 Principle Cards */}
-               <div className='grid grid-cols-1 md:grid-cols-3 gap-8 mb-20'>
+               <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mb-16'>
                   {principles.map((principle, index) => (
                      <div
                         key={index}
-                        className='labs-reveal group p-10 bg-gray-50 border border-t-4 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_12px_40px_rgba(45,212,191,0.2)] cursor-default'
+                        className='labs-reveal group p-8 bg-white border-l-2 transition-all duration-300 hover:-translate-y-1 cursor-default'
                         style={{
-                           borderTopColor: 'var(--labs-accent)',
-                           borderColor: 'rgba(0,0,0,0.08)',
+                           borderLeftColor: 'var(--labs-accent)',
+                           borderTop: '1px solid rgba(0,0,0,0.06)',
+                           borderRight: '1px solid rgba(0,0,0,0.06)',
+                           borderBottom: '1px solid rgba(0,0,0,0.06)',
                            transitionDelay: `${index * 100}ms`,
                         }}
                      >
                         {/* Emoji */}
-                        <div className='text-5xl mb-6 transition-transform duration-300 group-hover:scale-110'>
+                        <div className='text-3xl mb-4 opacity-60'>
                            {principle.emoji}
                         </div>
 
                         {/* Title */}
                         <h3
-                           className='font-black uppercase mb-4 transition-colors duration-300 group-hover:text-[var(--labs-accent)]'
+                           className='font-bold uppercase mb-3 transition-colors duration-300 group-hover:text-[var(--labs-accent)]'
                            style={{
-                              fontSize: 'clamp(18px, 2vw, 22px)',
+                              fontSize: '16px',
                               color: '#000000',
                            }}
                         >
@@ -936,9 +936,9 @@ function WhyItWorksSection() {
 
                         {/* Description */}
                         <p
-                           className='font-mono leading-relaxed mb-6 transition-colors duration-300 group-hover:text-[#000000]'
+                           className='font-mono leading-relaxed mb-4'
                            style={{
-                              fontSize: '13px',
+                              fontSize: '12px',
                               color: '#555555',
                            }}
                         >
@@ -947,7 +947,7 @@ function WhyItWorksSection() {
 
                         {/* Stat */}
                         <div
-                           className='font-mono text-xs uppercase tracking-wider transition-colors duration-300'
+                           className='font-mono text-[10px] uppercase tracking-[0.1em]'
                            style={{
                               color: 'var(--labs-accent)',
                            }}
@@ -956,43 +956,6 @@ function WhyItWorksSection() {
                         </div>
                      </div>
                   ))}
-               </div>
-
-               {/* Proof Bar */}
-               <div
-                  className='labs-reveal p-8 border-y-2 text-center'
-                  style={{
-                     borderColor: 'var(--labs-accent)',
-                     background: 'rgba(45,212,191,0.05)',
-                  }}
-               >
-                  <div
-                     className='font-mono font-bold mb-2'
-                     style={{
-                        fontSize: 'clamp(14px, 1.5vw, 18px)',
-                        color: '#000000',
-                     }}
-                  >
-                     GovTech Edition 2025:{' '}
-                     <span style={{ color: 'var(--labs-accent)' }}>
-                        3 startups
-                     </span>{' '}
-                     •{' '}
-                     <span style={{ color: 'var(--labs-accent)' }}>
-                        8 weeks
-                     </span>{' '}
-                     •{' '}
-                     <span style={{ color: 'var(--labs-accent)' }}>
-                        1 Bavarian Award
-                     </span>
-                  </div>
-                  <a
-                     href='#proof'
-                     className='font-mono text-xs uppercase tracking-wider transition-opacity duration-300 hover:opacity-70'
-                     style={{ color: '#555555' }}
-                  >
-                     View past projects →
-                  </a>
                </div>
             </div>
          </div>
@@ -1043,27 +1006,13 @@ function WhatsDifferentSection() {
          {/* Noise texture */}
          <NoiseTexture noiseOpacity={0.25} />
 
-         {/* Gradient blobs */}
+         {/* Subtle gradient blob for visual interest */}
          <div className='absolute inset-0 pointer-events-none z-[1]'>
             <div
-               className='absolute top-1/4 right-1/4 w-[600px] h-[600px] rounded-full blur-[140px] animate-blob'
+               className='absolute bottom-1/3 left-1/4 w-[600px] h-[600px] rounded-full blur-[140px] opacity-40'
                style={{
                   background:
-                     'radial-gradient(circle, rgba(45,212,191,0.3) 0%, transparent 70%)',
-               }}
-            ></div>
-            <div
-               className='absolute bottom-1/4 left-1/4 w-[600px] h-[600px] rounded-full blur-[140px] animate-blob animation-delay-2000'
-               style={{
-                  background:
-                     'radial-gradient(circle, rgba(168,85,247,0.3) 0%, transparent 70%)',
-               }}
-            ></div>
-            <div
-               className='absolute top-1/2 left-1/2 w-[500px] h-[500px] rounded-full blur-[140px] animate-blob animation-delay-4000'
-               style={{
-                  background:
-                     'radial-gradient(circle, rgba(251,146,60,0.25) 0%, transparent 70%)',
+                     'radial-gradient(circle, rgba(45,212,191,0.15) 0%, transparent 70%)',
                }}
             ></div>
          </div>
@@ -1071,123 +1020,94 @@ function WhatsDifferentSection() {
          <div className='max-w-[1400px] mx-auto px-6 md:px-12 relative z-10'>
             <div className='max-w-5xl mx-auto'>
                {/* Section Header */}
-               <div className='text-center mb-12'>
+               <div className='text-center mb-16'>
                   <span
                      className='font-mono uppercase tracking-[0.15em]'
                      style={{ fontSize: '16px', color: 'var(--labs-accent)' }}
                   >
-                     // What's Different
+                     // The Format
                   </span>
                </div>
 
                {/* Main Heading */}
                <h2
-                  className='labs-heading text-center mb-20'
+                  className='labs-heading text-[clamp(32px,5vw,56px)] leading-[1.1] mb-16 text-center'
                   style={{
-                     fontSize: 'clamp(40px, 6vw, 80px)',
-                     lineHeight: '1',
                      color: 'var(--labs-text-primary)',
                   }}
                >
-                  YOU KEEP EVERYTHING
+                  How It Works
                </h2>
 
                {/* 2x2 Grid of Specs */}
-               <div className='grid grid-cols-1 md:grid-cols-2 gap-10'>
+               <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                   {specs.map((spec, index) => (
                      <div
                         key={index}
-                        className='labs-reveal group relative p-12 bg-white/5 backdrop-blur-sm border-2 overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_16px_50px_rgba(45,212,191,0.25)] cursor-default'
+                        className='labs-reveal group p-10 bg-white/[0.03] border-l-2 transition-all duration-300 hover:-translate-y-1 cursor-default relative overflow-hidden'
                         style={{
-                           borderColor: 'rgba(255,255,255,0.1)',
+                           borderLeftColor: 'var(--labs-accent)',
+                           borderTop: '1px solid rgba(255,255,255,0.05)',
+                           borderRight: '1px solid rgba(255,255,255,0.05)',
+                           borderBottom: '1px solid rgba(255,255,255,0.05)',
                            transitionDelay: `${index * 100}ms`,
                         }}
                      >
-                        {/* Large background number */}
+                        {/* Subtle background number */}
                         <div
-                           className='absolute right-4 bottom-4 font-display font-black text-[140px] leading-none opacity-[0.03] pointer-events-none select-none transition-all duration-500 group-hover:opacity-[0.08]'
+                           className='absolute right-4 bottom-4 font-display font-black text-[100px] leading-none opacity-[0.02] pointer-events-none select-none'
                            style={{ color: '#ffffff' }}
                         >
                            {spec.number}
                         </div>
 
-                        {/* Gradient number overlay on hover */}
+                        {/* Icon */}
+                        <div className='text-3xl mb-4 opacity-60'>
+                           {spec.icon}
+                        </div>
+
+                        {/* Number badge */}
                         <div
-                           className='absolute right-4 bottom-4 font-display font-black text-[140px] leading-none opacity-0 pointer-events-none select-none transition-all duration-500 group-hover:opacity-[0.15]'
+                           className='inline-block font-mono text-[10px] uppercase tracking-[0.15em] px-2 py-1 mb-3 border'
                            style={{
-                              background:
-                                 'linear-gradient(135deg, #2DD4BF 0%, #A855F7 100%)',
-                              WebkitBackgroundClip: 'text',
-                              WebkitTextFillColor: 'transparent',
-                              backgroundClip: 'text',
+                              color: 'var(--labs-text-meta)',
+                              borderColor: 'rgba(255,255,255,0.1)',
                            }}
                         >
                            {spec.number}
                         </div>
 
-                        {/* Content */}
-                        <div className='relative z-10'>
-                           {/* Icon */}
-                           <div className='text-5xl mb-6 transition-transform duration-300 group-hover:scale-110'>
-                              {spec.icon}
-                           </div>
-
-                           {/* Number badge */}
-                           <div
-                              className='inline-block font-mono text-xs uppercase tracking-wider px-3 py-1 mb-4 border transition-colors duration-300'
-                              style={{
-                                 color: 'var(--labs-text-meta)',
-                                 borderColor: 'rgba(255,255,255,0.2)',
-                              }}
-                           >
-                              {spec.number}
-                           </div>
-
-                           {/* Title */}
-                           <h3
-                              className='font-black uppercase mb-4 transition-colors duration-500 group-hover:text-[var(--labs-accent)]'
-                              style={{
-                                 fontSize: 'clamp(20px, 2.5vw, 28px)',
-                                 color: 'var(--labs-text-primary)',
-                              }}
-                           >
-                              {spec.title}
-                           </h3>
-
-                           {/* Description */}
-                           <p
-                              className='font-mono leading-relaxed mb-6 transition-colors duration-300 group-hover:text-[var(--labs-text-primary)]'
-                              style={{
-                                 fontSize: '14px',
-                                 color: 'var(--labs-text-body)',
-                              }}
-                           >
-                              {spec.desc}
-                           </p>
-
-                           {/* Stat badge */}
-                           <div
-                              className='inline-flex items-center gap-2 font-mono font-bold text-xs uppercase tracking-wider px-4 py-2 rounded-full transition-all duration-300'
-                              style={{
-                                 color: 'var(--labs-accent)',
-                                 background: 'rgba(45,212,191,0.1)',
-                                 border: '1px solid var(--labs-accent)',
-                              }}
-                           >
-                              <span>✓</span>
-                              <span>{spec.stat}</span>
-                           </div>
-                        </div>
-
-                        {/* Hover border gradient */}
-                        <div
-                           className='absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none'
+                        {/* Title */}
+                        <h3
+                           className='font-bold uppercase mb-3 transition-colors duration-300 group-hover:text-[var(--labs-accent)]'
                            style={{
-                              background:
-                                 'linear-gradient(135deg, rgba(45,212,191,0.3) 0%, rgba(168,85,247,0.3) 100%)',
-                              mixBlendMode: 'screen',
+                              fontSize: '18px',
+                              color: 'var(--labs-text-primary)',
                            }}
-                        ></div>
+                        >
+                           {spec.title}
+                        </h3>
+
+                        {/* Description */}
+                        <p
+                           className='font-mono leading-relaxed mb-4'
+                           style={{
+                              fontSize: '12px',
+                              color: 'var(--labs-text-body)',
+                           }}
+                        >
+                           {spec.desc}
+                        </p>
+
+                        {/* Stat */}
+                        <div
+                           className='font-mono text-[10px] uppercase tracking-[0.1em]'
+                           style={{
+                              color: 'var(--labs-accent)',
+                           }}
+                        >
+                           {spec.stat}
+                        </div>
                      </div>
                   ))}
                </div>
@@ -1274,7 +1194,8 @@ function TheExperienceSection() {
 function ProofCalloutSection() {
    return (
       <section
-         className='labs-reveal relative py-20 overflow-hidden'
+         id='proof'
+         className='labs-reveal relative py-32 overflow-hidden'
          style={{
             background: 'var(--labs-bg)',
          }}
@@ -1400,6 +1321,36 @@ function ProofCalloutSection() {
                         </div>
                      </div>
                   </div>
+
+                  {/* Small image gallery from past edition */}
+                  <div className='grid grid-cols-2 gap-4 mt-8'>
+                     <div
+                        className='labs-reveal aspect-[4/3] overflow-hidden border'
+                        style={{
+                           borderColor: 'var(--labs-border)',
+                           transitionDelay: '300ms',
+                        }}
+                     >
+                        <img
+                           src='/labs/images/demoday.jpg'
+                           alt='Demo Day'
+                           className='w-full h-full object-cover opacity-70 hover:opacity-90 hover:scale-105 transition-all duration-500'
+                        />
+                     </div>
+                     <div
+                        className='labs-reveal aspect-[4/3] overflow-hidden border'
+                        style={{
+                           borderColor: 'var(--labs-border)',
+                           transitionDelay: '400ms',
+                        }}
+                     >
+                        <img
+                           src='/labs/images/winner.jpg'
+                           alt='Award Winner'
+                           className='w-full h-full object-cover opacity-70 hover:opacity-90 hover:scale-105 transition-all duration-500'
+                        />
+                     </div>
+                  </div>
                </div>
             </div>
          </div>
@@ -1416,17 +1367,6 @@ function CriteriaSection() {
       >
          {/* Noise texture */}
          <NoiseTexture noiseOpacity={0.25} />
-
-         {/* Background decorative images */}
-         <div className='absolute inset-0 opacity-[0.04] pointer-events-none'>
-            <div className='absolute left-0 top-1/4 w-[400px] h-[300px]'>
-               <img
-                  src='/labs/images/demoday.jpg'
-                  alt=''
-                  className='w-full h-full object-cover mix-blend-screen'
-               />
-            </div>
-         </div>
 
          <div className='max-w-[1400px] mx-auto px-6 md:px-12 relative z-10'>
             <div className='max-w-5xl mx-auto'>
@@ -1471,37 +1411,37 @@ function CriteriaSection() {
                </div> */}
 
                {/* Criteria Grid */}
-               <div className='grid grid-cols-1 md:grid-cols-2 gap-8 mb-8'>
+               <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-8'>
                   {/* Apply If */}
-                  <div className='labs-reveal group relative overflow-hidden transition-all duration-300'>
-                     {/* Top accent bar - green */}
-                     <div
-                        className='absolute top-0 left-0 right-0 h-[2px]'
-                        style={{ background: '#10b981' }}
-                     ></div>
-
-                     <div className='pt-8 pb-10 px-0'>
-                        <div className='mb-10'>
+                  <div
+                     className='labs-reveal p-8 bg-white/[0.02] border-l-2 transition-all duration-300 hover:-translate-y-1'
+                     style={{
+                        borderLeftColor: '#10b981',
+                        borderTop: '1px solid rgba(255,255,255,0.05)',
+                        borderRight: '1px solid rgba(255,255,255,0.05)',
+                        borderBottom: '1px solid rgba(255,255,255,0.05)',
+                     }}
+                  >
+                     <div>
+                        <div className='mb-6'>
                            <div
-                              className='font-mono uppercase tracking-[0.2em] mb-3'
+                              className='font-mono uppercase tracking-[0.15em] mb-2'
                               style={{
                                  fontSize: '10px',
                                  color: '#10b981',
-                                 letterSpacing: '0.2em',
                               }}
                            >
                               Apply if
                            </div>
                         </div>
 
-                        <div className='space-y-7'>
-                           <div className='border-l-2 border-white/5 pl-5 transition-all duration-300 hover:border-white/15'>
+                        <div className='space-y-5'>
+                           <div>
                               <div
-                                 className='font-mono font-semibold mb-2'
+                                 className='font-mono font-medium mb-1'
                                  style={{
                                     color: 'var(--labs-text-primary)',
                                     fontSize: '13px',
-                                    lineHeight: '1.5',
                                  }}
                               >
                                  Hard problems energize you.
@@ -1511,7 +1451,6 @@ function CriteriaSection() {
                                  style={{
                                     fontSize: '12px',
                                     color: 'var(--labs-text-body)',
-                                    lineHeight: '1.6',
                                  }}
                               >
                                  You don't quit when things get tough. You get
@@ -1519,13 +1458,12 @@ function CriteriaSection() {
                               </div>
                            </div>
 
-                           <div className='border-l-2 border-white/5 pl-5 transition-all duration-300 hover:border-white/15'>
+                           <div>
                               <div
-                                 className='font-mono font-semibold mb-2'
+                                 className='font-mono font-medium mb-1'
                                  style={{
                                     color: 'var(--labs-text-primary)',
                                     fontSize: '13px',
-                                    lineHeight: '1.5',
                                  }}
                               >
                                  The status quo makes you angry.
@@ -1535,7 +1473,6 @@ function CriteriaSection() {
                                  style={{
                                     fontSize: '12px',
                                     color: 'var(--labs-text-body)',
-                                    lineHeight: '1.6',
                                  }}
                               >
                                  You see broken systems and think "I can fix
@@ -1543,13 +1480,12 @@ function CriteriaSection() {
                               </div>
                            </div>
 
-                           <div className='border-l-2 border-white/5 pl-5 transition-all duration-300 hover:border-white/15'>
+                           <div>
                               <div
-                                 className='font-mono font-semibold mb-2'
+                                 className='font-mono font-medium mb-1'
                                  style={{
                                     color: 'var(--labs-text-primary)',
                                     fontSize: '13px',
-                                    lineHeight: '1.5',
                                  }}
                               >
                                  You have fire. Not just interest.
@@ -1559,7 +1495,6 @@ function CriteriaSection() {
                                  style={{
                                     fontSize: '12px',
                                     color: 'var(--labs-text-body)',
-                                    lineHeight: '1.6',
                                  }}
                               >
                                  Genuine, can't-sleep-at-night passion for
@@ -1572,37 +1507,35 @@ function CriteriaSection() {
 
                   {/* Don't Apply If */}
                   <div
-                     className='labs-reveal group relative overflow-hidden transition-all duration-300'
-                     style={{ transitionDelay: '100ms' }}
+                     className='labs-reveal p-8 bg-white/[0.02] border-l-2 transition-all duration-300 hover:-translate-y-1'
+                     style={{
+                        borderLeftColor: '#ef4444',
+                        borderTop: '1px solid rgba(255,255,255,0.05)',
+                        borderRight: '1px solid rgba(255,255,255,0.05)',
+                        borderBottom: '1px solid rgba(255,255,255,0.05)',
+                        transitionDelay: '100ms',
+                     }}
                   >
-                     {/* Top accent bar - red */}
-                     <div
-                        className='absolute top-0 left-0 right-0 h-[2px]'
-                        style={{ background: '#ef4444' }}
-                     ></div>
-
-                     <div className='pt-8 pb-10 px-0'>
-                        <div className='mb-10'>
+                     <div>
+                        <div className='mb-6'>
                            <div
-                              className='font-mono uppercase tracking-[0.2em] mb-3'
+                              className='font-mono uppercase tracking-[0.15em] mb-2'
                               style={{
                                  fontSize: '10px',
                                  color: '#ef4444',
-                                 letterSpacing: '0.2em',
                               }}
                            >
                               Don't apply if
                            </div>
                         </div>
 
-                        <div className='space-y-7'>
-                           <div className='border-l-2 border-white/5 pl-5 transition-all duration-300 hover:border-white/15'>
+                        <div className='space-y-5'>
+                           <div>
                               <div
-                                 className='font-mono font-semibold mb-2'
+                                 className='font-mono font-medium mb-1'
                                  style={{
                                     color: 'var(--labs-text-primary)',
                                     fontSize: '13px',
-                                    lineHeight: '1.5',
                                  }}
                               >
                                  Your calendar is already drowning.
@@ -1612,20 +1545,18 @@ function CriteriaSection() {
                                  style={{
                                     fontSize: '12px',
                                     color: 'var(--labs-text-body)',
-                                    lineHeight: '1.6',
                                  }}
                               >
                                  We need 10+ hours per week of real commitment.
                               </div>
                            </div>
 
-                           <div className='border-l-2 border-white/5 pl-5 transition-all duration-300 hover:border-white/15'>
+                           <div>
                               <div
-                                 className='font-mono font-semibold mb-2'
+                                 className='font-mono font-medium mb-1'
                                  style={{
                                     color: 'var(--labs-text-primary)',
                                     fontSize: '13px',
-                                    lineHeight: '1.5',
                                  }}
                               >
                                  You want a cozy lecture series.
@@ -1635,20 +1566,18 @@ function CriteriaSection() {
                                  style={{
                                     fontSize: '12px',
                                     color: 'var(--labs-text-body)',
-                                    lineHeight: '1.6',
                                  }}
                               >
                                  This is hands-on, messy, and real.
                               </div>
                            </div>
 
-                           <div className='border-l-2 border-white/5 pl-5 transition-all duration-300 hover:border-white/15'>
+                           <div>
                               <div
-                                 className='font-mono font-semibold mb-2'
+                                 className='font-mono font-medium mb-1'
                                  style={{
                                     color: 'var(--labs-text-primary)',
                                     fontSize: '13px',
-                                    lineHeight: '1.5',
                                  }}
                               >
                                  You're collecting badges for your CV.
@@ -1658,7 +1587,6 @@ function CriteriaSection() {
                                  style={{
                                     fontSize: '12px',
                                     color: 'var(--labs-text-body)',
-                                    lineHeight: '1.6',
                                  }}
                               >
                                  Build something you actually care about, or
@@ -2254,13 +2182,13 @@ function FAQSection() {
                   {faqs.map((faq, i) => (
                      <div
                         key={i}
-                        className='labs-reveal group border-l-2 transition-all duration-300 hover:shadow-[0_4px_20px_rgba(45,212,191,0.08)] bg-white/5 backdrop-blur-sm border'
+                        className='labs-reveal border-l-2 transition-all duration-200 bg-white/[0.02] border'
                         style={{
                            borderLeftColor:
                               openIndex === i
                                  ? 'var(--labs-accent)'
                                  : 'transparent',
-                           borderColor: 'rgba(255,255,255,0.1)',
+                           borderColor: 'rgba(255,255,255,0.05)',
                            transitionDelay: `${i * 50}ms`,
                         }}
                      >
@@ -2268,11 +2196,11 @@ function FAQSection() {
                            onClick={() =>
                               setOpenIndex(openIndex === i ? null : i)
                            }
-                           className='w-full text-left p-6 flex justify-between items-start gap-4 group/button'
+                           className='w-full text-left p-6 flex justify-between items-start gap-4'
                         >
                            <div className='flex items-start gap-4 flex-1'>
                               <span
-                                 className='font-mono text-[10px] uppercase tracking-[0.15em] mt-1 transition-colors duration-300'
+                                 className='font-mono text-[10px] uppercase tracking-[0.15em] mt-1 transition-colors duration-200'
                                  style={{
                                     color:
                                        openIndex === i
@@ -2283,9 +2211,9 @@ function FAQSection() {
                                  {String(i + 1).padStart(2, '0')}
                               </span>
                               <span
-                                 className='font-mono font-semibold transition-all duration-300 group-hover/button:translate-x-1'
+                                 className='font-mono font-medium transition-colors duration-200'
                                  style={{
-                                    fontSize: '12px',
+                                    fontSize: '13px',
                                     color:
                                        openIndex === i
                                           ? 'var(--labs-text-primary)'
@@ -2296,41 +2224,31 @@ function FAQSection() {
                               </span>
                            </div>
                            <div
-                              className={`w-5 h-5 border flex items-center justify-center transition-all duration-300 group-hover/button:border-[var(--labs-accent)] ${openIndex === i ? 'rotate-45 border-[var(--labs-accent)]' : ''}`}
+                              className='text-xl font-mono transition-all duration-200'
                               style={{
-                                 borderColor:
+                                 color:
                                     openIndex === i
                                        ? 'var(--labs-accent)'
-                                       : 'rgba(255,255,255,0.2)',
+                                       : 'var(--labs-text-meta)',
+                                 transform:
+                                    openIndex === i
+                                       ? 'rotate(45deg)'
+                                       : 'rotate(0deg)',
                               }}
                            >
-                              <div
-                                 className='w-2 h-px transition-colors duration-300'
-                                 style={{
-                                    background:
-                                       openIndex === i
-                                          ? 'var(--labs-accent)'
-                                          : 'var(--labs-text-body)',
-                                 }}
-                              ></div>
-                              <div
-                                 className='w-px h-2 absolute transition-colors duration-300'
-                                 style={{
-                                    background:
-                                       openIndex === i
-                                          ? 'var(--labs-accent)'
-                                          : 'var(--labs-text-body)',
-                                 }}
-                              ></div>
+                              +
                            </div>
                         </button>
                         <div
-                           className={`overflow-hidden transition-all duration-300 ${openIndex === i ? 'max-h-96 pb-6' : 'max-h-0'}`}
+                           className={`overflow-hidden transition-all duration-200 ${openIndex === i ? 'max-h-96 pb-6' : 'max-h-0'}`}
                         >
                            <div className='px-6 pl-[52px]'>
                               <p
-                                 className='labs-body leading-relaxed'
-                                 style={{ fontSize: '12px' }}
+                                 className='font-mono leading-relaxed'
+                                 style={{
+                                    fontSize: '12px',
+                                    color: 'var(--labs-text-body)',
+                                 }}
                               >
                                  {faq.a}
                               </p>
@@ -2420,7 +2338,7 @@ export default function LabsContent() {
             <WhyItWorksSection />
             <WhatsDifferentSection />
             {/* <TheExperienceSection /> */}
-            <ProofCalloutSection />
+            {/* <ProofCalloutSection /> */}
             <CriteriaSection />
             {/* <ProofSection /> */}
             {/* <HowToApplySection /> */}
