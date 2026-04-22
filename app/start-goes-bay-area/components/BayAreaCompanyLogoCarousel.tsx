@@ -1,9 +1,5 @@
 import { bayAreaVisitCompanyLogos } from '@/lib/startGoesBayAreaData'
-
-const getLogoChipClassName = (theme?: 'light' | 'dark') =>
-    theme === 'dark'
-        ? 'border-white/15 bg-slate-900/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_10px_24px_rgba(2,6,23,0.35)]'
-        : 'border-black/5 bg-white/[0.92] shadow-[inset_0_1px_0_rgba(255,255,255,0.75),0_10px_22px_rgba(15,23,42,0.14)]'
+import { getLogoChipClassName } from '../types'
 
 export default function BayAreaCompanyLogoCarousel() {
     if (bayAreaVisitCompanyLogos.length === 0) {

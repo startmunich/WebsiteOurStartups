@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 import CTA from '@/components/CTA'
 import BayAreaCompanyLogoCarousel from './BayAreaCompanyLogoCarousel'
 import BayAreaYearTabs from './BayAreaYearTabs'
-import BayAreaYearPreview from './BayAreaYearPreview'
 import Hero from '@/components/Hero'
 import HeroCard from '@/components/HeroCard'
 import { useAnimatedNumber } from '@/lib/useAnimatedNumber'
@@ -44,14 +43,9 @@ const OVERVIEW_PILLARS = [
 export default function StartGoesBayAreaContent() {
     const [activeYear, setActiveYear] = useState<'2025' | '2026'>('2026')
     const [showStickyYearSelector, setShowStickyYearSelector] = useState(false)
-    const [hasLoaded, setHasLoaded] = useState(false)
     const heroSectionRef = useRef<HTMLDivElement | null>(null)
-    const animatedStartupVisits = useAnimatedNumber(20, !hasLoaded, 800)
-    const animatedParticipants = useAnimatedNumber(20, !hasLoaded, 800)
-
-    useEffect(() => {
-        setHasLoaded(true)
-    }, [])
+    const animatedStartupVisits = useAnimatedNumber(20, false, 800)
+    const animatedParticipants = useAnimatedNumber(20, false, 800)
 
     useEffect(() => {
         const target = heroSectionRef.current
@@ -110,7 +104,6 @@ export default function StartGoesBayAreaContent() {
             <div ref={heroSectionRef}>
                 <Hero
                     backgroundImage={HERO_BACKGROUND}
-                    titleClassName={hasLoaded ? 'animate-[flyInFromTop_0.6s_ease-out]' : 'animate-none'}
                     title={
                         <>
                             START GOES
@@ -126,7 +119,7 @@ export default function StartGoesBayAreaContent() {
                                 <span className="text-4xl lg:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-300 transition">
                                     {Math.floor(animatedStartupVisits)}
                                 </span>
-                                <span className="text-xl lg:text-3xl font-bold text-[#d0006f]">+</span>
+                                <span className="text-xl lg:text-3xl font-bold text-brand-pink">+</span>
                             </div>
                             <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Startup Visits</p>
                         </HeroCard>
@@ -136,7 +129,7 @@ export default function StartGoesBayAreaContent() {
                                 <span className="text-4xl lg:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-300 transition">
                                     {Math.floor(animatedParticipants)}
                                 </span>
-                                <span className="text-xl lg:text-3xl font-bold text-[#d0006f]">+</span>
+                                <span className="text-xl lg:text-3xl font-bold text-brand-pink">+</span>
                             </div>
                             <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Participants</p>
                         </HeroCard>
@@ -144,9 +137,6 @@ export default function StartGoesBayAreaContent() {
                 </Hero>
             </div>
 
-            <div className="pt-8 lg:pt-20">
-                <BayAreaYearPreview yearLabel="2027" imageUrl="/bayarea/years/2026.png" />
-            </div>
             <BayAreaCompanyLogoCarousel />
 
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
