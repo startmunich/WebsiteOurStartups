@@ -3,6 +3,7 @@ import JoinStartClient from './JoinStartClient'
 import { OG_IMAGES } from '@/lib/metadata'
 
 const LAUNCH_DATE = new Date('2026-04-10T00:00:00+02:00').getTime()
+const CLOSE_DATE = new Date('2026-04-27T00:00:00+02:00').getTime()
 
 export const metadata: Metadata = {
   title: 'Join START Munich 2026',
@@ -25,7 +26,9 @@ interface JoinStart2026PageProps {
 export default async function JoinStart2026Page({ searchParams }: JoinStart2026PageProps) {
   const resolvedSearchParams = searchParams ? await searchParams : undefined
   const isBeta = resolvedSearchParams?.beta === 'true'
-  const isLive = isBeta || Date.now() >= LAUNCH_DATE
+  const now = Date.now()
+  const isClosed = !isBeta && now >= CLOSE_DATE
+  const isLive = !isClosed && (isBeta || now >= LAUNCH_DATE)
 
-  return <JoinStartClient isLive={isLive} />
+  return <JoinStartClient isLive={isLive} isClosed={isClosed} />
 }

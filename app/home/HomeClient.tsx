@@ -37,6 +37,10 @@ const facts = [
   { label: "Members in YC & other top programs", value: 8, suffix: "+" },
 ]
 
+// Munich-time cutoffs for the 2026 summer application window
+const APPLICATIONS_OPENED_AT = new Date('2026-04-10T00:00:00+02:00').getTime()
+const APPLICATIONS_CLOSED_AT = new Date('2026-04-27T00:00:00+02:00').getTime()
+
 // ── Component ───────────────────────────────────────────────────────────────────
 
 interface HomeClientProps {
@@ -53,6 +57,9 @@ export default function HomeClient({ initialPartners, initialStartups, initialNe
   const [featuredStartups] = useState<Startup[]>(initialStartups)
   const [newsIndex, setNewsIndex] = useState(0)
   const [showAllNews, setShowAllNews] = useState(false)
+  const [now, setNow] = useState(() => Date.now())
+  const applicationsClosed = now >= APPLICATIONS_CLOSED_AT
+  const applicationsOpen = now >= APPLICATIONS_OPENED_AT && !applicationsClosed
   const factsView = useInView(0.25)
   const missionView = useInView(0.15)
   // const specialView = useInView(0.1)
@@ -66,6 +73,12 @@ export default function HomeClient({ initialPartners, initialStartups, initialNe
   ]
 
   useEffect(() => { setLoaded(true) }, [])
+
+  // Re-check the application window every 30s so the banner / CTA flip live
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 30_000)
+    return () => clearInterval(t)
+  }, [])
 
   // Hero image crossfade
   useEffect(() => {
@@ -111,7 +124,9 @@ export default function HomeClient({ initialPartners, initialStartups, initialNe
           <div className="animate-scroll-slow whitespace-nowrap">
             {Array.from({ length: 12 }).map((_, i) => (
               <span key={i} className="text-white text-xs sm:text-sm tracking-wide mx-8">
-                Summer Applications are open from 10 of April to 26 of April
+                {applicationsClosed
+                  ? "Summer Applications are now closed. Winter applications will open in October"
+                  : "Summer Applications are open from 10 of April to 26 of April"}
               </span>
             ))}
           </div>
@@ -156,7 +171,7 @@ export default function HomeClient({ initialPartners, initialStartups, initialNe
                 START Munich is the largest student-run entrepreneurship community in Munich.
                 We empower the next generation of founders to dare, build, and belong.
               </p>
-              {Date.now() >= new Date('2026-04-10T00:00:00+02:00').getTime() && (
+              {applicationsOpen && (
                 <Link
                   href="/join-start/2026"
                   className={`inline-flex items-center justify-center px-8 py-3 bg-brand-pink text-white font-bold rounded-xl hover:shadow-[0_0_30px_rgba(208,0,111,0.4)] transition-all duration-1000 delay-500 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
