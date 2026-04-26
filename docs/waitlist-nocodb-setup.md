@@ -27,20 +27,32 @@ https://ndb.startmunich.de/nc/{workspace}/{project}/table/{TABLE_ID}
 
 Copy `{TABLE_ID}`.
 
-## 4. Set the env var
+## 4. Set up Cloudflare Turnstile
+
+The endpoint requires a Cloudflare Turnstile token to mitigate bot abuse.
+
+1. Go to https://dash.cloudflare.com → **Turnstile** and create a new site.
+2. Add the hostnames you need: `startmunich.de`, `www.startmunich.de`, your Vercel preview domain (`*.vercel.app` is allowed), and `localhost` for local dev.
+3. Choose the **Managed** widget type.
+4. Copy the **Site Key** (public) and **Secret Key** (server-only).
+
+## 5. Set the env vars
 
 Add the following to `.env.local` (and to Vercel → Settings → Environment Variables for production / preview):
 
 ```env
 NOCODB_WAITLIST_TABLE_ID=your_waitlist_table_id_here
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=your_turnstile_site_key_here
+TURNSTILE_SECRET_KEY=your_turnstile_secret_key_here
 ```
 
-`NOCODB_API_TOKEN` and `NOCODB_BASE_URL` are reused from the existing setup, so no extra credentials are needed.
+`NOCODB_API_TOKEN` and `NOCODB_BASE_URL` are reused from the existing setup, so no extra DB credentials are needed.
 
-After adding the variable on Vercel, redeploy.
+After adding the variables on Vercel, redeploy. Note: `NEXT_PUBLIC_TURNSTILE_SITE_KEY` is baked into the client bundle at build time, so a redeploy is required for changes to take effect.
 
-## 5. Verify
+## 6. Verify
 
-- POST `/api/waitlist` with `{ "email": "test@example.com" }` should return `{ "ok": true }`.
-- A new row should appear in the `Waitlist` table with the email and an ISO timestamp in `SignedUpAt`.
-- Submitting the form on `/join-start/2026` (after the close date) should write a row.
+- The form on `/join-start/2026` (after the close date) renders the Turnstile widget and only submits after the challenge is solved.
+- POST `/api/waitlist` with `{ "email": "test@example.com", "turnstileToken": "..." }` returns `{ "ok": true }` for a new email and `{ "ok": true, "alreadyOnList": true }` for a duplicate.
+- A POST without a valid `turnstileToken` returns `403`.
+- A new row appears in the `Waitlist` table with the email and an ISO timestamp in `SignedUpAt` only on the first submission for a given email.

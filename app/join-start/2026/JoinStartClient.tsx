@@ -3,10 +3,21 @@
 import { useState, useEffect, useRef } from 'react'
 import posthog from 'posthog-js'
 import Image from 'next/image'
+import Script from 'next/script'
 import Hero from '@/components/Hero'
 import HeroCard from '@/components/HeroCard'
 import UpcomingEventTile from '@/components/UpcomingEventTile'
 import { ScrollIndicator } from '@/components/EventComponents'
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+
+declare global {
+  interface Window {
+    turnstile?: {
+      reset: (widgetIdOrContainer?: string | HTMLElement) => void
+    }
+  }
+}
 
 const TARGET_DATE = new Date('2026-04-26T23:59:59+02:00').getTime()
 const CLOSE_DATE = new Date('2026-04-27T00:00:00+02:00').getTime()
@@ -121,27 +132,40 @@ export default function JoinStartClient({ isLive, isClosed }: JoinStartClientPro
   const handleWaitlistSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (waitlistStatus === 'submitting') return
+    const formData = new FormData(e.currentTarget)
+    const turnstileToken = formData.get('cf-turnstile-response')
+    if (typeof turnstileToken !== 'string' || !turnstileToken) {
+      setWaitlistStatus('error')
+      setWaitlistMessage('Please complete the captcha challenge.')
+      return
+    }
     setWaitlistStatus('submitting')
     setWaitlistMessage(null)
     try {
       const res = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: waitlistEmail }),
+        body: JSON.stringify({ email: waitlistEmail, turnstileToken }),
       })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
         setWaitlistStatus('error')
         setWaitlistMessage(data?.error || 'Something went wrong. Please try again.')
+        window.turnstile?.reset()
         return
       }
       posthog.capture('waitlist_signup', { location: 'join_start_2026_closed' })
       setWaitlistStatus('success')
-      setWaitlistMessage("You're on the list. We'll be in touch when applications reopen.")
+      setWaitlistMessage(
+        data?.alreadyOnList
+          ? "You're already on the list. We'll be in touch when applications reopen."
+          : "You're on the list. We'll be in touch when applications reopen."
+      )
       setWaitlistEmail('')
     } catch {
       setWaitlistStatus('error')
       setWaitlistMessage('Something went wrong. Please try again.')
+      window.turnstile?.reset()
     }
   }
 
@@ -216,33 +240,42 @@ export default function JoinStartClient({ isLive, isClosed }: JoinStartClientPro
             </h1>
 
             <form
-              className="mt-10 flex w-full max-w-2xl flex-col overflow-hidden rounded-md sm:flex-row"
+              className="mt-10 flex w-full max-w-2xl flex-col gap-3"
               onSubmit={handleWaitlistSubmit}
             >
-              <label htmlFor="waitlist-email" className="sr-only">
-                Email address
-              </label>
-              <input
-                id="waitlist-email"
-                type="email"
-                required
-                value={waitlistEmail}
-                onChange={(e) => setWaitlistEmail(e.target.value)}
-                disabled={waitlistStatus === 'submitting' || waitlistStatus === 'success'}
-                placeholder="Email address"
-                className="flex-1 bg-white px-5 py-3 text-sm text-brand-dark-blue placeholder:text-gray-400 focus:outline-none disabled:opacity-70 sm:text-base"
-              />
-              <button
-                type="submit"
-                disabled={waitlistStatus === 'submitting' || waitlistStatus === 'success'}
-                className="bg-brand-pink px-6 py-3 text-xs font-bold uppercase tracking-wide text-white transition-all duration-300 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70 sm:text-sm"
-              >
-                {waitlistStatus === 'submitting'
-                  ? 'Submitting...'
-                  : waitlistStatus === 'success'
-                  ? "You're on the list"
-                  : '> Join the waiting list'}
-              </button>
+              <div className="flex w-full flex-col overflow-hidden rounded-md sm:flex-row">
+                <label htmlFor="waitlist-email" className="sr-only">
+                  Email address
+                </label>
+                <input
+                  id="waitlist-email"
+                  type="email"
+                  required
+                  value={waitlistEmail}
+                  onChange={(e) => setWaitlistEmail(e.target.value)}
+                  disabled={waitlistStatus === 'submitting' || waitlistStatus === 'success'}
+                  placeholder="Email address"
+                  className="flex-1 bg-white px-5 py-3 text-sm text-brand-dark-blue placeholder:text-gray-400 focus:outline-none disabled:opacity-70 sm:text-base"
+                />
+                <button
+                  type="submit"
+                  disabled={waitlistStatus === 'submitting' || waitlistStatus === 'success'}
+                  className="bg-brand-pink px-6 py-3 text-xs font-bold uppercase tracking-wide text-white transition-all duration-300 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70 sm:text-sm"
+                >
+                  {waitlistStatus === 'submitting'
+                    ? 'Submitting...'
+                    : waitlistStatus === 'success'
+                    ? "You're on the list"
+                    : '> Join the waiting list'}
+                </button>
+              </div>
+              {TURNSTILE_SITE_KEY && (
+                <div
+                  className="cf-turnstile"
+                  data-sitekey={TURNSTILE_SITE_KEY}
+                  data-theme="dark"
+                />
+              )}
             </form>
             {waitlistMessage && (
               <p
@@ -253,6 +286,14 @@ export default function JoinStartClient({ isLive, isClosed }: JoinStartClientPro
               >
                 {waitlistMessage}
               </p>
+            )}
+            {TURNSTILE_SITE_KEY && (
+              <Script
+                src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+                strategy="afterInteractive"
+                async
+                defer
+              />
             )}
 
             <p className="mt-8 max-w-2xl text-xs font-bold uppercase tracking-wide text-white/90 sm:text-sm">
