@@ -8,7 +8,7 @@ export const bayAreaYearContent: BayAreaYearContent[] = [
     {
         id: '2025',
         label: '2025',
-        groupPictureUrl: '/bayarea/years/2025.jpg',
+        groupPictureUrl: '/bayarea/years/2025-opt.png',
         highlightVisits: [
             { name: 'a16z', context: 'San Francisco', logoPath: '/bayarea/logos/a16z.svg', websiteUrl: 'https://a16z.com/' },
             { name: 'Etched', context: 'South San Francisco', logoPath: '/bayarea/logos/etched.svg', websiteUrl: 'https://www.etched.com/' },
@@ -47,7 +47,7 @@ export const bayAreaYearContent: BayAreaYearContent[] = [
     {
         id: '2026',
         label: '2026',
-        groupPictureUrl: '/bayarea/years/2026.png',
+        groupPictureUrl: '/bayarea/years/2026-opt.jpg',
         highlightVisits: [
             { name: 'Google X', context: 'Mountain View', logoPath: '/bayarea/logos/google-x.svg', websiteUrl: 'https://x.company/' },
             { name: 'Y Combinator', context: 'San Francisco', logoPath: '/bayarea/logos/y-combinator.svg', websiteUrl: 'https://www.ycombinator.com/' },

@@ -137,7 +137,7 @@ export default function PastEventsGrid() {
                 </h3>
                 {event.description && (
                   <p className="text-gray-400 text-xs leading-relaxed line-clamp-2 flex-1">
-                    {event.description}
+                    {/* {event.description} */}
                   </p>
                 )}
               </div>
