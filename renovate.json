@@ -7,7 +7,8 @@
     {
       "matchPackageNames": ["*"],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "groupName": "all non-major dependencies"
+      "groupName": "all non-major dependencies",
+      "automerge": true
     },
     {
       "matchPackageNames": ["*"],
