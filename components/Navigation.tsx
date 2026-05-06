@@ -199,6 +199,8 @@ export default function Navigation() {
                     </a>
                     <Link
                       href="/eventpage/rtss"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       onClick={() => setIsEventsOpen(false)}
                       className="group block px-6 py-2.5 text-white/70 text-sm font-semibold hover:bg-brand-pink hover:text-white transition-all duration-200"
                     >
@@ -211,6 +213,8 @@ export default function Navigation() {
                     </Link>
                     <Link
                       href="/eventpage/rtsh"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       onClick={() => setIsEventsOpen(false)}
                       className="group block px-6 py-2.5 text-white/70 text-sm font-semibold hover:bg-brand-pink hover:text-white transition-all duration-200"
                     >
@@ -223,6 +227,8 @@ export default function Navigation() {
                     </Link>
                     <Link
                       href="/labs"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       onClick={() => setIsEventsOpen(false)}
                       className="group block px-6 py-2.5 text-white/70 text-sm font-semibold hover:bg-brand-pink hover:text-white transition-all duration-200"
                     >
@@ -462,6 +468,8 @@ export default function Navigation() {
                     </a>
                     <Link
                       href="/eventpage/rtss"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="block pl-4 py-2 text-white/50 text-sm font-medium hover:text-brand-pink transition-colors"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
@@ -469,6 +477,8 @@ export default function Navigation() {
                     </Link>
                     <Link
                       href="/eventpage/rtsh"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="block pl-4 py-2 text-white/50 text-sm font-medium hover:text-brand-pink transition-colors"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
@@ -476,6 +486,8 @@ export default function Navigation() {
                     </Link>
                     <Link
                       href="/labs"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="block pl-4 py-2 text-white/50 text-sm font-medium hover:text-brand-pink transition-colors"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
