@@ -130,16 +130,10 @@ export default function PastEventsGrid() {
                 </div>
               </div>
 
-              {/* Text content area */}
-              <div className="px-4 pt-4 pb-5 flex-1 flex flex-col">
-                <h3 className="text-sm font-bold text-white mb-1.5 leading-snug line-clamp-2">
+              <div className="px-4 pt-4 pb-5 flex-1">
+                <h3 className="text-sm font-bold text-white leading-snug line-clamp-2">
                   {event.name}
                 </h3>
-                {event.description && (
-                  <p className="text-gray-400 text-xs leading-relaxed line-clamp-2 flex-1">
-                    {event.description}
-                  </p>
-                )}
               </div>
             </a>
           )
