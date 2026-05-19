@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "package-manager:check": "node scripts/check-pnpm-hygiene.cjs",
+    "preinstall": "node scripts/enforce-pnpm.cjs"
   },
   "dependencies": {
     "@radix-ui/react-select": "^2.0.0",
