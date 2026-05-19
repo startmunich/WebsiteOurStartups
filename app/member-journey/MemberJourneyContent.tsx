@@ -17,7 +17,6 @@ interface TimelineEvent {
   id: string;
   title: string;
   description: string;
-  icon: string;
   image: string | string[];
   details: string[];
 }
@@ -58,7 +57,6 @@ const timelineEvents: TimelineEvent[] = [
     id: 'application',
     title: 'Application',
     description: 'Your entry into START Munich.',
-    icon: '📝',
     image: '',
     details: [
       'Apply in April or October',
@@ -71,7 +69,6 @@ const timelineEvents: TimelineEvent[] = [
     title: 'START Sprint',
     description:
       "Your first month at START. Get to know and bond with ambitious people you wouldn't meet in your usual circles, and build a real product together.",
-    icon: '🚀',
     image: [
       'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800&auto=format&fit=crop',
@@ -89,7 +86,6 @@ const timelineEvents: TimelineEvent[] = [
     title: 'Department Selection',
     description:
       'Develop yourself and shape the future of START. START is completely student-run. What happens here depends on what you do.',
-    icon: '🎯',
     image: '',
     details: [
       'Choose one of five departments',
@@ -104,7 +100,6 @@ const timelineEvents: TimelineEvent[] = [
     title: 'Active Member',
     description:
       'Enjoy the benefits of being a STARTie and expand your network through exclusive opportunities.',
-    icon: '🌍',
     image: placeholderImage,
     details: [
       'Join the Bay Area trip, 2 weeks, 20+ curated visits to top startups, VCs, and labs',
@@ -117,7 +112,6 @@ const timelineEvents: TimelineEvent[] = [
     id: 'alumni',
     title: 'START Alumni',
     description: 'Once a STARTie, always a STARTie. Stay connected as you build your own path.',
-    icon: '⭐',
     image: placeholderImage,
     details: [
       'Become alumni after two active semesters',
@@ -534,7 +528,6 @@ export default function MemberJourneyPage() {
                             0{index + 1}
                           </span>
                           <div className="h-px flex-1 bg-gradient-to-r from-white/20 to-transparent" />
-                          <span className="text-2xl">{event.icon}</span>
                         </div>
 
                         <h3 className="mb-3 text-xl font-black text-white transition-colors duration-300 group-hover:text-brand-pink">
