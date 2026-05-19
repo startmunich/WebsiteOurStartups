@@ -191,35 +191,50 @@ export default function MembersPage() {
   }, []);
 
   useEffect(() => {
-    if (expandedBatch) {
-      const loadBatchMembers = async () => {
-        setLoadingBatch(true);
-        try {
-          const response = await fetch(`/api/members/batch/${encodeURIComponent(expandedBatch)}`);
-          if (response.ok) {
-            const data = await response.json();
-            if (Array.isArray(data) && data.length > 0) {
-              const transformedData = data.map((member: Member) => ({
-                ...member,
-                profileImage: isPlaceholderImage(member.imageUrl) ? undefined : member.imageUrl,
-              }));
-              setBatchMembers(transformedData);
-            } else {
-              setBatchMembers(members.filter((m) => m.batch === expandedBatch));
-            }
+    if (!expandedBatch) {
+      setBatchMembers([]);
+      return;
+    }
+
+    const controller = new AbortController();
+    let cancelled = false;
+
+    const loadBatchMembers = async () => {
+      setLoadingBatch(true);
+      try {
+        const response = await fetch(`/api/members/batch/${encodeURIComponent(expandedBatch)}`, {
+          signal: controller.signal,
+        });
+        if (cancelled) return;
+        if (response.ok) {
+          const data = await response.json();
+          if (cancelled) return;
+          if (Array.isArray(data) && data.length > 0) {
+            const transformedData = data.map((member: Member) => ({
+              ...member,
+              profileImage: isPlaceholderImage(member.imageUrl) ? undefined : member.imageUrl,
+            }));
+            setBatchMembers(transformedData);
           } else {
             setBatchMembers(members.filter((m) => m.batch === expandedBatch));
           }
-        } catch (error) {
-          console.error('Error fetching batch members:', error);
+        } else {
           setBatchMembers(members.filter((m) => m.batch === expandedBatch));
         }
-        setLoadingBatch(false);
-      };
-      loadBatchMembers();
-    } else {
-      setBatchMembers([]);
-    }
+      } catch (error) {
+        if ((error as Error).name === 'AbortError') return;
+        console.error('Error fetching batch members:', error);
+        setBatchMembers(members.filter((m) => m.batch === expandedBatch));
+      }
+      if (!cancelled) setLoadingBatch(false);
+    };
+
+    loadBatchMembers();
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
   }, [expandedBatch, members]);
 
   const normalize = (text: string) =>
@@ -297,7 +312,11 @@ export default function MembersPage() {
     );
   };
 
-  const loadBoardMembers = async (boardId: string) => {
+  const loadBoardMembers = async (
+    boardId: string,
+    signal?: AbortSignal,
+    isCancelled?: () => boolean,
+  ) => {
     setBoardLoading(true);
     try {
       const board = boards.find((b) => b.id === boardId);
@@ -305,9 +324,12 @@ export default function MembersPage() {
       const termStartYear = termStartYearFromBoard(board);
       const response = await fetch(
         `/api/board?termStartYears=${encodeURIComponent(termStartYear)}`,
+        { signal },
       );
+      if (isCancelled?.()) return;
       if (!response.ok) return;
       const data = await response.json();
+      if (isCancelled?.()) return;
       if (!data) return;
       const candidateData = Array.isArray(data)
         ? data
@@ -341,6 +363,7 @@ export default function MembersPage() {
         }));
       });
       const matchByRole = findByRole(normalizedBoardMembers);
+      if (isCancelled?.()) return;
       setBoards((prev) =>
         prev.map((boardItem) => {
           if (boardItem.id !== boardId) return boardItem;
@@ -376,14 +399,22 @@ export default function MembersPage() {
         }),
       );
     } catch (error) {
+      if ((error as Error).name === 'AbortError') return;
       console.error('Error fetching board data:', error);
     } finally {
-      setBoardLoading(false);
+      if (!isCancelled?.()) setBoardLoading(false);
     }
   };
 
   useEffect(() => {
-    if (expandedBoard) loadBoardMembers(expandedBoard);
+    if (!expandedBoard) return;
+    const controller = new AbortController();
+    let cancelled = false;
+    loadBoardMembers(expandedBoard, controller.signal, () => cancelled);
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
   }, [expandedBoard]);
 
   useEffect(() => {
