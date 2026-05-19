@@ -77,20 +77,70 @@ export default function StartupsPage() {
 
   // Load companies on mount
   useEffect(() => {
+    // sessionStorage can throw in private mode, sandboxed iframes, or when
+    // disabled — guard every access so a hostile context never aborts the
+    // mount effect.
+    const safeGet = (key: string): string | null => {
+      try {
+        return sessionStorage.getItem(key);
+      } catch {
+        return null;
+      }
+    };
+    const safeRemove = (key: string) => {
+      try {
+        sessionStorage.removeItem(key);
+      } catch {
+        // non-fatal
+      }
+    };
+
+    const restoreScroll = () => {
+      // Double rAF waits for React's commit AND the next paint, so the page
+      // has its full height before we try to scroll into it. A single rAF
+      // can fire before paint and silently clip the scroll on tall lists.
+      const savedScroll = safeGet('startups-scroll');
+      if (savedScroll) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            window.scrollTo(0, parseInt(savedScroll));
+            safeRemove('startups-scroll');
+          });
+        });
+      }
+    };
+
     const loadCompanies = async () => {
+      // Returning from a detail page: hydrate synchronously from the
+      // sessionStorage cache so we skip the loading flash and the scroll
+      // restoration lands on the same paint as the rendered list.
+      const savedScroll = safeGet('startups-scroll');
+      const cached = savedScroll ? safeGet('startups-data') : null;
+      if (cached) {
+        try {
+          const parsed: unknown = JSON.parse(cached);
+          if (Array.isArray(parsed)) {
+            setCompanies(parsed as Company[]);
+            setLoading(false);
+            restoreScroll();
+            return;
+          }
+          // Wrong shape — fall through to a fresh fetch.
+        } catch {
+          // Cache is corrupt — fall through to a fresh fetch.
+        }
+      }
+
       setLoading(true);
       const data = await fetchCompanies();
       setCompanies(data);
       setLoading(false);
-
-      // Restore scroll position after returning from startup detail
-      const savedScroll = sessionStorage.getItem('startups-scroll');
-      if (savedScroll) {
-        requestAnimationFrame(() => {
-          window.scrollTo(0, parseInt(savedScroll));
-          sessionStorage.removeItem('startups-scroll');
-        });
+      try {
+        sessionStorage.setItem('startups-data', JSON.stringify(data));
+      } catch {
+        // Storage full or unavailable — non-fatal.
       }
+      restoreScroll();
     };
     loadCompanies();
   }, []);
