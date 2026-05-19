@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 
 import { useInView } from '@/lib/hooks';
@@ -31,16 +32,18 @@ function TeamPortraitCard({
   imageUrl: string;
   linkedinUrl?: string;
 }) {
+  const [src, setSrc] = useState(imageUrl);
   const content = (
     <div className="group relative h-[18rem] w-[14rem] flex-shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-white/5">
-      <img
-        src={imageUrl}
+      <Image
+        src={src}
         alt={name}
-        className="h-full w-full object-cover object-bottom transition-transform duration-500 group-hover:scale-105"
-        onError={(event) => {
-          const image = event.currentTarget;
-          if (!image.src.endsWith(TEAM_PLACEHOLDER_IMAGE)) {
-            image.src = TEAM_PLACEHOLDER_IMAGE;
+        fill
+        sizes="14rem"
+        className="object-cover object-bottom transition-transform duration-500 group-hover:scale-105"
+        onError={() => {
+          if (!src.endsWith(TEAM_PLACEHOLDER_IMAGE)) {
+            setSrc(TEAM_PLACEHOLDER_IMAGE);
           }
         }}
       />
@@ -153,10 +156,12 @@ export default function BayAreaYearTabs() {
           <div className="absolute -left-[9px] top-0 h-4 w-4 rounded-full border-2 border-brand-pink bg-brand-dark-blue" />
 
           <div className="relative min-h-[22rem] overflow-hidden rounded-[1.25rem] border border-white/10">
-            <img
+            <Image
               src={activeContent.groupPictureUrl}
               alt={`START Goes Bay Area ${activeContent.label}`}
-              className="absolute inset-0 h-full w-full object-cover"
+              fill
+              sizes="(max-width: 1280px) 100vw, 1280px"
+              className="object-cover"
             />
             <div className="absolute inset-0 bg-brand-dark-blue/20" />
           </div>
@@ -181,6 +186,8 @@ export default function BayAreaYearTabs() {
                 const content = (
                   <div className="h-full rounded-2xl border border-white/10 bg-white/[0.04] p-5 transition-colors hover:border-brand-pink/35 hover:bg-white/[0.07]">
                     <div className="flex h-16 items-center justify-start rounded-xl bg-white/[0.04] px-3">
+                      {/* Variable-aspect partner logos; fixed height with auto width. */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={highlight.logoPath ?? '/startlogo.svg'}
                         alt={`${highlight.name} logo`}
@@ -230,6 +237,7 @@ export default function BayAreaYearTabs() {
                       <span
                         className={`flex h-10 min-w-20 items-center justify-center rounded-lg border px-3 ${getLogoChipClassName(host.logoTheme)}`}
                       >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={host.logoPath}
                           alt={`${host.name} logo`}

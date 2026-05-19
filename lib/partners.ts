@@ -11,7 +11,16 @@ export interface Partner {
   featured?: boolean;
 }
 
-function transformNocoDBRecord(record: any): Partner {
+interface NocoDBPartnerRecord {
+  Id?: number | string;
+  Name?: string;
+  Categrory?: string;
+  Featured?: boolean | number | string;
+  Show?: boolean | number | string;
+  Logo?: Array<{ signedPath?: string }>;
+}
+
+function transformNocoDBRecord(record: NocoDBPartnerRecord): Partner {
   let logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(record.Name || 'Partner')}&size=300&background=4f46e5&color=fff&bold=true&font-size=0.4`;
 
   if (record.Logo && Array.isArray(record.Logo) && record.Logo[0]) {
@@ -22,7 +31,7 @@ function transformNocoDBRecord(record: any): Partner {
   }
 
   return {
-    id: record.Id || String(Math.random()),
+    id: String(record.Id ?? Math.random()),
     name: record.Name || 'Unnamed Partner',
     category: record.Categrory || 'Other',
     logoUrl,
@@ -60,7 +69,7 @@ export async function getAllPartners(): Promise<Partner[]> {
     const data = await response.json();
 
     return (data.list || [])
-      .filter((record: any) => {
+      .filter((record: NocoDBPartnerRecord) => {
         const show = record.Show;
         return show === true || show === 1 || String(show).toLowerCase() === 'true';
       })

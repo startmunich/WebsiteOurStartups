@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Script from 'next/script';
@@ -21,7 +22,6 @@ interface RecurringEvent {
   description: string;
   month: string;
   frequency: string;
-  icon: string;
   image: string;
   category: string;
 }
@@ -34,7 +34,6 @@ const recurringEvents: RecurringEvent[] = [
       'Our flagship pitch event where aspiring founders present their startup ideas to a panel of investors, entrepreneurs, and industry experts.',
     month: 'December',
     frequency: 'Once per year',
-    icon: 'presentation',
     image: '/events/eventCards/summit-opt.jpg',
     category: 'Pitch Event',
   },
@@ -45,7 +44,6 @@ const recurringEvents: RecurringEvent[] = [
       'An intensive hackathon bringing together developers, designers, and entrepreneurs to build innovative solutions in 24-48 hours.',
     month: 'November',
     frequency: 'Once per year',
-    icon: 'code',
     image: '/events/eventCards/hack-opt.jpg',
     category: 'Hackathon',
   },
@@ -56,7 +54,6 @@ const recurringEvents: RecurringEvent[] = [
       'A unique hackathon focused on building legal tech solutions that address real challenges in the legal industry, combining technology with regulatory expertise.',
     month: 'April',
     frequency: 'Once per year',
-    icon: 'code',
     image: '/events/eventCards/legal-opt.jpg',
     category: 'Hackathon',
   },
@@ -67,7 +64,6 @@ const recurringEvents: RecurringEvent[] = [
       'A hands-on program where students work on real-world challenges from industry partners, developing prototypes and solutions across various tech verticals like GovTech, MedTech, and more.',
     month: 'May',
     frequency: 'Once per year',
-    icon: 'code',
     image: '/events/eventCards/labs-opt.jpg',
     category: 'Incubator',
   },
@@ -78,7 +74,6 @@ const recurringEvents: RecurringEvent[] = [
       'Join us at the start of each semester to learn about START Munich, meet our community, and discover how you can get involved.',
     month: 'October & April',
     frequency: 'Once per semester',
-    icon: 'info',
     image: '/events/eventCards/info-opt.jpg',
     category: 'Talk',
   },
@@ -89,7 +84,6 @@ const recurringEvents: RecurringEvent[] = [
       'Real stories from real founders about their biggest failures and lessons learned.',
     month: 'October & April',
     frequency: 'Once per semester',
-    icon: 'stories',
     image: '/events/eventCards/fail-opt.jpg',
     category: 'Talk',
   },
@@ -100,7 +94,6 @@ const recurringEvents: RecurringEvent[] = [
       'Practice your pitch, get feedback from experienced entrepreneurs, and network with fellow founders in an intimate setting.',
     month: 'January & June',
     frequency: 'Once per semester',
-    icon: 'presentation',
     image: '/events/eventCards/pitch-opt.jpg',
     category: 'Pitch Event',
   },
@@ -184,68 +177,6 @@ export default function EventsPage() {
     return `${totalProgress.toFixed(2)}%`;
   };
 
-  const getIconSvg = (icon: string) => {
-    switch (icon) {
-      case 'trophy':
-        return (
-          <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-            />
-          </svg>
-        );
-      case 'code':
-        return (
-          <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-            />
-          </svg>
-        );
-      case 'info':
-        return (
-          <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        );
-      case 'stories':
-        return (
-          <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-            />
-          </svg>
-        );
-      case 'presentation':
-        return (
-          <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"
-            />
-          </svg>
-        );
-      default:
-        return null;
-    }
-  };
-
   if (loading) {
     return (
       <main className="min-h-screen bg-[#00002c] px-4 py-12 sm:px-6 lg:px-8">
@@ -325,10 +256,12 @@ export default function EventsPage() {
             <div className="relative overflow-hidden rounded-[1.75rem] border border-[#8eeeff]/30 shadow-2xl shadow-[#00d8ff]/10">
               {/* Background image */}
               <div className="absolute inset-0">
-                <img
+                <Image
                   src="/events/eventCards/europe-embodied-prism.png"
                   alt="Europe Embodied"
-                  className="saturate-125 h-full w-full object-cover"
+                  fill
+                  sizes="(max-width: 1280px) 100vw, 1280px"
+                  className="saturate-125 object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#050814]/95 via-[#06101d]/80 to-[#050814]/20" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_36%,rgba(142,238,255,0.22),transparent_34%),radial-gradient(circle_at_58%_72%,rgba(255,63,208,0.16),transparent_30%)]" />
@@ -415,7 +348,7 @@ export default function EventsPage() {
               {/* Title and description */}
               <div>
                 <span className="text-sm font-bold uppercase tracking-[0.3em] text-[#d0006f]">
-                  What's Next
+                  What&apos;s Next
                 </span>
                 <h2 className="mb-3 mt-2 text-3xl font-black text-white md:text-4xl">
                   UPCOMING EVENTS
@@ -499,7 +432,7 @@ export default function EventsPage() {
                     'Oct',
                     'Nov',
                     'Dec',
-                  ].map((month, i) => (
+                  ].map((month) => (
                     <div key={month} className="text-sm text-gray-300">
                       {month}
                     </div>
@@ -946,7 +879,7 @@ export default function EventsPage() {
               </span>
               <h2 className="mb-1 mt-2 text-3xl font-black text-white md:text-4xl">PAST EVENTS</h2>
               <p className="max-w-lg text-lg text-gray-400">
-                Check out the amazing events we've hosted in the past.
+                Check out the amazing events we&apos;ve hosted in the past.
               </p>
             </div>
 

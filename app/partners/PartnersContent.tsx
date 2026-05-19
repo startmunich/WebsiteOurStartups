@@ -330,6 +330,9 @@ export default function PartnersPage() {
                     <div key={partner.id} className="group relative">
                       {/* Logo Card - Reverted to Original Styling */}
                       <div className="relative flex h-32 items-center justify-center rounded-2xl border-2 border-transparent bg-white p-6 transition-all duration-300 group-hover:scale-105 group-hover:border-brand-pink group-hover:shadow-xl group-hover:shadow-brand-pink/20">
+                        {/* Partner logos have variable aspect ratios and use DOM-mutation
+                            fallback on error; next/image would not preserve either. */}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={partner.logoUrl}
                           alt={partner.name}

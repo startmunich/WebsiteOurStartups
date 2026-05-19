@@ -59,7 +59,6 @@ export default function HomeClient({
 }: HomeClientProps) {
   const [loaded, setLoaded] = useState(false);
   const [heroIdx, setHeroIdx] = useState(0);
-  const [turningIdx, setTurningIdx] = useState(0);
   const [brandPartners] = useState<Partner[]>(initialPartners);
   const [featuredStartups] = useState<Startup[]>(initialStartups);
   const [failedPartnerLogos, setFailedPartnerLogos] = useState<Set<string>>(new Set());
@@ -75,16 +74,6 @@ export default function HomeClient({
   const applicationsClosed = now >= APPLICATIONS_CLOSED_AT;
   const applicationsOpen = now >= APPLICATIONS_OPENED_AT && !applicationsClosed;
   const factsView = useInView(0.25);
-  const missionView = useInView(0.15);
-  // const specialView = useInView(0.1)
-
-  const turningPhrases = [
-    { from: 'latest research', to: 'innovation' },
-    { from: 'students', to: 'founders' },
-    { from: 'bold ideas', to: 'reality' },
-    { from: 'ambition', to: 'impact' },
-    { from: 'passion', to: 'startups' },
-  ];
 
   useEffect(() => {
     setLoaded(true);
@@ -101,12 +90,6 @@ export default function HomeClient({
     const t = setInterval(() => setHeroIdx((p) => (p + 1) % heroImages.length), 5000);
     return () => clearInterval(t);
   }, []);
-
-  // Turning phrases rotation
-  useEffect(() => {
-    const t = setInterval(() => setTurningIdx((p) => (p + 1) % turningPhrases.length), 2500);
-    return () => clearInterval(t);
-  }, [turningPhrases.length]);
 
   // Desktop news cards: link horizontal movement to natural page scroll.
   // This keeps the interaction while avoiding Safari's page-locking wheel behavior.
@@ -225,8 +208,8 @@ export default function HomeClient({
             return (
               <div
                 key={src}
-                className="duration-[2000ms] absolute inset-0 transition-opacity ease-in-out"
-                style={{ opacity: isCurrent ? 1 : 0 }}
+                className="absolute inset-0 transition-opacity ease-in-out"
+                style={{ opacity: isCurrent ? 1 : 0, transitionDuration: '2000ms' }}
               >
                 <Image
                   src={src}
@@ -301,6 +284,8 @@ export default function HomeClient({
                       {partner.name}
                     </span>
                   ) : (
+                    // Marquee partner logo; variable aspect ratio with auto width.
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={partner.logoUrl}
                       alt={partner.name}
@@ -583,6 +568,8 @@ export default function HomeClient({
                           {startup.name}
                         </span>
                       ) : (
+                        // Marquee startup logo; variable aspect with max-w/max-h auto sizing.
+                        // eslint-disable-next-line @next/next/no-img-element
                         <img
                           src={startup.logoUrl}
                           alt={startup.name}
@@ -692,12 +679,14 @@ export default function HomeClient({
                   >
                     <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
                       {item.imageUrl ? (
-                        <img
+                        <Image
                           src={item.imageUrl}
                           alt={item.title}
-                          loading="lazy"
+                          fill
+                          unoptimized
                           referrerPolicy="no-referrer"
-                          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          sizes="380px"
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       ) : (
                         <div className="absolute inset-0 bg-gradient-to-br from-brand-pink/30 to-purple-900/50" />
@@ -790,12 +779,14 @@ export default function HomeClient({
                 >
                   <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
                     {item.imageUrl ? (
-                      <img
+                      <Image
                         src={item.imageUrl}
                         alt={item.title}
-                        loading="lazy"
+                        fill
+                        unoptimized
                         referrerPolicy="no-referrer"
-                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 768px) 86vw, 380px"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (
                       <div className="absolute inset-0 bg-gradient-to-br from-brand-pink/30 to-purple-900/50" />

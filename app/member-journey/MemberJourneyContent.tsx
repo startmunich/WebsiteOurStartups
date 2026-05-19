@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Script from 'next/script';
 import { useEffect, useRef, useState } from 'react';
 
@@ -890,10 +891,12 @@ export default function MemberJourneyPage() {
                   <div className="grid h-full w-full grid-cols-2 grid-rows-2 gap-0">
                     {moreImages.map((img, i) => (
                       <div key={i} className="relative h-full w-full overflow-hidden">
-                        <img
+                        <Image
                           src={img}
                           alt={`More activities ${i + 1}`}
-                          className="fade-swap h-full w-full object-cover"
+                          fill
+                          sizes="50vw"
+                          className="fade-swap object-cover"
                         />
                         <div className="absolute inset-0 bg-brand-dark-blue/20" />
                       </div>
@@ -916,11 +919,13 @@ export default function MemberJourneyPage() {
                     const idx = eventImageIndex % images.length;
                     return (
                       <div className="relative h-full w-full">
-                        <img
+                        <Image
                           key={images[idx]?.src}
                           src={images[idx]?.src}
-                          alt={images[idx]?.title}
-                          className="fade-swap h-full w-full object-cover"
+                          alt={images[idx]?.title ?? ''}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          className="fade-swap object-cover"
                         />
                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
                           <p className="text-base font-bold text-white">{images[idx]?.title}</p>
@@ -1001,10 +1006,12 @@ export default function MemberJourneyPage() {
                 className="group relative block overflow-hidden rounded-3xl border border-white/10 bg-white/[0.06] backdrop-blur-sm transition-all duration-500 hover:border-brand-pink/40"
               >
                 <div className="relative aspect-video overflow-hidden rounded-t-3xl">
-                  <img
+                  <Image
                     src="/memberJourney/SF-opt.png"
                     alt="San Francisco Bay Area"
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                 </div>
@@ -1014,10 +1021,10 @@ export default function MemberJourneyPage() {
                   </h3>
                   <p className="mb-5 text-sm leading-relaxed text-gray-300">
                     Once a year, 20 selected STARTies go on a two-week trip to the San Francisco Bay
-                    Area to experience one of the world's most vibrant startup ecosystems firsthand.
-                    Through curated visits with partner companies, research labs, and VC firms,
-                    participants strengthen our ties with international founders, researchers, and
-                    investors.
+                    Area to experience one of the world&apos;s most vibrant startup ecosystems
+                    firsthand. Through curated visits with partner companies, research labs, and VC
+                    firms, participants strengthen our ties with international founders,
+                    researchers, and investors.
                   </p>
                   <span className="inline-flex items-center gap-2 text-sm font-bold text-brand-pink transition-all group-hover:gap-3">
                     Learn more
@@ -1036,10 +1043,12 @@ export default function MemberJourneyPage() {
               {/* Cambridge */}
               <div className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.06] backdrop-blur-sm transition-all duration-500 hover:border-brand-pink/30">
                 <div className="relative aspect-video overflow-hidden rounded-t-3xl">
-                  <img
+                  <Image
                     src="/memberJourney/cambridge-aerial-opt.png"
                     alt="University Research"
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                 </div>

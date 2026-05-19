@@ -5,6 +5,8 @@ import { DottedGlowBackground } from '@/components/ui/dotted-glow-background';
 export default function DottedGlowBackgroundDemo() {
   return (
     <div className="md:size-100 relative flex size-60 items-end justify-end overflow-hidden rounded-md rounded-bl-3xl rounded-br-3xl rounded-tl-3xl border border-transparent px-4 shadow shadow-black/10 ring-1 ring-black/5 dark:shadow-white/10 dark:ring-white/5">
+      {/* Demo asset from aceternity.com (not whitelisted in next.config.js remotePatterns). */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="https://assets.aceternity.com/logos/calcom.png"
         alt="Cal.com logo"

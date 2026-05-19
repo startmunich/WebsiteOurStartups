@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
 
@@ -67,7 +68,7 @@ function LabsNavigation() {
                 START LABS
               </span>
               <span className="labs-meta mt-[2px]" style={{ color: 'var(--labs-accent)' }}>
-                // MEDTECH EDITION
+                {'// MEDTECH EDITION'}
               </span>
             </a>
 
@@ -179,9 +180,9 @@ function HeroSection() {
             {/* Main Headline */}
             <h1 className="mb-6">
               <div className="labs-heading text-[clamp(36px,8vw,72px)] leading-[0.9]">
-                You're not a student.
+                You&apos;re not a student.
                 <br />
-                You're a <span style={{ color: 'var(--labs-accent)' }}>founder.</span>
+                You&apos;re a <span style={{ color: 'var(--labs-accent)' }}>founder.</span>
               </div>
             </h1>
 
@@ -230,7 +231,7 @@ function HeroSection() {
                 color: 'var(--labs-text-body)',
               }}
             >
-              // Deadline: 30 April 2026 · Limited spots · Munich, in-person
+              {'// Deadline: 30 April 2026 · Limited spots · Munich, in-person'}
             </div>
           </div>
         </div>
@@ -261,7 +262,7 @@ function OrganizedBySection() {
 
       <div className="relative z-10 mx-auto max-w-[1400px] px-6 md:px-12">
         <div className="flex flex-col items-center gap-6">
-          <Label>// This edition is organized by</Label>
+          <Label>{'// This edition is organized by'}</Label>
           <div className="flex items-center gap-6">
             <a
               href="https://www.startmunich.de/"
@@ -269,6 +270,8 @@ function OrganizedBySection() {
               rel="noopener"
               className="opacity-60 transition-opacity hover:opacity-100"
             >
+              {/* Variable-aspect partner logo from external host (not in remotePatterns). */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 alt="START Munich"
                 src="https://raw.githubusercontent.com/genepearl/start-labs-2026/main/images/startmunich.png"
@@ -282,6 +285,8 @@ function OrganizedBySection() {
               rel="noopener"
               className="opacity-60 transition-opacity hover:opacity-100"
             >
+              {/* Variable-aspect partner logo from external host (not in remotePatterns). */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 alt="OneAIM"
                 src="https://raw.githubusercontent.com/genepearl/start-labs-2026/main/images/oneaim.png"
@@ -335,17 +340,17 @@ function ProblemSection() {
               className="font-mono uppercase tracking-[0.15em]"
               style={{ fontSize: '16px', color: 'var(--labs-accent)' }}
             >
-              // The problem
+              {'// The problem'}
             </span>
           </div>
 
           {/* Main Statement */}
           <h2 className="labs-heading mb-12 text-center text-[clamp(32px,5vw,56px)] leading-[1.1]">
             <span className="block" style={{ color: 'var(--labs-text-primary)' }}>
-              The world isn't broken.
+              The world isn&apos;t broken.
             </span>
             <span className="block" style={{ color: 'var(--labs-text-primary)' }}>
-              It's disconnected.
+              It&apos;s disconnected.
             </span>
           </h2>
 
@@ -382,7 +387,7 @@ function ProblemSection() {
                     color: 'var(--labs-accent)',
                   }}
                 >
-                  // On one side
+                  {'// On one side'}
                 </span>
               </div>
               <h3
@@ -423,7 +428,7 @@ function ProblemSection() {
                     color: 'var(--labs-accent)',
                   }}
                 >
-                  // On the other
+                  {'// On the other'}
                 </span>
               </div>
               <h3
@@ -565,7 +570,7 @@ function JourneyTimelineSection() {
               className="font-mono uppercase tracking-[0.15em]"
               style={{ fontSize: '16px', color: 'var(--labs-accent)' }}
             >
-              // The 8-Week Journey
+              {'// The 8-Week Journey'}
             </span>
           </div>
 
@@ -692,15 +697,17 @@ function JourneyTimelineSection() {
                           {/* Left: Image - Larger */}
                           <div>
                             <div
-                              className="aspect-[4/3] overflow-hidden border"
+                              className="relative aspect-[4/3] overflow-hidden border"
                               style={{
                                 borderColor: 'rgba(255,255,255,0.1)',
                               }}
                             >
-                              <img
+                              <Image
                                 src={item.image}
                                 alt={item.title}
-                                className="h-full w-full object-cover opacity-70 transition-all duration-500 hover:scale-105 hover:opacity-90"
+                                fill
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                                className="object-cover opacity-70 transition-all duration-500 hover:scale-105 hover:opacity-90"
                               />
                             </div>
                           </div>
@@ -790,7 +797,7 @@ function JourneyTimelineSection() {
 }
 
 // Section 2: Why START Labs Works (Principles + Proof)
-function WhyItWorksSection() {
+function _WhyItWorksSection() {
   const principles = [
     {
       emoji: '⚡',
@@ -842,7 +849,7 @@ function WhyItWorksSection() {
               className="font-mono uppercase tracking-[0.15em]"
               style={{ fontSize: '16px', color: 'var(--labs-accent)' }}
             >
-              // Why START Labs Works
+              {'// Why START Labs Works'}
             </span>
           </div>
 
@@ -977,7 +984,7 @@ function WhatsDifferentSection() {
               className="font-mono uppercase tracking-[0.15em]"
               style={{ fontSize: '16px', color: 'var(--labs-accent)' }}
             >
-              // The Format
+              {'// The Format'}
             </span>
           </div>
 
@@ -1058,7 +1065,7 @@ function WhatsDifferentSection() {
 }
 
 // The Experience Section
-function TheExperienceSection() {
+function _TheExperienceSection() {
   return (
     <section
       className="labs-reveal relative overflow-hidden py-32"
@@ -1090,7 +1097,7 @@ function TheExperienceSection() {
       <div className="relative z-10 mx-auto max-w-[1400px] px-6 md:px-12">
         <div className="mx-auto max-w-5xl">
           {/* Section Header */}
-          <SectionHeader>// The experience</SectionHeader>
+          <SectionHeader>{'// The experience'}</SectionHeader>
 
           {/* Headline */}
           <h2
@@ -1131,7 +1138,7 @@ function TheExperienceSection() {
 }
 
 // Proof Callout Section - Visual break with stats
-function ProofCalloutSection() {
+function _ProofCalloutSection() {
   return (
     <section
       id="proof"
@@ -1147,15 +1154,17 @@ function ProofCalloutSection() {
             className="labs-reveal group relative aspect-[16/10] overflow-hidden border"
             style={{ borderColor: 'var(--labs-border)' }}
           >
-            <img
+            <Image
               src="/labs/images/award.png"
               alt="Bavarian Best Practice Award"
-              className="h-full w-full object-cover opacity-80 transition-all duration-700 group-hover:scale-105 group-hover:opacity-100"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover opacity-80 transition-all duration-700 group-hover:scale-105 group-hover:opacity-100"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
             <div className="absolute bottom-6 left-6 right-6">
               <div className="mb-2">
-                <Label style={{ color: 'var(--labs-accent)' }}>// GovTech Edition 2025</Label>
+                <Label style={{ color: 'var(--labs-accent)' }}>{'// GovTech Edition 2025'}</Label>
               </div>
               <h3
                 className="labs-heading"
@@ -1173,7 +1182,7 @@ function ProofCalloutSection() {
           <div className="space-y-8">
             <div>
               <div className="mb-3">
-                <Label style={{ color: 'var(--labs-text-meta)' }}>// Proof of concept</Label>
+                <Label style={{ color: 'var(--labs-text-meta)' }}>{'// Proof of concept'}</Label>
               </div>
               <h3
                 className="labs-heading mb-4"
@@ -1182,7 +1191,7 @@ function ProofCalloutSection() {
                   color: 'var(--labs-text-primary)',
                 }}
               >
-                We've done this before.
+                We&apos;ve done this before.
               </h3>
               <p
                 className="font-mono leading-relaxed"
@@ -1260,29 +1269,33 @@ function ProofCalloutSection() {
             {/* Small image gallery from past edition */}
             <div className="mt-8 grid grid-cols-2 gap-4">
               <div
-                className="labs-reveal aspect-[4/3] overflow-hidden border"
+                className="labs-reveal relative aspect-[4/3] overflow-hidden border"
                 style={{
                   borderColor: 'var(--labs-border)',
                   transitionDelay: '300ms',
                 }}
               >
-                <img
+                <Image
                   src="/labs/images/demoday.jpg"
                   alt="Demo Day"
-                  className="h-full w-full object-cover opacity-70 transition-all duration-500 hover:scale-105 hover:opacity-90"
+                  fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  className="object-cover opacity-70 transition-all duration-500 hover:scale-105 hover:opacity-90"
                 />
               </div>
               <div
-                className="labs-reveal aspect-[4/3] overflow-hidden border"
+                className="labs-reveal relative aspect-[4/3] overflow-hidden border"
                 style={{
                   borderColor: 'var(--labs-border)',
                   transitionDelay: '400ms',
                 }}
               >
-                <img
+                <Image
                   src="/labs/images/winner.jpg"
                   alt="Award Winner"
-                  className="h-full w-full object-cover opacity-70 transition-all duration-500 hover:scale-105 hover:opacity-90"
+                  fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  className="object-cover opacity-70 transition-all duration-500 hover:scale-105 hover:opacity-90"
                 />
               </div>
             </div>
@@ -1308,7 +1321,7 @@ function CriteriaSection() {
       <div className="relative z-10 mx-auto max-w-[1400px] px-6 md:px-12">
         <div className="mx-auto max-w-5xl">
           {/* Section Header */}
-          <SectionHeader>// Candidate profile</SectionHeader>
+          <SectionHeader>{'// Candidate profile'}</SectionHeader>
 
           <div className="mb-12 text-center">
             <h2 className="labs-heading mb-6" style={{ fontSize: 'var(--labs-size-heading-lg)' }}>
@@ -1394,7 +1407,7 @@ function CriteriaSection() {
                         color: 'var(--labs-text-body)',
                       }}
                     >
-                      You don't quit when things get tough. You get obsessed.
+                      You don&apos;t quit when things get tough. You get obsessed.
                     </div>
                   </div>
 
@@ -1415,7 +1428,7 @@ function CriteriaSection() {
                         color: 'var(--labs-text-body)',
                       }}
                     >
-                      You see broken systems and think "I can fix this."
+                      You see broken systems and think &ldquo;I can fix this.&rdquo;
                     </div>
                   </div>
 
@@ -1436,7 +1449,7 @@ function CriteriaSection() {
                         color: 'var(--labs-text-body)',
                       }}
                     >
-                      Genuine, can't-sleep-at-night passion for building things that matter.
+                      Genuine, can&apos;t-sleep-at-night passion for building things that matter.
                     </div>
                   </div>
                 </div>
@@ -1462,7 +1475,7 @@ function CriteriaSection() {
                     color: '#ef4444',
                   }}
                 >
-                  Don't apply if
+                  Don&apos;t apply if
                 </span>
               </div>
               <h3
@@ -1472,7 +1485,7 @@ function CriteriaSection() {
                   color: 'var(--labs-text-primary)',
                 }}
               >
-                You shouldn't apply
+                You shouldn&apos;t apply
               </h3>
               <div>
                 <div className="space-y-5">
@@ -1526,7 +1539,7 @@ function CriteriaSection() {
                         fontSize: '13px',
                       }}
                     >
-                      You're collecting badges for your CV.
+                      You&apos;re collecting badges for your CV.
                     </div>
                     <div
                       className="font-mono leading-relaxed"
@@ -1535,7 +1548,7 @@ function CriteriaSection() {
                         color: 'var(--labs-text-body)',
                       }}
                     >
-                      Build something you actually care about, or don't apply.
+                      Build something you actually care about, or don&apos;t apply.
                     </div>
                   </div>
                 </div>
@@ -1598,7 +1611,7 @@ function CriteriaSection() {
 }
 
 // Proof Section
-function ProofSection() {
+function _ProofSection() {
   return (
     <section
       id="proof"
@@ -1610,7 +1623,7 @@ function ProofSection() {
       <div className="mx-auto max-w-[1400px] px-6 md:px-12">
         <div className="mx-auto max-w-5xl">
           {/* Section Header */}
-          <SectionHeader>// Section 04: Proof of Concept</SectionHeader>
+          <SectionHeader>{'// Section 04: Proof of Concept'}</SectionHeader>
 
           <div className="mb-20">
             <h2 className="labs-heading mb-4" style={{ fontSize: 'var(--labs-size-heading-md)' }}>
@@ -1638,7 +1651,7 @@ function ProofSection() {
           {/* Image Carousel */}
           <div className="mb-20">
             <div className="mb-8 text-center">
-              <Label>// Program Archive 2025</Label>
+              <Label>{'// Program Archive 2025'}</Label>
             </div>
 
             <div className="labs-meta mb-4 flex items-center gap-2 px-6 md:hidden">
@@ -1667,10 +1680,12 @@ function ProofSection() {
                     className="group relative h-[180px] w-[280px] flex-shrink-0 overflow-hidden border sm:h-[220px] sm:w-[350px] md:h-[250px] md:w-[400px]"
                     style={{ borderColor: 'var(--labs-border)' }}
                   >
-                    <img
+                    <Image
                       src={`/labs/images/${img}`}
                       alt={`Archive ${i + 1}`}
-                      className="h-full w-full object-cover opacity-80 transition-all duration-500 group-hover:scale-105 group-hover:opacity-100"
+                      fill
+                      sizes="(max-width: 640px) 280px, (max-width: 768px) 350px, 400px"
+                      className="object-cover opacity-80 transition-all duration-500 group-hover:scale-105 group-hover:opacity-100"
                     />
                     <div
                       className="labs-meta absolute left-3 top-3 px-2 py-1"
@@ -1687,7 +1702,7 @@ function ProofSection() {
           {/* Project Grid */}
           <div>
             <div className="mb-8">
-              <Label>// Deliverables</Label>
+              <Label>{'// Deliverables'}</Label>
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -1743,7 +1758,7 @@ function ProofSection() {
 }
 
 // How to Apply Section
-function HowToApplySection() {
+function _HowToApplySection() {
   return (
     <section
       className="labs-reveal relative overflow-hidden py-32"
@@ -1778,7 +1793,7 @@ function HowToApplySection() {
               className="font-mono uppercase tracking-[0.15em]"
               style={{ fontSize: '16px', color: 'var(--labs-accent)' }}
             >
-              // How to apply
+              {'// How to apply'}
             </span>
           </div>
 
@@ -1793,8 +1808,8 @@ function HowToApplySection() {
           {/* Body */}
           <div className="mx-auto mb-12 max-w-2xl">
             <p className="font-mono leading-relaxed" style={{ fontSize: '13px', color: '#555555' }}>
-              Fill out a short written application. If we like what we read, we'll reach out for a
-              quick interview.
+              Fill out a short written application. If we like what we read, we&apos;ll reach out
+              for a quick interview.
             </p>
             <p
               className="mt-4 font-mono leading-relaxed"
@@ -1868,7 +1883,13 @@ function ApplySection() {
       {/* Rocket image - prominent but tasteful */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute right-0 top-1/2 h-[500px] w-[500px] -translate-y-1/2 opacity-[0.1]">
-          <img src="/labs/images/rocket.png" alt="" className="h-full w-full object-contain" />
+          <Image
+            src="/labs/images/rocket.png"
+            alt=""
+            fill
+            sizes="500px"
+            className="object-contain"
+          />
         </div>
       </div>
 
@@ -1927,11 +1948,11 @@ function FAQSection() {
       q: 'Is this paid?',
       a: (
         <>
-          Not in salary. But you'll work on{' '}
+          Not in salary. But you&apos;ll work on{' '}
           <span style={{ color: 'var(--labs-accent)' }}>real healthcare challenges</span>, build a
           working MVP, get hands-on mentorship, and have a shot at your{' '}
-          <span style={{ color: 'var(--labs-accent)' }}>first paying customer</span>. If that's not
-          enough, this probably isn't for you.
+          <span style={{ color: 'var(--labs-accent)' }}>first paying customer</span>. If that&apos;s
+          not enough, this probably isn&apos;t for you.
         </>
       ),
     },
@@ -1958,8 +1979,8 @@ function FAQSection() {
       q: 'Do I have to speak German?',
       a: (
         <>
-          It helps on the business and sales side. If you're focused on tech or design, English is
-          fine.
+          It helps on the business and sales side. If you&apos;re focused on tech or design, English
+          is fine.
         </>
       ),
     },
@@ -1976,8 +1997,8 @@ function FAQSection() {
       q: 'Do I have to be a student?',
       a: (
         <>
-          Nope. Recent graduates and young professionals are welcome. No hard cut-off. If you're at
-          the start of your career and want to build something real,{' '}
+          Nope. Recent graduates and young professionals are welcome. No hard cut-off. If
+          you&apos;re at the start of your career and want to build something real,{' '}
           <span style={{ color: 'var(--labs-accent)' }}>we want you in</span>.
         </>
       ),
@@ -1986,8 +2007,8 @@ function FAQSection() {
       q: 'Can I do it next to studying?',
       a: (
         <>
-          Yes, but be realistic. If you're taking 6+ courses and a working student job, it might be
-          a stretch. The{' '}
+          Yes, but be realistic. If you&apos;re taking 6+ courses and a working student job, it
+          might be a stretch. The{' '}
           <span style={{ color: 'var(--labs-accent)' }}>
             more time you put in, the more you get out
           </span>
@@ -2045,7 +2066,7 @@ function FAQSection() {
       <div className="relative z-10 mx-auto max-w-[1400px] px-6 md:px-12">
         <div className="mx-auto max-w-5xl">
           {/* Section Header */}
-          <SectionHeader>// Frequently asked</SectionHeader>
+          <SectionHeader>{'// Frequently asked'}</SectionHeader>
 
           {/* <h2
                   className='labs-heading mb-8'
@@ -2059,15 +2080,17 @@ function FAQSection() {
             className="labs-reveal group relative mb-16 aspect-[21/9] overflow-hidden border"
             style={{ borderColor: 'var(--labs-border)' }}
           >
-            <img
+            <Image
               src="/labs/images/letter.JPG"
               alt="Program details"
-              className="h-full w-full object-cover opacity-50 transition-all duration-700 group-hover:scale-105 group-hover:opacity-70"
+              fill
+              sizes="(max-width: 1280px) 100vw, 1280px"
+              className="object-cover opacity-50 transition-all duration-700 group-hover:scale-105 group-hover:opacity-70"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
             <div className="absolute left-8 top-1/2 -translate-y-1/2">
               <Label className="mb-2 block" style={{ color: 'var(--labs-accent)' }}>
-                // Everything you need to know
+                {'// Everything you need to know'}
               </Label>
               <div
                 className="labs-heading"
@@ -2162,7 +2185,7 @@ function LabsFooter() {
             color: 'var(--labs-text-body)',
           }}
         >
-          // START Labs © 2026 · MedTech Edition
+          {'// START Labs © 2026 · MedTech Edition'}
         </p>
       </div>
     </footer>

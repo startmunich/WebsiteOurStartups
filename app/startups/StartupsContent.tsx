@@ -46,26 +46,11 @@ async function fetchCompanies(): Promise<Company[]> {
   }
 }
 
-// Helper function to get preview text (first 30 words)
-function getPreviewText(text: string): string {
-  if (!text) return '';
-
-  const words = text.split(/\s+/);
-  const maxWords = 30;
-
-  if (words.length <= maxWords) {
-    return text;
-  }
-
-  return words.slice(0, maxWords).join(' ') + '...';
-}
-
 export default function StartupsPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedYear, setSelectedYear] = useState<string>('all');
-  const [selectedProgram, setSelectedProgram] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12; // Reduced to approximate 3000px height (about 5-6 cards)
@@ -155,16 +140,6 @@ export default function StartupsPage() {
     new Set(companies.map((company) => company.foundingYear.toString())),
   ).sort();
 
-  // Extract unique supporting programs
-  const allPrograms = Array.from(
-    new Set(
-      companies
-        .map((company) => company.supportingPrograms)
-        .filter((program): program is string => program !== undefined && program.trim() !== '')
-        .flatMap((program) => program.split(',').map((p) => p.trim())),
-    ),
-  ).sort();
-
   // Filter companies based on all selected filters
   const filteredCompanies = companies.filter((company) => {
     const matchesCategory =
@@ -173,13 +148,6 @@ export default function StartupsPage() {
 
     const matchesYear = selectedYear === 'all' || company.foundingYear.toString() === selectedYear;
 
-    const matchesProgram =
-      selectedProgram === 'all' ||
-      (company.supportingPrograms &&
-        company.supportingPrograms
-          .split(',')
-          .some((program) => program.trim().toLowerCase().includes(selectedProgram.toLowerCase())));
-
     const matchesSearch =
       searchQuery === '' ||
       company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -187,7 +155,7 @@ export default function StartupsPage() {
         founder.name.toLowerCase().includes(searchQuery.toLowerCase()),
       );
 
-    return matchesCategory && matchesYear && matchesProgram && matchesSearch;
+    return matchesCategory && matchesYear && matchesSearch;
   });
 
   // Pagination calculations
@@ -199,7 +167,7 @@ export default function StartupsPage() {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedCategory, selectedYear, selectedProgram, searchQuery]);
+  }, [selectedCategory, selectedYear, searchQuery]);
 
   // Calculate total statistics
   const totalStartups = companies.length + 30;
@@ -339,7 +307,7 @@ export default function StartupsPage() {
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                {spotlightStartups.map((company, index) => (
+                {spotlightStartups.map((company) => (
                   <StartupCard
                     key={company.id}
                     id={company.id}
@@ -404,8 +372,8 @@ export default function StartupsPage() {
                       </span>{' '}
                       label are located at our location partner, the{' '}
                       <strong className="text-white">MTZ (Münchner Technologiezentrum)</strong>, one
-                      of Munich's leading innovation hubs. START Munich is also located at the MTZ,
-                      fostering a vibrant community of entrepreneurs and innovators.
+                      of Munich&apos;s leading innovation hubs. START Munich is also located at the
+                      MTZ, fostering a vibrant community of entrepreneurs and innovators.
                     </p>
 
                     <div className="flex flex-col gap-2 text-sm text-gray-400">
@@ -500,9 +468,10 @@ export default function StartupsPage() {
                             </h4>
                           </div>
                           <p className="text-sm leading-relaxed text-gray-300">
-                            Y Combinator is the world's most prestigious startup accelerator, having
-                            funded over 4,000 companies including Airbnb, Dropbox, Stripe, and
-                            Reddit. These alumni have gone through YC's intensive 3-month program.
+                            Y Combinator is the world&apos;s most prestigious startup accelerator,
+                            having funded over 4,000 companies including Airbnb, Dropbox, Stripe,
+                            and Reddit. These alumni have gone through YC&apos;s intensive 3-month
+                            program.
                           </p>
                         </div>
                       </div>
@@ -511,7 +480,7 @@ export default function StartupsPage() {
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                {yCombinatorStartups.map((company, index) => (
+                {yCombinatorStartups.map((company) => (
                   <StartupCard
                     key={company.id}
                     id={company.id}
@@ -583,7 +552,7 @@ export default function StartupsPage() {
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                {eworStartups.map((company, index) => (
+                {eworStartups.map((company) => (
                   <StartupCard
                     key={company.id}
                     id={company.id}
@@ -616,7 +585,7 @@ export default function StartupsPage() {
                   <div className="flex-1 text-center md:text-left">
                     <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#d0006f]/40 bg-[#d0006f]/20 px-3 py-1.5">
                       <span className="text-xs font-bold uppercase tracking-widest text-[#d0006f]">
-                        We're Hiring
+                        We&apos;re Hiring
                       </span>
                     </div>
 
@@ -733,7 +702,6 @@ export default function StartupsPage() {
                   onClick={() => {
                     setSelectedCategory('all');
                     setSelectedYear('all');
-                    setSelectedProgram('all');
                     setSearchQuery('');
                   }}
                   className="w-full whitespace-nowrap rounded border border-white/20 bg-white/10 px-6 py-2.5 text-sm font-medium text-white transition-all hover:border-white/30 hover:bg-white/20 lg:w-auto"

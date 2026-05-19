@@ -253,7 +253,7 @@ export default function RtssPage() {
         <div className="relative z-[70] mx-auto min-h-[820px] max-w-[1500px] px-5 sm:min-h-[calc(100svh-5rem)] sm:px-8 lg:min-h-[900px] lg:px-12">
           <div className="absolute inset-x-5 top-[53%] flex -translate-y-1/2 flex-col items-center text-center sm:inset-x-8 sm:top-[52%] lg:inset-x-12 lg:top-[54%]">
             <p className="mx-auto max-w-[20rem] px-4 text-base font-bold text-white/85 drop-shadow-[0_2px_14px_rgba(0,0,44,0.5)] sm:max-w-xl sm:text-xl">
-              Join us for START Munich's biggest event yet.
+              Join us for START Munich&apos;s biggest event yet.
             </p>
             <div className="mx-auto mt-6 flex w-full max-w-md flex-col items-center justify-center gap-3 text-sm font-black uppercase tracking-wide text-white sm:max-w-none sm:flex-row sm:text-base">
               <span className="inline-flex w-full items-center justify-center gap-2 rounded bg-[#00002c]/35 px-4 py-2 shadow-lg shadow-[#00002c]/20 backdrop-blur sm:w-auto">
@@ -291,7 +291,7 @@ export default function RtssPage() {
         <div className="absolute inset-x-0 top-0 mx-auto h-px max-w-6xl bg-white/20" />
         <div className="mx-auto max-w-6xl text-center">
           <p className="mx-auto max-w-sm text-lg font-bold text-white/70 sm:max-w-none">
-            Join us for START Munich's biggest event yet.
+            Join us for START Munich&apos;s biggest event yet.
           </p>
           <h2 className="mt-3 text-[2rem] font-black uppercase leading-none min-[480px]:text-4xl sm:text-7xl lg:text-8xl">
             <span className="block">Road to</span>
@@ -440,7 +440,7 @@ export default function RtssPage() {
                   </div>
                 </div>
                 <p className="mt-5 text-base leading-relaxed text-[#00002c]/75">
-                  "{testimonial.quote}"
+                  &ldquo;{testimonial.quote}&rdquo;
                 </p>
               </article>
             ))}

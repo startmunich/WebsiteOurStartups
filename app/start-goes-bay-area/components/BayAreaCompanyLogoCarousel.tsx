@@ -26,6 +26,9 @@ export default function BayAreaCompanyLogoCarousel() {
                   <div
                     className={`flex h-14 w-full items-center justify-center rounded-xl border px-3 sm:px-4 ${getLogoChipClassName(logo.logoTheme)}`}
                   >
+                    {/* Infinite-scroll marquee with variable-aspect logos; next/image fill/responsive
+                        sizing interacts poorly with animated horizontal scroll. */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={logo.logoPath}
                       alt={`${logo.name} logo`}

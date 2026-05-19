@@ -13,7 +13,7 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-export default [
+const config = [
   {
     ignores: [
       '.next',
@@ -63,3 +63,5 @@ export default [
     },
   },
 ];
+
+export default config;

@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 interface MemberCardProps {
   name: string;
   imageUrl: string;
@@ -15,11 +17,15 @@ export default function MemberCard({
 }: MemberCardProps) {
   const content = (
     <div className="group relative h-full cursor-pointer overflow-hidden rounded-lg border border-white/10 bg-white/5 transition-all duration-300 hover:scale-105 hover:border-white/20 hover:bg-white/10">
-      <img
-        src={imageUrl}
-        alt={name}
-        className={compact ? 'h-40 w-full object-cover' : 'h-64 w-full object-cover'}
-      />
+      <div className={compact ? 'relative h-40 w-full' : 'relative h-64 w-full'}>
+        <Image
+          src={imageUrl}
+          alt={name}
+          fill
+          sizes="(max-width: 768px) 50vw, 25vw"
+          className="object-cover"
+        />
+      </div>
       <div className="absolute inset-0 bg-gradient-to-t from-[#00002c]/60 via-[#00002c]/20 to-transparent"></div>
 
       {linkedinUrl && (

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
 
@@ -32,22 +33,20 @@ async function fetchCompanies(): Promise<Company[]> {
 
 function LogoCard({ company }: { company: Company }) {
   const [imgFailed, setImgFailed] = useState(false);
-  const initials = company.name
-    .split(' ')
-    .map((w) => w[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase();
 
   return (
     <div className="flex min-h-[100px] items-center justify-center rounded-xl border border-white/10 bg-white p-5 transition-all duration-300 hover:border-[#d0006f]/50 hover:shadow-lg hover:shadow-[#d0006f]/10">
       {company.logoUrl && !imgFailed ? (
-        <img
-          src={company.logoUrl}
-          alt={company.name}
-          className="max-h-14 max-w-full object-contain"
-          onError={() => setImgFailed(true)}
-        />
+        <div className="relative h-14 w-full">
+          <Image
+            src={company.logoUrl}
+            alt={company.name}
+            fill
+            sizes="(max-width: 768px) 50vw, 25vw"
+            className="object-contain"
+            onError={() => setImgFailed(true)}
+          />
+        </div>
       ) : (
         <h3 className="text-center text-lg font-bold text-gray-700">{company.name}</h3>
       )}
@@ -123,9 +122,9 @@ export default function MemberNetworkPage() {
                 Where Our Members Work
               </h2>
               <p className="text-gray-400">
-                Our community spans some of the world's leading companies, research institutions,
-                and startups. From global tech giants to early-stage ventures, START Munich members
-                are building careers that make an impact.
+                Our community spans some of the world&apos;s leading companies, research
+                institutions, and startups. From global tech giants to early-stage ventures, START
+                Munich members are building careers that make an impact.
               </p>
             </div>
           </div>

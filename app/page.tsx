@@ -47,6 +47,41 @@ type StartupFetchResult = {
   totalStartups: number;
 };
 
+interface NocoDBAttachment {
+  signedPath?: string;
+}
+
+interface PartnerRecord {
+  Id?: number | string;
+  Name?: string;
+  Categrory?: string;
+  Show?: boolean | number | string;
+  Featured?: boolean | number | string;
+  LogoNoBackground?: NocoDBAttachment[];
+}
+
+interface StartupRecord {
+  Id?: number | string;
+  id?: number | string;
+  'Startup Name'?: string;
+  'Featured Startup'?: unknown;
+  'Y Combinator Alumni'?: unknown;
+  EWOR?: unknown;
+  'Company Logo'?: NocoDBAttachment[];
+}
+
+interface NewsRecord {
+  Id?: number | string;
+  id?: number | string;
+  Title?: string;
+  Desciption?: string;
+  Description?: string;
+  URL?: string;
+  Url?: string;
+  Order?: number;
+  Image?: NocoDBAttachment[];
+}
+
 async function fetchFeaturedPartners(): Promise<Partner[]> {
   if (!NOCODB_API_TOKEN || !NOCODB_PARTNERS_TABLE_ID) return [];
   try {
@@ -60,7 +95,7 @@ async function fetchFeaturedPartners(): Promise<Partner[]> {
     if (!res.ok) return [];
     const data = await res.json();
     return (data.list || [])
-      .filter((r: any) => {
+      .filter((r: PartnerRecord) => {
         const show = r.Show;
         const featured = r.Featured;
         return (
@@ -68,8 +103,8 @@ async function fetchFeaturedPartners(): Promise<Partner[]> {
           (featured === true || featured === 1 || String(featured).toLowerCase() === 'true')
         );
       })
-      .map((r: any) => {
-        const logos: any[] = r.LogoNoBackground || [];
+      .map((r: PartnerRecord) => {
+        const logos: NocoDBAttachment[] = r.LogoNoBackground || [];
         const logo = logos.length > 0 ? logos[logos.length - 1] : null;
         const logoUrl = logo?.signedPath
           ? `${NOCODB_BASE_URL}/${logo.signedPath}`
@@ -104,10 +139,10 @@ async function fetchFeaturedStartups(): Promise<StartupFetchResult> {
     const startups = data.list || [];
     const featuredStartups = startups
       .filter(
-        (r: any) =>
+        (r: StartupRecord) =>
           isYes(r['Featured Startup']) || isYes(r['Y Combinator Alumni']) || isYes(r['EWOR']),
       )
-      .map((r: any) => {
+      .map((r: StartupRecord) => {
         let logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(r['Startup Name'] || 'Startup')}&size=300&background=00002c&color=fff&bold=true&font-size=0.4`;
         if (r['Company Logo']?.[0]?.signedPath)
           logoUrl = `${NOCODB_BASE_URL}/${r['Company Logo'][0].signedPath}`;
@@ -139,8 +174,8 @@ async function fetchNews(): Promise<NewsItem[]> {
     if (!res.ok) return [];
     const data = await res.json();
     return (data.list || [])
-      .sort((a: any, b: any) => (a.Order ?? Infinity) - (b.Order ?? Infinity))
-      .map((r: any) => {
+      .sort((a: NewsRecord, b: NewsRecord) => (a.Order ?? Infinity) - (b.Order ?? Infinity))
+      .map((r: NewsRecord) => {
         let imageUrl = '';
         if (r.Image && Array.isArray(r.Image) && r.Image[0]?.signedPath) {
           imageUrl = `${NOCODB_BASE_URL}/${r.Image[0].signedPath}`;

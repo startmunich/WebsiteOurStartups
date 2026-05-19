@@ -56,6 +56,10 @@ export default function TestimonialsSection({
                   <div className="ml-4 flex flex-shrink-0 flex-col gap-2">
                     {item.logos.map((logo, index) => {
                       const logoImg = (
+                        // Partner logos have varying aspect ratios and we render at fixed
+                        // height with auto width; next/image needs explicit dimensions
+                        // and a wrapper, which would distort the logos.
+                        // eslint-disable-next-line @next/next/no-img-element
                         <img
                           src={logo.src}
                           alt={item.company}

@@ -8,11 +8,8 @@ interface HeroProps {
   description: React.ReactNode;
   children?: React.ReactNode;
   className?: string;
-  contentClassName?: string;
   titleClassName?: string;
   descriptionClassName?: string;
-  leftColumnClassName?: string;
-  rightColumnClassName?: string;
   overlayOpacity?: string;
   hideChildrenOnMobile?: boolean;
   imagePosition?: string;
@@ -25,11 +22,8 @@ export default function Hero({
   description,
   children,
   className = 'min-h-[70vh]',
-  contentClassName,
   titleClassName,
   descriptionClassName,
-  leftColumnClassName,
-  rightColumnClassName,
   overlayOpacity = 'bg-brand-dark-blue/70',
   hideChildrenOnMobile = false,
   imagePosition = 'center 45%',

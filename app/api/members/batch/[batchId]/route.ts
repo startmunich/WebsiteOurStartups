@@ -1,13 +1,5 @@
 import { NextResponse } from 'next/server';
 
-interface ExternalMember {
-  id: number;
-  name: string;
-  imageUrl: string;
-  linkedinUrl?: string;
-  // Add other fields as needed
-}
-
 interface Member {
   id: number;
   name: string;
@@ -23,6 +15,50 @@ interface Member {
   achievements?: string;
   gender?: string;
 }
+
+interface RawMember {
+  id?: number;
+  name?: string;
+  fullName?: string;
+  firstname?: string;
+  firstName?: string;
+  vorname?: string;
+  lastname?: string;
+  lastName?: string;
+  nachname?: string;
+  displayName?: string;
+  username?: string;
+  role?: string;
+  position?: string;
+  title?: string;
+  study?: string;
+  field?: string;
+  degree?: string;
+  university?: string;
+  school?: string;
+  company?: string;
+  employer?: string;
+  linkedinUrl?: string;
+  linkedin?: string;
+  linkedin_profile?: string;
+  bio?: string;
+  description?: string;
+  expertise?: string[] | string;
+  achievements?: string;
+  gender?: string;
+  imageUrl?: unknown;
+  image?: unknown;
+  photo?: unknown;
+  avatar?: unknown;
+  profileImage?: unknown;
+  profilePicture?: unknown;
+  picture?: unknown;
+  image_path?: unknown;
+  avatarUrl?: unknown;
+  icon?: unknown;
+}
+
+type ImageSource = unknown;
 
 export const revalidate = 3600;
 
@@ -88,14 +124,14 @@ export async function GET(request: Request, { params }: { params: Promise<{ batc
     }
 
     const data = await response.json();
-    const dataMembers: any[] = Array.isArray(data) ? data : data.members || data.data || [];
+    const dataMembers: RawMember[] = Array.isArray(data) ? data : data.members || data.data || [];
 
     if (!Array.isArray(dataMembers) || dataMembers.length === 0) {
       return NextResponse.json([]);
     }
 
     // Helper to pick the best image field
-    const getImageUrl = (member: any): string => {
+    const getImageUrl = (member: RawMember): string => {
       const maybeUrl =
         member.imageUrl ||
         member.image ||
@@ -109,7 +145,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ batc
         member.icon ||
         null;
 
-      const normalise = (url: any): string | null => {
+      const normalise = (url: ImageSource): string | null => {
         if (!url) return null;
         if (typeof url === 'string') {
           const trimmed = url.trim();
@@ -119,14 +155,15 @@ export async function GET(request: Request, { params }: { params: Promise<{ batc
           if (trimmed.startsWith('/')) return trimmed;
           return trimmed;
         }
-        if (typeof url === 'object') {
+        if (typeof url === 'object' && url !== null) {
           if (Array.isArray(url) && url.length > 0) {
             return normalise(url[0]);
           }
-          if (url.url) return normalise(url.url);
-          if (url.src) return normalise(url.src);
-          if (url.path) return normalise(url.path);
-          if (url.signedPath) return normalise(url.signedPath);
+          const obj = url as Record<string, ImageSource>;
+          if (obj.url) return normalise(obj.url);
+          if (obj.src) return normalise(obj.src);
+          if (obj.path) return normalise(obj.path);
+          if (obj.signedPath) return normalise(obj.signedPath);
         }
         return null;
       };
@@ -151,7 +188,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ batc
       return '/example.png';
     };
 
-    const getMemberName = (member: any): string => {
+    const getMemberName = (member: RawMember): string => {
       if (member.name) return member.name;
       if (member.fullName) return member.fullName;
       if (member.firstname || member.firstName || member.vorname) {
@@ -166,7 +203,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ batc
     };
 
     // Transform external API response to Member format
-    const members: Member[] = (dataMembers || []).map((member: any, index: number) => ({
+    const members: Member[] = (dataMembers || []).map((member: RawMember, index: number) => ({
       id: member.id || index + 1,
       name: getMemberName(member),
       batch: batchId,
@@ -174,12 +211,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ batc
       study: member.study || member.field || member.degree,
       university: member.university || member.school,
       company: member.company || member.employer,
-      linkedinUrl:
-        member.linkedinUrl ||
-        member.linkedin ||
-        member.linkedin_profile ||
-        member.linkedinUrl ||
-        null,
+      linkedinUrl: member.linkedinUrl || member.linkedin || member.linkedin_profile || undefined,
       imageUrl: getImageUrl(member),
       bio: member.bio || member.description,
       expertise: member.expertise

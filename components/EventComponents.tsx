@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 // Event Card Component
@@ -41,10 +42,12 @@ export const EventCard = ({
     <>
       {/* Full card background image */}
       <div className={`relative ${isFlagship ? 'h-[240px]' : 'h-[200px]'} w-full overflow-hidden`}>
-        <img
+        <Image
           src={event.image}
           alt={event.name}
-          className={`absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out ${onClick ? 'group-hover:scale-110' : ''}`}
+          fill
+          sizes={isFlagship ? '(max-width: 640px) 78vw, 340px' : '(max-width: 640px) 58vw, 240px'}
+          className={`object-cover transition-transform duration-700 ease-out ${onClick ? 'group-hover:scale-110' : ''}`}
         />
 
         {/* Top gradient for category badge */}
@@ -156,10 +159,12 @@ export const SpecialEventCard = ({ event, index = 0, className = '' }: SpecialEv
     >
       {/* Full card image area */}
       <div className="relative h-72 w-full overflow-hidden">
-        <img
+        <Image
           src={event.image}
           alt={event.name}
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+          fill
+          sizes="(max-width: 640px) 90vw, 400px"
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
@@ -212,8 +217,6 @@ export const TimelineMarker = ({
   onLeave,
 }: TimelineMarkerProps) => {
   const isHovered = hoveredEvent === eventId;
-  const markerSize = size === 'lg' ? 'w-6 h-6' : 'w-4 h-4';
-  const labelSize = size === 'lg' ? 'text-sm px-4 py-2' : 'text-xs px-3 py-1.5';
   const positionClass =
     position === 'top'
       ? `${size === 'lg' ? '-top-12' : '-top-10'}`
