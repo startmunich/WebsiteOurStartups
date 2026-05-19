@@ -61,7 +61,11 @@ export async function GET(request: Request, { params }: { params: Promise<{ batc
 
   const apiBatch = resolveApiBatch(batchId);
 
-  const API_KEY = process.env.STARTMUNICH_API_KEY || 'YOUR_API_KEY_PLACEHOLDER';
+  const API_KEY = process.env.STARTMUNICH_API_KEY;
+  if (!API_KEY) {
+    console.error('STARTMUNICH_API_KEY is not set');
+    return NextResponse.json([]);
+  }
 
   try {
     const response = await fetch(
