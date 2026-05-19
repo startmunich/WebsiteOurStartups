@@ -86,29 +86,36 @@ export default function StartupDetailsContent({ company }: { company: Company })
                 </div>
                 {/* Links */}
                 <div className="flex flex-wrap gap-3">
-                  <a
-                    href={`https://${company.website}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() =>
-                      posthog.capture('startup_website_clicked', {
-                        startup_id: company.id,
-                        startup_name: company.name,
-                        website: company.website,
-                      })
-                    }
-                    className="inline-flex items-center gap-2 font-medium text-[#d0006f] transition-colors hover:text-pink-400"
-                  >
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                      />
-                    </svg>
-                    Visit Website
-                  </a>
+                  {company.website && (
+                    <a
+                      href={`https://${company.website}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() =>
+                        posthog.capture('startup_website_clicked', {
+                          startup_id: company.id,
+                          startup_name: company.name,
+                          website: company.website,
+                        })
+                      }
+                      className="inline-flex items-center gap-2 font-medium text-[#d0006f] transition-colors hover:text-pink-400"
+                    >
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                        />
+                      </svg>
+                      Visit Website
+                    </a>
+                  )}
                   {company.companyLinkedin && (
                     <a
                       href={company.companyLinkedin}
