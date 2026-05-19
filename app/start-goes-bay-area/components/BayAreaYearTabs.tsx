@@ -33,6 +33,11 @@ function TeamPortraitCard({
   linkedinUrl?: string;
 }) {
   const [src, setSrc] = useState(imageUrl);
+  // `imageUrl` resolves later (after the members API returns), so the initial
+  // placeholder must be replaced when the real URL arrives via props.
+  useEffect(() => {
+    setSrc(imageUrl);
+  }, [imageUrl]);
   const content = (
     <div className="group relative h-[18rem] w-[14rem] flex-shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-white/5">
       <Image

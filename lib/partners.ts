@@ -31,7 +31,9 @@ function transformNocoDBRecord(record: NocoDBPartnerRecord): Partner {
   }
 
   return {
-    id: String(record.Id ?? Math.random()),
+    // Deterministic fallback so React keys stay stable across refetches;
+    // Name is required-ish (defaulted to 'Unnamed Partner' below).
+    id: String(record.Id ?? record.Name ?? 'unnamed-partner'),
     name: record.Name || 'Unnamed Partner',
     category: record.Categrory || 'Other',
     logoUrl,

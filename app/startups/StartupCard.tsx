@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import posthog from 'posthog-js';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Founder {
   name: string;
@@ -12,6 +12,11 @@ interface Founder {
 
 function FounderAvatar({ name, imageUrl }: { name: string; imageUrl: string }) {
   const [src, setSrc] = useState(imageUrl);
+  // Reset the displayed src when the prop changes so a parent re-render with a
+  // new founder image isn't stuck on the previous one (or its fallback).
+  useEffect(() => {
+    setSrc(imageUrl);
+  }, [imageUrl]);
   return (
     <div className="relative h-10 w-10 overflow-hidden rounded-full border border-white/20">
       <Image

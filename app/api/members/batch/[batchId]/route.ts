@@ -204,7 +204,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ batc
 
     // Transform external API response to Member format
     const members: Member[] = (dataMembers || []).map((member: RawMember, index: number) => ({
-      id: member.id || index + 1,
+      id: member.id ?? index + 1,
       name: getMemberName(member),
       batch: batchId,
       role: member.role || member.position || member.title || '',
