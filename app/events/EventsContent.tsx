@@ -32,7 +32,7 @@ const recurringEvents: RecurringEvent[] = [
     name: 'Road to START Summit (RTSS)',
     description:
       'Our flagship pitch event where aspiring founders present their startup ideas to a panel of investors, entrepreneurs, and industry experts.',
-    month: 'October',
+    month: 'December',
     frequency: 'Once per year',
     icon: 'presentation',
     image: '/events/eventCards/summit-opt.jpg',
@@ -611,10 +611,10 @@ export default function EventsPage() {
                   />
 
                   <TimelineMarker
-                    eventId="rtss"
-                    left={calculateTimelinePosition(12, 0)}
-                    color="#ff1744"
-                    label="RTSS 🚀"
+                    eventId="rtsh"
+                    left={calculateTimelinePosition(11, 29)}
+                    color="#9c27b0"
+                    label="RTSH 🚀"
                     position="top"
                     hoveredEvent={hoveredEvent}
                     onHover={handleTimelineMarkerHover}
@@ -622,10 +622,10 @@ export default function EventsPage() {
                   />
 
                   <TimelineMarker
-                    eventId="rtsh"
-                    left={calculateTimelinePosition(12, 15)}
-                    color="#9c27b0"
-                    label="RTSH 🚀"
+                    eventId="rtss"
+                    left={calculateTimelinePosition(12, 9)}
+                    color="#ff1744"
+                    label="RTSS 🚀"
                     position="bottom"
                     hoveredEvent={hoveredEvent}
                     onHover={handleTimelineMarkerHover}
@@ -734,13 +734,6 @@ export default function EventsPage() {
                         <div className="h-3 w-3 flex-shrink-0 rounded-full bg-[#4a90e2]"></div>
                         <span className="text-sm text-white">Fail Tales</span>
                       </button>
-                      <button
-                        onClick={() => scrollToEventMobile('rtss')}
-                        className="flex items-center gap-2 transition-opacity hover:opacity-80"
-                      >
-                        <div className="h-3 w-3 flex-shrink-0 rounded-full bg-[#ff1744]"></div>
-                        <span className="text-sm text-white">RTSS 🚀</span>
-                      </button>
                     </div>
                   </div>
 
@@ -752,6 +745,17 @@ export default function EventsPage() {
                     >
                       <div className="h-3 w-3 flex-shrink-0 rounded-full bg-[#9c27b0]"></div>
                       <span className="text-sm text-white">Road to START Hack 🚀</span>
+                    </button>
+                  </div>
+
+                  <div className="flex items-start gap-4 rounded-2xl bg-white/[0.04] p-4">
+                    <div className="w-14 flex-shrink-0 text-sm font-bold text-gray-400">Dec</div>
+                    <button
+                      onClick={() => scrollToEventMobile('rtss')}
+                      className="flex items-center gap-2 transition-opacity hover:opacity-80"
+                    >
+                      <div className="h-3 w-3 flex-shrink-0 rounded-full bg-[#ff1744]"></div>
+                      <span className="text-sm text-white">RTSS 🚀</span>
                     </button>
                   </div>
                 </div>
