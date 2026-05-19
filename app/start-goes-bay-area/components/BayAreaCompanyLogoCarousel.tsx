@@ -48,7 +48,7 @@ export default function BayAreaCompanyLogoCarousel() {
                     <a
                       href={logo.websiteUrl}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener"
                       className="flex h-full w-full flex-col items-center justify-center"
                       aria-label={`${logo.name} website`}
                     >

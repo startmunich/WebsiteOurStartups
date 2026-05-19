@@ -36,7 +36,7 @@ export default function CTA({
 
     if (button.external) {
       return (
-        <a key={index} href={button.href} target="_blank" rel="noreferrer" className={classes}>
+        <a key={index} href={button.href} target="_blank" rel="noopener" className={classes}>
           {button.label}
         </a>
       );
