@@ -10,6 +10,14 @@ export async function GET() {
     return NextResponse.json(companies);
   } catch (error) {
     console.error('Error fetching from NocoDB:', error);
-    return NextResponse.json({ error: 'Failed to fetch startups from database' }, { status: 500 });
+    const isTimeout = error instanceof DOMException && error.name === 'TimeoutError';
+    return NextResponse.json(
+      {
+        error: isTimeout
+          ? 'Upstream NocoDB request timed out'
+          : 'Failed to fetch startups from database',
+      },
+      { status: isTimeout ? 504 : 500 },
+    );
   }
 }

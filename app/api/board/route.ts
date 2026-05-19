@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 
 export const revalidate = 3600;
 
+const BOARD_TIMEOUT_MS = 10_000;
+
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const termStartYears = url.searchParams.get('termStartYears') || '2024,2025';
@@ -20,6 +22,7 @@ export async function GET(request: Request) {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${API_KEY}`,
         },
+        signal: AbortSignal.timeout(BOARD_TIMEOUT_MS),
         next: { revalidate: 3600 },
       },
     );
@@ -34,6 +37,10 @@ export async function GET(request: Request) {
     return NextResponse.json(data);
   } catch (error) {
     console.error('Error fetching board data', error);
-    return NextResponse.json({ error: 'Error fetching board data' }, { status: 500 });
+    const isTimeout = error instanceof DOMException && error.name === 'TimeoutError';
+    return NextResponse.json(
+      { error: isTimeout ? 'Upstream board API timed out' : 'Error fetching board data' },
+      { status: isTimeout ? 504 : 500 },
+    );
   }
 }

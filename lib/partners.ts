@@ -1,6 +1,7 @@
 const NOCODB_API_TOKEN = process.env.NOCODB_API_TOKEN;
 const NOCODB_BASE_URL = process.env.NOCODB_BASE_URL || 'https://ndb.startmunich.de';
 const NOCODB_PARTNERS_TABLE_ID = process.env.NOCODB_PARTNERS_TABLE_ID;
+const NOCODB_TIMEOUT_MS = 10_000;
 
 export interface Partner {
   id: string;
@@ -46,6 +47,7 @@ export async function getAllPartners(): Promise<Partner[]> {
           'xc-token': NOCODB_API_TOKEN,
           'Content-Type': 'application/json',
         },
+        signal: AbortSignal.timeout(NOCODB_TIMEOUT_MS),
         next: { revalidate: 3600 },
       },
     );

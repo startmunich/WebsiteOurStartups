@@ -26,6 +26,8 @@ interface Member {
 
 export const revalidate = 3600;
 
+const STARTMUNICH_API_TIMEOUT_MS = 10_000;
+
 export async function GET(request: Request, { params }: { params: Promise<{ batchId: string }> }) {
   const { batchId } = await params;
 
@@ -75,6 +77,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ batc
           Authorization: `Bearer ${API_KEY}`,
           'Content-Type': 'application/json',
         },
+        signal: AbortSignal.timeout(STARTMUNICH_API_TIMEOUT_MS),
         next: { revalidate: 3600 },
       },
     );
