@@ -21,10 +21,6 @@ export async function GET() {
     const beforeDate = now.toISOString();
     const afterDate = eighteenMonthsAgo.toISOString();
 
-    console.log('Fetching latest past events');
-    console.log('After date (18 months ago):', afterDate);
-    console.log('Before date (now):', beforeDate);
-
     const response = await fetch(
       `https://public-api.luma.com/v1/calendar/list-events?calendar_id=cal-1MxD65bgV0Hcb0r&after=${afterDate}&before=${beforeDate}&pagination_limit=50`,
       {
@@ -50,13 +46,10 @@ export async function GET() {
       return eventDate < now && entry.event.visibility !== 'private';
     });
 
-    console.log('Luma API response received');
-    console.log('Total events in range:', data.entries?.length || 0);
-    console.log('Past events (filtered):', pastEvents.length);
-
-    if (pastEvents.length > 0) {
-      console.log('First past event date:', pastEvents[0].event.start_at);
-      console.log('Last past event date:', pastEvents[pastEvents.length - 1].event.start_at);
+    if (process.env.LUMA_DEBUG === '1') {
+      console.log(
+        `[luma:past] range=${afterDate}..${beforeDate} total=${data.entries?.length || 0} filtered=${pastEvents.length}`,
+      );
     }
 
     // Return filtered past events

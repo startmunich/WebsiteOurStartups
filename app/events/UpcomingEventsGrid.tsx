@@ -39,10 +39,6 @@ export default function UpcomingEventsGrid() {
 
         const data = await response.json();
 
-        // Log the full API response for debugging
-        console.log('Upcoming Events API Response:', data);
-        console.log('Number of upcoming events:', data.entries?.length || 0);
-
         // Sort events by date (soonest first)
         const sortedEvents = (data.entries || []).sort(
           (a: LumaEventWrapper, b: LumaEventWrapper) => {
@@ -51,8 +47,7 @@ export default function UpcomingEventsGrid() {
         );
 
         setEvents(sortedEvents);
-      } catch (err) {
-        console.error('Error fetching upcoming events:', err);
+      } catch {
         setError('Unable to load upcoming events');
       } finally {
         setLoading(false);

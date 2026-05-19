@@ -21,10 +21,6 @@ export async function GET() {
     const afterDate = now.toISOString();
     const beforeDate = twelveMonthsFromNow.toISOString();
 
-    console.log('Fetching upcoming events');
-    console.log('After date (now):', afterDate);
-    console.log('Before date (12 months from now):', beforeDate);
-
     const response = await fetch(
       `https://public-api.luma.com/v1/calendar/list-events?calendar_id=cal-1MxD65bgV0Hcb0r&after=${afterDate}&before=${beforeDate}&pagination_limit=50`,
       {
@@ -50,15 +46,9 @@ export async function GET() {
       return eventDate >= now && entry.event.visibility !== 'private';
     });
 
-    console.log('Luma API response received');
-    console.log('Total events in range:', data.entries?.length || 0);
-    console.log('Upcoming events (filtered):', upcomingEvents.length);
-
-    if (upcomingEvents.length > 0) {
-      console.log('First upcoming event date:', upcomingEvents[0].event.start_at);
+    if (process.env.LUMA_DEBUG === '1') {
       console.log(
-        'Last upcoming event date:',
-        upcomingEvents[upcomingEvents.length - 1].event.start_at,
+        `[luma:upcoming] range=${afterDate}..${beforeDate} total=${data.entries?.length || 0} filtered=${upcomingEvents.length}`,
       );
     }
 
