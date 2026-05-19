@@ -37,6 +37,11 @@ const NOCODB_PARTNERS_TABLE_ID = process.env.NOCODB_PARTNERS_TABLE_ID;
 const NOCODB_STARTUPS_TABLE_ID = process.env.NOCODB_STARTUPS_TABLE_ID;
 const NOCODB_NEWS_TABLE_ID = process.env.NOCODB_NEWS_TABLE_ID;
 
+const isYes = (v: unknown) =>
+  String(v ?? '')
+    .trim()
+    .toLowerCase() === 'yes';
+
 type StartupFetchResult = {
   featuredStartups: Startup[];
   totalStartups: number;
@@ -100,9 +105,7 @@ async function fetchFeaturedStartups(): Promise<StartupFetchResult> {
     const featuredStartups = startups
       .filter(
         (r: any) =>
-          r['Featured Startup']?.toLowerCase() === 'yes' ||
-          r['Y Combinator Alumni']?.toLowerCase() === 'yes' ||
-          r['EWOR']?.toLowerCase() === 'yes',
+          isYes(r['Featured Startup']) || isYes(r['Y Combinator Alumni']) || isYes(r['EWOR']),
       )
       .map((r: any) => {
         let logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(r['Startup Name'] || 'Startup')}&size=300&background=00002c&color=fff&bold=true&font-size=0.4`;
@@ -112,9 +115,9 @@ async function fetchFeaturedStartups(): Promise<StartupFetchResult> {
           id: r.Id || r.id,
           name: r['Startup Name'] || 'Startup',
           logoUrl,
-          isSpotlight: r['Featured Startup']?.toLowerCase() === 'yes',
-          isYCombinator: r['Y Combinator Alumni']?.toLowerCase() === 'yes',
-          isEWOR: r['EWOR']?.toLowerCase() === 'yes',
+          isSpotlight: isYes(r['Featured Startup']),
+          isYCombinator: isYes(r['Y Combinator Alumni']),
+          isEWOR: isYes(r['EWOR']),
         };
       });
     return { featuredStartups, totalStartups: startups.length };

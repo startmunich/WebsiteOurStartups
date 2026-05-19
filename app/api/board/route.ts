@@ -6,7 +6,11 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const termStartYears = url.searchParams.get('termStartYears') || '2024,2025';
 
-  const API_KEY = process.env.STARTMUNICH_API_KEY || 'YOUR_API_KEY_PLACEHOLDER';
+  const API_KEY = process.env.STARTMUNICH_API_KEY;
+  if (!API_KEY) {
+    console.error('STARTMUNICH_API_KEY is not set');
+    return NextResponse.json({ error: 'Server misconfiguration' }, { status: 500 });
+  }
 
   try {
     const response = await fetch(

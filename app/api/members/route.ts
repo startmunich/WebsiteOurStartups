@@ -58,18 +58,7 @@ function transformNocoDBRecord(record: any): Member {
 }
 
 export async function GET() {
-  console.log('========== FETCHING ALL MEMBERS ==========');
-  console.log('🔍 Environment Variables:');
-  console.log(
-    'NOCODB_API_TOKEN:',
-    NOCODB_API_TOKEN
-      ? `${NOCODB_API_TOKEN.substring(0, 10)}... (${NOCODB_API_TOKEN.length} chars)`
-      : 'NOT SET',
-  );
-  console.log('NOCODB_BASE_URL:', NOCODB_BASE_URL);
-  console.log('NOCODB_MEMBERS_TABLE_ID:', NOCODB_MEMBERS_TABLE_ID);
-  console.log('NOCODB_STARTUPS_TABLE_ID:', process.env.NOCODB_STARTUPS_TABLE_ID);
-  console.log('NODE_ENV:', process.env.NODE_ENV);
+  console.log('NOCODB_API_TOKEN:', NOCODB_API_TOKEN ? 'SET' : 'NOT SET');
 
   // If members table is not configured, return mock data
   if (!NOCODB_API_TOKEN || !NOCODB_MEMBERS_TABLE_ID) {
@@ -78,8 +67,6 @@ export async function GET() {
   }
 
   try {
-    console.log('Fetching members from NocoDB...');
-
     const response = await fetch(
       `${NOCODB_BASE_URL}/api/v2/tables/${NOCODB_MEMBERS_TABLE_ID}/records?limit=1000&offset=0`,
       {
@@ -100,7 +87,6 @@ export async function GET() {
     const data = await response.json();
     const members = (data.list || []).map(transformNocoDBRecord);
 
-    console.log(`Successfully fetched ${members.length} members from NocoDB`);
     return NextResponse.json(members);
   } catch (error) {
     console.error('Error fetching from NocoDB:', error);
