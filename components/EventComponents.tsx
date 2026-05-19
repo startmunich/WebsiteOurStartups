@@ -35,15 +35,10 @@ export const EventCard = ({
 }: EventCardProps) => {
   const isHovered = hoveredEvent === event.id;
 
-  return (
-    <div
-      data-event-id={event.id}
-      onMouseEnter={() => setHoveredEvent(event.id)}
-      onMouseLeave={() => setHoveredEvent(null)}
-      onClick={onClick}
-      className={`flex-shrink-0 ${isFlagship ? 'w-[78vw] sm:w-[340px]' : 'w-[58vw] sm:w-[240px]'} group relative ${isFlagship ? 'bg-gradient-to-br from-[#d0006f]/10 via-white/5 to-[#d0006f]/5' : 'bg-white/5'} overflow-hidden rounded-[1.75rem] border-2 transition-all duration-500 ${isHovered ? 'border-[#d0006f]' : 'border-transparent'} ${onClick && isHovered ? 'scale-[1.02] shadow-2xl shadow-black/40' : 'shadow-xl shadow-black/20'} ${onClick ? 'cursor-pointer' : ''} ${className} `}
-      style={{ animationDelay: `${index * 100}ms` }}
-    >
+  const wrapperClassName = `flex flex-col flex-shrink-0 ${isFlagship ? 'w-[78vw] sm:w-[340px]' : 'w-[58vw] sm:w-[240px]'} group relative ${isFlagship ? 'bg-gradient-to-br from-[#d0006f]/10 via-white/5 to-[#d0006f]/5' : 'bg-white/5'} overflow-hidden rounded-[1.75rem] border-2 transition-all duration-500 ${isHovered ? 'border-[#d0006f]' : 'border-transparent'} ${onClick && isHovered ? 'scale-[1.02] shadow-2xl shadow-black/40' : 'shadow-xl shadow-black/20'} ${onClick ? 'cursor-pointer' : ''} ${className} `;
+
+  const cardContent = (
+    <>
       {/* Full card background image */}
       <div className={`relative ${isFlagship ? 'h-[240px]' : 'h-[200px]'} w-full overflow-hidden`}>
         <img
@@ -108,6 +103,34 @@ export const EventCard = ({
           )
         )}
       </div>
+    </>
+  );
+
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        data-event-id={event.id}
+        onMouseEnter={() => setHoveredEvent(event.id)}
+        onMouseLeave={() => setHoveredEvent(null)}
+        onClick={onClick}
+        className={`${wrapperClassName} appearance-none p-0 text-left`}
+        style={{ animationDelay: `${index * 100}ms` }}
+      >
+        {cardContent}
+      </button>
+    );
+  }
+
+  return (
+    <div
+      data-event-id={event.id}
+      onMouseEnter={() => setHoveredEvent(event.id)}
+      onMouseLeave={() => setHoveredEvent(null)}
+      className={wrapperClassName}
+      style={{ animationDelay: `${index * 100}ms` }}
+    >
+      {cardContent}
     </div>
   );
 };
