@@ -9,7 +9,23 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 // the absolutely-positioned panel without the menu collapsing.
 const HOVER_CLOSE_DELAY_MS = 150;
 
-function useHoverableDropdown() {
+// Touch devices synthesize a `mouseenter` on the first tap and only fire
+// `click` on the second — wiring hover handlers there would force users
+// to double-tap. Gate the hover behavior on a real hover-capable pointer.
+function useHasHover() {
+  const [hasHover, setHasHover] = useState(false);
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
+    setHasHover(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setHasHover(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+  return hasHover;
+}
+
+function useHoverableDropdown(hoverEnabled: boolean) {
   const [isOpen, setIsOpen] = useState(false);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -43,8 +59,11 @@ function useHoverableDropdown() {
   useEffect(() => () => cancelClose(), [cancelClose]);
 
   const hoverProps = useMemo(
-    () => ({ onMouseEnter: open, onMouseLeave: scheduleClose }),
-    [open, scheduleClose],
+    () =>
+      hoverEnabled
+        ? { onMouseEnter: open, onMouseLeave: scheduleClose }
+        : ({} as { onMouseEnter?: () => void; onMouseLeave?: () => void }),
+    [hoverEnabled, open, scheduleClose],
   );
 
   return useMemo(
@@ -54,9 +73,10 @@ function useHoverableDropdown() {
 }
 
 export default function Navigation() {
-  const community = useHoverableDropdown();
-  const events = useHoverableDropdown();
-  const partner = useHoverableDropdown();
+  const hoverEnabled = useHasHover();
+  const community = useHoverableDropdown(hoverEnabled);
+  const events = useHoverableDropdown(hoverEnabled);
+  const partner = useHoverableDropdown(hoverEnabled);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileCommunityOpen, setIsMobileCommunityOpen] = useState(false);
   const [isMobileEventsOpen, setIsMobileEventsOpen] = useState(false);
