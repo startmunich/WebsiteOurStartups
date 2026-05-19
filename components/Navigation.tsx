@@ -3,12 +3,60 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import posthog from 'posthog-js';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+// 150ms grace window so the user can cross the gap between the button and
+// the absolutely-positioned panel without the menu collapsing.
+const HOVER_CLOSE_DELAY_MS = 150;
+
+function useHoverableDropdown() {
+  const [isOpen, setIsOpen] = useState(false);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const cancelClose = useCallback(() => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  }, []);
+
+  const open = useCallback(() => {
+    cancelClose();
+    setIsOpen(true);
+  }, [cancelClose]);
+
+  const close = useCallback(() => {
+    cancelClose();
+    setIsOpen(false);
+  }, [cancelClose]);
+
+  const toggle = useCallback(() => {
+    cancelClose();
+    setIsOpen((v) => !v);
+  }, [cancelClose]);
+
+  const scheduleClose = useCallback(() => {
+    cancelClose();
+    closeTimerRef.current = setTimeout(() => setIsOpen(false), HOVER_CLOSE_DELAY_MS);
+  }, [cancelClose]);
+
+  useEffect(() => () => cancelClose(), [cancelClose]);
+
+  const hoverProps = useMemo(
+    () => ({ onMouseEnter: open, onMouseLeave: scheduleClose }),
+    [open, scheduleClose],
+  );
+
+  return useMemo(
+    () => ({ isOpen, open, close, toggle, hoverProps }),
+    [isOpen, open, close, toggle, hoverProps],
+  );
+}
 
 export default function Navigation() {
-  const [isCommunityOpen, setIsCommunityOpen] = useState(false);
-  const [isEventsOpen, setIsEventsOpen] = useState(false);
-  const [isPartnerOpen, setIsPartnerOpen] = useState(false);
+  const community = useHoverableDropdown();
+  const events = useHoverableDropdown();
+  const partner = useHoverableDropdown();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileCommunityOpen, setIsMobileCommunityOpen] = useState(false);
   const [isMobileEventsOpen, setIsMobileEventsOpen] = useState(false);
@@ -21,16 +69,16 @@ export default function Navigation() {
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsCommunityOpen(false);
+        community.close();
       }
       if (eventsDropdownRef.current && !eventsDropdownRef.current.contains(event.target as Node)) {
-        setIsEventsOpen(false);
+        events.close();
       }
       if (
         partnerDropdownRef.current &&
         !partnerDropdownRef.current.contains(event.target as Node)
       ) {
-        setIsPartnerOpen(false);
+        partner.close();
       }
     }
 
@@ -38,7 +86,7 @@ export default function Navigation() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [community, events, partner]);
 
   return (
     <nav className="sticky top-0 z-50 bg-brand-dark-blue">
@@ -65,14 +113,16 @@ export default function Navigation() {
             </Link>
 
             {/* Community Dropdown */}
-            <div ref={dropdownRef} className="relative">
+            <div ref={dropdownRef} className="relative" {...community.hoverProps}>
               <button
-                onClick={() => setIsCommunityOpen(!isCommunityOpen)}
+                onClick={community.toggle}
+                aria-expanded={community.isOpen}
+                aria-haspopup="menu"
                 className="flex items-center space-x-1 text-base font-bold uppercase tracking-wide text-white transition-colors hover:text-brand-pink"
               >
                 <span>COMMUNITY</span>
                 <svg
-                  className={`h-4 w-4 transition-transform ${isCommunityOpen ? 'rotate-180' : ''}`}
+                  className={`h-4 w-4 transition-transform ${community.isOpen ? 'rotate-180' : ''}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -87,12 +137,12 @@ export default function Navigation() {
               </button>
 
               {/* Dropdown Menu */}
-              {isCommunityOpen && (
+              {community.isOpen && (
                 <div className="animate-fadeIn absolute left-0 top-full mt-3 w-64 overflow-hidden rounded-xl border border-white/20 bg-brand-dark-blue shadow-2xl">
                   <div className="py-2">
                     <Link
                       href="/about-us"
-                      onClick={() => setIsCommunityOpen(false)}
+                      onClick={() => community.close()}
                       className="group block px-6 py-3.5 text-base font-bold text-white transition-all duration-200 hover:bg-brand-pink"
                     >
                       <span className="flex items-center">
@@ -114,7 +164,7 @@ export default function Navigation() {
                     </Link>
                     <Link
                       href="/member-journey"
-                      onClick={() => setIsCommunityOpen(false)}
+                      onClick={() => community.close()}
                       className="group block px-6 py-3.5 text-base font-bold text-white transition-all duration-200 hover:bg-brand-pink"
                     >
                       <span className="flex items-center">
@@ -136,7 +186,7 @@ export default function Navigation() {
                     </Link>
                     <Link
                       href="/members"
-                      onClick={() => setIsCommunityOpen(false)}
+                      onClick={() => community.close()}
                       className="group block px-6 py-3.5 text-base font-bold text-white transition-all duration-200 hover:bg-brand-pink"
                     >
                       <span className="flex items-center">
@@ -158,7 +208,7 @@ export default function Navigation() {
                     </Link>
                     <Link
                       href="https://jobs.startmunich.de/jobs"
-                      onClick={() => setIsCommunityOpen(false)}
+                      onClick={() => community.close()}
                       className="group block px-6 py-3.5 text-base font-bold text-white transition-all duration-200 hover:bg-brand-pink"
                     >
                       <span className="flex items-center">
@@ -191,14 +241,16 @@ export default function Navigation() {
             </Link>
 
             {/* Events Dropdown */}
-            <div ref={eventsDropdownRef} className="relative">
+            <div ref={eventsDropdownRef} className="relative" {...events.hoverProps}>
               <button
-                onClick={() => setIsEventsOpen(!isEventsOpen)}
+                onClick={events.toggle}
+                aria-expanded={events.isOpen}
+                aria-haspopup="menu"
                 className="flex items-center space-x-1 text-base font-bold uppercase tracking-wide text-white transition-colors hover:text-brand-pink"
               >
                 <span>EVENTS</span>
                 <svg
-                  className={`h-4 w-4 transition-transform ${isEventsOpen ? 'rotate-180' : ''}`}
+                  className={`h-4 w-4 transition-transform ${events.isOpen ? 'rotate-180' : ''}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -212,12 +264,12 @@ export default function Navigation() {
                 </svg>
               </button>
 
-              {isEventsOpen && (
+              {events.isOpen && (
                 <div className="animate-fadeIn absolute left-0 top-full mt-3 w-64 overflow-hidden rounded-xl border border-white/20 bg-brand-dark-blue shadow-2xl">
                   <div className="py-2">
                     <Link
                       href="/events"
-                      onClick={() => setIsEventsOpen(false)}
+                      onClick={() => events.close()}
                       className="group block px-6 py-3.5 text-base font-bold text-white transition-all duration-200 hover:bg-brand-pink"
                     >
                       <span className="flex items-center">
@@ -242,7 +294,7 @@ export default function Navigation() {
                       href="https://europe-embodied.com/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={() => setIsEventsOpen(false)}
+                      onClick={() => events.close()}
                       className="group block px-6 py-2.5 text-sm font-semibold text-white/70 transition-all duration-200 hover:bg-brand-pink hover:text-white"
                     >
                       <span className="flex items-center">
@@ -266,7 +318,7 @@ export default function Navigation() {
                       href="https://www.hacking-legal.org/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={() => setIsEventsOpen(false)}
+                      onClick={() => events.close()}
                       className="group block px-6 py-2.5 text-sm font-semibold text-white/70 transition-all duration-200 hover:bg-brand-pink hover:text-white"
                     >
                       <span className="flex items-center">
@@ -290,7 +342,7 @@ export default function Navigation() {
                       href="https://www.munich-startup.de/veranstaltung/isar-unfiltered/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={() => setIsEventsOpen(false)}
+                      onClick={() => events.close()}
                       className="group block px-6 py-2.5 text-sm font-semibold text-white/70 transition-all duration-200 hover:bg-brand-pink hover:text-white"
                     >
                       <span className="flex items-center">
@@ -314,7 +366,7 @@ export default function Navigation() {
                       href="/eventpage/rtss"
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={() => setIsEventsOpen(false)}
+                      onClick={() => events.close()}
                       className="group block px-6 py-2.5 text-sm font-semibold text-white/70 transition-all duration-200 hover:bg-brand-pink hover:text-white"
                     >
                       <span className="flex items-center">
@@ -338,7 +390,7 @@ export default function Navigation() {
                       href="/eventpage/rtsh"
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={() => setIsEventsOpen(false)}
+                      onClick={() => events.close()}
                       className="group block px-6 py-2.5 text-sm font-semibold text-white/70 transition-all duration-200 hover:bg-brand-pink hover:text-white"
                     >
                       <span className="flex items-center">
@@ -362,7 +414,7 @@ export default function Navigation() {
                       href="/labs"
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={() => setIsEventsOpen(false)}
+                      onClick={() => events.close()}
                       className="group block px-6 py-2.5 text-sm font-semibold text-white/70 transition-all duration-200 hover:bg-brand-pink hover:text-white"
                     >
                       <span className="flex items-center">
@@ -388,14 +440,16 @@ export default function Navigation() {
             </div>
 
             {/* Partner Dropdown */}
-            <div ref={partnerDropdownRef} className="relative">
+            <div ref={partnerDropdownRef} className="relative" {...partner.hoverProps}>
               <button
-                onClick={() => setIsPartnerOpen(!isPartnerOpen)}
+                onClick={partner.toggle}
+                aria-expanded={partner.isOpen}
+                aria-haspopup="menu"
                 className="flex items-center space-x-1 text-base font-bold uppercase tracking-wide text-white transition-colors hover:text-brand-pink"
               >
                 <span>PARTNERS</span>
                 <svg
-                  className={`h-4 w-4 transition-transform ${isPartnerOpen ? 'rotate-180' : ''}`}
+                  className={`h-4 w-4 transition-transform ${partner.isOpen ? 'rotate-180' : ''}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -409,12 +463,12 @@ export default function Navigation() {
                 </svg>
               </button>
 
-              {isPartnerOpen && (
+              {partner.isOpen && (
                 <div className="animate-fadeIn absolute left-0 top-full mt-3 w-64 overflow-hidden rounded-xl border border-white/20 bg-brand-dark-blue shadow-2xl">
                   <div className="py-2">
                     <Link
                       href="/for-partners"
-                      onClick={() => setIsPartnerOpen(false)}
+                      onClick={() => partner.close()}
                       className="group block px-6 py-3.5 text-base font-bold text-white transition-all duration-200 hover:bg-brand-pink"
                     >
                       <span className="flex items-center">
@@ -436,7 +490,7 @@ export default function Navigation() {
                     </Link>
                     <Link
                       href="/partners"
-                      onClick={() => setIsPartnerOpen(false)}
+                      onClick={() => partner.close()}
                       className="group block px-6 py-3.5 text-base font-bold text-white transition-all duration-200 hover:bg-brand-pink"
                     >
                       <span className="flex items-center">
