@@ -1,8 +1,9 @@
 'use client';
 
 import CTA from '@/components/CTA';
-import BayAreaYearTabs from './BayAreaYearTabs';
 import Hero from '@/components/Hero';
+
+import BayAreaYearTabs from './BayAreaYearTabs';
 
 const HERO_BACKGROUND = '/bayarea/years/2026-opt.jpg';
 

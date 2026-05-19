@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
-import posthog from 'posthog-js';
-import Link from 'next/link';
 import { notFound, useRouter } from 'next/navigation';
+import posthog from 'posthog-js';
+import { use, useEffect, useState } from 'react';
+
 import type { Company } from '@/lib/types';
 
 // Fetch companies from API

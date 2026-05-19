@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { useInView, useAnimatedNumber } from '@/lib/hooks';
+import { useEffect, useRef, useState } from 'react';
+
+import CTA from '@/components/CTA';
 import Hero from '@/components/Hero';
 import HeroCard from '@/components/HeroCard';
-import CTA from '@/components/CTA';
+import { useAnimatedNumber, useInView } from '@/lib/hooks';
 
 const executiveBoard = [
   {

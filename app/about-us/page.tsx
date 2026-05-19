@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
-import AboutUsContent from './AboutUsContent';
+
 import { OG_IMAGES } from '@/lib/metadata';
+
+import AboutUsContent from './AboutUsContent';
 
 export const metadata: Metadata = {
   title: 'About Us',

@@ -1,4 +1,5 @@
 import { bayAreaVisitCompanyLogos } from '@/lib/startGoesBayAreaData';
+
 import { getLogoChipClassName } from '../types';
 
 export default function BayAreaCompanyLogoCarousel() {

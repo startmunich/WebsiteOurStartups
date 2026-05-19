@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+
 import { getAllPartners } from '@/lib/partners';
 
 export const revalidate = 3600;

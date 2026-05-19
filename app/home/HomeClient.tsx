@@ -8,12 +8,13 @@
  * server-side by the parent `page.tsx` (ISR, 1-hour revalidation). This means
  * no client-side data fetching is needed and logos appear instantly on load.
  */
-import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Script from 'next/script';
+import { useEffect, useRef, useState } from 'react';
+
 import { useAnimatedNumber, useInView } from '@/lib/hooks';
-import type { Partner, Startup, NewsItem } from '@/lib/types';
+import type { NewsItem, Partner, Startup } from '@/lib/types';
 
 // ── Images ──────────────────────────────────────────────────────────────────────
 

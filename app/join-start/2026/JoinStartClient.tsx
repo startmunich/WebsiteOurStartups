@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import posthog from 'posthog-js';
 import Image from 'next/image';
 import Script from 'next/script';
+import posthog from 'posthog-js';
+import { useEffect, useRef, useState } from 'react';
+
+import { ScrollIndicator } from '@/components/EventComponents';
 import Hero from '@/components/Hero';
 import HeroCard from '@/components/HeroCard';
 import UpcomingEventTile from '@/components/UpcomingEventTile';
-import { ScrollIndicator } from '@/components/EventComponents';
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 

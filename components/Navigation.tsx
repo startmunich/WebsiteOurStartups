@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import posthog from 'posthog-js';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
+import posthog from 'posthog-js';
+import React, { useEffect, useRef, useState } from 'react';
 
 export default function Navigation() {
   const [isCommunityOpen, setIsCommunityOpen] = useState(false);

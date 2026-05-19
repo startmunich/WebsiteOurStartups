@@ -5,9 +5,9 @@
  * - Skips files already under 100 KB
  */
 
-import sharp from 'sharp';
 import { readdir, stat } from 'fs/promises';
-import { join, extname } from 'path';
+import { extname, join } from 'path';
+import sharp from 'sharp';
 
 const PUBLIC_DIR = new URL('../public', import.meta.url).pathname;
 const MAX_WIDTH = 1920;

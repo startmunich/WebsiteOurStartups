@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Script from 'next/script';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
 import Hero from '@/components/Hero';
 import HeroCard from '@/components/HeroCard';
-import { useAnimatedNumber } from '@/lib/useAnimatedNumber';
 import { useInView } from '@/lib/hooks';
+import { useAnimatedNumber } from '@/lib/useAnimatedNumber';
 
 export const dynamic = 'force-dynamic';
 

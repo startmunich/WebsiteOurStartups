@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
 import Script from 'next/script';
+import { useEffect, useRef, useState } from 'react';
+
+import CTA from '@/components/CTA';
 import { ScrollIndicator } from '@/components/EventComponents';
 import Hero from '@/components/Hero';
 import HeroCard from '@/components/HeroCard';
 import TestimonialsSection from '@/components/TestimonialsSection';
-import CTA from '@/components/CTA';
 import { useAnimatedNumber } from '@/lib/hooks';
 
 export const dynamic = 'force-dynamic';

@@ -1,8 +1,9 @@
+import { ArrowRight, CalendarDays, MapPin } from 'lucide-react';
 import type { Metadata } from 'next';
-import type { ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, CalendarDays, MapPin } from 'lucide-react';
+import type { ReactNode } from 'react';
+
 import RtssHeroTitle from './RtssHeroTitle';
 
 export const metadata: Metadata = {

@@ -1,5 +1,7 @@
-import type { Metadata, Viewport } from 'next';
 import './globals.css';
+
+import type { Metadata, Viewport } from 'next';
+
 import SiteChrome from '@/components/SiteChrome';
 
 export const viewport: Viewport = {

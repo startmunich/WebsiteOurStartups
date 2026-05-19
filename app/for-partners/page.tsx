@@ -1,12 +1,14 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Script from 'next/script';
-import type { Metadata } from 'next';
+
 import Hero from '@/components/Hero';
 import HeroCard from '@/components/HeroCard';
-import PhotoGallery from './PhotoGallery';
-import PartnerCTAButton from './PartnerCTAButton';
-import { getAllPartners } from '@/lib/partners';
 import { OG_IMAGES } from '@/lib/metadata';
+import { getAllPartners } from '@/lib/partners';
+
+import PartnerCTAButton from './PartnerCTAButton';
+import PhotoGallery from './PhotoGallery';
 
 export const metadata: Metadata = {
   title: 'Partner With Us',

@@ -1,16 +1,17 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import Script from 'next/script';
 import { useRouter } from 'next/navigation';
+import Script from 'next/script';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { EventCard, TimelineMarker, ScrollIndicator } from '@/components/EventComponents';
+import { EventCard, ScrollIndicator, TimelineMarker } from '@/components/EventComponents';
 import Hero from '@/components/Hero';
 import HeroCard from '@/components/HeroCard';
+import { useAnimatedNumber } from '@/lib/useAnimatedNumber';
+
 import PastEventsGrid from './PastEventsGrid';
 import UpcomingEventsGrid from './UpcomingEventsGrid';
-import { useAnimatedNumber } from '@/lib/useAnimatedNumber';
 
 export const dynamic = 'force-dynamic';
 

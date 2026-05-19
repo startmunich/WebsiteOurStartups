@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+
 import StartGoesBayAreaContent from './components/StartGoesBayAreaContent';
 
 export const metadata: Metadata = {

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
-import StartupDetailsContent from './StartupDetailsContent';
+
 import { OG_IMAGES } from '@/lib/metadata';
+
+import StartupDetailsContent from './StartupDetailsContent';
 
 const NOCODB_API_TOKEN = process.env.NOCODB_API_TOKEN;
 const NOCODB_BASE_URL = process.env.NOCODB_BASE_URL || 'https://ndb.startmunich.de';

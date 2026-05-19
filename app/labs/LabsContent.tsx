@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Script from 'next/script';
+import { useEffect, useState } from 'react';
+
 import { NoiseTexture } from '@/components/ui/noise-texture';
 
 export const dynamic = 'force-dynamic';

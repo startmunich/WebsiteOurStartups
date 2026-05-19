@@ -1,17 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import type { Company } from '@/lib/types';
-import StartupCard from './StartupCard';
+import { useEffect, useState } from 'react';
+
+import CTA from '@/components/CTA';
 import Hero from '@/components/Hero';
 import HeroCard from '@/components/HeroCard';
-import CTA from '@/components/CTA';
+import type { Company } from '@/lib/types';
 import { useAnimatedNumber } from '@/lib/useAnimatedNumber';
 
+import StartupCard from './StartupCard';
+
 export const dynamic = 'force-dynamic';
-import Image from 'next/image';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import Script from 'next/script';
+
 import {
   Select,
   SelectContent,
@@ -19,7 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import Script from 'next/script';
 
 // Fetch companies from API
 async function fetchCompanies(): Promise<Company[]> {

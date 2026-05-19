@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
-import MembersContent from './MembersContent';
+
 import { OG_IMAGES } from '@/lib/metadata';
+
+import MembersContent from './MembersContent';
 
 export const dynamic = 'force-dynamic';
 

@@ -1,9 +1,10 @@
 'use client';
 
-import type { ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
-import Navigation from '@/components/Navigation';
+import type { ReactNode } from 'react';
+
 import Footer from '@/components/Footer';
+import Navigation from '@/components/Navigation';
 
 export default function SiteChrome({ children }: { children: ReactNode }) {
   const pathname = usePathname();

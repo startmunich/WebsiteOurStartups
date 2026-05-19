@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+
 import type { Company, Founder } from '@/lib/types';
 
 export const revalidate = 3600;

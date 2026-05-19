@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
-import EventsContent from './EventsContent';
+
 import { OG_IMAGES } from '@/lib/metadata';
+
+import EventsContent from './EventsContent';
 
 export const dynamic = 'force-dynamic';
 

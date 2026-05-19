@@ -1,10 +1,12 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { bayAreaYearContent } from '@/lib/startGoesBayAreaData';
+
 import { useInView } from '@/lib/hooks';
-import { getLogoChipClassName } from '../types';
+import { bayAreaYearContent } from '@/lib/startGoesBayAreaData';
+
 import type { BayAreaYearId } from '../types';
+import { getLogoChipClassName } from '../types';
 
 interface Member {
   id: number;

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
-import JoinStartClient from './JoinStartClient';
+
 import { OG_IMAGES } from '@/lib/metadata';
+
+import JoinStartClient from './JoinStartClient';
 
 const LAUNCH_DATE = new Date('2026-04-10T00:00:00+02:00').getTime();
 const CLOSE_DATE = new Date('2026-04-27T00:00:00+02:00').getTime();

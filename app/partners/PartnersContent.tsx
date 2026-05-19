@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
 import Script from 'next/script';
-import { cn } from '@/lib/utils';
+import { useEffect, useRef, useState } from 'react';
+
+import CTA from '@/components/CTA';
 import Hero from '@/components/Hero';
 import HeroCard from '@/components/HeroCard';
-import CTA from '@/components/CTA';
+import { cn } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 
