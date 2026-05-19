@@ -38,10 +38,6 @@ export default function PastEventsGrid() {
 
         const data = await response.json();
 
-        // Log the full API response for debugging
-        console.log('Luma API Response:', data);
-        console.log('Number of events:', data.entries?.length || 0);
-
         // Sort events by date (most recent first)
         const sortedEvents = (data.entries || []).sort(
           (a: LumaEventWrapper, b: LumaEventWrapper) => {
@@ -50,8 +46,7 @@ export default function PastEventsGrid() {
         );
 
         setEvents(sortedEvents);
-      } catch (err) {
-        console.error('Error fetching past events:', err);
+      } catch {
         setError('Unable to load past events');
       } finally {
         setLoading(false);
