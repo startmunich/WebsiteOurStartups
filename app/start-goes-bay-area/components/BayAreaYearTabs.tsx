@@ -199,7 +199,7 @@ export default function BayAreaYearTabs() {
                     key={`${activeContent.id}-${highlight.name}`}
                     href={highlight.websiteUrl}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener"
                     aria-label={`${highlight.name} website`}
                   >
                     {content}
@@ -246,7 +246,7 @@ export default function BayAreaYearTabs() {
                     key={`${activeContent.id}-${host.name}`}
                     href={host.websiteUrl}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener"
                     className="inline-flex min-h-14 items-center gap-3 rounded-xl border border-white/10 bg-black/15 px-3 py-2 transition-colors hover:border-brand-pink/40 hover:bg-white/[0.07]"
                     aria-label={`${host.name} website`}
                   >

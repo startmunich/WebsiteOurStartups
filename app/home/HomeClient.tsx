@@ -640,6 +640,7 @@ export default function HomeClient({
                   <Link
                     href="https://www.linkedin.com/company/start-munich/"
                     target="_blank"
+                    rel="noopener"
                     className="group flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2.5 transition-all duration-300 hover:border-brand-pink/50 hover:bg-brand-pink/10"
                   >
                     <svg
@@ -656,6 +657,7 @@ export default function HomeClient({
                   <Link
                     href="https://www.instagram.com/start.munich/"
                     target="_blank"
+                    rel="noopener"
                     className="group flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2.5 transition-all duration-300 hover:border-brand-pink/50 hover:bg-brand-pink/10"
                   >
                     <svg
@@ -685,6 +687,7 @@ export default function HomeClient({
                     key={item.id}
                     href={item.url}
                     target="_blank"
+                    rel="noopener"
                     className="group relative w-[380px] flex-shrink-0 snap-start"
                   >
                     <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
@@ -743,6 +746,7 @@ export default function HomeClient({
                 <Link
                   href="https://www.linkedin.com/company/start-munich/"
                   target="_blank"
+                  rel="noopener"
                   className="group flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2.5 transition-all duration-300 hover:border-brand-pink/50 hover:bg-brand-pink/10"
                 >
                   <svg
@@ -759,6 +763,7 @@ export default function HomeClient({
                 <Link
                   href="https://www.instagram.com/start.munich/"
                   target="_blank"
+                  rel="noopener"
                   className="group flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2.5 transition-all duration-300 hover:border-brand-pink/50 hover:bg-brand-pink/10"
                 >
                   <svg
@@ -776,7 +781,13 @@ export default function HomeClient({
             </div>
             <div className="flex flex-col gap-6">
               {(showAllNews ? initialNews : initialNews.slice(0, 3)).map((item) => (
-                <Link key={item.id} href={item.url} target="_blank" className="group relative">
+                <Link
+                  key={item.id}
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener"
+                  className="group relative"
+                >
                   <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
                     {item.imageUrl ? (
                       <img
