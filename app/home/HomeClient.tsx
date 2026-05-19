@@ -781,7 +781,13 @@ export default function HomeClient({
             </div>
             <div className="flex flex-col gap-6">
               {(showAllNews ? initialNews : initialNews.slice(0, 3)).map((item) => (
-                <Link key={item.id} href={item.url} target="_blank" rel="noopener" className="group relative">
+                <Link
+                  key={item.id}
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener"
+                  className="group relative"
+                >
                   <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
                     {item.imageUrl ? (
                       <img
