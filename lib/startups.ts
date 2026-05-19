@@ -5,6 +5,7 @@ import type { Company, Founder } from '@/lib/types';
 const NOCODB_API_TOKEN = process.env.NOCODB_API_TOKEN;
 const NOCODB_BASE_URL = process.env.NOCODB_BASE_URL || 'https://ndb.startmunich.de';
 const NOCODB_TABLE_ID = process.env.NOCODB_STARTUPS_TABLE_ID;
+const NOCODB_TIMEOUT_MS = 10_000;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function transformNocoDBRecord(record: any): Company {
@@ -86,6 +87,7 @@ async function queryNocoDB(query: string): Promise<unknown[]> {
         'xc-token': NOCODB_API_TOKEN,
         'Content-Type': 'application/json',
       },
+      signal: AbortSignal.timeout(NOCODB_TIMEOUT_MS),
       next: { revalidate: 3600 },
     },
   );

@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 
 export const revalidate = 3600;
 
+const LUMA_TIMEOUT_MS = 10_000;
+
 export async function GET() {
   const lumaApiKey = process.env.LUMA_API_KEY;
 
@@ -28,6 +30,7 @@ export async function GET() {
           accept: 'application/json',
           'x-luma-api-key': lumaApiKey,
         },
+        signal: AbortSignal.timeout(LUMA_TIMEOUT_MS),
         next: { revalidate: 3600 },
       },
     );
@@ -56,12 +59,13 @@ export async function GET() {
     return NextResponse.json({ ...data, entries: pastEvents });
   } catch (error) {
     console.error('Error fetching past events from Luma:', error);
+    const isTimeout = error instanceof DOMException && error.name === 'TimeoutError';
     return NextResponse.json(
       {
-        error: 'Failed to fetch past events',
+        error: isTimeout ? 'Upstream request to Luma timed out' : 'Failed to fetch past events',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 },
+      { status: isTimeout ? 504 : 500 },
     );
   }
 }

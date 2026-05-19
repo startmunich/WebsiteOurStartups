@@ -5,6 +5,7 @@ export const revalidate = 3600;
 const NOCODB_API_TOKEN = process.env.NOCODB_API_TOKEN;
 const NOCODB_BASE_URL = process.env.NOCODB_BASE_URL || 'https://ndb.startmunich.de';
 const NOCODB_MEMBERS_TABLE_ID = process.env.NOCODB_MEMBERS_TABLE_ID;
+const NOCODB_TIMEOUT_MS = 10_000;
 
 interface Member {
   id: number;
@@ -74,6 +75,7 @@ export async function GET() {
           'xc-token': NOCODB_API_TOKEN,
           'Content-Type': 'application/json',
         },
+        signal: AbortSignal.timeout(NOCODB_TIMEOUT_MS),
         next: { revalidate: 3600 },
       },
     );
@@ -90,6 +92,14 @@ export async function GET() {
     return NextResponse.json(members);
   } catch (error) {
     console.error('Error fetching from NocoDB:', error);
-    return NextResponse.json({ error: 'Failed to fetch members from database' }, { status: 500 });
+    const isTimeout = error instanceof DOMException && error.name === 'TimeoutError';
+    return NextResponse.json(
+      {
+        error: isTimeout
+          ? 'Upstream NocoDB request timed out'
+          : 'Failed to fetch members from database',
+      },
+      { status: isTimeout ? 504 : 500 },
+    );
   }
 }
