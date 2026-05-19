@@ -579,7 +579,7 @@ export default function HomeClient({
                   >
                     <div className="flex h-20 w-36 items-center justify-center rounded-xl bg-white p-4 transition-all duration-300 hover:scale-105 hover:border-brand-pink/30">
                       {failedStartupLogos.has(startup.id) ? (
-                        <span className="text-center text-sm font-bold text-white/80">
+                        <span className="text-center text-sm font-bold text-brand-dark-blue">
                           {startup.name}
                         </span>
                       ) : (
