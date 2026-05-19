@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
+import { cn } from '@/lib/utils';
+
 const eventPhotos = [
   {
     id: 'ep1',
@@ -128,7 +130,10 @@ export default function PhotoGallery() {
             <Wrapper
               key={photo.id}
               {...wrapperProps}
-              className={`group relative block aspect-video overflow-hidden rounded-3xl border border-white/10 shadow-lg transition-all duration-300 hover:border-brand-pink/40 hover:shadow-brand-pink/10${!isVisible ? 'hidden' : ''}`}
+              className={cn(
+                'group relative block aspect-video overflow-hidden rounded-3xl border border-white/10 shadow-lg transition-all duration-300 hover:border-brand-pink/40 hover:shadow-brand-pink/10',
+                !isVisible && 'hidden',
+              )}
             >
               <Image
                 src={photo.url}
