@@ -4,6 +4,13 @@ export const revalidate = 3600;
 
 const LUMA_TIMEOUT_MS = 10_000;
 
+interface LumaEntry {
+  event: {
+    start_at: string;
+    visibility?: string;
+  };
+}
+
 export async function GET() {
   const lumaApiKey = process.env.LUMA_API_KEY;
 
@@ -44,7 +51,7 @@ export async function GET() {
     const data = await response.json();
 
     // Filter to only include future, non-private events
-    const upcomingEvents = (data.entries || []).filter((entry: any) => {
+    const upcomingEvents = (data.entries || []).filter((entry: LumaEntry) => {
       const eventDate = new Date(entry.event.start_at);
       return eventDate >= now && entry.event.visibility !== 'private';
     });

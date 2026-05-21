@@ -22,8 +22,23 @@ interface Member {
   gender?: string;
 }
 
+interface NocoDBMemberRecord {
+  Id?: number;
+  id?: number;
+  Name?: string;
+  Batch?: string;
+  Role?: string;
+  Company?: string;
+  LinkedIn?: string;
+  Bio?: string;
+  Expertise?: string;
+  Achievements?: string;
+  Gender?: string;
+  'Member Picture'?: Array<{ signedPath?: string }>;
+}
+
 // Transform NocoDB record to Member format
-function transformNocoDBRecord(record: any): Member {
+function transformNocoDBRecord(record: NocoDBMemberRecord): Member {
   // Handle profile pic - NocoDB stores it as an array of attachment objects
   let profilePicUrl = '/placeholder-profile.jpg';
   if (
@@ -44,7 +59,7 @@ function transformNocoDBRecord(record: any): Member {
     : undefined;
 
   return {
-    id: record.Id || record.id,
+    id: record.Id ?? record.id ?? 0,
     name: record.Name || 'Unknown',
     batch: record.Batch || '',
     role: record.Role || '',

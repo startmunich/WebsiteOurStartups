@@ -518,7 +518,7 @@ export default async function ForPartnersPage() {
               <div className="relative p-8 md:p-10">
                 <div className="mx-auto max-w-2xl text-center">
                   <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-brand-pink">
-                    Let's Connect
+                    Let&apos;s Connect
                   </p>
                   <h3 className="mb-5 text-3xl font-black text-white md:text-5xl">
                     READY TO <span className="outline-text">PARTNER?</span>

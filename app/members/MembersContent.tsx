@@ -47,6 +47,27 @@ interface Board {
   departmentBoard: BoardMember[];
 }
 
+interface RawBoardMember {
+  name?: string;
+  fullName?: string;
+  displayName?: string;
+  role?: string;
+  position?: string;
+  title?: string;
+  profileImage?: string;
+  linkedinUrl?: string;
+  members?: RawBoardMember[];
+  boardMembers?: RawBoardMember[];
+  memberList?: RawBoardMember[];
+}
+
+interface BoardMemberLike {
+  name?: string;
+  role?: string;
+  profileImage?: string;
+  linkedinUrl?: string;
+}
+
 async function fetchMembers(): Promise<Member[]> {
   try {
     const response = await fetch('/api/members');
@@ -64,7 +85,7 @@ export default function MembersPage() {
   const [expandedBoard, setExpandedBoard] = useState<string | null>(null);
   const [batchMembers, setBatchMembers] = useState<Member[]>([]);
   const [loadingBatch, setLoadingBatch] = useState(false);
-  const [boardLoading, setBoardLoading] = useState(false);
+  const [, setBoardLoading] = useState(false);
   const batchContentRef = useRef<HTMLDivElement>(null);
   const [boards, setBoards] = useState<Board[]>([
     {
@@ -286,7 +307,7 @@ export default function MembersPage() {
     return '2024';
   };
 
-  const findByRole = (normalizedBoardMembers: any[]) => (role: string) => {
+  const findByRole = (normalizedBoardMembers: BoardMemberLike[]) => (role: string) => {
     if (!role) return null;
     const normalizedRole = normalize(role);
     let match = normalizedBoardMembers.find((m) => normalize(m.role || '') === normalizedRole);
@@ -336,15 +357,15 @@ export default function MembersPage() {
         : data?.data && Array.isArray(data.data)
           ? data.data
           : [];
-      const rawMembers: any[] = [];
-      candidateData.forEach((item: any) => {
+      const rawMembers: RawBoardMember[] = [];
+      candidateData.forEach((item: RawBoardMember) => {
         if (item && Array.isArray(item.members)) rawMembers.push(...item.members);
         else if (item && Array.isArray(item.boardMembers)) rawMembers.push(...item.boardMembers);
         else if (item && Array.isArray(item.memberList)) rawMembers.push(...item.memberList);
         else if (item && item.name && item.role) rawMembers.push(item);
       });
       if (rawMembers.length === 0) return;
-      const normalizedBoardMembers = rawMembers.flatMap((member: any) => {
+      const normalizedBoardMembers = rawMembers.flatMap((member: RawBoardMember) => {
         const normalizedName =
           member.name || member.fullName || member.displayName || 'Board Member';
         const normalizedRole = member.role || member.position || member.title || '';
@@ -415,12 +436,18 @@ export default function MembersPage() {
       cancelled = true;
       controller.abort();
     };
+    // loadBoardMembers reads `boards` via closure; re-running on `boards` change
+    // would re-fetch every time we update board members (infinite loop).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expandedBoard]);
 
   useEffect(() => {
     void (async () => {
       for (const board of boards) await loadBoardMembers(board.id);
     })();
+    // Mount-only prefetch of all boards; `boards` is initialized once and only
+    // mutated by loadBoardMembers itself, so deps would loop.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleOutsideClick = useCallback(
@@ -1041,10 +1068,12 @@ export default function MembersPage() {
                       className="group relative w-full overflow-hidden rounded-3xl border border-white/10 transition-all duration-300 hover:border-brand-pink/30"
                     >
                       <div className="relative h-72 overflow-hidden bg-white/5 sm:h-80">
-                        <img
+                        <Image
                           src={batch.groupImageUrl}
                           alt={batch.name}
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-blue/70 via-transparent to-transparent" />
                         <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between">

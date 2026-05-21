@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import { cn } from '@/lib/utils';
 
 interface UpcomingEventTileProps {
@@ -32,11 +34,15 @@ export default function UpcomingEventTile({
       <div className="p-3 pb-0">
         <div className="relative overflow-hidden rounded-xl bg-black/20">
           {imageUrl ? (
-            <img
-              src={imageUrl}
-              alt={title}
-              className="aspect-square w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            />
+            <div className="relative aspect-square w-full">
+              <Image
+                src={imageUrl}
+                alt={title}
+                fill
+                sizes="(max-width: 768px) 86vw, 320px"
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              />
+            </div>
           ) : (
             <div className="aspect-square w-full rounded-xl bg-gradient-to-br from-[#1a1a3e] to-[#0a0a2e]" />
           )}

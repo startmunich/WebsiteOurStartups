@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import posthog from 'posthog-js';
 
@@ -49,6 +50,8 @@ export default function StartupDetailsContent({ company }: { company: Company })
             {/* Header with Logo */}
             <div className="mb-6 flex flex-col gap-6 md:flex-row">
               <div className="flex h-48 w-full flex-shrink-0 items-center justify-center rounded-lg border-2 border-white/20 bg-white p-6 transition-all hover:border-[#d0006f] md:w-48">
+                {/* Variable-aspect company logo; max-w/max-h with auto-sizing. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={company.logoUrl}
                   alt={`${company.name} logo`}
@@ -184,20 +187,26 @@ export default function StartupDetailsContent({ company }: { company: Company })
                           href={founder.linkedinUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex-shrink-0"
+                          className="relative block h-16 w-16 flex-shrink-0 overflow-hidden rounded-full border-2 border-white/20 transition-all hover:border-[#d0006f]"
                         >
-                          <img
+                          <Image
                             src={founder.imageUrl}
                             alt={founder.name}
-                            className="h-16 w-16 rounded-full border-2 border-white/20 object-cover transition-all hover:border-[#d0006f]"
+                            fill
+                            sizes="64px"
+                            className="object-cover"
                           />
                         </a>
                       ) : (
-                        <img
-                          src={founder.imageUrl}
-                          alt={founder.name}
-                          className="h-16 w-16 rounded-full border-2 border-white/20 object-cover"
-                        />
+                        <div className="relative h-16 w-16 overflow-hidden rounded-full border-2 border-white/20">
+                          <Image
+                            src={founder.imageUrl}
+                            alt={founder.name}
+                            fill
+                            sizes="64px"
+                            className="object-cover"
+                          />
+                        </div>
                       )}
                       <div className="min-w-0 flex-1">
                         <p className="mb-1 text-base font-semibold text-white">

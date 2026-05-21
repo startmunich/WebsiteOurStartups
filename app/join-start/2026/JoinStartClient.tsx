@@ -418,8 +418,9 @@ export default function JoinStartClient({ isLive, isClosed }: JoinStartClientPro
           </h2>
           <p className="mt-4 max-w-3xl text-sm leading-relaxed text-white/70 md:text-base">
             Curious about START Munich or unsure about the application process? Join one of our
-            upcoming events and get all your questions answered. Meet the team, learn what we're all
-            about, and find out how you can become part of our entrepreneurial community.
+            upcoming events and get all your questions answered. Meet the team, learn what
+            we&apos;re all about, and find out how you can become part of our entrepreneurial
+            community.
           </p>
         </div>
 
@@ -433,7 +434,7 @@ export default function JoinStartClient({ isLive, isClosed }: JoinStartClientPro
             className="scrollbar-hide flex cursor-grab select-none gap-6 overflow-x-auto pb-4 active:cursor-grabbing"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {applyEvents.map((event, index) => (
+            {applyEvents.map((event) => (
               <UpcomingEventTile
                 key={event.id}
                 title={event.name}

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 interface LumaEventWrapper {
@@ -116,11 +117,16 @@ export default function PastEventsGrid() {
               <div className="p-3 pb-0">
                 <div className="relative overflow-hidden rounded-xl bg-black/20">
                   {event.cover_url ? (
-                    <img
-                      src={event.cover_url}
-                      alt={event.name}
-                      className="h-auto w-full object-contain transition-transform duration-700 ease-out group-hover:scale-105"
-                    />
+                    <div className="relative aspect-square w-full">
+                      <Image
+                        src={event.cover_url}
+                        alt={event.name}
+                        fill
+                        unoptimized
+                        sizes="(max-width: 768px) 86vw, 300px"
+                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                      />
+                    </div>
                   ) : (
                     <div className="h-36 rounded-xl bg-gradient-to-br from-[#1a1a3e] to-[#0a0a2e]" />
                   )}

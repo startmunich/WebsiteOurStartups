@@ -14,7 +14,14 @@ export interface MemberNetworkLogo {
   logoUrl: string;
 }
 
-function transformRecord(record: any): MemberNetworkLogo {
+interface NocoDbRecord {
+  Id: string | number;
+  Name?: string;
+  Type?: string;
+  Logo?: Array<{ path?: string }>;
+}
+
+function transformRecord(record: NocoDbRecord): MemberNetworkLogo {
   let logoUrl = '';
 
   if (record.Logo && Array.isArray(record.Logo) && record.Logo[0]) {

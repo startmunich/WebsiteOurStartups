@@ -1,11 +1,38 @@
 'use client';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import posthog from 'posthog-js';
+import { useEffect, useState } from 'react';
 
 interface Founder {
   name: string;
   imageUrl: string;
   linkedinUrl?: string;
+}
+
+function FounderAvatar({ name, imageUrl }: { name: string; imageUrl: string }) {
+  const [src, setSrc] = useState(imageUrl);
+  // Reset the displayed src when the prop changes so a parent re-render with a
+  // new founder image isn't stuck on the previous one (or its fallback).
+  useEffect(() => {
+    setSrc(imageUrl);
+  }, [imageUrl]);
+  return (
+    <div className="relative h-10 w-10 overflow-hidden rounded-full border border-white/20">
+      <Image
+        src={src}
+        alt={name}
+        fill
+        sizes="40px"
+        className="object-cover"
+        onError={() => {
+          setSrc(
+            `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=d0006f&color=fff`,
+          );
+        }}
+      />
+    </div>
+  );
 }
 
 interface StartupCardProps {
@@ -58,6 +85,9 @@ export default function StartupCard({
     >
       {/* Logo Section */}
       <div className="flex h-48 items-center justify-center bg-white p-8">
+        {/* Startup logos have varying intrinsic aspect ratios; using next/image with
+            fixed dimensions would distort them, and fill needs a known box. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={logoUrl}
           alt={`${name} logo`}
@@ -132,30 +162,14 @@ export default function StartupCard({
                       onClick={(e) => e.stopPropagation()}
                       className="flex items-center gap-2 transition-opacity hover:opacity-80"
                     >
-                      <img
-                        src={founder.imageUrl}
-                        alt={founder.name}
-                        className="h-10 w-10 rounded-full border border-white/20 object-cover"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(founder.name)}&background=d0006f&color=fff`;
-                        }}
-                      />
+                      <FounderAvatar name={founder.name} imageUrl={founder.imageUrl} />
                       <span className="text-sm text-gray-300 transition-colors hover:text-white">
                         {founder.name}
                       </span>
                     </a>
                   ) : (
                     <>
-                      <img
-                        src={founder.imageUrl}
-                        alt={founder.name}
-                        className="h-10 w-10 rounded-full border border-white/20 object-cover"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(founder.name)}&background=d0006f&color=fff`;
-                        }}
-                      />
+                      <FounderAvatar name={founder.name} imageUrl={founder.imageUrl} />
                       <span className="text-sm text-gray-300">{founder.name}</span>
                     </>
                   )}

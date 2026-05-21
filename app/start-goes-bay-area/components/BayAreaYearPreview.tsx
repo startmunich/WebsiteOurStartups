@@ -1,17 +1,20 @@
+import Image from 'next/image';
+
 interface BayAreaYearPreviewProps {
-  yearLabel: string;
   imageUrl: string;
 }
 
-export default function BayAreaYearPreview({ yearLabel, imageUrl }: BayAreaYearPreviewProps) {
+export default function BayAreaYearPreview({ imageUrl }: BayAreaYearPreviewProps) {
   return (
     <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
       <div className="relative overflow-hidden rounded-[1.75rem] border border-brand-pink/30 shadow-2xl shadow-brand-pink/10">
         <div className="absolute inset-0">
-          <img
+          <Image
             src={imageUrl}
             alt="START goes Bay Area preview"
-            className="h-full w-full object-cover"
+            fill
+            sizes="(max-width: 1280px) 100vw, 1280px"
+            className="object-cover"
           />
           <div className="via-[#00002c]/78 absolute inset-0 bg-gradient-to-r from-[#00002c]/95 to-[#00002c]/35" />
         </div>
